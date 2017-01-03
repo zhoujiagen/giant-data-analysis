@@ -4,8 +4,9 @@
 
 一般是Maven项目, Code Template和Formatter使用dev-resources/[STS]*.
 
+父项目: `java-parent`.
 
-$M2_HOME/conf/settins.xml中添加国内镜像:
+$M2_HOME/conf/settings.xml中添加国内镜像:
 
     <mirrors>
       <!--国内镜像 -->
@@ -22,6 +23,22 @@ $M2_HOME/conf/settins.xml中添加国内镜像:
 + Scala
 
 一般是SBT项目, Formatter使用dev-resources/[ScalaIDE]*.
+
+父项目: `scala-parent`.
+
+设置阿里云镜像:
+
+  $ cat ~/.sbt/repositories
+  [repositories]
+    local
+    aliyun: http://maven.aliyun.com/nexus/content/groups/public/
+    central: http://repo1.maven.org/maven2/
+
+or in build.sbt:
+
+  // resolver
+  resolvers += "aliyun Maven" at "http://maven.aliyun.com/nexus/content/groups/public/"
+
 
 + Go
 

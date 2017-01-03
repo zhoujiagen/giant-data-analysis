@@ -32,6 +32,10 @@
 + Alibaba JStorm
 + Spark Streaming
 
+Strike 1: Apache Storm word count example.
+
+> TODO Strike 2: Spark-Streaming + ElasticSearch + Kafka 日志应用
+
 > TBD
 
 ## 3 数据表示 - data-representation
