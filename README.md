@@ -25,6 +25,10 @@
 
 ## 1 数据管理基础设施 - data-management-infrastructure
 
++ Spark 1.5.2
+
+
+
 > TBD
 
 ## 2 时序数据和实时算法 - temporal-data-and-realtime-algorithm
