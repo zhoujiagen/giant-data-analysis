@@ -4,10 +4,14 @@ import org.apache.spark.SparkContext
 import org.apache.spark.SparkContext._
 import org.apache.spark.SparkConf
 
+/**
+ * 文本中日志挖掘
+ * @author zhoujiagen
+ */
 object ConsoleLogMining {
   def main(args: Array[String]) {
     // data
-    val logFile = "/Users/jiedong/github_local/giant-data-analysis/data-management-infrastructure/scala-infrastructure-apache-spark/data/log.out"
+    val logFile = DATA_DIR + "log.out"
 
     // configuration and context
     val conf = new SparkConf().setAppName("Console Log Mining")
