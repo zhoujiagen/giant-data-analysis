@@ -32,12 +32,14 @@ public class WordCountTopology {
 
     // WordCountSentenceSpout -> WordCountSplitSentenceBolt
     // DIFF: 增加Executor和Task
+    // Executor数量为2, Task数量为4, 即2 tasks per executor
     builder.setBolt(WordCountSplitSentenceBolt.ID, splitSentenceBolt, 2)//
         .setNumTasks(4)//
         .shuffleGrouping(WordCountSentenceSpout.ID);
 
     // WordCountSplitSentenceBolt -> WordCountCountWordsBolt
     // DIFF: 增加Executor
+    // Executor数量为4, 即1 task per executor
     builder.setBolt(WordCountCountWordsBolt.ID, countWordsBolt, 4)//
         .fieldsGrouping(WordCountSplitSentenceBolt.ID,
           new Fields(WordCountSplitSentenceBolt.FIELD_WORD));

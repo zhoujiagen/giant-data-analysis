@@ -16,7 +16,7 @@ public class SentenceStream implements Serializable {
           "don't have a cow man",//
           "i don't think i like fleas" };
 
-  private static int SENTENCES_LEN = SENTENCES.length;
+  private static final int SENTENCES_LEN = SENTENCES.length;
   private static int CURRENT_INDEX = 0;
 
   public static synchronized String next() {
