@@ -37,6 +37,8 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<slf4j.version>1.7.7</slf4j.version>
 		<log4j.version>1.2.17</log4j.version>
+		<storm.version>0.9.7</storm.version>
+		<kafka.version>0.9.0.0</kafka.version>
 	</properties>
 
 	<dependencyManagement>
