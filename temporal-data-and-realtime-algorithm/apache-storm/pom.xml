@@ -41,6 +41,12 @@
 			<artifactId>kafka-clients</artifactId>
 			<version>${kafka.version}</version>
 		</dependency>
+		<!-- Storm Spouts for Apache Kafka -->
+		<dependency>
+			<groupId>org.apache.storm</groupId>
+			<artifactId>storm-kafka</artifactId>
+			<version>${storm.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.slf4j</groupId>
