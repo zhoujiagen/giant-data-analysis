@@ -11,6 +11,7 @@
 
 	<modules>
 		<module>../../temporal-data-and-realtime-algorithm/apache-storm</module>
+		<module>../../temporal-data-and-realtime-algorithm/apache-kafka</module>
 	</modules>
 
 	<licenses>
