@@ -47,6 +47,13 @@
 			<artifactId>kafka-clients</artifactId>
 			<version>${kafka.version}</version>
 		</dependency>
+		<!-- LocalCluster部署模式 -->
+		<!-- REF: http://stackoverflow.com/questions/34627302/noclassdeffounderror-kafka-api-offsetrequest -->
+		<dependency>
+			<groupId>org.apache.kafka</groupId>
+			<artifactId>kafka_2.11</artifactId>
+			<version>${kafka.version}</version>
+		</dependency>
 
 		<!-- Slack -->
 		<dependency>

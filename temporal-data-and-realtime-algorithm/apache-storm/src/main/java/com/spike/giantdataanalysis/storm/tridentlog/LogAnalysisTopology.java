@@ -17,14 +17,13 @@ public class LogAnalysisTopology {
   public static final String NAME = LogAnalysisTopology.class.getSimpleName();
 
   public static final String KAFKA_TOPIC_NAME = "log-analysis";
-  
-  
+
   public static StormTopology topology() {
     TridentTopology topology = new TridentTopology();
 
     // Kafka Spout
     // REF: http://storm.apache.org/releases/0.9.7/storm-kafka.html
-    BrokerHosts hosts = new ZkHosts("localhost");
+    BrokerHosts hosts = new ZkHosts("localhost:2188");
     TridentKafkaConfig config = new TridentKafkaConfig(hosts, KAFKA_TOPIC_NAME);
     config.scheme = new SchemeAsMultiScheme(new StringScheme());
     config.startOffsetTime = -1;
@@ -39,7 +38,9 @@ public class LogAnalysisTopology {
     Stream stream =
         inputStream//
             // JsonProjectFunction
-            .each(new Fields("str"), new JsonProjectFunction(jsonFields), jsonFields)//
+            .each(new Fields(StringScheme.STRING_SCHEME_KEY), new JsonProjectFunction(jsonFields),
+              jsonFields)//
+            //
             .project(jsonFields)//
             // MovingAverageFunction
             .each(new Fields("timestamp"), new MovingAverageFunction(ewma, EWMA.Time.MINUTES),

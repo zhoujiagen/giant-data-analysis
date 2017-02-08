@@ -11,7 +11,7 @@ import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.FileAppender;
 import org.apache.log4j.spi.LoggingEvent;
 
-import com.spike.giantdataanalysis.storm.tridentlog.formatter.DefaultLogFormatter;
+import com.spike.giantdataanalysis.storm.tridentlog.formatter.JsonFormatter;
 import com.spike.giantdataanalysis.storm.tridentlog.formatter.LogFormatter;
 
 /**
@@ -20,7 +20,7 @@ import com.spike.giantdataanalysis.storm.tridentlog.formatter.LogFormatter;
  */
 public class Log4j1KafkaAppender extends AppenderSkeleton {
 
-  public static final String DEFAULT_TOPIC_NAME = "log4j1-topic";
+  public static final String DEFAULT_TOPIC_NAME = "log-analysis";
 
   private LogFormatter formatter;
 
@@ -67,7 +67,7 @@ public class Log4j1KafkaAppender extends AppenderSkeleton {
 
   @Override
   protected void append(LoggingEvent event) {
-    if (this.formatter == null) this.formatter = new DefaultLogFormatter();
+    if (this.formatter == null) this.formatter = new JsonFormatter();
 
     String messageKey = String.valueOf(event.getTimeStamp());
     String message = this.formatter.format(event);

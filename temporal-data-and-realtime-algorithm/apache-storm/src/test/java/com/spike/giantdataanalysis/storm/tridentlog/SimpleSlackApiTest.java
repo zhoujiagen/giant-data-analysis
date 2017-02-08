@@ -22,11 +22,13 @@ public class SimpleSlackApiTest {
      * https://api.slack.com/bot-users
      * storm-alert-bot
      * xoxb-138595343058-qoHQm5MQKMO0RQybTSvVXVBh
+     * 
+     * NEED UPDATE!!!
      * </pre>
      */
     SlackSession session =
         SlackSessionFactory
-            .createWebSocketSlackSession("xoxb-138595343058-qoHQm5MQKMO0RQybTSvVXVBh");
+            .createWebSocketSlackSession("xoxb-138595343058-hZJXobxwCNuo74wH3AVY7NwD");
     session.connect();
 
     // get a channel to send message

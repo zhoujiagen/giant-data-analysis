@@ -20,7 +20,7 @@ public class SlackBotFunction extends BaseFunction {
   private static final Logger LOG = LoggerFactory.getLogger(SlackBotFunction.class);
 
   public static final String PARAM_TOKEN = "token";
-  
+
   private SlackSession session;
 
   @SuppressWarnings("rawtypes")
@@ -31,7 +31,7 @@ public class SlackBotFunction extends BaseFunction {
 
     String token = (String) conf.get(PARAM_TOKEN);
     try {
-      SlackSessionFactory.createWebSocketSlackSession(token);
+      session = SlackSessionFactory.createWebSocketSlackSession(token);
       session.connect();
     } catch (Exception e) {
       LOG.warn("Error initializing Slack", e);

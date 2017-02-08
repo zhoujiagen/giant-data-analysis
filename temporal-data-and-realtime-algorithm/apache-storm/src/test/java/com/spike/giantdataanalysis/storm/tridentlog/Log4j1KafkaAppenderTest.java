@@ -44,6 +44,7 @@ public class Log4j1KafkaAppenderTest {
 
   @Test
   public void generateDataPattern() throws InterruptedException {
+
     int slowCount = 6;
     int fastCount = 15;
     // slow state
@@ -61,5 +62,6 @@ public class Log4j1KafkaAppenderTest {
       LOG.warn("This is a warning (slow state).");
       Thread.sleep(5000);
     }
+
   }
 }

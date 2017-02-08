@@ -10,7 +10,7 @@ public class LogAnalysisApplication {
 
   public static void main(String[] args) throws AlreadyAliveException, InvalidTopologyException {
     Config conf = new Config();
-    conf.put(SlackBotFunction.PARAM_TOKEN, "xoxb-138595343058-qoHQm5MQKMO0RQybTSvVXVBh");
+    conf.put(SlackBotFunction.PARAM_TOKEN, "xoxb-138595343058-hZJXobxwCNuo74wH3AVY7NwD");
     conf.setMaxSpoutPending(5);
 
     if (args.length == 0) {

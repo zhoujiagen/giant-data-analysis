@@ -3,6 +3,8 @@ package com.spike.giantdataanalysis.storm.tridentlog;
 import java.util.Map;
 
 import org.json.simple.JSONValue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Values;
@@ -12,6 +14,7 @@ import storm.trident.tuple.TridentTuple;
 
 public class JsonProjectFunction extends BaseFunction {
   private static final long serialVersionUID = 9025844207660740588L;
+  private static final Logger LOG = LoggerFactory.getLogger(JsonProjectFunction.class);
 
   private Fields jsonFields;
 
@@ -22,16 +25,18 @@ public class JsonProjectFunction extends BaseFunction {
   @SuppressWarnings("unchecked")
   @Override
   public void execute(TridentTuple tuple, TridentCollector collector) {
-    String json = (String) tuple.getValue(0); // str
+    String json = tuple.getString(0); // str
+    LOG.debug("JSON={}", json);
 
     // use org.json.simple.JSONValue
     Map<String, Object> map = (Map<String, Object>) JSONValue.parse(json);
-    Values values = new Values();
-    for (int i = 0, len = jsonFields.size(); i < len; i++) {
-      values.add(map.get(jsonFields.get(i))); // value maybe null
+    if (map != null) {
+      Values values = new Values();
+      for (int i = 0, len = jsonFields.size(); i < len; i++) {
+        values.add(map.get(jsonFields.get(i))); // value maybe null
+      }
+      collector.emit(values);
     }
-
-    collector.emit(values);
   }
 
 }
