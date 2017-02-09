@@ -12,47 +12,74 @@ import backtype.storm.spout.SchemeAsMultiScheme;
 import backtype.storm.tuple.Fields;
 
 import com.spike.giantdataanalysis.storm.tridentlog.MovingAverageFunction.EWMA;
+import com.spike.giantdataanalysis.storm.tridentlog.formatter.LogFormatter;
 
 public class LogAnalysisTopology {
   public static final String NAME = LogAnalysisTopology.class.getSimpleName();
 
   public static final String KAFKA_TOPIC_NAME = "log-analysis";
 
+  /**
+   * <pre>
+   * Init Kafka Spout
+   * REF: http://storm.apache.org/releases/0.9.7/storm-kafka.html
+   * </pre>
+   * @return
+   */
+  public static OpaqueTridentKafkaSpout kafkaSpout() {
+    BrokerHosts hosts = new ZkHosts("localhost:2188");
+
+    TridentKafkaConfig config = new TridentKafkaConfig(hosts, KAFKA_TOPIC_NAME);
+    config.scheme = new SchemeAsMultiScheme(new StringScheme());
+    // 从kafka topic尾部开始读取
+    config.startOffsetTime = -1;// see kafka.api.OffsetRequest.LatestTime()
+
+    OpaqueTridentKafkaSpout spout = new OpaqueTridentKafkaSpout(config);
+
+    return spout;
+  }
+
   public static StormTopology topology() {
     TridentTopology topology = new TridentTopology();
 
-    // Kafka Spout
-    // REF: http://storm.apache.org/releases/0.9.7/storm-kafka.html
-    BrokerHosts hosts = new ZkHosts("localhost:2188");
-    TridentKafkaConfig config = new TridentKafkaConfig(hosts, KAFKA_TOPIC_NAME);
-    config.scheme = new SchemeAsMultiScheme(new StringScheme());
-    config.startOffsetTime = -1;
-    OpaqueTridentKafkaSpout spout = new OpaqueTridentKafkaSpout(config);
+    OpaqueTridentKafkaSpout spout = kafkaSpout();
 
     String txId = "kafka-stream";
     Stream inputStream = topology.newStream(txId, spout);
 
-    Fields jsonFields = new Fields("level", "timestamp", "message", "logger");
+    Fields strField = new Fields(StringScheme.STRING_SCHEME_KEY);
+
+    Fields levelField = new Fields(LogFormatter.FIELD_LEVEL);
+    Fields timestampField = new Fields(LogFormatter.FIELD_TIMESTAMP);
+    Fields messageField = new Fields(LogFormatter.FIELD_MESSAGE);
+    Fields loggerField = new Fields(LogFormatter.FIELD_LOGGER);
+    Fields jsonFields = new Fields(//
+        levelField.get(0), timestampField.get(0), messageField.get(0), loggerField.get(0));
+
+    Fields averageField = new Fields(MovingAverageFunction.FIELD_AVERAGE);
+
+    Fields changeField = new Fields(ThresholdFilterFunction.FIELD_CHANGE);
+    Fields thresholdField = new Fields(ThresholdFilterFunction.FIELD_THRESHOLD);
+    Fields changeAndThresholdField = new Fields(changeField.get(0), thresholdField.get(0));
+
+    Fields emptyField = new Fields();
+
     EWMA ewma = new EWMA().sliding(1.0, EWMA.Time.MINUTES).withAlpha(EWMA.ONE_MINUTE_ALPHA);
 
-    Stream stream =
-        inputStream//
-            // JsonProjectFunction
-            .each(new Fields(StringScheme.STRING_SCHEME_KEY), new JsonProjectFunction(jsonFields),
-              jsonFields)//
-            //
-            .project(jsonFields)//
-            // MovingAverageFunction
-            .each(new Fields("timestamp"), new MovingAverageFunction(ewma, EWMA.Time.MINUTES),
-              new Fields("average"))//
-            // ThresholdFilterFunction
-            .each(new Fields("average"), new ThresholdFilterFunction(50d),
-              new Fields("change", "threshold"));
+    Stream stream = inputStream//
+        // JsonProjectFunction
+        .each(strField, new JsonProjectFunction(jsonFields), jsonFields)//
+        // project
+        .project(jsonFields)//
+        // MovingAverageFunction
+        .each(timestampField, new MovingAverageFunction(ewma, EWMA.Time.MINUTES), averageField)//
+        // ThresholdFilterFunction
+        .each(averageField, new ThresholdFilterFunction(50d), changeAndThresholdField);
 
     // BooleanFilter
-    Stream filteredStream = stream.each(new Fields("change"), new BooleanFilter());
-    // XMPPFunction
-    filteredStream.each(filteredStream.getOutputFields(), new SlackBotFunction(), new Fields());
+    Stream filteredStream = stream.each(changeField, new BooleanFilter());
+    // SlackBotFunction
+    filteredStream.each(filteredStream.getOutputFields(), new SlackBotFunction(), emptyField);
 
     return topology.build();
   }

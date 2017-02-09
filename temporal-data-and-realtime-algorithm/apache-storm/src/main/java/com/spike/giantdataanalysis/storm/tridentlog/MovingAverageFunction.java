@@ -16,6 +16,8 @@ public class MovingAverageFunction extends BaseFunction {
   private static final long serialVersionUID = 5289077353167838744L;
   private static final Logger LOG = LoggerFactory.getLogger(MovingAverageFunction.class);
 
+  public static final String FIELD_AVERAGE = "average";
+
   private EWMA ewma;
   private Time emitRatePer;
 

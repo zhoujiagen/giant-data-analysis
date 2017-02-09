@@ -42,6 +42,16 @@ public class Log4j1KafkaAppenderTest {
     }
   }
 
+  /**
+   * <pre>
+   * 生成日志
+   * 
+   * (1) 每5秒一条日志 6次
+   * (2) 每1秒一条日志 15次
+   * (3) 每5秒一条日志 6次
+   * </pre>
+   * @throws InterruptedException
+   */
   @Test
   public void generateDataPattern() throws InterruptedException {
 

@@ -11,6 +11,7 @@ import storm.trident.operation.TridentCollector;
 import storm.trident.operation.TridentOperationContext;
 import storm.trident.tuple.TridentTuple;
 
+import com.spike.giantdataanalysis.storm.tridentlog.formatter.LogFormatter;
 import com.ullink.slack.simpleslackapi.SlackSession;
 import com.ullink.slack.simpleslackapi.SlackUser;
 import com.ullink.slack.simpleslackapi.impl.SlackSessionFactory;
@@ -20,8 +21,11 @@ public class SlackBotFunction extends BaseFunction {
   private static final Logger LOG = LoggerFactory.getLogger(SlackBotFunction.class);
 
   public static final String PARAM_TOKEN = "token";
+  public static final String PARAM_USE = "user";
 
+  // REF: https://github.com/Ullink/simple-slack-api
   private SlackSession session;
+  private SlackUser user;
 
   @SuppressWarnings("rawtypes")
   @Override
@@ -30,9 +34,12 @@ public class SlackBotFunction extends BaseFunction {
     super.prepare(conf, context);
 
     String token = (String) conf.get(PARAM_TOKEN);
+    String userName = (String) conf.get(PARAM_USE);
     try {
       session = SlackSessionFactory.createWebSocketSlackSession(token);
       session.connect();
+
+      user = session.findUserByUserName(userName);
     } catch (Exception e) {
       LOG.warn("Error initializing Slack", e);
     }
@@ -41,15 +48,19 @@ public class SlackBotFunction extends BaseFunction {
   public void execute(TridentTuple tuple, TridentCollector collector) {
 
     StringBuilder sb = new StringBuilder();
-    sb.append("On " + new Date(tuple.getLongByField("timestamp")) + " ");
-    sb.append("the application \"" + tuple.getStringByField("logger") + "\" ");
-    sb.append("changed alert state based on a threshold of " + tuple.getDoubleByField("threshold")
-        + ".\n");
-    sb.append("The last value was " + tuple.getDoubleByField("average") + "\n");
-    sb.append("The last message was \"" + tuple.getStringByField("message") + "\"");
+    sb.append("On " + new Date(tuple.getLongByField(LogFormatter.FIELD_TIMESTAMP)) + " ");
+    sb.append("the application \"" + tuple.getStringByField(LogFormatter.FIELD_LOGGER) + "\" ");
+    sb.append("changed alert state based on a threshold of "
+        + tuple.getDoubleByField(ThresholdFilterFunction.FIELD_THRESHOLD) + ".\n");
+    sb.append("The last value was " + tuple.getDoubleByField(MovingAverageFunction.FIELD_AVERAGE)
+        + "\n");
+    sb.append("The last message was \"" + tuple.getStringByField(LogFormatter.FIELD_MESSAGE) + "\"");
 
-    SlackUser user = session.findUserByUserName("zhoujiagen");
-    session.sendMessageToUser(user, sb.toString(), null);
+    if (session != null && user != null) {
+      session.sendMessageToUser(user, sb.toString(), null);
+    } else {
+      LOG.warn(sb.toString());
+    }
   }
 
 }

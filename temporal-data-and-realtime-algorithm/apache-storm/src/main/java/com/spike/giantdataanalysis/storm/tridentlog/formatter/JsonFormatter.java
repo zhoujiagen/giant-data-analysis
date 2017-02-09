@@ -3,6 +3,7 @@ package com.spike.giantdataanalysis.storm.tridentlog.formatter;
 import org.apache.log4j.spi.LoggingEvent;
 
 public class JsonFormatter implements LogFormatter {
+
   private static final String QUOTE = "\"";
   private static final String COLON = ":";
   private static final String COMMA = ",";
@@ -12,16 +13,16 @@ public class JsonFormatter implements LogFormatter {
   public String format(LoggingEvent event) {
     StringBuilder sb = new StringBuilder();
     sb.append("{");
-    fieldName("level", sb);
+    fieldName(FIELD_LEVEL, sb);
     quote(event.getLevel().toString(), sb);
     sb.append(COMMA);
-    fieldName("logger", sb);
+    fieldName(FIELD_LOGGER, sb);
     quote(event.getLoggerName(), sb);
     sb.append(COMMA);
-    fieldName("timestamp", sb);
+    fieldName(FIELD_TIMESTAMP, sb);
     sb.append(event.getTimeStamp());
     sb.append(COMMA);
-    fieldName("message", sb);
+    fieldName(FIELD_MESSAGE, sb);
     if (this.expectJson) {
       sb.append(event.getMessage().toString());
     } else {

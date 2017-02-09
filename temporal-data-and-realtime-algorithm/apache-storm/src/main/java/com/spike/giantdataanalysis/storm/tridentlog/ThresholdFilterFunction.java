@@ -12,6 +12,9 @@ public class ThresholdFilterFunction extends BaseFunction {
   private static final long serialVersionUID = 1353469000817608466L;
   private static final Logger LOG = LoggerFactory.getLogger(ThresholdFilterFunction.class);
 
+  public static final String FIELD_CHANGE = "change";
+  public static final String FIELD_THRESHOLD = "threshold";
+
   public static enum State {
     BELOW, ABOVE
   }
