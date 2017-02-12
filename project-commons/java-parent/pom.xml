@@ -10,6 +10,8 @@
 	<inceptionYear>2017</inceptionYear>
 
 	<modules>
+
+		<module>../../data-management-infrastructure/infrastructure-apache-hbase</module>
 		<module>../../data-representation/graph-titan</module>
 		<module>../../data-representation/graph-apache-tinkerpop</module>
 		<module>../../temporal-data-and-realtime-algorithm/apache-storm</module>
@@ -40,10 +42,14 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<slf4j.version>1.7.7</slf4j.version>
 		<log4j.version>1.2.17</log4j.version>
+		<zookeeper.version>3.4.6</zookeeper.version>
+		<hadoop.version>2.7.2</hadoop.version>
+		<hbase.version>1.2.3</hbase.version>
 		<storm.version>0.9.7</storm.version>
 		<kafka.version>0.9.0.0</kafka.version>
 		<titan.version>1.0.0</titan.version>
 		<tinkerpop.version>3.2.3</tinkerpop.version>
+		<twitter4j.version>4.0.6</twitter4j.version>
 	</properties>
 
 	<dependencyManagement>

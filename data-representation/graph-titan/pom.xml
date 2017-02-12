@@ -19,8 +19,18 @@
 		<!-- core, all, cassandra, hbase, berkeleyje, es, lucene -->
 		<dependency>
 			<groupId>com.thinkaurelius.titan</groupId>
-			<artifactId>titan-hbase</artifactId>
+			<artifactId>titan-cassandra</artifactId>
 			<version>${titan.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-log4j12</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>ch.qos.logback</groupId>
+					<artifactId>logback-classic</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>com.thinkaurelius.titan</groupId>

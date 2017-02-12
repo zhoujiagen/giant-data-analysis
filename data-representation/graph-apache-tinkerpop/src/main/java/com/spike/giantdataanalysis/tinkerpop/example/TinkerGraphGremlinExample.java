@@ -7,6 +7,8 @@ import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSo
 import org.apache.tinkerpop.gremlin.structure.T;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * TinkerPop Gremlin实现的示例
@@ -16,6 +18,8 @@ import org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph;
  * @see T#id
  */
 public final class TinkerGraphGremlinExample {
+  private static final Logger LOG = LoggerFactory.getLogger(TinkerGraphGremlinExample.class);
+
   public static final String VERTEX_KEY_NAME = "name";
   public static final String VERTEX_KEY_AGE = "age";
   public static final String VERTEX_KEY_LANG = "lang";
@@ -49,7 +53,7 @@ public final class TinkerGraphGremlinExample {
           gts.V().has(VERTEX_KEY_NAME, "marko").out().values(VERTEX_KEY_LANG);
       // 提取结果
       List<Object> result = gt.toList();
-      System.out.println(result);
+      LOG.info(result.toString());
     }
 
   }
