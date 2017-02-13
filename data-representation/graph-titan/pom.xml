@@ -10,12 +10,40 @@
 
 	<artifactId>graph-titan</artifactId>
 
+	<properties>
+		<cassandra.version>2.1.9</cassandra.version>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>com.thinkaurelius.titan</groupId>
 			<artifactId>titan-core</artifactId>
 			<version>${titan.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.tinkerpop</groupId>
+					<artifactId>gremlin-core</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
+
+		<dependency>
+			<groupId>org.apache.tinkerpop</groupId>
+			<artifactId>gremlin-core</artifactId>
+			<version>3.2.3</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>gossip</artifactId>
+					<groupId>org.sonatype.gossip</groupId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>jcl-over-slf4j</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+
 		<!-- core, all, cassandra, hbase, berkeleyje, es, lucene -->
 		<dependency>
 			<groupId>com.thinkaurelius.titan</groupId>
@@ -26,30 +54,28 @@
 					<groupId>org.slf4j</groupId>
 					<artifactId>slf4j-log4j12</artifactId>
 				</exclusion>
-				<exclusion>
-					<groupId>ch.qos.logback</groupId>
-					<artifactId>logback-classic</artifactId>
-				</exclusion>
 			</exclusions>
 		</dependency>
+
 		<dependency>
 			<groupId>com.thinkaurelius.titan</groupId>
 			<artifactId>titan-es</artifactId>
 			<version>${titan.version}</version>
 		</dependency>
 
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-		</dependency>
-		<dependency>
+			</dependency>
+			<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
-		</dependency>
-		<dependency>
+			</dependency>
+			<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
-		</dependency>
+			</dependency> -->
+
 
 		<dependency>
 			<groupId>junit</groupId>

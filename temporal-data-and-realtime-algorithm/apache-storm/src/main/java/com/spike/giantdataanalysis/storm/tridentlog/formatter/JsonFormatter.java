@@ -1,6 +1,6 @@
 package com.spike.giantdataanalysis.storm.tridentlog.formatter;
 
-import org.apache.log4j.spi.LoggingEvent;
+import ch.qos.logback.classic.spi.ILoggingEvent;
 
 public class JsonFormatter implements LogFormatter {
 
@@ -10,7 +10,7 @@ public class JsonFormatter implements LogFormatter {
   private boolean expectJson = false;
 
   @Override
-  public String format(LoggingEvent event) {
+  public String format(ILoggingEvent event) {
     StringBuilder sb = new StringBuilder();
     sb.append("{");
     fieldName(FIELD_LEVEL, sb);

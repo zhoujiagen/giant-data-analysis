@@ -1,11 +1,11 @@
 package com.spike.giantdataanalysis.storm.tridentlog.formatter;
 
-import org.apache.log4j.spi.LoggingEvent;
+import ch.qos.logback.classic.spi.ILoggingEvent;
 
 public class DefaultLogFormatter implements LogFormatter {
 
   @Override
-  public String format(LoggingEvent event) {
+  public String format(ILoggingEvent event) {
     return event.getMessage().toString();
   }
 }

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- REF: https://segmentfault.com/a/1190000004693427 -->
+<configuration>
+
+	<!-- log at work -->
+	<property name="USER_HOME" value="/Users/jiedong/logs" />
+	<!-- log at home -->
+	<!-- <property name="USER_HOME" value="/Users/zhang/logs" /> -->
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%p] [%t] %logger\(%file:%line\) => %m%n</pattern>
+		</encoder>
+	</appender>
+	<appender name="FILE" class="ch.qos.logback.core.FileAppender">
+		<file>${USER_HOME}/gda-apache-storm.log</file>
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%p] [%t] %logger\(%file:%line\) => %m%n</pattern>
+		</encoder>
+	</appender>
+	<appender name="KAFKA" class="com.spike.giantdataanalysis.storm.tridentlog.LogbackKafkaAppender">
+		<topic>log-analysis</topic>
+		<kafkaBootStrapServersString>localhost:9092</kafkaBootStrapServersString>
+		<formatter class="com.spike.giantdataanalysis.storm.tridentlog.formatter.JsonFormatter">
+			<expectJson>false</expectJson>
+		</formatter>
+	</appender>
+
+	<root level="DEBUG">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="FILE" />
+	</root>
+</configuration>

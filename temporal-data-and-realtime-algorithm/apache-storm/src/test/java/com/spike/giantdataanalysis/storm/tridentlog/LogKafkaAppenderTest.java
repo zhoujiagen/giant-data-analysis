@@ -10,9 +10,9 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Log4j1KafkaAppenderTest {
+public class LogKafkaAppenderTest {
 
-  private static final Logger LOG = LoggerFactory.getLogger(Log4j1KafkaAppenderTest.class);
+  private static final Logger LOG = LoggerFactory.getLogger(LogKafkaAppenderTest.class);
 
   @Test
   public void testKafka() {

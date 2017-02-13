@@ -1,6 +1,6 @@
 package com.spike.giantdataanalysis.storm.tridentlog.formatter;
 
-import org.apache.log4j.spi.LoggingEvent;
+import ch.qos.logback.classic.spi.ILoggingEvent;
 
 public interface LogFormatter {
   public static final String FIELD_LEVEL = "level";
@@ -8,5 +8,9 @@ public interface LogFormatter {
   public static final String FIELD_TIMESTAMP = "timestamp";
   public static final String FIELD_MESSAGE = "message";
 
-  String format(LoggingEvent event);
+  // for log4j
+  //String format(LoggingEvent event);
+  
+  // for logback
+  String format(ILoggingEvent event);
 }
