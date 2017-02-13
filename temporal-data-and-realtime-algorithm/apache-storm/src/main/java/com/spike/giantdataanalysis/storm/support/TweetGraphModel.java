@@ -57,6 +57,17 @@ public class TweetGraphModel {
       int i = 0;
       while ((line = reader.readLine()) != null) {
         LOG.info(line);
+
+        // for debug
+        // JSONObject json = (JSONObject) JSONValue.parse(line);
+        // if (json != null) {
+        // System.err.println(json.get("user"));
+        // System.err.println(json.get("name"));
+        // System.err.println(json.get("hashtags"));
+        // } else {
+        // System.err.println(line);
+        // }
+        
         Thread.sleep(random.nextInt(10) * 100L);
         i++;
         if (i == 10) {

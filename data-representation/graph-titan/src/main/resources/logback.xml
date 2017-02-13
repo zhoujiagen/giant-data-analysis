@@ -3,9 +3,9 @@
 <configuration>
 
 	<!-- log at work -->
-	<property name="USER_HOME" value="/Users/jiedong/logs" />
+	<!-- <property name="USER_HOME" value="/Users/jiedong/logs" /> -->
 	<!-- log at home -->
-	<!-- <property name="USER_HOME" value="/Users/zhang/logs" /> -->
+	<property name="USER_HOME" value="/Users/zhang/logs" />
 
 	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>

@@ -3,9 +3,9 @@
 <configuration>
 
 	<!-- log at work -->
-	<property name="USER_HOME" value="/Users/jiedong/logs" />
+	<!-- <property name="USER_HOME" value="/Users/jiedong/logs" /> -->
 	<!-- log at home -->
-	<!-- <property name="USER_HOME" value="/Users/zhang/logs" /> -->
+	<property name="USER_HOME" value="/Users/zhang/logs" />
 
 	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
@@ -19,14 +19,18 @@
 		</encoder>
 	</appender>
 	<appender name="KAFKA" class="com.spike.giantdataanalysis.storm.tridentlog.LogbackKafkaAppender">
-		<topic>log-analysis</topic>
+		<!-- <topic>log-analysis</topic>
 		<kafkaBootStrapServersString>localhost:9092</kafkaBootStrapServersString>
 		<formatter class="com.spike.giantdataanalysis.storm.tridentlog.formatter.JsonFormatter">
 			<expectJson>false</expectJson>
-		</formatter>
+		</formatter> -->
 	</appender>
 
-	<root level="DEBUG">
+	<logger name="com.spike.giantdataanalysis" level="INFO" additivity="false">
+		<appender-ref ref="KAFKA" />
+	</logger>
+
+	<root level="INFO">
 		<appender-ref ref="STDOUT" />
 		<appender-ref ref="FILE" />
 	</root>

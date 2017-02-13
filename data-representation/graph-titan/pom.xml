@@ -30,7 +30,7 @@
 		<dependency>
 			<groupId>org.apache.tinkerpop</groupId>
 			<artifactId>gremlin-core</artifactId>
-			<version>3.2.3</version>
+			<version>3.0.1-incubating</version>
 			<exclusions>
 				<exclusion>
 					<artifactId>gossip</artifactId>
@@ -63,17 +63,9 @@
 			<version>${titan.version}</version>
 		</dependency>
 
-		<!-- <dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			</dependency>
-			<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			</dependency>
-			<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
+		<!-- <dependency> <groupId>org.slf4j</groupId> <artifactId>slf4j-api</artifactId> 
+			</dependency> <dependency> <groupId>org.slf4j</groupId> <artifactId>slf4j-log4j12</artifactId> 
+			</dependency> <dependency> <groupId>log4j</groupId> <artifactId>log4j</artifactId> 
 			</dependency> -->
 
 

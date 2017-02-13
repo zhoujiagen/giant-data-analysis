@@ -7,6 +7,7 @@ import org.apache.tinkerpop.gremlin.structure.Graph;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 
 import storm.trident.operation.TridentCollector;
 import storm.trident.tuple.TridentTuple;
@@ -25,7 +26,7 @@ public class TweetGraphTupleProcessor implements GraphTupleProcessor {
     // estimated to be costing Britain \xc2\xa3170 billion per year! #BetterOffOut #UKIP',
     // 'hashtags': ['BetterOffOut', 'UKIP'], 'location': 'Coningsby, Lincs', 'urls': [], 'mentions':
     // ['KirkKus'], 'user': 'vienesewaltz'}
-    JSONObject json = (JSONObject) tuple.get(1);
+    JSONObject json = (JSONObject) JSONValue.parse(tuple.getString(1));
     Vertex user = findOrCreateUser(graph, (String) json.get("user"), (String) json.get("name"));
 
     JSONArray hashtags = (JSONArray) json.get("hashtags");
