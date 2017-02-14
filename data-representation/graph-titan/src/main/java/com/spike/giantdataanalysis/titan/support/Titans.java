@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.configuration.BaseConfiguration;
-import org.apache.commons.configuration.Configuration;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
 import org.apache.tinkerpop.gremlin.structure.Edge;
@@ -38,10 +36,9 @@ public final class Titans {
     private static final long serialVersionUID = -4436664158416466570L;
 
     public TitanGraph make(Map<String, Object> conf) {
-      Configuration graphConf = new BaseConfiguration();
-      graphConf.setProperty(Titans.storage_backend_key, conf.get(Titans.storage_backend_key));
-      graphConf.setProperty(Titans.storage_hostname_key, conf.get(Titans.storage_hostname_key));
-
+      // Configuration graphConf = new BaseConfiguration();
+      // graphConf.setProperty(Titans.storage_backend_key, conf.get(Titans.storage_backend_key));
+      // graphConf.setProperty(Titans.storage_hostname_key, conf.get(Titans.storage_hostname_key));
       // TitanGraph result = TitanFactory.open(graphConf);
       TitanGraph result =
           TitanFactory.open("src/main/resources/conf/titan-cassandra-es.properties");
@@ -105,19 +102,18 @@ public final class Titans {
   }
 
   public static void main(String[] args) {
-    Map<String, Object> conf = new HashMap<String, Object>();
-    conf.put("storage.backend", "cassandra");
-    conf.put("storage.hostname", "localhost");
-    TitanGraph graph = new TitanGraphFactory().make(conf);
+    try (TitanGraph graph =
+        TitanFactory.open("src/main/resources/conf/titan-cassandra-es.properties");) {
 
-    Map<String, Object> properties = new HashMap<String, Object>();
-    properties.put("name", "zhoujiagen");
-    TitanManagement mgmt = graph.openManagement();
-    mgmt.makeVertexLabel("user").make();
-    mgmt.commit();
+      TitanManagement mgmt = graph.openManagement();
+      mgmt.makeVertexLabel("zhoujiagen").make();
+      mgmt.commit();
 
-    TitanTransaction tx = graph.newTransaction();
-    Titans.createV(graph, "user", properties);
-    tx.commit();
+      TitanTransaction tx = graph.newTransaction();
+      Map<String, Object> properties = new HashMap<String, Object>();
+      properties.put("name", "zhoujiagen");
+      Titans.createV(graph, "zhoujiagen", properties);
+      tx.commit();
+    }
   }
 }

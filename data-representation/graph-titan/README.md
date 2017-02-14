@@ -4,7 +4,7 @@ READING LIST:
 
 + [Getting Started with Graph Databases](https://academy.datastax.com/resources/getting-started-graph-databases)
 + [Getting Started](http://s3.thinkaurelius.com/docs/titan/1.0.0/getting-started.html)
-+ [Titan  0.9.0-M1 with Scala](https://jaceklaskowski.gitbooks.io/titan-scala/content/)
++ [Titan  0.9.0-M1 with Scala](https://jaceklaskowski.gitbooks.io/titan-scala/content/): seems no pure code.
 
 # 0 实践版本
 
@@ -26,6 +26,9 @@ TinkerPop		3.0.z
 + [Titan with HBase](http://s3.thinkaurelius.com/docs/titan/1.0.0/hbase.html)
 + [Titan with ES](http://s3.thinkaurelius.com/docs/titan/1.0.0/elasticsearch.html)
 + [Titan配置参考](http://s3.thinkaurelius.com/docs/titan/1.0.0/titan-config-ref.html)
+
++ [Titan Schema and Data Modeling](http://s3.thinkaurelius.com/docs/titan/1.0.0/schema.html)
++ [Titan Advanced Schema](http://s3.thinkaurelius.com/docs/titan/1.0.0/advanced-schema.html)
 
 # 2 运行实例
 
