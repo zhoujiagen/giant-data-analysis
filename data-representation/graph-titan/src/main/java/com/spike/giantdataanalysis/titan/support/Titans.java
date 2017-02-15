@@ -10,11 +10,17 @@ import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSo
 import org.apache.tinkerpop.gremlin.structure.Edge;
 import org.apache.tinkerpop.gremlin.structure.Graph;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
+import org.elasticsearch.common.Preconditions;
 
+import com.google.common.collect.Maps;
 import com.thinkaurelius.titan.core.TitanFactory;
 import com.thinkaurelius.titan.core.TitanGraph;
 import com.thinkaurelius.titan.core.TitanTransaction;
 import com.thinkaurelius.titan.core.schema.TitanManagement;
+import com.thinkaurelius.titan.core.util.TitanCleanup;
+import com.thinkaurelius.titan.diskstorage.BackendException;
+import com.thinkaurelius.titan.diskstorage.configuration.backend.CommonsConfiguration;
+import com.thinkaurelius.titan.graphdb.configuration.GraphDatabaseConfiguration;
 
 /**
  * Titan工具类
@@ -27,6 +33,8 @@ public final class Titans {
   public static final String storage_backend_key = "storage.backend";
   public static final String storage_hostname_key = "storage.hostname";
   public static final String storage_port_key = "storage.port";
+
+  public static final String DEFAULT_PROPERTY_NAME = "name";
 
   public interface GraphFactory extends Serializable {
     Graph make(Map<String, Object> conf);
@@ -61,6 +69,11 @@ public final class Titans {
       v = graph.addVertex();
     }
 
+    if (properties == null) {
+      properties = Maps.newHashMap();
+      properties.put(DEFAULT_PROPERTY_NAME, label);
+    }
+
     for (String propName : properties.keySet()) {
       v.property(propName, properties.get(propName));
     }
@@ -79,6 +92,12 @@ public final class Titans {
   public static void createE(Graph graph, String label, Vertex from, Vertex to,
       Map<String, Object> properties) {
     Edge edge = from.addEdge(label, to);
+
+    if (properties == null) {
+      properties = Maps.newHashMap();
+      properties.put(DEFAULT_PROPERTY_NAME, label);
+    }
+
     for (String propName : properties.keySet()) {
       edge.property(propName, properties.get(propName));
     }
@@ -99,6 +118,37 @@ public final class Titans {
       return vertexs.get(0);
     }
     return null;
+  }
+
+  /**
+   * <pre>
+   * 清空图中数据
+   * 
+   * WARNING: 仅在开发和测试中使用
+   * </pre>
+   * @param graph
+   * @see TitanCleanup#clear(TitanGraph)
+   * @see GraphTraversalSource.V().drop().iterate();
+   */
+  public static void clean(Graph graph) {
+    if (graph instanceof TitanGraph) {
+      TitanGraph tg = (TitanGraph) graph;
+      Preconditions.checkArgument(tg.isClosed());
+      TitanCleanup.clear((TitanGraph) graph);
+    } else {
+      // TODO clean the schema in graph
+      GraphTraversalSource g = graph.traversal();
+      g.V().drop().iterate();
+      g.E().drop().iterate();
+      graph.tx().commit();
+    }
+  }
+
+  public static void clean(TitanGraph titanGraph) throws BackendException {
+    // convert org.apache.commons.configuration.Configuration to GraphDatabaseConfiguration
+    GraphDatabaseConfiguration config = new GraphDatabaseConfiguration(//
+        new CommonsConfiguration(titanGraph.configuration()));
+    config.getBackend().clearStorage();
   }
 
   public static void main(String[] args) {

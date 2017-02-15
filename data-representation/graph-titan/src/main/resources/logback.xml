@@ -3,9 +3,9 @@
 <configuration>
 
 	<!-- log at work -->
-	<!-- <property name="USER_HOME" value="/Users/jiedong/logs" /> -->
+	<property name="USER_HOME" value="/Users/jiedong/logs" />
 	<!-- log at home -->
-	<property name="USER_HOME" value="/Users/zhang/logs" />
+	<!-- <property name="USER_HOME" value="/Users/zhang/logs" /> -->
 
 	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
@@ -18,7 +18,7 @@
 			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%p] [%t] %logger\(%file:%line\) => %m%n</pattern>
 		</encoder>
 	</appender>
-	<root level="DEBUG">
+	<root level="INFO"><!-- DEBUG -->
 		<appender-ref ref="STDOUT" />
 		<appender-ref ref="FILE" />
 	</root>

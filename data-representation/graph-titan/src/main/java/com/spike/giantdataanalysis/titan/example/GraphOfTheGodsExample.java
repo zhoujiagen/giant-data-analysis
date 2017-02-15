@@ -45,6 +45,7 @@ public class GraphOfTheGodsExample {
     LOG.info(names.toString());
 
     graph.close();
+    // TitanCleanup.clear(graph); // 清空图中索引和数据
   }
 
   public static final String INDEX_NAME = "search";
@@ -81,6 +82,15 @@ public class GraphOfTheGodsExample {
       boolean uniqueNameCompositeIndex) {
 
     // 1 创建Schema
+    loadSchema(graph, mixedIndexName, uniqueNameCompositeIndex);
+
+    // 2 创建节点和边
+    loadData(graph, mixedIndexName, uniqueNameCompositeIndex);
+  }
+
+  public static void loadSchema(final TitanGraph graph, String mixedIndexName,
+      boolean uniqueNameCompositeIndex) {
+
     // Create Schema
     TitanManagement mgmt = graph.openManagement();
 
@@ -126,8 +136,11 @@ public class GraphOfTheGodsExample {
     mgmt.makeVertexLabel("monster").make();
 
     mgmt.commit();
+  }
 
-    // 2 创建节点和边
+  public static void loadData(final TitanGraph graph, String mixedIndexName,
+      boolean uniqueNameCompositeIndex) {
+
     TitanTransaction tx = graph.newTransaction();
     // vertices
 
