@@ -43,6 +43,8 @@ Strike 1: Apache Storm word count example.
 > TBD
 
 ## 3 数据表示 - data-representation
++ graph-apache-tinkerpop: 图计算框架; 图遍历语言Gremlin抽象
++ graph-titan: 分布式图数据库
 
 > TBD
 

@@ -70,6 +70,8 @@ public class TitansTest {
     Titans.createE(graph, friend, Dawn, Jill, null);
     Titans.createE(graph, friend, Barbara, Elizabeth, null);
     Titans.createE(graph, friend, Elizabeth, Jill, null);
+    Titans.createE(graph, friend, Martin, Pramod, null);
+    Titans.createE(graph, friend, Pramod, Martin, null);
 
     Titans.createE(graph, likes, Anna, Refactoring, null);
     Titans.createE(graph, likes, Barbara, Refactoring, null);

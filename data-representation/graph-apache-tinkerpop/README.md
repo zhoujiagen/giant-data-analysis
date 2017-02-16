@@ -1,6 +1,6 @@
 # TODO
 
-		create package `com.spike.giantdataanalysis.<specific-project>`
+	阅读docs/reference/index.html TinkerPop3 Documentation
 
 # 0 实践版本
 
