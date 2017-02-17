@@ -1,0 +1,6 @@
+├── custom-groovy-scripts					使用定制的groovy脚本执行gremlin.sh
+├── dl										描述逻辑概念
+├── notes-of-TinkerPop3-renference.md		Apache TinkerPop3参考指南记录
+├── sample-graph-nosql-distilled.gliffy		NoSQL Distilled中示例图
+├── sample-graph-tinkerpop-morden.png		Apache TinkerPop3中Mordern示例图
+└── tinkerpop-step-types.png				Apache TinkerPop3中步骤基本的抽象类型(处理前一步骤结果的方式)
