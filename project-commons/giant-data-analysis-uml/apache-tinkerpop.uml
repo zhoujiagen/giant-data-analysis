@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_MHg2UPcUEeaahK8RASsCfw" name="tinkerpop">
+  <ownedComment xmi:id="_a1CasPcUEeaahK8RASsCfw" annotatedElement="_MHg2UPcUEeaahK8RASsCfw">
+    <body>类型和类型关系</body>
+  </ownedComment>
+  <packagedElement xmi:type="uml:Class" xmi:id="_6_fwAPcUEeaahK8RASsCfw" name="TinkerGraph">
+    <interfaceRealization xmi:id="_PTaVIPcVEeaahK8RASsCfw" client="_6_fwAPcUEeaahK8RASsCfw" supplier="_EmjJ0PcVEeaahK8RASsCfw" contract="_EmjJ0PcVEeaahK8RASsCfw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_7fAWgPcUEeaahK8RASsCfw" name="Class2"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_8Zqn8PcUEeaahK8RASsCfw" name="Class3"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_EmjJ0PcVEeaahK8RASsCfw" name="Graph"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_X7bT0PcVEeaahK8RASsCfw" name="Element"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_Yi4VYPcVEeaahK8RASsCfw" name="Edge">
+    <generalization xmi:id="_tcnkYPcVEeaahK8RASsCfw" general="_X7bT0PcVEeaahK8RASsCfw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_Y0zL0PcVEeaahK8RASsCfw" name="Vertex">
+    <generalization xmi:id="_t04TYPcVEeaahK8RASsCfw" general="_X7bT0PcVEeaahK8RASsCfw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_ZDkAkPcVEeaahK8RASsCfw" name="VertexProperty">
+    <generalization xmi:id="_uUlHIPcVEeaahK8RASsCfw" general="_X7bT0PcVEeaahK8RASsCfw"/>
+    <generalization xmi:id="_uu65wPcVEeaahK8RASsCfw" general="_o_VgwPcVEeaahK8RASsCfw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_o_VgwPcVEeaahK8RASsCfw" name="Property"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_Bc2YgPcWEeaahK8RASsCfw" name="TraversalSource">
+    <generalization xmi:id="_c4mtkPcXEeaahK8RASsCfw" general="_bIlhcPcXEeaahK8RASsCfw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_Fk0TcPcWEeaahK8RASsCfw" name="GraphTraversalSource">
+    <interfaceRealization xmi:id="_HxMEYPcWEeaahK8RASsCfw" client="_Fk0TcPcWEeaahK8RASsCfw" supplier="_Bc2YgPcWEeaahK8RASsCfw" contract="_Bc2YgPcWEeaahK8RASsCfw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_djdd4PcWEeaahK8RASsCfw" name="Traversal&lt;S, E>">
+    <generalization xmi:id="_22yjUPcWEeaahK8RASsCfw" general="_giBgwPcWEeaahK8RASsCfw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_giBgwPcWEeaahK8RASsCfw" name="Iterator&lt;E>"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_1GQZ0PcWEeaahK8RASsCfw" name="GraphTraversal&lt;S, E>">
+    <generalization xmi:id="_3PunwPcWEeaahK8RASsCfw" general="_djdd4PcWEeaahK8RASsCfw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_bIlhcPcXEeaahK8RASsCfw" name="Cloneable"/>
+  <packagedElement xmi:type="uml:Association" xmi:id="_zNhEoPcYEeaahK8RASsCfw" name="V(), E()..." memberEnd="_zNhEofcYEeaahK8RASsCfw _zNhrsfcYEeaahK8RASsCfw" navigableOwnedEnd="_zNhrsfcYEeaahK8RASsCfw">
+    <ownedEnd xmi:id="_zNhEofcYEeaahK8RASsCfw" name="factory" type="_Fk0TcPcWEeaahK8RASsCfw" association="_zNhEoPcYEeaahK8RASsCfw">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_zNhEovcYEeaahK8RASsCfw"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_zNhrsPcYEeaahK8RASsCfw" value="*"/>
+    </ownedEnd>
+    <ownedEnd xmi:id="_zNhrsfcYEeaahK8RASsCfw" name="bean" type="_1GQZ0PcWEeaahK8RASsCfw" association="_zNhEoPcYEeaahK8RASsCfw">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_zNhrsvcYEeaahK8RASsCfw"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_zNhrs_cYEeaahK8RASsCfw" value="*"/>
+    </ownedEnd>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_TgVrwPcZEeaahK8RASsCfw" name="GraphComputer"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_Vdc4sPcZEeaahK8RASsCfw" name="TinkerGraphComputer">
+    <interfaceRealization xmi:id="_W02wgPcZEeaahK8RASsCfw" client="_Vdc4sPcZEeaahK8RASsCfw" supplier="_TgVrwPcZEeaahK8RASsCfw" contract="_TgVrwPcZEeaahK8RASsCfw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_fTE6APcZEeaahK8RASsCfw" name="VertexProgram&lt;M>"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_pR898PcZEeaahK8RASsCfw" name="MapReduce&lt;MK, MV, RK, RV, R>"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_GOX0gPcbEeaahK8RASsCfw" name="Step&lt;S, E>">
+    <generalization xmi:id="_g6jjQPcbEeaahK8RASsCfw" general="_eA_VIPcbEeaahK8RASsCfw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_KbDQUPcbEeaahK8RASsCfw" name="Traverser&lt;T>"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_eA_VIPcbEeaahK8RASsCfw" name="Iterator&lt;Traverser.Admin&lt;E>>"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_9imhwPcbEeaahK8RASsCfw" name="Traversal.Admin&lt;S, E>">
+    <generalization xmi:id="_CNZc8PccEeaahK8RASsCfw" general="_djdd4PcWEeaahK8RASsCfw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_IF3FIPccEeaahK8RASsCfw" name="GraphTraversal.Admin&lt;S, E>">
+    <generalization xmi:id="_PzZ_oPccEeaahK8RASsCfw" general="_9imhwPcbEeaahK8RASsCfw"/>
+    <generalization xmi:id="_SDCf8PccEeaahK8RASsCfw" general="_1GQZ0PcWEeaahK8RASsCfw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_vJOL8PccEeaahK8RASsCfw" name="steps" memberEnd="_vJOL8fccEeaahK8RASsCfw _vJbAQvccEeaahK8RASsCfw" navigableOwnedEnd="_vJbAQvccEeaahK8RASsCfw">
+    <ownedEnd xmi:id="_vJOL8fccEeaahK8RASsCfw" name="operator" type="_9imhwPcbEeaahK8RASsCfw" association="_vJOL8PccEeaahK8RASsCfw">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_vJbAQPccEeaahK8RASsCfw"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_vJbAQfccEeaahK8RASsCfw" value="*"/>
+    </ownedEnd>
+    <ownedEnd xmi:id="_vJbAQvccEeaahK8RASsCfw" name="operatee" type="_GOX0gPcbEeaahK8RASsCfw" association="_vJOL8PccEeaahK8RASsCfw">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_vJl_YPccEeaahK8RASsCfw"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_vJl_YfccEeaahK8RASsCfw" value="*"/>
+    </ownedEnd>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_9uucwPccEeaahK8RASsCfw" name="Traverser.Admin&lt;T>">
+    <generalization xmi:id="_C2x7sPcdEeaahK8RASsCfw" general="_KbDQUPcbEeaahK8RASsCfw"/>
+  </packagedElement>
+</uml:Model>
