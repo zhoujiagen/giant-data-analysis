@@ -4,4 +4,5 @@
 ├── sample-graph-nosql-distilled.gliffy		NoSQL Distilled中示例图
 ├── sample-graph-tinkerpop-morden.png		Apache TinkerPop3中Mordern示例图
 ├── sample-graph-tinkerpop-morden.png		Apache TinkerPop3中Crew示例图
-└── tinkerpop-step-types.png				Apache TinkerPop3中步骤基本的抽象类型(处理前一步骤结果的方式)
+├── tinkerpop-step-types.png				Apache TinkerPop3中步骤基本的抽象类型(处理前一步骤结果的方式)
+├── tinkerpop-vertex-steps.png				Apache TinkerPop3中节点步骤的示意图
