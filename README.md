@@ -25,13 +25,17 @@
 
 ## 1 数据管理基础设施 - data-management-infrastructure
 
-+ Spark 1.5.2
++ Hadoop 2.7.2/1.2.1 - infrastructure-apache-hadoop
++ Spark 1.5.2 - scala-infrastructure-apache-spark
 
+> TODO 收集和整理Hadoop2运行示例和配置; Hadoop MapReduce抽象矩阵惩罚和关系代数运算.
+> TODO Apache Jena Elephant子项目的示例; 可能的尽快实现类SPARQL端点的功能.
 
 
 > TBD
 
 ## 2 时序数据和实时算法 - temporal-data-and-realtime-algorithm
+
 + Apache Storm
 + Alibaba JStorm
 + Spark Streaming
@@ -43,8 +47,12 @@ Strike 1: Apache Storm word count example.
 > TBD
 
 ## 3 数据表示 - data-representation
+
 + graph-apache-tinkerpop: 图计算框架; 图遍历语言Gremlin抽象
 + graph-titan: 分布式图数据库
+
+
+> TODO 继续整理Step示例; 完成NoSQL Distilled中关系图信息查询.
 
 > TBD
 

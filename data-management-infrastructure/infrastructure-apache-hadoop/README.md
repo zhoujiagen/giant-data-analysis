@@ -1,10 +1,12 @@
 # TODO
 
-		create package `com.spike.giantdataanalysis.<specific-project>`
+	给运行示例temperature添加示例.
+	准备MapReduce抽象矩阵乘法和关系代数运算.
 
 # 0 实践版本
 
-	x.y.z
+	1.2.1
+	2.7.2
 
 # 1 资源
 
