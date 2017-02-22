@@ -73,130 +73,22 @@ Gremlin I/O负责图数据的存储, 格式有XML, JSON, Kryo.
 
 具体的实现: `GraphTraversal<S,E>`. 可以从`GraphTraversalSource`或者`org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__`中生成.
 
+图遍历由步骤的顺序列表构成.
 
 ## General Steps
 
-## AddEdge Step
+5种通用的步骤:  map, flatMap, filter, sideEffect, branch.
 
-## AddVertex Step
+遍历者`Traverser<S>`提供了访问接口:
 
-## AddProperty Step
++ 当前被遍历对象`S`(`Traverser.get()`)
++ 遍历者遍历的当前路径(`Traverser.path()`)
++ 在当前循环中遍历者已走的次数(`Traverser.loop()`)
++ 遍历者表示的对象数量(`Traverser.bulk()`)
++ 遍历者关联的局部数据结构(`Traverser.sack()`)
++ 遍历者关联的副作用(`Traverser.sideEffects()`)
 
-## Aggregate Step
-
-## And Step
-
-## As Step
-
-## Barrier Step
-
-## By Step
-
-## Cap Step
-
-## Coalesce Step
-
-## Count Step
-
-## Choose Step
-
-## Coin Step
-
-## Constant Step
-
-## CyclicPath Step
-
-## Dedup Step
-
-## Drop Step
-
-## Explain Step
-
-## Fold Step
-
-## Graph Step
-
-## Group Step
-
-## GroupCount Step
-
-## Has Step
-
-## Inject Step
-
-## Is Step
-
-## Limit Step
-
-## Local Step
-
-## Match Step
-
-Using Where with Match
-## Max Step
-
-## Mean Step
-
-## Min Step
-
-## Option Step
-
-## Optional Step
-
-## Or Step
-
-## Order Step
-
-## PageRank Step
-
-## Path Step
-
-Path Data Structure
-
-## PeerPressure Step
-
-## Profile Step
-
-## Project Step
-
-## Program Step
-
-## Range Step
-
-## Repeat Step
-
-## Sack Step
-
-## Sample Step
-
-## Select Step
-
-Using Where with Select
-
-## SimplePath Step
-
-## Store Step
-
-## Subgraph Step
-
-## Sum Step
-
-## Tail Step
-
-## TimeLimit Step
-
-## Tree Step
-
-## Unfold Step
-
-## Union Step
-
-## ValueMap Step
-
-## Vertex Steps
-
-## Where Step
-
+详情见`com.spike.giantdataanalysis.tinkerpop.example.TinkerPopTraversalStepExample`.
 
 > TBD
 
