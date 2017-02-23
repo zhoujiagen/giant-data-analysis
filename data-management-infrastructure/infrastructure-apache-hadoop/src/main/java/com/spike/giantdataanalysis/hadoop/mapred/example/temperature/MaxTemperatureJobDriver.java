@@ -31,13 +31,14 @@ public class MaxTemperatureJobDriver extends Configured implements Tool {
   @Override
   public int run(String[] args) throws Exception {
 
+    // 输出通用命令
     ToolRunner.printGenericCommandUsage(System.err);
 
     Job job = Job.getInstance(getConf(), "Max temperature");
     job.setJarByClass(getClass());
 
-    FileInputFormat.addInputPath(job, new Path("input"));
-    FileOutputFormat.setOutputPath(job, new Path("output"));
+    FileInputFormat.addInputPath(job, new Path("data/input"));
+    FileOutputFormat.setOutputPath(job, new Path("data/output"));
 
     job.setMapperClass(MaxTemperatureMapper.class);
     job.setCombinerClass(MaxTemperatureReducer.class);

@@ -5,3 +5,7 @@
 .settings/
 
 target/
+
+data/output/
+
+
