@@ -1,13 +1,18 @@
 package com.spike.giantdataanalysis.tinkerpop.example;
 
-import static com.spike.giantdataanalysis.tinkerpop.support.TinkerPops.*;
+import static com.spike.giantdataanalysis.tinkerpop.support.TinkerPops.explain;
+import static com.spike.giantdataanalysis.tinkerpop.support.TinkerPops.introspect;
+import static com.spike.giantdataanalysis.tinkerpop.support.TinkerPops.result;
+import static com.spike.giantdataanalysis.tinkerpop.support.TinkerPops.sampleMordenGraph;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import org.apache.tinkerpop.gremlin.process.traversal.Order;
 import org.apache.tinkerpop.gremlin.process.traversal.P;
@@ -17,6 +22,7 @@ import org.apache.tinkerpop.gremlin.process.traversal.Traverser;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__;
 import org.apache.tinkerpop.gremlin.process.traversal.step.TraversalOptionParent.Pick;
+import org.apache.tinkerpop.gremlin.process.traversal.step.util.Tree;
 import org.apache.tinkerpop.gremlin.structure.T;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.apache.tinkerpop.gremlin.structure.VertexProperty.Cardinality;
@@ -87,21 +93,20 @@ public class TinkerPopTraversalStepExample {
       // ProgramStep(g);
       // RangeStep(g);
       // RepeatStep(g);
-      // TODO
-      SackStep(g);
-      SampleStep(g);
-      SelectStep(g);
-      SimplePathStep(g);
-      StoreStep(g);
-      SubgraphStep(g);
-      SumStep(g);
-      TailStep(g);
-      TimeLimitStep(g);
-      TreeStep(g);
-      UnfoldStep(g);
-      UnionStep(g);
-      ValueMapStep(g);
-      VertexSteps(g);
+      // SackStep(g);
+      // SampleStep(g);
+      // SelectStep(g);
+      // SimplePathStep(g);
+      // StoreStep(g);
+      // SubgraphStep(g);
+      // SumStep(g);
+      // TailStep(g);
+      // TimeLimitStep(g);
+      // TreeStep(g);
+      // UnfoldStep(g);
+      // UnionStep(g);
+      // ValueMapStep(g);
+      // VertexSteps(g);
       WhereStep(g);
     }
   }
@@ -619,48 +624,128 @@ public class TinkerPopTraversalStepExample {
     result(g.V(1).repeat(__.out()).times(2).emit(__.has("lang")).path().by("name"));
   }
 
+  /**
+   * sack: 遍历者的局部数据结构
+   * @param g
+   * @see GraphTraversalSource#withSack(Object)
+   * @see GraphTraversalSource#withSack(Object, java.util.function.UnaryOperator,
+   *      java.util.function.BinaryOperator)
+   * @see org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal#sack()
+   * @see org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal#sack(BiFunction)
+   */
   static void SackStep(GraphTraversalSource g) {
+    result(g.withSack(1.0f).V().sack());
+
+    // work with java.util.function.Supplier
+    final Random random = new Random(System.currentTimeMillis());
+    result(g.withSack(new Supplier<Float>() {
+      @Override
+      public Float get() {
+        return random.nextFloat();
+      }
+    }).V().sack());
   }
 
   static void SampleStep(GraphTraversalSource g) {
+    // 在遍历中采样遍历者
+    result(g.V().outE().sample(1).values("weight"));
+    result(g.V().outE().sample(1).by("weight").values("weight"));
   }
 
   static void SelectStep(GraphTraversalSource g) {
+    result(g.V().as("a").out().as("b").out().as("c"));
+    result(g.V().as("a").out().as("b").out().as("c").select("a", "b", "c"));
+    result(g.V().as("a").out().as("b").out().as("c").select("a", "b"));
+    result(g.V().as("a").out().as("b").out().as("c").select("a", "b", "c").by("name"));
+
+    // work with where()
+    result(g.V().as("a").out("created").in("created").as("b")//
+        .select("a", "b").by("name"));
+    result(g.V().as("a").out("created").in("created").as("b")//
+        .select("a", "b").by("name").where("a", P.neq("b")));
   }
 
   static void SimplePathStep(GraphTraversalSource g) {
+    // 保证遍历者不在图中重复其遍历路径
+    result(g.V(1).both().both().path());
+    result(g.V(1).both().both().simplePath().path());
   }
 
   static void StoreStep(GraphTraversalSource g) {
+    // lazy aggregation
+    result(g.V().aggregate("v").limit(1).cap("v"));
+    result(g.V().store("v").limit(1).cap("v")); // 2 result
+
+    result(g.E().store("e").by("weight").cap("e"));
   }
 
   static void SubgraphStep(GraphTraversalSource g) {
+    // 从任意遍历中生成边包含的子图
+    TinkerGraph subGraph =
+        g.E().hasLabel("knows").subgraph("subGraph").<TinkerGraph> cap("subGraph").next();
+
+    result(subGraph.traversal().E().label());
+    result(subGraph.traversal().V().values("name"));
   }
 
   static void SumStep(GraphTraversalSource g) {
+    result(g.V().values("age").sum());
   }
 
   static void TailStep(GraphTraversalSource g) {
+    // like limit(), but emits last n objects
+    result(g.V().limit(2));
+    result(g.V().tail(2));
   }
 
   static void TimeLimitStep(GraphTraversalSource g) {
+    // {v[1]=2744208, v[2]=1136688, v[3]=2744208, v[4]=2744208, v[5]=1136688, v[6]=1136688}
+    result(g.V().repeat(__.both().groupCount("m")).times(16).cap("m"));
+
+    // {v[1]=2611264, v[2]=1081276, v[3]=2610249, v[4]=2611264, v[5]=1081276, v[6]=1081892}
+    result(g.V().repeat(__.timeLimit(1).both().groupCount("m")).times(16).cap("m"));
   }
 
   static void TreeStep(GraphTraversalSource g) {
+    // HashMap<T, Tree<T>>
+    Tree<?> tree = g.V().out().out().tree().by("name").next();
+
+    result(tree);
   }
 
+  @SuppressWarnings("unchecked")
   static void UnfoldStep(GraphTraversalSource g) {
+    result(g.V().out().values("name").fold()
+        .inject(Lists.newArrayList("Gremlin", Lists.newArrayList("1", "2")))//
+        .unfold());
   }
 
+  @SuppressWarnings("unchecked")
   static void UnionStep(GraphTraversalSource g) {
+    // a branch
+    result(g.V(4).union(//
+      __.in().values("age"),//
+      __.out().values("name")));
+
+    result(g.V(4).union(//
+      __.in().values("age"),//
+      __.out().values("name")).path());
   }
 
   static void ValueMapStep(GraphTraversalSource g) {
+    // 元素属性的Map表示
+    result(g.V().valueMap());
+    result(g.V().has("name", "marko").properties());
+    result(g.V().has("name", "marko").properties().valueMap()); // 元属性
   }
 
   static void VertexSteps(GraphTraversalSource g) {
+    // out(), in(), both(), *E(), otherV()
+    result(g.V());
   }
 
   static void WhereStep(GraphTraversalSource g) {
+    result(g.V().as("a").out("created").in("created").as("b")//
+        .select("a", "b").by("name").where("a", P.neq("b")));
   }
 }

@@ -168,6 +168,8 @@ public class TinkerPops {
       }
       System.out.println();
     }
+    
+    System.out.println(object);
   }
   
   public static void introspect(Path path) {
