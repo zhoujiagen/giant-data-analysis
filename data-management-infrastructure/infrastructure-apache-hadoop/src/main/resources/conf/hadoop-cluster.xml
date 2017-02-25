@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<configuration>
+	<property>
+		<name>fs.defaultFS</name>
+		<!-- 主机名namenode -->
+		<value>hdfs://namenode/</value>
+	</property>
+	<property>
+		<name>mapreduce.framework.name</name>
+		<value>yarn</value>
+	</property>
+	<property>
+		<name>yarn.resourcemanager.address</name>
+		<!-- 主机名resourcemanager -->
+		<value>resourcemanager:8032</value>
+	</property>
+</configuration>

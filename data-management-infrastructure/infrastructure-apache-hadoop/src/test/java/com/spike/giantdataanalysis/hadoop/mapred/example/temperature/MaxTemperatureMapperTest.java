@@ -9,13 +9,22 @@ import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mrunit.mapreduce.MapDriver;
 import org.apache.hadoop.mrunit.types.Pair;
+import org.junit.BeforeClass;
 import org.junit.Test;
+
+import com.spike.giantdataanalysis.hadoop.support.Hadoops;
 
 /**
  * {@link MaxTemperatureMapper}的MRUnit单元测试
  * @author zhoujiagen
+ * @see MapDriver
  */
 public class MaxTemperatureMapperTest {
+
+  @BeforeClass
+  public static void BeforeClass() {
+    Hadoops.SETUP_ENV();
+  }
 
   @Test
   public void processValidRecord() throws IOException {
@@ -33,8 +42,8 @@ public class MaxTemperatureMapperTest {
     inputRecords.add(pair);
     new MapDriver<LongWritable, Text, Text, IntWritable>()//
         .withMapper(new MaxTemperatureMapper())//
-        .withAll(inputRecords)//
-        .withOutput(new Text("1901"), new IntWritable(-78))//
+        .withAll(inputRecords)// 输入
+        .withOutput(new Text("1901"), new IntWritable(-78))// 期望输出
         .runTest();
   }
 
@@ -56,6 +65,9 @@ public class MaxTemperatureMapperTest {
     Pair<LongWritable, Text> pair =
         new Pair<LongWritable, Text>(new LongWritable(0), new Text(line));
     inputRecords.add(pair);
+
+    // 期望没有输出
+    // 期望多个输出时, 指定多个withOutput
     new MapDriver<LongWritable, Text, Text, IntWritable>()//
         .withMapper(new MaxTemperatureMapper())//
         .withAll(inputRecords)//

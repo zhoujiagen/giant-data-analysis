@@ -16,17 +16,11 @@
 	</properties>
 
 	<dependencies>
-		<!-- Hadoop相关依赖 -->
+		<!-- Hadoop依赖 -->
 		<dependency>
 			<groupId>org.apache.hadoop</groupId>
 			<artifactId>hadoop-client</artifactId>
 			<version>${hadoop.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.hadoop</groupId>
-			<artifactId>hadoop-minicluster</artifactId>
-			<version>${hadoop.version}</version>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.hadoop</groupId>
@@ -41,7 +35,20 @@
 			<!-- <scope>provided</scope> -->
 		</dependency>
 
-		<!-- 测试项目依赖 -->
+		<!-- 测试依赖 -->
+		<dependency>
+			<groupId>org.apache.mrunit</groupId>
+			<artifactId>mrunit</artifactId>
+			<version>${mrunit.version}</version>
+			<classifier>hadoop2</classifier>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.hadoop</groupId>
+			<artifactId>hadoop-minicluster</artifactId>
+			<version>${hadoop.version}</version>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -67,13 +74,6 @@
 					<artifactId>xmlParserAPIs</artifactId>
 				</exclusion>
 			</exclusions>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.mrunit</groupId>
-			<artifactId>mrunit</artifactId>
-			<version>${mrunit.version}</version>
-			<classifier>hadoop2</classifier>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

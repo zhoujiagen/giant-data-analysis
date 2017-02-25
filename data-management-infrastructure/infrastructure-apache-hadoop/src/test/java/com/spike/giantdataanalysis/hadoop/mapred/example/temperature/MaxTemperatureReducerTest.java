@@ -12,6 +12,7 @@ import org.junit.Test;
 /**
  * {@link MaxTemperatureReducer}的MRUnit单元测试
  * @author zhoujiagen
+ * @see ReduceDriver
  */
 public class MaxTemperatureReducerTest {
 
@@ -26,7 +27,7 @@ public class MaxTemperatureReducerTest {
     new ReduceDriver<Text, IntWritable, Text, IntWritable>()//
         .withReducer(new MaxTemperatureReducer())//
         .withInput(key, values)//
-        .withOutput(key, new IntWritable(10))//
+        .withOutput(key, new IntWritable(10))// 期望输出
         .runTest();
   }
 

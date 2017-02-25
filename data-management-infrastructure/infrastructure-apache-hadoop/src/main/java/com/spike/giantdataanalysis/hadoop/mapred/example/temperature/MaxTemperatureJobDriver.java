@@ -6,9 +6,13 @@ import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
+
+import com.spike.giantdataanalysis.hadoop.support.ApplicationConstants;
+import com.spike.giantdataanalysis.hadoop.support.Hadoops;
 
 /**
  * Job Driver of max temperature
@@ -23,6 +27,8 @@ public class MaxTemperatureJobDriver extends Configured implements Tool {
   // }
 
   public static void main(String[] args) throws Exception {
+    Hadoops.SETUP_ENV();
+
     int exitCode = ToolRunner.run(new MaxTemperatureJobDriver(), args);
 
     System.exit(exitCode);
@@ -34,16 +40,23 @@ public class MaxTemperatureJobDriver extends Configured implements Tool {
     // 输出通用命令
     ToolRunner.printGenericCommandUsage(System.err);
 
-    Job job = Job.getInstance(getConf(), "Max temperature");
+    // 基于Tool的配置创建作业
+    Job job = Job.getInstance(super.getConf(), "Max temperature");
     job.setJarByClass(getClass());
 
-    FileInputFormat.addInputPath(job, new Path("data/input"));
-    FileOutputFormat.setOutputPath(job, new Path("data/output"));
+    FileInputFormat.addInputPath(job, new Path(ApplicationConstants.DATA_NCDC_INPUT_PATH));
+    FileOutputFormat.setOutputPath(job, new Path(ApplicationConstants.DATA_NCDC_OUTPUT_PATH));
 
     job.setMapperClass(MaxTemperatureMapper.class);
     job.setCombinerClass(MaxTemperatureReducer.class);
     job.setReducerClass(MaxTemperatureReducer.class);
 
+    // 默认的输入格式TextInputFormat, [LongWritable, Text]
+    job.setInputFormatClass(TextInputFormat.class);
+
+    // map的输出与reduce的输出一致是可以不设置
+    job.setMapOutputKeyClass(Text.class);
+    job.setMapOutputValueClass(IntWritable.class);
     job.setOutputKeyClass(Text.class);
     job.setOutputValueClass(IntWritable.class);
 
