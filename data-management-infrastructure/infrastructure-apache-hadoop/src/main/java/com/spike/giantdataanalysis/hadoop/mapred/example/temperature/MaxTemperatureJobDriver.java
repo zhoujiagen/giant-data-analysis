@@ -11,7 +11,6 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
-import com.spike.giantdataanalysis.hadoop.support.ApplicationConstants;
 import com.spike.giantdataanalysis.hadoop.support.Hadoops;
 
 /**
@@ -44,8 +43,11 @@ public class MaxTemperatureJobDriver extends Configured implements Tool {
     Job job = Job.getInstance(super.getConf(), "Max temperature");
     job.setJarByClass(getClass());
 
-    FileInputFormat.addInputPath(job, new Path(ApplicationConstants.DATA_NCDC_INPUT_PATH));
-    FileOutputFormat.setOutputPath(job, new Path(ApplicationConstants.DATA_NCDC_OUTPUT_PATH));
+    // for local test
+    // FileInputFormat.addInputPath(job, new Path(ApplicationConstants.DATA_NCDC_INPUT_PATH));
+    // FileOutputFormat.setOutputPath(job, new Path(ApplicationConstants.DATA_NCDC_OUTPUT_PATH));
+    FileInputFormat.addInputPath(job, new Path(args[0]));
+    FileOutputFormat.setOutputPath(job, new Path(args[1]));
 
     job.setMapperClass(MaxTemperatureMapper.class);
     job.setCombinerClass(MaxTemperatureReducer.class);

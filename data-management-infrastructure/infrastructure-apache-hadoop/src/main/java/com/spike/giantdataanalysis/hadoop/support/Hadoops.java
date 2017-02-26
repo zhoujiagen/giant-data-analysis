@@ -6,10 +6,27 @@ import java.util.TreeMap;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.Mapper;
+import org.apache.hadoop.mapreduce.Reducer;
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
+import org.apache.hadoop.mapreduce.lib.partition.HashPartitioner;
+import org.apache.hadoop.util.Tool;
+import org.apache.hadoop.util.ToolRunner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class Hadoops {
+
+  private static final Logger LOG = LoggerFactory.getLogger(Hadoops.class);
 
   public static final String HADOOP_HOME_VALUE = "/Users/jiedong/software/hadoop-2.7.2";
 
@@ -35,7 +52,7 @@ public final class Hadoops {
     if (conf == null) return;
 
     StringBuilder sb = new StringBuilder();
-    sb.append(StringUtils.repeat("=", 50) + "\n");
+    sb.append("\n" + StringUtils.repeat("=", 50) + "\n");
     sb.append("Configuration\n");
     sb.append(StringUtils.repeat("-", 50) + "\n");
 
@@ -56,7 +73,8 @@ public final class Hadoops {
 
     sb.append(StringUtils.repeat("=", 50) + "\n");
 
-    System.out.print(sb.toString());
+    // System.out.print(sb.toString());
+    LOG.info(sb.toString());
   }
 
   /**
@@ -89,4 +107,60 @@ public final class Hadoops {
     FileSystem fs = FileSystem.getLocal(conf);
     fs.delete(path, recursive);
   }
+
+  /**
+   * 最小的MapReduce作业
+   * @author zhoujiagen
+   */
+  public static class MinimalMapReduce extends Configured implements Tool {
+
+    // example Arguments: data/ncdc/input data/ncdc/output
+    public static void main(String[] args) {
+      if (args.length != 2) {
+        ToolRunner.printGenericCommandUsage(System.out);
+      }
+
+      int exitCode = 0;
+      try {
+        exitCode = ToolRunner.run(new MinimalMapReduce(), args);
+      } catch (Exception e) {
+        LOG.error(e.getMessage(), e);
+      }
+      System.exit(exitCode);
+    }
+
+    @Override
+    public int run(String[] args) throws Exception {
+      Job job = Job.getInstance(super.getConf());
+      job.setJarByClass(getClass());
+      FileInputFormat.addInputPath(job, new Path(args[0]));
+      FileOutputFormat.setOutputPath(job, new Path(args[1]));
+
+      // 默认配置
+      // format
+      job.setInputFormatClass(TextInputFormat.class);
+      job.setOutputFormatClass(TextOutputFormat.class);
+
+      // mapper
+      // mapper任务的数量等于输入拆分为split的数量
+      // split的数量由输入大小和文件块的大小(如果在HDFS上)决定
+      job.setMapperClass(Mapper.class);
+      job.setMapOutputKeyClass(LongWritable.class);
+      job.setMapOutputValueClass(Text.class);
+
+      // partitioner
+      // 每个分区由一个reduce任务处理
+      job.setPartitionerClass(HashPartitioner.class);
+
+      // reducer
+      job.setNumReduceTasks(1); // 任务数量
+      job.setReducerClass(Reducer.class);
+      job.setOutputKeyClass(LongWritable.class);
+      job.setOutputValueClass(Text.class);
+
+      return job.waitForCompletion(true) ? 0 : 1;
+    }
+
+  }
+
 }

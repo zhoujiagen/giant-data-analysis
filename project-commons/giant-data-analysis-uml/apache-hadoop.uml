@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_hn-IQPwQEeatJIQbqfl0tw" name="hadoop">
+  <ownedComment xmi:id="_4Tk9gPwQEeatJIQbqfl0tw" annotatedElement="_hn-IQPwQEeatJIQbqfl0tw">
+    <body>输入输出格式</body>
+  </ownedComment>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_-yHHMPwQEeatJIQbqfl0tw" name="Configurable"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_C2JkYPwREeatJIQbqfl0tw" name="Tool">
+    <generalization xmi:id="_Z8mikPwREeatJIQbqfl0tw" general="_-yHHMPwQEeatJIQbqfl0tw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_IxRfAPwREeatJIQbqfl0tw" name="Writable"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_MXxroPwREeatJIQbqfl0tw" name="Iterable&lt;Map.Entry&lt;String,String>>"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_RD_jIPwREeatJIQbqfl0tw" name="Configuration">
+    <interfaceRealization xmi:id="_YFGOYPwREeatJIQbqfl0tw" client="_RD_jIPwREeatJIQbqfl0tw" supplier="_MXxroPwREeatJIQbqfl0tw" contract="_MXxroPwREeatJIQbqfl0tw"/>
+    <interfaceRealization xmi:id="_YotRwPwREeatJIQbqfl0tw" client="_RD_jIPwREeatJIQbqfl0tw" supplier="_IxRfAPwREeatJIQbqfl0tw" contract="_IxRfAPwREeatJIQbqfl0tw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_k1Xb4PwREeatJIQbqfl0tw" name="Configured">
+    <interfaceRealization xmi:id="_phxgoPwREeatJIQbqfl0tw" client="_k1Xb4PwREeatJIQbqfl0tw" supplier="_-yHHMPwQEeatJIQbqfl0tw" contract="_-yHHMPwQEeatJIQbqfl0tw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Abstraction" xmi:id="_ym9jgPwREeatJIQbqfl0tw" client="_-yHHMPwQEeatJIQbqfl0tw" supplier="_RD_jIPwREeatJIQbqfl0tw"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_H_EJgPwSEeatJIQbqfl0tw" name="Job"/>
+</uml:Model>

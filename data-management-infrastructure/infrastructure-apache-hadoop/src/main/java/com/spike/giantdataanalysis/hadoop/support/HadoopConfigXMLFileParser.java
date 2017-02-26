@@ -21,19 +21,16 @@ public class HadoopConfigXMLFileParser {
   public static final String DESCRIPTION_KEY = "description";
 
   public static void main(String[] args) throws ConfigurationException {
-    String dir =
-        "/home/zhoujiagen/local_git_repository/hadoop/hadoop-parent/hadoop-common/src/main/resources/";
+    String dir = System.getProperty("user.dir") + "/src/main/resources/";
+    // dir += "hadoop1/conf/"; // V1
+    // dir += "hadoop2/etc/hadoop/"; // V2
+    dir += "hadoop2/_default/";// V2 default
 
-    // String version = "1.2.1";
-    String version = "2.7.0";
-
-    dir += version + "/";
-
-    // String fileName = dir + "core-default.xml";
-    // String fileName = dir + "hdfs-default.xml";
-    // String fileName = dir + "mapred-default.xml";
-
-    String fileName = dir + "yarn-default.xml";
+    // String fileName = dir + "core-site.xml";
+    // String fileName = dir + "hdfs-site.xml";
+    // String fileName = dir + "mapred-site.xml";
+    // String fileName = dir + "yarn-site.xml";
+    String fileName = dir + "hdfs-default.xml";
 
     XMLConfiguration conf = new XMLConfiguration(fileName);
 
