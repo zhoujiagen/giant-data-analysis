@@ -1,4 +1,4 @@
-Use UML Designer Plugin.
+Use UML Designer Plugin, REF: https://marketplace.eclipse.org/content/uml-designer
 
 reserve `.project` file.
 // change dotproject to .project.

@@ -18,4 +18,95 @@
   </packagedElement>
   <packagedElement xmi:type="uml:Abstraction" xmi:id="_ym9jgPwREeatJIQbqfl0tw" client="_-yHHMPwQEeatJIQbqfl0tw" supplier="_RD_jIPwREeatJIQbqfl0tw"/>
   <packagedElement xmi:type="uml:Class" xmi:id="_H_EJgPwSEeatJIQbqfl0tw" name="Job"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="__ImdwPvSEeawNM3lmW2VBg" name="TextInputFormat">
+    <generalization xmi:id="_LdJ_oPvTEeawNM3lmW2VBg" general="_C3XOgPvTEeawNM3lmW2VBg"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_C3XOgPvTEeawNM3lmW2VBg" name="FileInputFormat&lt;K, V>" isAbstract="true">
+    <ownedComment xmi:id="_PYIJ8PvfEeawNM3lmW2VBg" annotatedElement="_C3XOgPvTEeawNM3lmW2VBg">
+      <body>文件输入格式.
+(1) 指定作为作业输入的文件位置;
+(2) 根据文件产生split.</body>
+    </ownedComment>
+    <generalization xmi:id="_K27GEPvTEeawNM3lmW2VBg" general="_HU5JwPvTEeawNM3lmW2VBg"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_HU5JwPvTEeawNM3lmW2VBg" name="InputFormat&lt;K, V>" isAbstract="true"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_ctEBMPvTEeawNM3lmW2VBg" name="LongWritable">
+    <interfaceRealization xmi:id="_jdrZYPvTEeawNM3lmW2VBg" client="_ctEBMPvTEeawNM3lmW2VBg" supplier="_hW5TEPvTEeawNM3lmW2VBg" contract="_hW5TEPvTEeawNM3lmW2VBg"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_hW5TEPvTEeawNM3lmW2VBg" name="WritableComparable">
+    <generalization xmi:id="_shP1MPvfEeawNM3lmW2VBg" general="_jUZrIPvfEeawNM3lmW2VBg"/>
+    <generalization xmi:id="_w0J00PvfEeawNM3lmW2VBg" general="_56DqYPvUEeawNM3lmW2VBg"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_mOCBIPvTEeawNM3lmW2VBg" name="Text">
+    <generalization xmi:id="_q83u0PvTEeawNM3lmW2VBg" general="_qLLMIPvTEeawNM3lmW2VBg"/>
+    <interfaceRealization xmi:id="_nrk9MPvTEeawNM3lmW2VBg" client="_mOCBIPvTEeawNM3lmW2VBg" supplier="_hW5TEPvTEeawNM3lmW2VBg" contract="_hW5TEPvTEeawNM3lmW2VBg"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_qLLMIPvTEeawNM3lmW2VBg" name="BinaryComparable" isAbstract="true">
+    <interfaceRealization xmi:id="_-De94PvUEeawNM3lmW2VBg" client="_qLLMIPvTEeawNM3lmW2VBg" supplier="_56DqYPvUEeawNM3lmW2VBg" contract="_56DqYPvUEeawNM3lmW2VBg"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_56DqYPvUEeawNM3lmW2VBg" name="java.lang.Comparable"/>
+  <packagedElement xmi:type="uml:Usage" xmi:id="_B4ZZ8PvVEeawNM3lmW2VBg" client="__ImdwPvSEeawNM3lmW2VBg" supplier="_ctEBMPvTEeawNM3lmW2VBg"/>
+  <packagedElement xmi:type="uml:Usage" xmi:id="_DEic8PvVEeawNM3lmW2VBg" client="__ImdwPvSEeawNM3lmW2VBg" supplier="_mOCBIPvTEeawNM3lmW2VBg"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_VsP-8PvVEeawNM3lmW2VBg" name="Mapper"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_WO3j0PvVEeawNM3lmW2VBg" name="Reducer"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_fWHcMPvVEeawNM3lmW2VBg" name="HashPartitioner&lt;K, V>">
+    <generalization xmi:id="_owazcPvVEeawNM3lmW2VBg" general="_l7LEoPvVEeawNM3lmW2VBg"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_l7LEoPvVEeawNM3lmW2VBg" name="Partitioner&lt;KEY, VALUE>" isAbstract="true"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_6u6ZUPvVEeawNM3lmW2VBg" name="TextOutputFormat&lt;K, V>">
+    <generalization xmi:id="_FzuxoPvWEeawNM3lmW2VBg" general="_-btbMPvVEeawNM3lmW2VBg"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_-btbMPvVEeawNM3lmW2VBg" name="FileOutputFormat&lt;K, V>" isAbstract="true">
+    <generalization xmi:id="_Facu8PvWEeawNM3lmW2VBg" general="_EHn1IPvWEeawNM3lmW2VBg"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_EHn1IPvWEeawNM3lmW2VBg" name="OutputFormat&lt;K, V>" isAbstract="true"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_bMj68PvXEeawNM3lmW2VBg" name="InputSplit">
+    <ownedComment xmi:id="_R84NYPvZEeawNM3lmW2VBg" annotatedElement="_bMj68PvXEeawNM3lmW2VBg">
+      <body>不包含实际的数据, 只是数据的引用.</body>
+    </ownedComment>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_YkcXQPvZEeawNM3lmW2VBg" name="RecordReader&lt;KEYIN, VALUEIN>">
+    <interfaceRealization xmi:id="_ln-fAPvZEeawNM3lmW2VBg" client="_YkcXQPvZEeawNM3lmW2VBg" supplier="_kZ-a0PvZEeawNM3lmW2VBg" contract="_kZ-a0PvZEeawNM3lmW2VBg"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Usage" xmi:id="_g4BXAPvZEeawNM3lmW2VBg" client="_HU5JwPvTEeawNM3lmW2VBg" supplier="_bMj68PvXEeawNM3lmW2VBg"/>
+  <packagedElement xmi:type="uml:Usage" xmi:id="_hegIMPvZEeawNM3lmW2VBg" client="_HU5JwPvTEeawNM3lmW2VBg" supplier="_YkcXQPvZEeawNM3lmW2VBg"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_kZ-a0PvZEeawNM3lmW2VBg" name="java.io.Closeable"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_5U-1IPvZEeawNM3lmW2VBg" name="JobContext">
+    <generalization xmi:id="_8c8EkPvZEeawNM3lmW2VBg" general="_64ku0PvZEeawNM3lmW2VBg"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_64ku0PvZEeawNM3lmW2VBg" name="MRJobConfig"/>
+  <packagedElement xmi:type="uml:Usage" xmi:id="_Mm1gUPvaEeawNM3lmW2VBg" client="_64ku0PvZEeawNM3lmW2VBg" supplier="_RD_jIPwREeatJIQbqfl0tw"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_mcDx4PvaEeawNM3lmW2VBg" name="TaskAttemptContext">
+    <generalization xmi:id="_8IlvwPvaEeawNM3lmW2VBg" general="_5U-1IPvZEeawNM3lmW2VBg"/>
+    <generalization xmi:id="_P95tUPvbEeawNM3lmW2VBg" general="_O2O6oPvbEeawNM3lmW2VBg"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_qeBygPvaEeawNM3lmW2VBg" name="TaskInputOutputContext">
+    <generalization xmi:id="_8hoh4PvaEeawNM3lmW2VBg" general="_mcDx4PvaEeawNM3lmW2VBg"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_EYa38PvbEeawNM3lmW2VBg" name="MapContext">
+    <generalization xmi:id="_Fmo-kPvbEeawNM3lmW2VBg" general="_qeBygPvaEeawNM3lmW2VBg"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_O2O6oPvbEeawNM3lmW2VBg" name="Progressable"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_Y_5SQPvbEeawNM3lmW2VBg" name="ReduceContext">
+    <generalization xmi:id="_aW8kwPvbEeawNM3lmW2VBg" general="_qeBygPvaEeawNM3lmW2VBg"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_ywMnkPvbEeawNM3lmW2VBg" name="MultithreadedMapper&lt;K1, V1, K2, V2>">
+    <ownedComment xmi:id="_B5Ui0PvcEeawNM3lmW2VBg" annotatedElement="_ywMnkPvbEeawNM3lmW2VBg">
+      <body>在可配置数量的线程中并发执行.</body>
+    </ownedComment>
+    <generalization xmi:id="_2JhT0PvbEeawNM3lmW2VBg" general="_VsP-8PvVEeawNM3lmW2VBg"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_YigO0PvfEeawNM3lmW2VBg" name="FileSplit">
+    <generalization xmi:id="_bO-cIPvfEeawNM3lmW2VBg" general="_bMj68PvXEeawNM3lmW2VBg"/>
+    <interfaceRealization xmi:id="_1Hl_8PvfEeawNM3lmW2VBg" client="_YigO0PvfEeawNM3lmW2VBg" supplier="_jUZrIPvfEeawNM3lmW2VBg" contract="_jUZrIPvfEeawNM3lmW2VBg"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_jUZrIPvfEeawNM3lmW2VBg" name="Writable"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_AHbDMPvjEeawNM3lmW2VBg" name="SequenceFileInputFormat&lt;K, V>">
+    <generalization xmi:id="_LrqicPvjEeawNM3lmW2VBg" general="_C3XOgPvTEeawNM3lmW2VBg"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_Tl7DQPvjEeawNM3lmW2VBg" name="SequenceFile"/>
+  <packagedElement xmi:type="uml:Usage" xmi:id="_n6IjUPvjEeawNM3lmW2VBg" client="_AHbDMPvjEeawNM3lmW2VBg" supplier="_Tl7DQPvjEeawNM3lmW2VBg"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_JzzekPwHEeawNM3lmW2VBg" name="CombineFileInputFormat&lt;K, V>">
+    <generalization xmi:id="_NjozEPwXEeawNM3lmW2VBg" general="_C3XOgPvTEeawNM3lmW2VBg"/>
+  </packagedElement>
 </uml:Model>
