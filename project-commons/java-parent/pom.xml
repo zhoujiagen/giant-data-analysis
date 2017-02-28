@@ -14,6 +14,7 @@
 		<module>../../data-management-infrastructure/infrastructure-apache-hbase</module>
 		<module>../../data-representation/graph-titan</module>
 		<module>../../data-representation/graph-apache-tinkerpop</module>
+		<module>../../data-representation/graph-apache-giraph</module>
 		<module>../../temporal-data-and-realtime-algorithm/apache-storm</module>
 		<module>../../temporal-data-and-realtime-algorithm/apache-kafka</module>
 	</modules>
