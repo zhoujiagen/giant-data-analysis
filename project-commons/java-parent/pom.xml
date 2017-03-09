@@ -15,6 +15,7 @@
 		<module>../../data-management-infrastructure/infrastructure-netty</module>
 		<module>../../data-representation/representation-titan</module>
 		<module>../../data-representation/representation-apache-tinkerpop</module>
+		<module>../../data-representation/representation-apache-giraph</module>
 		<module>../../temporal-data-and-realtime-algorithm/temporal-apache-storm</module>
 		<module>../../temporal-data-and-realtime-algorithm/temporal-apache-kafka</module>
 	</modules>

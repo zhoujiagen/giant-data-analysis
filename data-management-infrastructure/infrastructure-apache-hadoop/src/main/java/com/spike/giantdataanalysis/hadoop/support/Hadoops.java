@@ -10,7 +10,9 @@ import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.Text;
+import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
@@ -19,6 +21,7 @@ import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.apache.hadoop.mapreduce.lib.partition.HashPartitioner;
+import org.apache.hadoop.util.ReflectionUtils;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 import org.slf4j.Logger;
@@ -108,6 +111,12 @@ public final class Hadoops {
     fs.delete(path, recursive);
   }
 
+  public static void DELETE_LOCAL(String path, boolean recursive) throws IOException {
+    Configuration conf = new Configuration();
+    FileSystem fs = FileSystem.getLocal(conf);
+    fs.delete(new Path(path), recursive);
+  }
+
   /**
    * 最小的MapReduce作业
    * @author zhoujiagen
@@ -115,6 +124,9 @@ public final class Hadoops {
   public static class MinimalMapReduce extends Configured implements Tool {
 
     // example Arguments: data/ncdc/input data/ncdc/output
+    //
+    // more argument parse REF:
+    // https://github.com/tomwhite/hadoop-book/blob/master/common/src/main/java/JobBuilder.java
     public static void main(String[] args) {
       if (args.length != 2) {
         ToolRunner.printGenericCommandUsage(System.out);
@@ -161,6 +173,34 @@ public final class Hadoops {
       return job.waitForCompletion(true) ? 0 : 1;
     }
 
+  }
+
+  /**
+   * 输出使用{@link Writable}序列化的{@link SequenceFile}中内容
+   * @param conf
+   * @param path
+   * @throws IOException
+   */
+  public static void DEV_RENDER_WRITABLE_SEQFILE(Configuration conf, Path path) throws IOException {
+
+    SequenceFile.Reader.Option[] options = new SequenceFile.Reader.Option[] {//
+        SequenceFile.Reader.file(path) //
+        };
+    try (SequenceFile.Reader reader = new SequenceFile.Reader(conf, options);) {
+
+      Writable _key = (Writable) ReflectionUtils.newInstance(reader.getKeyClass(), conf);
+      Writable _value = (Writable) ReflectionUtils.newInstance(reader.getValueClass(), conf);
+
+      long position = reader.getPosition();
+
+      // 使用内建的Writable的遍历方式
+      while (reader.next(_key, _value)) {
+        String syncSeen = reader.syncSeen() ? "*" : "";
+        System.out.printf("[%s%s]\t%s\t%s\n", position, syncSeen, _key, _value);
+
+        position = reader.getPosition();
+      }
+    }
   }
 
 }
