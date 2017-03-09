@@ -12,10 +12,11 @@
 	<modules>
 		<module>../../data-management-infrastructure/infrastructure-apache-hadoop</module>
 		<module>../../data-management-infrastructure/infrastructure-apache-hbase</module>
-		<module>../../data-representation/graph-titan</module>
-		<module>../../data-representation/graph-apache-tinkerpop</module>
-		<module>../../temporal-data-and-realtime-algorithm/apache-storm</module>
-		<module>../../temporal-data-and-realtime-algorithm/apache-kafka</module>
+		<module>../../data-management-infrastructure/infrastructure-netty</module>
+		<module>../../data-representation/representation-titan</module>
+		<module>../../data-representation/representation-apache-tinkerpop</module>
+		<module>../../temporal-data-and-realtime-algorithm/temporal-apache-storm</module>
+		<module>../../temporal-data-and-realtime-algorithm/temporal-apache-kafka</module>
 	</modules>
 
 	<licenses>

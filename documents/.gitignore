@@ -5,3 +5,7 @@
 *.pdf
 *.toc
 *.gz
+*.idx
+*.ilg
+*.ind
+.DS_Store

@@ -1,6 +1,6 @@
 
 organization := "com.spike.giantdataanalysis"
-name := "apache-spark-streaming"
+name := "temporal-apache-spark-streaming"
 version := "1.0.0"
 scalaVersion := "2.11.8"
 

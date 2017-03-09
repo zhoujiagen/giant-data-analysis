@@ -8,7 +8,7 @@
 		<relativePath>../../project-commons/java-parent</relativePath>
 	</parent>
 
-	<artifactId>graph-titan</artifactId>
+	<artifactId>representation-titan</artifactId>
 
 	<properties>
 		<cassandra.version>2.1.9</cassandra.version>

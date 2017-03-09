@@ -15,7 +15,7 @@ lazy val root = (project in file("."))
 
 // RootProject REF http://stackoverflow.com/questions/11653435/how-to-reference-external-sbt-project-from-another-sbt-project
 // lazy val spark_streaming = //(project in file("../../temporal-data-and-realtime-algorithm/apache-spark-streaming"))
-//  RootProject(file("../../temporal-data-and-realtime-algorithm/apache-spark-streaming"))
+//  RootProject(file("../../temporal-data-and-realtime-algorithm/temporal-apache-spark-streaming"))
 
 lazy val scala_infrastructure_apache_spark =
   RootProject(file("../../data-management-infrastructure/scala-infrastructure-apache-spark"))

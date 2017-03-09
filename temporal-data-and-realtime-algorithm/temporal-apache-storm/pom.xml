@@ -8,7 +8,7 @@
 		<relativePath>../../project-commons/java-parent</relativePath>
 	</parent>
 
-	<artifactId>apache-storm</artifactId>
+	<artifactId>temporal-apache-storm</artifactId>
 
 	<dependencies>
 		<dependency>
