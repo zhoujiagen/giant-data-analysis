@@ -11,10 +11,10 @@
 [Text](https://github.com/zhoujiagen/Text): 文本数据操作.
 
 
-[Triple](https://github.com/zhoujiagen/Triple): Hadoop ecosystem.
+[Triple](https://github.com/zhoujiagen/Triple): Hadoop ecosystem. - removed
 
 
-[Parallel-Programming-Examples](https://github.com/zhoujiagen/Parallel-Programming-Examples): 并行计算.
+[Parallel-Programming-Examples](https://github.com/zhoujiagen/Parallel-Programming-Examples): 并行计算. - removed
 
 
 [Jena-Based-Semantic-Web-Tutorial](https://github.com/zhoujiagen/Jena-Based-Semantic-Web-Tutorial): 基于Jena的语义网.
@@ -28,9 +28,9 @@
 + Hadoop 2.7.2/1.2.1 - infrastructure-apache-hadoop
 + Spark 1.5.2 - scala-infrastructure-apache-spark
 
-> TODO 收集和整理Hadoop2运行示例和配置; Hadoop MapReduce抽象矩阵惩罚和关系代数运算.
-> TODO Apache Jena Elephant子项目的示例; 可能的尽快实现类SPARQL端点的功能.
-
++ DOING Netty for network communications
++ TODO 收集和整理Hadoop2运行示例和配置; Hadoop MapReduce抽象矩阵惩罚和关系代数运算.
++ TODO Apache Jena Elephant子项目的示例; 可能的尽快实现类SPARQL端点的功能.
 
 > TBD
 
@@ -42,7 +42,7 @@
 
 Strike 1: Apache Storm word count example.
 
-> TODO Strike 2: Spark-Streaming + ElasticSearch + Kafka 日志应用
++ TODO Strike 2: Spark-Streaming + ElasticSearch + Kafka 日志应用
 
 > TBD
 
@@ -51,8 +51,7 @@ Strike 1: Apache Storm word count example.
 + graph-apache-tinkerpop: 图计算框架; 图遍历语言Gremlin抽象
 + graph-titan: 分布式图数据库
 
-
-> TODO 继续整理Step示例; 完成NoSQL Distilled中关系图信息查询.
++ TODO 继续整理Step示例; 完成NoSQL Distilled中关系图信息查询.
 
 > TBD
 

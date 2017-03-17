@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_6VUhcAZFEee2Iv-wSvySVg" name="netty">
+  <ownedComment xmi:id="_6XW9wAnzEeeapuhVtJVoNg" annotatedElement="_6VUhcAZFEee2Iv-wSvySVg">
+    <body>1 bootstrap: ServerBootStrap, Bootstrap
+2 channel handler: ChannelHandler, adapters
+3 event executor: EventLoop
+4 channel: Channel
+5 channel future: Future abstraction on channel
+6 byte container: ByteBuf</body>
+  </ownedComment>
+  <packageImport xmi:id="_YUoVEAfLEeea0PIAILHzig">
+    <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#_0"/>
+  </packageImport>
+  <packagedElement xmi:type="uml:Class" xmi:id="_FbN30AZGEee2Iv-wSvySVg" name="ChannelInboundHandlerAdapter">
+    <generalization xmi:id="_M_RfIAZGEee2Iv-wSvySVg" general="_KyAWUAZGEee2Iv-wSvySVg"/>
+    <interfaceRealization xmi:id="_b__FQAZGEee2Iv-wSvySVg" client="_FbN30AZGEee2Iv-wSvySVg" supplier="_UtRsoAZGEee2Iv-wSvySVg" contract="_UtRsoAZGEee2Iv-wSvySVg"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_KyAWUAZGEee2Iv-wSvySVg" name="ChannelHandlerAdapter" isAbstract="true">
+    <interfaceRealization xmi:id="_SEOmwAZGEee2Iv-wSvySVg" client="_KyAWUAZGEee2Iv-wSvySVg" supplier="_PSVt8AZGEee2Iv-wSvySVg" contract="_PSVt8AZGEee2Iv-wSvySVg"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_PSVt8AZGEee2Iv-wSvySVg" name="ChannelHandler"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_UtRsoAZGEee2Iv-wSvySVg" name="ChannelInboundHandler">
+    <generalization xmi:id="_c0rRkAZGEee2Iv-wSvySVg" general="_PSVt8AZGEee2Iv-wSvySVg"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_53lAEAZGEee2Iv-wSvySVg" name="ChannelHandlerContext">
+    <generalization xmi:id="_s5fjkAZHEee2Iv-wSvySVg" general="_gLMsAAZHEee2Iv-wSvySVg"/>
+    <generalization xmi:id="_tlaOYAZHEee2Iv-wSvySVg" general="_lsd8MAZHEee2Iv-wSvySVg"/>
+    <generalization xmi:id="_QsxvsAfHEeea0PIAILHzig" general="_qmmT4AZHEee2Iv-wSvySVg"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_Ib0soAZHEee2Iv-wSvySVg" name="java.util.concurrent.Future&lt;V>"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_N5DKUAZHEee2Iv-wSvySVg" name="Future&lt;V>">
+    <generalization xmi:id="_R8bgMAZHEee2Iv-wSvySVg" general="_Ib0soAZHEee2Iv-wSvySVg"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_VEk84AZHEee2Iv-wSvySVg" name="ChannelFuture">
+    <generalization xmi:id="_dUj2EAZHEee2Iv-wSvySVg" general="_N5DKUAZHEee2Iv-wSvySVg"/>
+    <ownedOperation xmi:id="_qhv-MAZJEee2Iv-wSvySVg" name="addListener">
+      <ownedParameter xmi:id="_tkhLoAZJEee2Iv-wSvySVg" name="listener" type="_WXlyAAZJEee2Iv-wSvySVg"/>
+      <ownedParameter xmi:id="_EXhpYAZKEee2Iv-wSvySVg" type="_VEk84AZHEee2Iv-wSvySVg" direction="return">
+        <name xsi:nil="true"/>
+      </ownedParameter>
+    </ownedOperation>
+    <ownedOperation xmi:id="_7wF5gAZJEee2Iv-wSvySVg" name="sync">
+      <ownedParameter xmi:id="_-Hrb8AZJEee2Iv-wSvySVg" type="_VEk84AZHEee2Iv-wSvySVg" direction="return">
+        <name xsi:nil="true"/>
+      </ownedParameter>
+    </ownedOperation>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_gLMsAAZHEee2Iv-wSvySVg" name="AttributeMap"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_lsd8MAZHEee2Iv-wSvySVg" name="ChannelInboundInvoker"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_qmmT4AZHEee2Iv-wSvySVg" name="ChannelOutboundInvoker">
+    <ownedOperation xmi:id="_gk9dkAZMEee2Iv-wSvySVg" name="write">
+      <ownedParameter xmi:id="_pNzisAZMEee2Iv-wSvySVg" type="_VEk84AZHEee2Iv-wSvySVg" direction="return">
+        <name xsi:nil="true"/>
+      </ownedParameter>
+      <ownedParameter xmi:id="_0AAhAAZMEee2Iv-wSvySVg" name="msg" type="_xfY-YAZMEee2Iv-wSvySVg"/>
+    </ownedOperation>
+    <ownedOperation xmi:id="_6ZlSMAZMEee2Iv-wSvySVg" name="writeAndFlush">
+      <ownedParameter xmi:id="_7bR_wAZMEee2Iv-wSvySVg" type="_VEk84AZHEee2Iv-wSvySVg" direction="return">
+        <name xsi:nil="true"/>
+      </ownedParameter>
+      <ownedParameter xmi:id="_9ZeKwAZMEee2Iv-wSvySVg" name="msg" type="_xfY-YAZMEee2Iv-wSvySVg"/>
+    </ownedOperation>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_Njk-sAZJEee2Iv-wSvySVg" name="java.util.EventListener"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_WXlyAAZJEee2Iv-wSvySVg" name="GenericFutureListener&lt;F extends Future&lt;?>>">
+    <generalization xmi:id="_iZWTsAZJEee2Iv-wSvySVg" general="_Njk-sAZJEee2Iv-wSvySVg"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_fUWRoAZJEee2Iv-wSvySVg" name="ChannelFutureListener">
+    <generalization xmi:id="_h2pPQAZJEee2Iv-wSvySVg" general="_WXlyAAZJEee2Iv-wSvySVg"/>
+    <ownedAttribute xmi:id="_WZDNwAZNEee2Iv-wSvySVg" name="CLOSE" isStatic="true" type="_fUWRoAZJEee2Iv-wSvySVg"/>
+    <ownedAttribute xmi:id="_kL-yIAZNEee2Iv-wSvySVg" name="CLOSE_ON_FAILURE" isStatic="true" type="_fUWRoAZJEee2Iv-wSvySVg">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_nUurwAZNEee2Iv-wSvySVg" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_nUvS0AZNEee2Iv-wSvySVg" value="1"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:id="_I6BAUAZOEee2Iv-wSvySVg" name="FIRE_EXCEPTION_ON_FAILURE" isStatic="true" type="_fUWRoAZJEee2Iv-wSvySVg"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Usage" xmi:id="_YdG3kAZKEee2Iv-wSvySVg" client="_VEk84AZHEee2Iv-wSvySVg" supplier="_WXlyAAZJEee2Iv-wSvySVg"/>
+  <packagedElement xmi:type="uml:Usage" xmi:id="_964goAZKEee2Iv-wSvySVg" client="_PSVt8AZGEee2Iv-wSvySVg" supplier="_53lAEAZGEee2Iv-wSvySVg"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_xfY-YAZMEee2Iv-wSvySVg" name="java.lang.Object"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_-EYeEAZOEee2Iv-wSvySVg" name="Unpooled">
+    <ownedComment xmi:id="_0DEAQAoWEeeapuhVtJVoNg" annotatedElement="_-EYeEAZOEee2Iv-wSvySVg">
+      <body>创建unpooled ByteBuf.</body>
+    </ownedComment>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_miaMEAZPEee2Iv-wSvySVg" name="ByteBuf" isAbstract="true">
+    <ownedComment xmi:id="_5-2hsAn0EeeapuhVtJVoNg" annotatedElement="_miaMEAZPEee2Iv-wSvySVg">
+      <body>字节(octects)的容器, 提供byte[]或Java NIO buffer的视图.</body>
+    </ownedComment>
+    <interfaceRealization xmi:id="_KrSewAZQEee2Iv-wSvySVg" client="_miaMEAZPEee2Iv-wSvySVg" supplier="_3pYUEAZPEee2Iv-wSvySVg" contract="_3pYUEAZPEee2Iv-wSvySVg"/>
+    <interfaceRealization xmi:id="_LP8rAAZQEee2Iv-wSvySVg" client="_miaMEAZPEee2Iv-wSvySVg" supplier="_vw0cYAZPEee2Iv-wSvySVg" contract="_vw0cYAZPEee2Iv-wSvySVg"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_vw0cYAZPEee2Iv-wSvySVg" name="java.lang.Comparable&lt;T>"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_3pYUEAZPEee2Iv-wSvySVg" name="ReferenceCounted">
+    <ownedComment xmi:id="_qj0acAodEeeapuhVtJVoNg" annotatedElement="_3pYUEAZPEee2Iv-wSvySVg">
+      <body>引用计数.</body>
+    </ownedComment>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Abstraction" xmi:id="_IgpzMAZQEee2Iv-wSvySVg" client="_-EYeEAZOEee2Iv-wSvySVg" supplier="_miaMEAZPEee2Iv-wSvySVg"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_lScI8AfDEeea0PIAILHzig" name="ChannelInitializer&lt;C extends Channel>" isAbstract="true">
+    <generalization xmi:id="_z1BWsAfFEeea0PIAILHzig" general="_FbN30AZGEee2Iv-wSvySVg"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_BfGhEAfGEeea0PIAILHzig" name="Channel">
+    <generalization xmi:id="_HCl-0AfGEeea0PIAILHzig" general="_gLMsAAZHEee2Iv-wSvySVg"/>
+    <generalization xmi:id="_Y1sNAAfGEeea0PIAILHzig" general="_U5IQ0AfGEeea0PIAILHzig"/>
+    <generalization xmi:id="_hwvccAfGEeea0PIAILHzig" general="_vw0cYAZPEee2Iv-wSvySVg"/>
+    <generalization xmi:id="_XmKCUAfHEeea0PIAILHzig" general="_qmmT4AZHEee2Iv-wSvySVg"/>
+    <ownedOperation xmi:id="_ibCEsAfIEeea0PIAILHzig" name="pipeline">
+      <ownedParameter xmi:id="_jWNTgAfIEeea0PIAILHzig" type="_98r4UAfHEeea0PIAILHzig" direction="return">
+        <name xsi:nil="true"/>
+      </ownedParameter>
+    </ownedOperation>
+    <ownedOperation xmi:id="_70YTgAiBEeendssKS2Fz9w" name="config">
+      <ownedParameter xmi:id="_8YtvoAiBEeendssKS2Fz9w" type="_l7wFQAh_EeendssKS2Fz9w" direction="return">
+        <name xsi:nil="true"/>
+      </ownedParameter>
+    </ownedOperation>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_U5IQ0AfGEeea0PIAILHzig" name="ChannelOutboundInvoker"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_98r4UAfHEeea0PIAILHzig" name="ChannelPipeline">
+    <generalization xmi:id="_ElZ4wAfIEeea0PIAILHzig" general="_qmmT4AZHEee2Iv-wSvySVg"/>
+    <generalization xmi:id="_Gi5gMAfIEeea0PIAILHzig" general="_lsd8MAZHEee2Iv-wSvySVg"/>
+    <generalization xmi:id="_bdayUAfIEeea0PIAILHzig" general="_TIDp4AfIEeea0PIAILHzig"/>
+    <ownedOperation xmi:id="_rWiAEAfIEeea0PIAILHzig" name="addLast">
+      <ownedParameter xmi:id="_r7tJsAfIEeea0PIAILHzig" name="handlers" type="_PSVt8AZGEee2Iv-wSvySVg"/>
+      <ownedParameter xmi:id="_vb2PoAfIEeea0PIAILHzig" type="_98r4UAfHEeea0PIAILHzig" direction="return">
+        <name xsi:nil="true"/>
+      </ownedParameter>
+    </ownedOperation>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_TIDp4AfIEeea0PIAILHzig" name="Iterable&lt;Entry&lt;String, ChannelHandler>>"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_5lW2QAfIEeea0PIAILHzig" name="ServerBootstrap">
+    <generalization xmi:id="_GeQbUAfJEeea0PIAILHzig" general="_E4vPAAfJEeea0PIAILHzig"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_-Z148AfIEeea0PIAILHzig" name="ServerChannel">
+    <generalization xmi:id="__6dXIAfIEeea0PIAILHzig" general="_BfGhEAfGEeea0PIAILHzig"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_E4vPAAfJEeea0PIAILHzig" name="AbstractBootstrap&lt;B extends AbstractBootstrap&lt;B, C>, C extends Channel>" isAbstract="true">
+    <interfaceRealization xmi:id="_RoyaEAfJEeea0PIAILHzig" client="_E4vPAAfJEeea0PIAILHzig" supplier="_J12pQAfJEeea0PIAILHzig" contract="_J12pQAfJEeea0PIAILHzig"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_J12pQAfJEeea0PIAILHzig" name="java.lang.Cloneable"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_aMkZAAfJEeea0PIAILHzig" name="EventLoopGroup">
+    <generalization xmi:id="_orPCAAfJEeea0PIAILHzig" general="_dUEVcAfJEeea0PIAILHzig"/>
+    <ownedOperation xmi:id="_pbQPEAfcEeea0PIAILHzig" name="next">
+      <ownedParameter xmi:id="_p8_qMAfcEeea0PIAILHzig" type="_H5l2QAfcEeea0PIAILHzig" direction="return">
+        <name xsi:nil="true"/>
+      </ownedParameter>
+    </ownedOperation>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_dUEVcAfJEeea0PIAILHzig" name="EventExecutorGroup">
+    <generalization xmi:id="_pFwa0AfJEeea0PIAILHzig" general="_g5QTcAfJEeea0PIAILHzig"/>
+    <generalization xmi:id="_pd2xwAfJEeea0PIAILHzig" general="_miyHwAfJEeea0PIAILHzig"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_g5QTcAfJEeea0PIAILHzig" name="java.util.concurrent.ScheduledExecutorService"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_miyHwAfJEeea0PIAILHzig" name="Iterable&lt;EventExecutor>"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_u4M6kAfJEeea0PIAILHzig" name="EventExecutor">
+    <generalization xmi:id="_zLG6MAfJEeea0PIAILHzig" general="_dUEVcAfJEeea0PIAILHzig"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_TsStcAfKEeea0PIAILHzig" name="ServerSocketChannel">
+    <generalization xmi:id="_VW4nAAfKEeea0PIAILHzig" general="_-Z148AfIEeea0PIAILHzig"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_r0HpEAfKEeea0PIAILHzig" name="NioServerSocketChannel">
+    <generalization xmi:id="_MNbSsAfLEeea0PIAILHzig" general="_vH9YYAfKEeea0PIAILHzig"/>
+    <interfaceRealization xmi:id="_sWXlEAfLEeea0PIAILHzig" client="_r0HpEAfKEeea0PIAILHzig" supplier="_TsStcAfKEeea0PIAILHzig" contract="_TsStcAfKEeea0PIAILHzig"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_vH9YYAfKEeea0PIAILHzig" name="AbstractNioMessageChannel" isAbstract="true">
+    <generalization xmi:id="_MyqGsAfLEeea0PIAILHzig" general="_yyBPUAfKEeea0PIAILHzig"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_yyBPUAfKEeea0PIAILHzig" name="AbstractNioChannel">
+    <generalization xmi:id="_NUzKcAfLEeea0PIAILHzig" general="_16omEAfKEeea0PIAILHzig"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_16omEAfKEeea0PIAILHzig" name="AbstractChannel" isAbstract="true">
+    <generalization xmi:id="_EZgqcAfLEeea0PIAILHzig" general="_6ZA14AfKEeea0PIAILHzig"/>
+    <interfaceRealization xmi:id="_Dj5REAfLEeea0PIAILHzig" client="_16omEAfKEeea0PIAILHzig" supplier="_BfGhEAfGEeea0PIAILHzig" contract="_BfGhEAfGEeea0PIAILHzig"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_6ZA14AfKEeea0PIAILHzig" name="DefaultAttributeMap">
+    <interfaceRealization xmi:id="_AbLMoAfLEeea0PIAILHzig" client="_6ZA14AfKEeea0PIAILHzig" supplier="_gLMsAAZHEee2Iv-wSvySVg" contract="_gLMsAAZHEee2Iv-wSvySVg"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_BI7OAAfMEeea0PIAILHzig" name="AbstractEventExecutorGroup" isAbstract="true">
+    <interfaceRealization xmi:id="_Fzs7EAfMEeea0PIAILHzig" client="_BI7OAAfMEeea0PIAILHzig" supplier="_dUEVcAfJEeea0PIAILHzig" contract="_dUEVcAfJEeea0PIAILHzig"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_IGMiIAfMEeea0PIAILHzig" name="MultithreadEventExecutorGroup" isAbstract="true">
+    <generalization xmi:id="_Kx3eMAfMEeea0PIAILHzig" general="_BI7OAAfMEeea0PIAILHzig"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_PGi_cAfMEeea0PIAILHzig" name="MultithreadEventLoopGroup" isAbstract="true">
+    <generalization xmi:id="_Q3uCIAfMEeea0PIAILHzig" general="_IGMiIAfMEeea0PIAILHzig"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_TMjLgAfMEeea0PIAILHzig" name="NioEventLoopGroup">
+    <generalization xmi:id="_U9PGAAfMEeea0PIAILHzig" general="_PGi_cAfMEeea0PIAILHzig"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_lbg2UAfMEeea0PIAILHzig" name="Bootstrap">
+    <generalization xmi:id="_nIOPwAfMEeea0PIAILHzig" general="_E4vPAAfJEeea0PIAILHzig"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_y-mn4AfMEeea0PIAILHzig" name="DuplexChannel">
+    <generalization xmi:id="_1Fzk8AfMEeea0PIAILHzig" general="_BfGhEAfGEeea0PIAILHzig"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_3fYEYAfMEeea0PIAILHzig" name="SocketChannel">
+    <generalization xmi:id="_dbeBIAfNEeea0PIAILHzig" general="_y-mn4AfMEeea0PIAILHzig"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_8MOOAAfMEeea0PIAILHzig" name="AbstractNioByteChannel">
+    <generalization xmi:id="_TgpWwAfNEeea0PIAILHzig" general="_yyBPUAfKEeea0PIAILHzig"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_ABt44AfNEeea0PIAILHzig" name="NioSocketChannel">
+    <generalization xmi:id="_VkNJ8AfNEeea0PIAILHzig" general="_8MOOAAfMEeea0PIAILHzig"/>
+    <interfaceRealization xmi:id="_bm6TQAfNEeea0PIAILHzig" client="_ABt44AfNEeea0PIAILHzig" supplier="_3fYEYAfMEeea0PIAILHzig" contract="_3fYEYAfMEeea0PIAILHzig"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_HiN14AfNEeea0PIAILHzig" name="AbstractChannel" isAbstract="true"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_2Tc8cAfPEeea0PIAILHzig" name="SimpleChannelInboundHandler" isAbstract="true">
+    <generalization xmi:id="_7y0IIAfPEeea0PIAILHzig" general="_FbN30AZGEee2Iv-wSvySVg"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_MaaMgAfQEeea0PIAILHzig" name="ChannelOutboundHandler">
+    <generalization xmi:id="_OhB6wAfQEeea0PIAILHzig" general="_PSVt8AZGEee2Iv-wSvySVg"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_ah-kIAfQEeea0PIAILHzig" name="ChannelOutboundHandlerAdapter">
+    <generalization xmi:id="_rFkSQAfQEeea0PIAILHzig" general="_KyAWUAZGEee2Iv-wSvySVg"/>
+    <interfaceRealization xmi:id="_dWqSQAfQEeea0PIAILHzig" client="_ah-kIAfQEeea0PIAILHzig" supplier="_MaaMgAfQEeea0PIAILHzig" contract="_MaaMgAfQEeea0PIAILHzig"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_H5l2QAfcEeea0PIAILHzig" name="EventLoop">
+    <generalization xmi:id="_UzHtcAfcEeea0PIAILHzig" general="_NyJlEAfcEeea0PIAILHzig"/>
+    <generalization xmi:id="_g98rkAfcEeea0PIAILHzig" general="_aMkZAAfJEeea0PIAILHzig"/>
+    <ownedOperation xmi:id="_avQ7wAfcEeea0PIAILHzig" name="parent">
+      <ownedParameter xmi:id="_bYdpwAfcEeea0PIAILHzig" type="_aMkZAAfJEeea0PIAILHzig" direction="return">
+        <name xsi:nil="true"/>
+      </ownedParameter>
+    </ownedOperation>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_NyJlEAfcEeea0PIAILHzig" name="OrderedEventExecutor">
+    <generalization xmi:id="_UUjiIAfcEeea0PIAILHzig" general="_u4M6kAfJEeea0PIAILHzig"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_vUePwAfdEeea0PIAILHzig" name="contains" memberEnd="_vUe20AfdEeea0PIAILHzig _vU2qQAfdEeea0PIAILHzig" navigableOwnedEnd="_vU2qQAfdEeea0PIAILHzig">
+    <ownedEnd xmi:id="_vUe20AfdEeea0PIAILHzig" name="eventLoopGroups" type="_aMkZAAfJEeea0PIAILHzig" aggregation="composite" association="_vUePwAfdEeea0PIAILHzig">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_vU1cIAfdEeea0PIAILHzig"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_vU2DMAfdEeea0PIAILHzig" value="1"/>
+    </ownedEnd>
+    <ownedEnd xmi:id="_vU2qQAfdEeea0PIAILHzig" name="eventLoops" type="_H5l2QAfcEeea0PIAILHzig" association="_vUePwAfdEeea0PIAILHzig">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_vVKzUAfdEeea0PIAILHzig"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_vVKzUQfdEeea0PIAILHzig" value="*"/>
+    </ownedEnd>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Usage" xmi:id="_oo6rkAh-EeendssKS2Fz9w" client="_98r4UAfHEeea0PIAILHzig" supplier="_PSVt8AZGEee2Iv-wSvySVg"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_ME74QAh_EeendssKS2Fz9w" name="DefaultChannelPipeline">
+    <interfaceRealization xmi:id="_PnDUIAh_EeendssKS2Fz9w" client="_ME74QAh_EeendssKS2Fz9w" supplier="_98r4UAfHEeea0PIAILHzig" contract="_98r4UAfHEeea0PIAILHzig"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_l7wFQAh_EeendssKS2Fz9w" name="ChannelConfig"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_UZ4UgAiAEeendssKS2Fz9w" name="ChannelOption">
+    <ownedComment xmi:id="_xbAhYAiAEeendssKS2Fz9w" annotatedElement="_UZ4UgAiAEeendssKS2Fz9w">
+      <body>Channel的选项, 提供了一些选项常量名称.</body>
+    </ownedComment>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_VtVrAAiBEeendssKS2Fz9w" name="ChannelFactory"/>
+  <packagedElement xmi:type="uml:Abstraction" xmi:id="_aYLCcAiBEeendssKS2Fz9w" client="_VtVrAAiBEeendssKS2Fz9w" supplier="_BfGhEAfGEeea0PIAILHzig"/>
+  <packagedElement xmi:type="uml:Usage" xmi:id="_1Zgh0AiBEeendssKS2Fz9w" client="_l7wFQAh_EeendssKS2Fz9w" supplier="_UZ4UgAiAEeendssKS2Fz9w"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_bVgX8AiCEeendssKS2Fz9w" name="DefaultChannelConfig">
+    <interfaceRealization xmi:id="_1D8FAAiCEeendssKS2Fz9w" client="_bVgX8AiCEeendssKS2Fz9w" supplier="_l7wFQAh_EeendssKS2Fz9w" contract="_l7wFQAh_EeendssKS2Fz9w"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_lxkHIAiCEeendssKS2Fz9w" name="DefaultServerSocketChannelConfig">
+    <generalization xmi:id="_3OzaEAiCEeendssKS2Fz9w" general="_bVgX8AiCEeendssKS2Fz9w"/>
+    <interfaceRealization xmi:id="_2GZAgAiCEeendssKS2Fz9w" client="_lxkHIAiCEeendssKS2Fz9w" supplier="_rVjUIAiCEeendssKS2Fz9w" contract="_rVjUIAiCEeendssKS2Fz9w"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_rVjUIAiCEeendssKS2Fz9w" name="ServerSocketChannelConfig">
+    <generalization xmi:id="_wfV4cAiCEeendssKS2Fz9w" general="_l7wFQAh_EeendssKS2Fz9w"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_CPo4AAiIEeendssKS2Fz9w" name="EpollServerSocketChannel">
+    <interfaceRealization xmi:id="_DCjGMAiJEeendssKS2Fz9w" client="_CPo4AAiIEeendssKS2Fz9w" supplier="_TsStcAfKEeea0PIAILHzig" contract="_TsStcAfKEeea0PIAILHzig"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_MdXQQAiIEeendssKS2Fz9w" name="OioServerSocketChannel">
+    <interfaceRealization xmi:id="_GF4UUAiJEeendssKS2Fz9w" client="_MdXQQAiIEeendssKS2Fz9w" supplier="_TsStcAfKEeea0PIAILHzig" contract="_TsStcAfKEeea0PIAILHzig"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_sHijAAiIEeendssKS2Fz9w" name="LocalChannel">
+    <generalization xmi:id="_vQnMwAiIEeendssKS2Fz9w" general="_16omEAfKEeea0PIAILHzig"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_5SiksAiIEeendssKS2Fz9w" name="EmbeddedChannel">
+    <ownedComment xmi:id="_S1lZwAiMEeendssKS2Fz9w" annotatedElement="_5SiksAiIEeendssKS2Fz9w">
+      <body>在ChannelHandler内嵌入ChannelHandler作为帮助类.</body>
+    </ownedComment>
+    <generalization xmi:id="_97GrQAiIEeendssKS2Fz9w" general="_16omEAfKEeea0PIAILHzig"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_rkIkkAn0EeeapuhVtJVoNg" name="ByteBufHolder">
+    <ownedComment xmi:id="_xC_Z8An0EeeapuhVtJVoNg" annotatedElement="_rkIkkAn0EeeapuhVtJVoNg">
+      <body>A packet which is send or receive.</body>
+    </ownedComment>
+    <generalization xmi:id="_tlR88An0EeeapuhVtJVoNg" general="_3pYUEAZPEee2Iv-wSvySVg"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_3K3hsAn1EeeapuhVtJVoNg" name="AbstractByteBuf">
+    <generalization xmi:id="_5JGI8An1EeeapuhVtJVoNg" general="_miaMEAZPEee2Iv-wSvySVg"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_etcUEAn2EeeapuhVtJVoNg" name="AbstractReferenceCountedByteBuf">
+    <generalization xmi:id="_ip4UcAn2EeeapuhVtJVoNg" general="_3K3hsAn1EeeapuhVtJVoNg"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_99K0kAn4EeeapuhVtJVoNg" name="CompositeByteBuf">
+    <generalization xmi:id="_BWQQQAn5EeeapuhVtJVoNg" general="_etcUEAn2EeeapuhVtJVoNg"/>
+    <interfaceRealization xmi:id="_KZwREAn5EeeapuhVtJVoNg" client="_99K0kAn4EeeapuhVtJVoNg" supplier="_CEUQIAn5EeeapuhVtJVoNg" contract="_CEUQIAn5EeeapuhVtJVoNg"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_CEUQIAn5EeeapuhVtJVoNg" name="java.lang.Iterable&lt;ByteBuf>"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_D_ockAoVEeeapuhVtJVoNg" name="ByteBufAllocator">
+    <ownedComment xmi:id="_bQFrUAoVEeeapuhVtJVoNg" annotatedElement="_D_ockAoVEeeapuhVtJVoNg">
+      <body>ByteBuf分配, 可以从Channel, ChannelHandlerContext获取实例引用.</body>
+    </ownedComment>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Abstraction" xmi:id="_Vev-0AoVEeeapuhVtJVoNg" client="_D_ockAoVEeeapuhVtJVoNg" supplier="_miaMEAZPEee2Iv-wSvySVg"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_6nsnYAoVEeeapuhVtJVoNg" name="AbstractByteBufAllocator" isAbstract="true">
+    <interfaceRealization xmi:id="_SVzbcAoWEeeapuhVtJVoNg" client="_6nsnYAoVEeeapuhVtJVoNg" supplier="_D_ockAoVEeeapuhVtJVoNg" contract="_D_ockAoVEeeapuhVtJVoNg"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_B5c9wAoWEeeapuhVtJVoNg" name="PooledByteBufAllocator">
+    <ownedComment xmi:id="_ppXokAoWEeeapuhVtJVoNg" annotatedElement="_B5c9wAoWEeeapuhVtJVoNg">
+      <body>Netty默认使用, 覆盖行为方法:
+(1) ChannelConfig API
+(2) bootstrapping时</body>
+    </ownedComment>
+    <generalization xmi:id="_S4RPUAoWEeeapuhVtJVoNg" general="_6nsnYAoVEeeapuhVtJVoNg"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_MJ9kQAoWEeeapuhVtJVoNg" name="UnpooledByteBufAllocator">
+    <generalization xmi:id="_Tb3roAoWEeeapuhVtJVoNg" general="_6nsnYAoVEeeapuhVtJVoNg"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_BE50AAoZEeeapuhVtJVoNg" name="ByteBufUtil">
+    <ownedOperation xmi:id="_z75g8AoZEeeapuhVtJVoNg" name="hexDump">
+      <ownedParameter xmi:id="_238bUAoZEeeapuhVtJVoNg" type="_Mu45cAoaEeeapuhVtJVoNg" direction="return">
+        <name xsi:nil="true"/>
+      </ownedParameter>
+      <ownedParameter xmi:id="_X3_74AoaEeeapuhVtJVoNg" name="bb" type="_miaMEAZPEee2Iv-wSvySVg"/>
+    </ownedOperation>
+    <ownedOperation xmi:id="_cMblgAoaEeeapuhVtJVoNg" name="equals">
+      <ownedParameter xmi:id="_dKtysAoaEeeapuhVtJVoNg" name="bb1" type="_miaMEAZPEee2Iv-wSvySVg"/>
+      <ownedParameter xmi:id="_fPtJQAoaEeeapuhVtJVoNg" name="bb2" type="_miaMEAZPEee2Iv-wSvySVg"/>
+      <ownedParameter xmi:id="_tzpT0AoaEeeapuhVtJVoNg" type="_pFrv4AoaEeeapuhVtJVoNg" direction="return">
+        <name xsi:nil="true"/>
+      </ownedParameter>
+    </ownedOperation>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_Mu45cAoaEeeapuhVtJVoNg" name="java.lang.String"/>
+  <packagedElement xmi:type="uml:PrimitiveType" xmi:id="_pFrv4AoaEeeapuhVtJVoNg" name="boolean"/>
+</uml:Model>

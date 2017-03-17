@@ -8,29 +8,29 @@
 		<relativePath>../../project-commons/java-parent</relativePath>
 	</parent>
 
-	<artifactId>graph-apache-giraph</artifactId>
+	<artifactId>representation-apache-giraph</artifactId>
 
-<!-- core -->
+	<!-- core -->
 	<dependencies>
 		<dependency>
-    <groupId>org.apache.giraph</groupId>
-    <artifactId>giraph-core</artifactId>
-    <version>1.2.0-hadoop2</version>
-</dependency>
+			<groupId>org.apache.giraph</groupId>
+			<artifactId>giraph-core</artifactId>
+			<version>${giraph.version}</version>
+		</dependency>
 
-<!-- example -->
-<dependency>
-    <groupId>org.apache.giraph</groupId>
-    <artifactId>giraph-examples</artifactId>
-    <version>1.2.0-hadoop2</version>
-</dependency>
+		<!-- example -->
+		<dependency>
+			<groupId>org.apache.giraph</groupId>
+			<artifactId>giraph-examples</artifactId>
+			<version>${giraph.version}</version>
+		</dependency>
 
-<!-- hbase io -->
-<dependency>
-    <groupId>org.apache.giraph</groupId>
-    <artifactId>giraph-hbase</artifactId>
-    <version>1.2.0-hadoop2</version>
-</dependency>
+		<!-- hbase io -->
+		<dependency>
+			<groupId>org.apache.giraph</groupId>
+			<artifactId>giraph-hbase</artifactId>
+			<version>${giraph.version}</version>
+		</dependency>
 
 
 		<dependency>
