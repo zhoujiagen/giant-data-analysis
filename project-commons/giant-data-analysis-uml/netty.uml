@@ -18,14 +18,86 @@
   <packagedElement xmi:type="uml:Class" xmi:id="_KyAWUAZGEee2Iv-wSvySVg" name="ChannelHandlerAdapter" isAbstract="true">
     <interfaceRealization xmi:id="_SEOmwAZGEee2Iv-wSvySVg" client="_KyAWUAZGEee2Iv-wSvySVg" supplier="_PSVt8AZGEee2Iv-wSvySVg" contract="_PSVt8AZGEee2Iv-wSvySVg"/>
   </packagedElement>
-  <packagedElement xmi:type="uml:Interface" xmi:id="_PSVt8AZGEee2Iv-wSvySVg" name="ChannelHandler"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_PSVt8AZGEee2Iv-wSvySVg" name="ChannelHandler">
+    <ownedOperation xmi:id="_EHMdMAvCEeeMFO3OnlF2sg" name="handlerAdded">
+      <ownedParameter xmi:id="_Xf-20AvCEeeMFO3OnlF2sg" name="context" type="_53lAEAZGEee2Iv-wSvySVg"/>
+    </ownedOperation>
+    <ownedOperation xmi:id="_MRBrEAvCEeeMFO3OnlF2sg" name="handlerRemoved">
+      <ownedParameter xmi:id="_a2Yx8AvCEeeMFO3OnlF2sg" name="context" type="_53lAEAZGEee2Iv-wSvySVg"/>
+    </ownedOperation>
+  </packagedElement>
   <packagedElement xmi:type="uml:Interface" xmi:id="_UtRsoAZGEee2Iv-wSvySVg" name="ChannelInboundHandler">
     <generalization xmi:id="_c0rRkAZGEee2Iv-wSvySVg" general="_PSVt8AZGEee2Iv-wSvySVg"/>
+    <ownedOperation xmi:id="__9JbAAw3Eee1fO4RILwXfg" name="channelRegistered">
+      <ownedParameter xmi:id="_AanaIAw4Eee1fO4RILwXfg" name="ctx" type="_53lAEAZGEee2Iv-wSvySVg"/>
+    </ownedOperation>
+    <ownedOperation xmi:id="_D5ps0Aw4Eee1fO4RILwXfg" name="channelUnregistered">
+      <ownedParameter xmi:id="_EgKTMAw4Eee1fO4RILwXfg" name="ctx" type="_53lAEAZGEee2Iv-wSvySVg"/>
+    </ownedOperation>
+    <ownedOperation xmi:id="_Hml4oAw4Eee1fO4RILwXfg" name="channelActive">
+      <ownedParameter xmi:id="_IFCIIAw4Eee1fO4RILwXfg" name="ctx" type="_53lAEAZGEee2Iv-wSvySVg"/>
+    </ownedOperation>
+    <ownedOperation xmi:id="_L9PIwAw4Eee1fO4RILwXfg" name="channelInactive">
+      <ownedParameter xmi:id="_MowyAAw4Eee1fO4RILwXfg" name="ctx" type="_53lAEAZGEee2Iv-wSvySVg"/>
+    </ownedOperation>
+    <ownedOperation xmi:id="_QQIhUAw4Eee1fO4RILwXfg" name="channelRead">
+      <ownedParameter xmi:id="_QqCPEAw4Eee1fO4RILwXfg" name="ctx" type="_53lAEAZGEee2Iv-wSvySVg"/>
+      <ownedParameter xmi:id="_Si0VoAw4Eee1fO4RILwXfg" name="msg" type="_xfY-YAZMEee2Iv-wSvySVg"/>
+    </ownedOperation>
+    <ownedOperation xmi:id="_Y_01UAw4Eee1fO4RILwXfg" name="channelReadComplete">
+      <ownedParameter xmi:id="_ZhhNIAw4Eee1fO4RILwXfg" name="ctx" type="_53lAEAZGEee2Iv-wSvySVg"/>
+    </ownedOperation>
+    <ownedOperation xmi:id="_eU7RwAw4Eee1fO4RILwXfg" name="userEventTriggered">
+      <ownedParameter xmi:id="_ezxw8Aw4Eee1fO4RILwXfg" name="ctx" type="_53lAEAZGEee2Iv-wSvySVg"/>
+      <ownedParameter xmi:id="_glFWgAw4Eee1fO4RILwXfg" name="evt" type="_xfY-YAZMEee2Iv-wSvySVg"/>
+    </ownedOperation>
+    <ownedOperation xmi:id="_kq2SAAw4Eee1fO4RILwXfg" name="channelWritabilityChanged">
+      <ownedParameter xmi:id="_liDm0Aw4Eee1fO4RILwXfg" name="ctx" type="_53lAEAZGEee2Iv-wSvySVg"/>
+    </ownedOperation>
+    <ownedOperation xmi:id="_y1cIcAw4Eee1fO4RILwXfg" name="exceptionCaught">
+      <ownedParameter xmi:id="_znqPkAw4Eee1fO4RILwXfg" name="ctx" type="_53lAEAZGEee2Iv-wSvySVg"/>
+      <ownedParameter xmi:id="_1ZBfgAw4Eee1fO4RILwXfg" name="cause" type="_tNXFoAw4Eee1fO4RILwXfg"/>
+    </ownedOperation>
   </packagedElement>
   <packagedElement xmi:type="uml:Interface" xmi:id="_53lAEAZGEee2Iv-wSvySVg" name="ChannelHandlerContext">
     <generalization xmi:id="_s5fjkAZHEee2Iv-wSvySVg" general="_gLMsAAZHEee2Iv-wSvySVg"/>
     <generalization xmi:id="_tlaOYAZHEee2Iv-wSvySVg" general="_lsd8MAZHEee2Iv-wSvySVg"/>
     <generalization xmi:id="_QsxvsAfHEeea0PIAILHzig" general="_qmmT4AZHEee2Iv-wSvySVg"/>
+    <ownedOperation xmi:id="_Jd1GEAxDEee1fO4RILwXfg" name="channel">
+      <ownedParameter xmi:id="_KsppoAxDEee1fO4RILwXfg" type="_BfGhEAfGEeea0PIAILHzig" direction="return">
+        <name xsi:nil="true"/>
+      </ownedParameter>
+    </ownedOperation>
+    <ownedOperation xmi:id="_Qg0AoAxDEee1fO4RILwXfg" name="executor">
+      <ownedParameter xmi:id="_RL3IwAxDEee1fO4RILwXfg" type="_u4M6kAfJEeea0PIAILHzig" direction="return">
+        <name xsi:nil="true"/>
+      </ownedParameter>
+    </ownedOperation>
+    <ownedOperation xmi:id="_VNQhoAxDEee1fO4RILwXfg" name="handler">
+      <ownedParameter xmi:id="_VvBx8AxDEee1fO4RILwXfg" type="_PSVt8AZGEee2Iv-wSvySVg" direction="return">
+        <name xsi:nil="true"/>
+      </ownedParameter>
+    </ownedOperation>
+    <ownedOperation xmi:id="_aG1fsAxDEee1fO4RILwXfg" name="pipeline">
+      <ownedParameter xmi:id="_aiT6wAxDEee1fO4RILwXfg" type="_98r4UAfHEeea0PIAILHzig" direction="return">
+        <name xsi:nil="true"/>
+      </ownedParameter>
+    </ownedOperation>
+    <ownedOperation xmi:id="_emlBcAxDEee1fO4RILwXfg" name="fireChannelRegistered">
+      <ownedParameter xmi:id="_e94uMAxDEee1fO4RILwXfg" type="_53lAEAZGEee2Iv-wSvySVg" direction="return">
+        <name xsi:nil="true"/>
+      </ownedParameter>
+    </ownedOperation>
+    <ownedOperation xmi:id="_mULmUAxDEee1fO4RILwXfg" name="fireChannelRead">
+      <ownedParameter xmi:id="_mwThoAxDEee1fO4RILwXfg" type="_53lAEAZGEee2Iv-wSvySVg" direction="return">
+        <name xsi:nil="true"/>
+      </ownedParameter>
+    </ownedOperation>
+    <ownedOperation xmi:id="_qBatEAxDEee1fO4RILwXfg" name="alloc">
+      <ownedParameter xmi:id="_qWZekAxDEee1fO4RILwXfg" type="_D_ockAoVEeeapuhVtJVoNg" direction="return">
+        <name xsi:nil="true"/>
+      </ownedParameter>
+    </ownedOperation>
   </packagedElement>
   <packagedElement xmi:type="uml:Interface" xmi:id="_Ib0soAZHEee2Iv-wSvySVg" name="java.util.concurrent.Future&lt;V>"/>
   <packagedElement xmi:type="uml:Interface" xmi:id="_N5DKUAZHEee2Iv-wSvySVg" name="Future&lt;V>">
@@ -45,8 +117,33 @@
       </ownedParameter>
     </ownedOperation>
   </packagedElement>
-  <packagedElement xmi:type="uml:Interface" xmi:id="_gLMsAAZHEee2Iv-wSvySVg" name="AttributeMap"/>
-  <packagedElement xmi:type="uml:Interface" xmi:id="_lsd8MAZHEee2Iv-wSvySVg" name="ChannelInboundInvoker"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_gLMsAAZHEee2Iv-wSvySVg" name="AttributeMap">
+    <ownedOperation xmi:id="_jk7BQA3kEeea7eJGc5qIAg" name="attr">
+      <ownedParameter xmi:id="_kIwuIA3kEeea7eJGc5qIAg" name="key" type="_wnYAYA3jEeea7eJGc5qIAg"/>
+      <ownedParameter xmi:id="_mSI1cA3kEeea7eJGc5qIAg" type="_Rwq8gA3kEeea7eJGc5qIAg" direction="return">
+        <name xsi:nil="true"/>
+      </ownedParameter>
+    </ownedOperation>
+    <ownedOperation xmi:id="_rArBIA3kEeea7eJGc5qIAg" name="hasAttr">
+      <ownedParameter xmi:id="_rdMlEA3kEeea7eJGc5qIAg" name="key" type="_wnYAYA3jEeea7eJGc5qIAg"/>
+      <ownedParameter xmi:id="_tb2qIA3kEeea7eJGc5qIAg" type="_pFrv4AoaEeeapuhVtJVoNg" direction="return">
+        <name xsi:nil="true"/>
+      </ownedParameter>
+    </ownedOperation>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_lsd8MAZHEee2Iv-wSvySVg" name="ChannelInboundInvoker">
+    <ownedOperation xmi:id="_lgZmsAxIEee1fO4RILwXfg" name="fireChannelRegistered">
+      <ownedParameter xmi:id="_l55r0AxIEee1fO4RILwXfg" type="_lsd8MAZHEee2Iv-wSvySVg" direction="return">
+        <name xsi:nil="true"/>
+      </ownedParameter>
+    </ownedOperation>
+    <ownedOperation xmi:id="_5xKxMAxIEee1fO4RILwXfg" name="fireChannelRead">
+      <ownedParameter xmi:id="_6Lt_MAxIEee1fO4RILwXfg" name="msg" type="_xfY-YAZMEee2Iv-wSvySVg"/>
+      <ownedParameter xmi:id="_7-LbUAxIEee1fO4RILwXfg" type="_lsd8MAZHEee2Iv-wSvySVg" direction="return">
+        <name xsi:nil="true"/>
+      </ownedParameter>
+    </ownedOperation>
+  </packagedElement>
   <packagedElement xmi:type="uml:Interface" xmi:id="_qmmT4AZHEee2Iv-wSvySVg" name="ChannelOutboundInvoker">
     <ownedOperation xmi:id="_gk9dkAZMEee2Iv-wSvySVg" name="write">
       <ownedParameter xmi:id="_pNzisAZMEee2Iv-wSvySVg" type="_VEk84AZHEee2Iv-wSvySVg" direction="return">
@@ -59,6 +156,12 @@
         <name xsi:nil="true"/>
       </ownedParameter>
       <ownedParameter xmi:id="_9ZeKwAZMEee2Iv-wSvySVg" name="msg" type="_xfY-YAZMEee2Iv-wSvySVg"/>
+    </ownedOperation>
+    <ownedOperation xmi:id="_Y0kNQAxIEee1fO4RILwXfg" name="bind">
+      <ownedParameter xmi:id="_ZfW2sAxIEee1fO4RILwXfg" name="localAddress" type="_J-zQsAw5Eee1fO4RILwXfg"/>
+      <ownedParameter xmi:id="_bBpI0AxIEee1fO4RILwXfg" type="_VEk84AZHEee2Iv-wSvySVg" direction="return">
+        <name xsi:nil="true"/>
+      </ownedParameter>
     </ownedOperation>
   </packagedElement>
   <packagedElement xmi:type="uml:Interface" xmi:id="_Njk-sAZJEee2Iv-wSvySVg" name="java.util.EventListener"/>
@@ -104,13 +207,43 @@
     <generalization xmi:id="_Y1sNAAfGEeea0PIAILHzig" general="_U5IQ0AfGEeea0PIAILHzig"/>
     <generalization xmi:id="_hwvccAfGEeea0PIAILHzig" general="_vw0cYAZPEee2Iv-wSvySVg"/>
     <generalization xmi:id="_XmKCUAfHEeea0PIAILHzig" general="_qmmT4AZHEee2Iv-wSvySVg"/>
-    <ownedOperation xmi:id="_ibCEsAfIEeea0PIAILHzig" name="pipeline">
-      <ownedParameter xmi:id="_jWNTgAfIEeea0PIAILHzig" type="_98r4UAfHEeea0PIAILHzig" direction="return">
+    <ownedOperation xmi:id="_nyCO8AxEEee1fO4RILwXfg" name="id">
+      <ownedParameter xmi:id="_oK1wgAxEEee1fO4RILwXfg" type="_j0sPoAxEEee1fO4RILwXfg" direction="return">
+        <name xsi:nil="true"/>
+      </ownedParameter>
+    </ownedOperation>
+    <ownedOperation xmi:id="_rRKoQAxEEee1fO4RILwXfg" name="eventLoop">
+      <ownedParameter xmi:id="_rypksAxEEee1fO4RILwXfg" type="_H5l2QAfcEeea0PIAILHzig" direction="return">
+        <name xsi:nil="true"/>
+      </ownedParameter>
+    </ownedOperation>
+    <ownedOperation xmi:id="_xTU_AAxEEee1fO4RILwXfg" name="parent">
+      <ownedParameter xmi:id="_xyx7IAxEEee1fO4RILwXfg" type="_BfGhEAfGEeea0PIAILHzig" direction="return">
         <name xsi:nil="true"/>
       </ownedParameter>
     </ownedOperation>
     <ownedOperation xmi:id="_70YTgAiBEeendssKS2Fz9w" name="config">
       <ownedParameter xmi:id="_8YtvoAiBEeendssKS2Fz9w" type="_l7wFQAh_EeendssKS2Fz9w" direction="return">
+        <name xsi:nil="true"/>
+      </ownedParameter>
+    </ownedOperation>
+    <ownedOperation xmi:id="_3wVesAxEEee1fO4RILwXfg" name="localAddress">
+      <ownedParameter xmi:id="_4GNBAAxEEee1fO4RILwXfg" type="_J-zQsAw5Eee1fO4RILwXfg" direction="return">
+        <name xsi:nil="true"/>
+      </ownedParameter>
+    </ownedOperation>
+    <ownedOperation xmi:id="_7JBRwAxEEee1fO4RILwXfg" name="remoteAddress">
+      <ownedParameter xmi:id="_7gsx8AxEEee1fO4RILwXfg" type="_J-zQsAw5Eee1fO4RILwXfg" direction="return">
+        <name xsi:nil="true"/>
+      </ownedParameter>
+    </ownedOperation>
+    <ownedOperation xmi:id="_ibCEsAfIEeea0PIAILHzig" name="pipeline">
+      <ownedParameter xmi:id="_jWNTgAfIEeea0PIAILHzig" type="_98r4UAfHEeea0PIAILHzig" direction="return">
+        <name xsi:nil="true"/>
+      </ownedParameter>
+    </ownedOperation>
+    <ownedOperation xmi:id="_AH3KUAxFEee1fO4RILwXfg" name="alloc">
+      <ownedParameter xmi:id="_Aj4_AAxFEee1fO4RILwXfg" type="_D_ockAoVEeeapuhVtJVoNg">
         <name xsi:nil="true"/>
       </ownedParameter>
     </ownedOperation>
@@ -123,6 +256,31 @@
     <ownedOperation xmi:id="_rWiAEAfIEeea0PIAILHzig" name="addLast">
       <ownedParameter xmi:id="_r7tJsAfIEeea0PIAILHzig" name="handlers" type="_PSVt8AZGEee2Iv-wSvySVg"/>
       <ownedParameter xmi:id="_vb2PoAfIEeea0PIAILHzig" type="_98r4UAfHEeea0PIAILHzig" direction="return">
+        <name xsi:nil="true"/>
+      </ownedParameter>
+    </ownedOperation>
+    <ownedOperation xmi:id="_AueB4AxGEee1fO4RILwXfg" name="addLast">
+      <ownedParameter xmi:id="_C8Xc0AxGEee1fO4RILwXfg" name="group" type="_dUEVcAfJEeea0PIAILHzig"/>
+      <ownedParameter xmi:id="_Fh-NIAxGEee1fO4RILwXfg" name="handlers" type="_PSVt8AZGEee2Iv-wSvySVg"/>
+    </ownedOperation>
+    <ownedOperation xmi:id="_nSIU8AxGEee1fO4RILwXfg" name="channel">
+      <ownedParameter xmi:id="_nvY4sAxGEee1fO4RILwXfg" type="_BfGhEAfGEeea0PIAILHzig" direction="return">
+        <name xsi:nil="true"/>
+      </ownedParameter>
+    </ownedOperation>
+    <ownedOperation xmi:id="_ws0GsAxGEee1fO4RILwXfg" name="context">
+      <ownedParameter xmi:id="_xMfsUAxGEee1fO4RILwXfg" type="_53lAEAZGEee2Iv-wSvySVg" direction="return">
+        <name xsi:nil="true"/>
+      </ownedParameter>
+    </ownedOperation>
+    <ownedOperation xmi:id="_1n-ZIAxGEee1fO4RILwXfg" name="remove">
+      <ownedParameter xmi:id="_2BnBIAxGEee1fO4RILwXfg" name="handler" type="_PSVt8AZGEee2Iv-wSvySVg"/>
+      <ownedParameter xmi:id="_4tQIAAxGEee1fO4RILwXfg" type="_98r4UAfHEeea0PIAILHzig" direction="return">
+        <name xsi:nil="true"/>
+      </ownedParameter>
+    </ownedOperation>
+    <ownedOperation xmi:id="_BsxLQAxIEee1fO4RILwXfg" name="fireChannelRegistered">
+      <ownedParameter xmi:id="_CHXckAxIEee1fO4RILwXfg" type="_98r4UAfHEeea0PIAILHzig" direction="return">
         <name xsi:nil="true"/>
       </ownedParameter>
     </ownedOperation>
@@ -145,6 +303,18 @@
         <name xsi:nil="true"/>
       </ownedParameter>
     </ownedOperation>
+    <ownedOperation xmi:id="_FQu_IA3mEeea7eJGc5qIAg" name="register">
+      <ownedParameter xmi:id="_FvBdoA3mEeea7eJGc5qIAg" name="channel" type="_BfGhEAfGEeea0PIAILHzig"/>
+      <ownedParameter xmi:id="_Hei6gA3mEeea7eJGc5qIAg" type="_VEk84AZHEee2Iv-wSvySVg" direction="return">
+        <name xsi:nil="true"/>
+      </ownedParameter>
+    </ownedOperation>
+    <ownedOperation xmi:id="_M-mCsA3mEeea7eJGc5qIAg" name="register">
+      <ownedParameter xmi:id="_OFyUQA3mEeea7eJGc5qIAg" name="promise" type="_gKyxwAw5Eee1fO4RILwXfg"/>
+      <ownedParameter xmi:id="_P0mmgA3mEeea7eJGc5qIAg" type="_VEk84AZHEee2Iv-wSvySVg" direction="return">
+        <name xsi:nil="true"/>
+      </ownedParameter>
+    </ownedOperation>
   </packagedElement>
   <packagedElement xmi:type="uml:Interface" xmi:id="_dUEVcAfJEeea0PIAILHzig" name="EventExecutorGroup">
     <generalization xmi:id="_pFwa0AfJEeea0PIAILHzig" general="_g5QTcAfJEeea0PIAILHzig"/>
@@ -154,6 +324,22 @@
   <packagedElement xmi:type="uml:Interface" xmi:id="_miyHwAfJEeea0PIAILHzig" name="Iterable&lt;EventExecutor>"/>
   <packagedElement xmi:type="uml:Interface" xmi:id="_u4M6kAfJEeea0PIAILHzig" name="EventExecutor">
     <generalization xmi:id="_zLG6MAfJEeea0PIAILHzig" general="_dUEVcAfJEeea0PIAILHzig"/>
+    <ownedOperation xmi:id="_bucs8A0jEeelTtPdKou6gA" name="next">
+      <ownedParameter xmi:id="_cUQvwA0jEeelTtPdKou6gA" type="_u4M6kAfJEeea0PIAILHzig" direction="return">
+        <name xsi:nil="true"/>
+      </ownedParameter>
+    </ownedOperation>
+    <ownedOperation xmi:id="_f9CNQA0jEeelTtPdKou6gA" name="parent">
+      <ownedParameter xmi:id="_gbuUYA0jEeelTtPdKou6gA" type="_aMkZAAfJEeea0PIAILHzig" direction="return">
+        <name xsi:nil="true"/>
+      </ownedParameter>
+    </ownedOperation>
+    <ownedOperation xmi:id="_4vXJQA3lEeea7eJGc5qIAg" name="inEventLoop">
+      <ownedParameter xmi:id="_5UWssA3lEeea7eJGc5qIAg" name="thread" type="_vtCiUA0jEeelTtPdKou6gA"/>
+      <ownedParameter xmi:id="_7PwpcA3lEeea7eJGc5qIAg" type="_pFrv4AoaEeeapuhVtJVoNg" direction="return">
+        <name xsi:nil="true"/>
+      </ownedParameter>
+    </ownedOperation>
   </packagedElement>
   <packagedElement xmi:type="uml:Interface" xmi:id="_TsStcAfKEeea0PIAILHzig" name="ServerSocketChannel">
     <generalization xmi:id="_VW4nAAfKEeea0PIAILHzig" general="_-Z148AfIEeea0PIAILHzig"/>
@@ -209,6 +395,40 @@
   </packagedElement>
   <packagedElement xmi:type="uml:Interface" xmi:id="_MaaMgAfQEeea0PIAILHzig" name="ChannelOutboundHandler">
     <generalization xmi:id="_OhB6wAfQEeea0PIAILHzig" general="_PSVt8AZGEee2Iv-wSvySVg"/>
+    <ownedOperation xmi:id="_Dlo5wAw6Eee1fO4RILwXfg" name="bind">
+      <ownedParameter xmi:id="_Ex4qcAw6Eee1fO4RILwXfg" name="ctx" type="_53lAEAZGEee2Iv-wSvySVg"/>
+      <ownedParameter xmi:id="_J59-kAw6Eee1fO4RILwXfg" name="localAddress" type="_J-zQsAw5Eee1fO4RILwXfg"/>
+      <ownedParameter xmi:id="_N50fUAw6Eee1fO4RILwXfg" name="promise" type="_gKyxwAw5Eee1fO4RILwXfg"/>
+    </ownedOperation>
+    <ownedOperation xmi:id="_UuX8UAw6Eee1fO4RILwXfg" name="connect">
+      <ownedParameter xmi:id="_X0IMUAw6Eee1fO4RILwXfg" name="ctx" type="_53lAEAZGEee2Iv-wSvySVg"/>
+      <ownedParameter xmi:id="_Z17E8Aw6Eee1fO4RILwXfg" name="remoteAddress" type="_J-zQsAw5Eee1fO4RILwXfg"/>
+      <ownedParameter xmi:id="_bocLcAw6Eee1fO4RILwXfg" name="localAddress" type="_J-zQsAw5Eee1fO4RILwXfg"/>
+      <ownedParameter xmi:id="_dbMigAw6Eee1fO4RILwXfg" name="promise" type="_gKyxwAw5Eee1fO4RILwXfg"/>
+    </ownedOperation>
+    <ownedOperation xmi:id="_hLIX8Aw6Eee1fO4RILwXfg" name="disconnect">
+      <ownedParameter xmi:id="_iAkyMAw6Eee1fO4RILwXfg" name="ctx" type="_53lAEAZGEee2Iv-wSvySVg"/>
+      <ownedParameter xmi:id="_joJM8Aw6Eee1fO4RILwXfg" name="promise" type="_gKyxwAw5Eee1fO4RILwXfg"/>
+    </ownedOperation>
+    <ownedOperation xmi:id="_mOvbwAw6Eee1fO4RILwXfg" name="close">
+      <ownedParameter xmi:id="_m_XAYAw6Eee1fO4RILwXfg" name="ctx" type="_53lAEAZGEee2Iv-wSvySVg"/>
+      <ownedParameter xmi:id="_oiN6QAw6Eee1fO4RILwXfg" name="promise" type="_gKyxwAw5Eee1fO4RILwXfg"/>
+    </ownedOperation>
+    <ownedOperation xmi:id="_sP3QsAw6Eee1fO4RILwXfg" name="deregister">
+      <ownedParameter xmi:id="_tFJS4Aw6Eee1fO4RILwXfg" name="ctx" type="_53lAEAZGEee2Iv-wSvySVg"/>
+      <ownedParameter xmi:id="_uhMaIAw6Eee1fO4RILwXfg" name="promise" type="_gKyxwAw5Eee1fO4RILwXfg"/>
+    </ownedOperation>
+    <ownedOperation xmi:id="_xPSYEAw6Eee1fO4RILwXfg" name="read">
+      <ownedParameter xmi:id="_yCjBAAw6Eee1fO4RILwXfg" name="ctx" type="_53lAEAZGEee2Iv-wSvySVg"/>
+    </ownedOperation>
+    <ownedOperation xmi:id="_0fPs8Aw6Eee1fO4RILwXfg" name="write">
+      <ownedParameter xmi:id="_1OjC8Aw6Eee1fO4RILwXfg" name="ctx" type="_53lAEAZGEee2Iv-wSvySVg"/>
+      <ownedParameter xmi:id="_27XxIAw6Eee1fO4RILwXfg" name="msg" type="_xfY-YAZMEee2Iv-wSvySVg"/>
+      <ownedParameter xmi:id="_4YkH4Aw6Eee1fO4RILwXfg" name="promise" type="_gKyxwAw5Eee1fO4RILwXfg"/>
+    </ownedOperation>
+    <ownedOperation xmi:id="_6_DpAAw6Eee1fO4RILwXfg" name="flush">
+      <ownedParameter xmi:id="_7xGJ8Aw6Eee1fO4RILwXfg" name="ctx" type="_53lAEAZGEee2Iv-wSvySVg"/>
+    </ownedOperation>
   </packagedElement>
   <packagedElement xmi:type="uml:Class" xmi:id="_ah-kIAfQEeea0PIAILHzig" name="ChannelOutboundHandlerAdapter">
     <generalization xmi:id="_rFkSQAfQEeea0PIAILHzig" general="_KyAWUAZGEee2Iv-wSvySVg"/>
@@ -328,4 +548,113 @@
   </packagedElement>
   <packagedElement xmi:type="uml:Class" xmi:id="_Mu45cAoaEeeapuhVtJVoNg" name="java.lang.String"/>
   <packagedElement xmi:type="uml:PrimitiveType" xmi:id="_pFrv4AoaEeeapuhVtJVoNg" name="boolean"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_tNXFoAw4Eee1fO4RILwXfg" name="java.lang.Throwable"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_J-zQsAw5Eee1fO4RILwXfg" name="java.net.SocketAddress"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_YDbCAAw5Eee1fO4RILwXfg" name="Promise&lt;V>">
+    <generalization xmi:id="_dbB_4Aw5Eee1fO4RILwXfg" general="_N5DKUAZHEee2Iv-wSvySVg"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_gKyxwAw5Eee1fO4RILwXfg" name="ChannelPromise">
+    <generalization xmi:id="_klEksAw5Eee1fO4RILwXfg" general="_VEk84AZHEee2Iv-wSvySVg"/>
+    <generalization xmi:id="_lHA0IAw5Eee1fO4RILwXfg" general="_YDbCAAw5Eee1fO4RILwXfg"/>
+    <ownedOperation xmi:id="_JsgU4Aw7Eee1fO4RILwXfg" name="setSuccess">
+      <ownedParameter xmi:id="_KTy-YAw7Eee1fO4RILwXfg" type="_gKyxwAw5Eee1fO4RILwXfg" direction="return">
+        <name xsi:nil="true"/>
+      </ownedParameter>
+    </ownedOperation>
+    <ownedOperation xmi:id="_Ow-UUAw7Eee1fO4RILwXfg" name="setFailure">
+      <ownedParameter xmi:id="_PL0dQAw7Eee1fO4RILwXfg" name="cause" type="_tNXFoAw4Eee1fO4RILwXfg"/>
+      <ownedParameter xmi:id="_RvdesAw7Eee1fO4RILwXfg" type="_gKyxwAw5Eee1fO4RILwXfg" direction="return">
+        <name xsi:nil="true"/>
+      </ownedParameter>
+    </ownedOperation>
+    <ownedOperation xmi:id="_X0Su8Aw7Eee1fO4RILwXfg" name="addListener">
+      <ownedParameter xmi:id="_YUl_oAw7Eee1fO4RILwXfg" name="listener" type="_WXlyAAZJEee2Iv-wSvySVg"/>
+      <ownedParameter xmi:id="_aw9UYAw7Eee1fO4RILwXfg" type="_gKyxwAw5Eee1fO4RILwXfg" direction="return">
+        <name xsi:nil="true"/>
+      </ownedParameter>
+    </ownedOperation>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_l7pZQAw9Eee1fO4RILwXfg" name="ResourceLeakDetector">
+    <ownedTemplateSignature xmi:type="uml:RedefinableTemplateSignature" xmi:id="_muADQAw9Eee1fO4RILwXfg" parameter="_muAqUAw9Eee1fO4RILwXfg">
+      <ownedParameter xmi:type="uml:ClassifierTemplateParameter" xmi:id="_muAqUAw9Eee1fO4RILwXfg" default="_muAqUQw9Eee1fO4RILwXfg" parameteredElement="_muAqUQw9Eee1fO4RILwXfg">
+        <ownedDefault xmi:type="uml:Class" xmi:id="_muAqUQw9Eee1fO4RILwXfg" name="T" templateParameter="_muAqUAw9Eee1fO4RILwXfg"/>
+      </ownedParameter>
+    </ownedTemplateSignature>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Enumeration" xmi:id="_p0PbcAw9Eee1fO4RILwXfg" name="Level">
+    <ownedAttribute xmi:id="__ifQkAw9Eee1fO4RILwXfg" name="DISABLED" type="_p0PbcAw9Eee1fO4RILwXfg"/>
+    <ownedAttribute xmi:id="_7r_gIAw9Eee1fO4RILwXfg" name="SIMPLE" type="_p0PbcAw9Eee1fO4RILwXfg"/>
+    <ownedAttribute xmi:id="_Cu8lgAw-Eee1fO4RILwXfg" name="ADVANCED" type="_p0PbcAw9Eee1fO4RILwXfg"/>
+    <ownedAttribute xmi:id="_EqaMoAw-Eee1fO4RILwXfg" name="PARANOID" type="_p0PbcAw9Eee1fO4RILwXfg"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Usage" xmi:id="_LnTtUAw-Eee1fO4RILwXfg" client="_l7pZQAw9Eee1fO4RILwXfg" supplier="_p0PbcAw9Eee1fO4RILwXfg"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_j0sPoAxEEee1fO4RILwXfg" name="ChannelId"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_vtCiUA0jEeelTtPdKou6gA" name="java.lang.Thread"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_wnYAYA3jEeea7eJGc5qIAg" name="AttributeKey">
+    <ownedTemplateSignature xmi:type="uml:RedefinableTemplateSignature" xmi:id="_xhSD4A3jEeea7eJGc5qIAg" parameter="_xhTSAA3jEeea7eJGc5qIAg">
+      <ownedParameter xmi:type="uml:ClassifierTemplateParameter" xmi:id="_xhTSAA3jEeea7eJGc5qIAg" default="_xhTSAQ3jEeea7eJGc5qIAg" parameteredElement="_xhTSAQ3jEeea7eJGc5qIAg">
+        <ownedDefault xmi:type="uml:Class" xmi:id="_xhTSAQ3jEeea7eJGc5qIAg" name="T" templateParameter="_xhTSAA3jEeea7eJGc5qIAg"/>
+      </ownedParameter>
+    </ownedTemplateSignature>
+    <generalization xmi:id="_Nrq2AA3kEeea7eJGc5qIAg" general="_4HKywA3jEeea7eJGc5qIAg"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_4HKywA3jEeea7eJGc5qIAg" name="AbstractConstant" isAbstract="true">
+    <interfaceRealization xmi:id="_My1JgA3kEeea7eJGc5qIAg" client="_4HKywA3jEeea7eJGc5qIAg" supplier="_JGAScA3kEeea7eJGc5qIAg" contract="_JGAScA3kEeea7eJGc5qIAg"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_JGAScA3kEeea7eJGc5qIAg" name="Constant">
+    <ownedOperation xmi:id="_711AYA3kEeea7eJGc5qIAg" name="id">
+      <ownedParameter xmi:id="_8c6OgA3kEeea7eJGc5qIAg" type="_3MIRYA3kEeea7eJGc5qIAg" direction="return">
+        <name xsi:nil="true"/>
+      </ownedParameter>
+    </ownedOperation>
+    <ownedOperation xmi:id="__WBwsA3kEeea7eJGc5qIAg" name="name">
+      <ownedParameter xmi:id="_ABfIgA3lEeea7eJGc5qIAg" type="_Mu45cAoaEeeapuhVtJVoNg" direction="return">
+        <name xsi:nil="true"/>
+      </ownedParameter>
+    </ownedOperation>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_Rwq8gA3kEeea7eJGc5qIAg" name="Attribute">
+    <ownedOperation xmi:id="_NieBQA3lEeea7eJGc5qIAg" name="key">
+      <ownedParameter xmi:id="_N_8AYA3lEeea7eJGc5qIAg" type="_wnYAYA3jEeea7eJGc5qIAg" direction="return">
+        <name xsi:nil="true"/>
+      </ownedParameter>
+    </ownedOperation>
+  </packagedElement>
+  <packagedElement xmi:type="uml:PrimitiveType" xmi:id="_3MIRYA3kEeea7eJGc5qIAg" name="int"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_iFC4AA3mEeea7eJGc5qIAg" name="java.util.concurrent.ExecutorService"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_nctgQA3mEeea7eJGc5qIAg" name="java.util.concurrent.Executor"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_tK-DkA3mEeea7eJGc5qIAg" name="java.lang.Runnable"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_3NzawA70EeeLv8MIZn-P-A" name="EmbeddedChannel">
+    <ownedOperation xmi:id="_MRt5cA71EeeLv8MIZn-P-A" name="writeInbound">
+      <ownedParameter xmi:id="_N0MY0A71EeeLv8MIZn-P-A" type="_xfY-YAZMEee2Iv-wSvySVg">
+        <name xsi:nil="true"/>
+      </ownedParameter>
+      <ownedParameter xmi:id="_Q53JQA71EeeLv8MIZn-P-A" type="_pFrv4AoaEeeapuhVtJVoNg" direction="return">
+        <name xsi:nil="true"/>
+      </ownedParameter>
+    </ownedOperation>
+    <ownedOperation xmi:id="_XdLsUA71EeeLv8MIZn-P-A" name="readInbound">
+      <ownedParameter xmi:id="_YPFqYA71EeeLv8MIZn-P-A" direction="return">
+        <name xsi:nil="true"/>
+      </ownedParameter>
+    </ownedOperation>
+    <ownedOperation xmi:id="_dfnv4A71EeeLv8MIZn-P-A" name="finish">
+      <ownedParameter xmi:id="_d5m9MA71EeeLv8MIZn-P-A" type="_pFrv4AoaEeeapuhVtJVoNg" direction="return">
+        <name xsi:nil="true"/>
+      </ownedParameter>
+    </ownedOperation>
+    <ownedOperation xmi:id="_i9DB4A71EeeLv8MIZn-P-A" name="writeOutbound">
+      <ownedParameter xmi:id="_jcUX0A71EeeLv8MIZn-P-A" type="_xfY-YAZMEee2Iv-wSvySVg">
+        <name xsi:nil="true"/>
+      </ownedParameter>
+      <ownedParameter xmi:id="_lvxoMA71EeeLv8MIZn-P-A" type="_pFrv4AoaEeeapuhVtJVoNg" direction="return">
+        <name xsi:nil="true"/>
+      </ownedParameter>
+    </ownedOperation>
+    <ownedOperation xmi:id="_n85AAA71EeeLv8MIZn-P-A" name="readOuntbound">
+      <ownedParameter xmi:id="_p2aGYA71EeeLv8MIZn-P-A" type="_xfY-YAZMEee2Iv-wSvySVg" direction="return">
+        <name xsi:nil="true"/>
+      </ownedParameter>
+    </ownedOperation>
+  </packagedElement>
 </uml:Model>

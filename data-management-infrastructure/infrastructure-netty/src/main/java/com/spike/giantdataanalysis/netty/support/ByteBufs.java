@@ -18,6 +18,33 @@ public class ByteBufs {
   // ======================================== methods
 
   /**
+   * {@link ByteBuf}的引用计数减1.
+   * @param bbs
+   * @see io.netty.util.ReferenceCountUtil
+   */
+  public static void RELEASE(ByteBuf... bbs) {
+    if (bbs == null) return;
+
+    for (ByteBuf bb : bbs) {
+      if (bb.refCnt() > 0) {
+        bb.release();
+      }
+    }
+  }
+
+  /**
+   * {@link ByteBuf}的读写索引归0.
+   * @param bbs
+   */
+  public static void CLEAR(ByteBuf... bbs) {
+    if (bbs == null) return;
+
+    for (ByteBuf bb : bbs) {
+      bb.clear();
+    }
+  }
+
+  /**
    * 查看{@link ByteBuf}的属性
    * @param bb
    * @return
