@@ -39,6 +39,12 @@ or in build.sbt:
   // resolver
   resolvers += "aliyun Maven" at "http://maven.aliyun.com/nexus/content/groups/public/"
 
+stuck at getting 0.13.13:
+
+scala-parent/project/build.properties
+  # or another version you have in local
+  sbt.version=0.13.12
+
 
 + Go
 
