@@ -13,6 +13,7 @@
 		<module>../../data-management-infrastructure/infrastructure-apache-hadoop</module>
 		<module>../../data-management-infrastructure/infrastructure-apache-hbase</module>
 		<module>../../data-management-infrastructure/infrastructure-netty</module>
+		<module>../../data-management-infrastructure/infrastructure-jetty</module>
 		<module>../../data-representation/representation-titan</module>
 		<module>../../data-representation/representation-apache-tinkerpop</module>
 		<module>../../data-representation/representation-apache-giraph</module>
@@ -54,6 +55,7 @@
 		<mrunit.version>1.1.0</mrunit.version>
 		<hbase.version>1.2.3</hbase.version>
 		<netty.version>4.1.8.Final</netty.version>
+		<jetty.version>9.4.3.v20170317</jetty.version>
 		<!-- representation -->
 		<titan.version>1.0.0</titan.version>
 		<tinkerpop.version>3.2.3</tinkerpop.version>

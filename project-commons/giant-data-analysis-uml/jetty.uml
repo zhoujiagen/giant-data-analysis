@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_KDN6gBnKEeeT3cOUwX2Uhw" name="NewModel">
+  <packagedElement xmi:type="uml:Interface" xmi:id="_b9ZLoBnLEeeT3cOUwX2Uhw" name="Handler">
+    <generalization xmi:id="_kL1MsBnLEeeT3cOUwX2Uhw" general="_i3_mQBnLEeeT3cOUwX2Uhw"/>
+    <generalization xmi:id="_kq010BnLEeeT3cOUwX2Uhw" general="_e7NAkBnLEeeT3cOUwX2Uhw"/>
+    <ownedOperation xmi:id="_JeEh4BnREeeT3cOUwX2Uhw" name="destroy"/>
+    <ownedOperation xmi:id="_LZqE0BnREeeT3cOUwX2Uhw" name="setServer">
+      <ownedParameter xmi:id="_PPcDkBnREeeT3cOUwX2Uhw" name="server" type="_lZCxQBnMEeeT3cOUwX2Uhw"/>
+    </ownedOperation>
+    <ownedOperation xmi:id="_Loo8ABnREeeT3cOUwX2Uhw" name="getServer">
+      <ownedParameter xmi:id="_TkNrcBnREeeT3cOUwX2Uhw" type="_lZCxQBnMEeeT3cOUwX2Uhw" direction="return">
+        <name xsi:nil="true"/>
+      </ownedParameter>
+    </ownedOperation>
+    <ownedOperation xmi:id="_L4WzABnREeeT3cOUwX2Uhw" name="handle">
+      <ownedParameter xmi:id="_lQEpMBnREeeT3cOUwX2Uhw" name="target" type="_lEH_QBnOEeeT3cOUwX2Uhw"/>
+      <ownedParameter xmi:id="_m1txUBnREeeT3cOUwX2Uhw" name="baseRequest" type="_drSbYBnMEeeT3cOUwX2Uhw"/>
+      <ownedParameter xmi:id="_pB1DkBnREeeT3cOUwX2Uhw" name="request" type="_Ue2hABnMEeeT3cOUwX2Uhw"/>
+      <ownedParameter xmi:id="_qlPXEBnREeeT3cOUwX2Uhw" name="response" type="_X2DGUBnMEeeT3cOUwX2Uhw"/>
+    </ownedOperation>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_e7NAkBnLEeeT3cOUwX2Uhw" name="LifeCycle">
+    <ownedOperation xmi:id="_2z9BkBnPEeeT3cOUwX2Uhw" name="start"/>
+    <ownedOperation xmi:id="_CDnX8BnQEeeT3cOUwX2Uhw" name="stop"/>
+    <ownedOperation xmi:id="_DtxMoBnQEeeT3cOUwX2Uhw" name="addLifeCycleListener">
+      <ownedParameter xmi:id="_Jz-V4BnQEeeT3cOUwX2Uhw" name="listener" type="_vSs2oBnPEeeT3cOUwX2Uhw"/>
+    </ownedOperation>
+    <ownedOperation xmi:id="_ECITEBnQEeeT3cOUwX2Uhw" name="removeLifeCycleListener">
+      <ownedParameter xmi:id="_HdeYkBnQEeeT3cOUwX2Uhw" name="listener" type="_vSs2oBnPEeeT3cOUwX2Uhw"/>
+    </ownedOperation>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_i3_mQBnLEeeT3cOUwX2Uhw" name="Destroyable">
+    <ownedOperation xmi:id="_CtR80BnMEeeT3cOUwX2Uhw" name="destroy">
+      <ownedParameter xmi:id="_EOiUMBnMEeeT3cOUwX2Uhw" direction="return">
+        <name xsi:nil="true"/>
+      </ownedParameter>
+    </ownedOperation>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_Ue2hABnMEeeT3cOUwX2Uhw" name="javax.servlet.http.HttpServletRequest"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_X2DGUBnMEeeT3cOUwX2Uhw" name="javax.servlet.http.HttpServletResponse"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_drSbYBnMEeeT3cOUwX2Uhw" name="Request">
+    <interfaceRealization xmi:id="_g9krgBnMEeeT3cOUwX2Uhw" client="_drSbYBnMEeeT3cOUwX2Uhw" supplier="_Ue2hABnMEeeT3cOUwX2Uhw" contract="_Ue2hABnMEeeT3cOUwX2Uhw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_lZCxQBnMEeeT3cOUwX2Uhw" name="Server">
+    <generalization xmi:id="_CchukBnNEeeT3cOUwX2Uhw" general="_pdtgkBnMEeeT3cOUwX2Uhw"/>
+    <interfaceRealization xmi:id="_HuTKMBnNEeeT3cOUwX2Uhw" client="_lZCxQBnMEeeT3cOUwX2Uhw" supplier="_GkVRcBnNEeeT3cOUwX2Uhw" contract="_GkVRcBnNEeeT3cOUwX2Uhw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_pdtgkBnMEeeT3cOUwX2Uhw" name="HandlerWrapper">
+    <generalization xmi:id="_B8oGgBnNEeeT3cOUwX2Uhw" general="_uSgsUBnMEeeT3cOUwX2Uhw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_uSgsUBnMEeeT3cOUwX2Uhw" name="AbstractHandlerContainer">
+    <generalization xmi:id="_Biu_0BnNEeeT3cOUwX2Uhw" general="_xlSrsBnMEeeT3cOUwX2Uhw"/>
+    <interfaceRealization xmi:id="_RA_dkBnNEeeT3cOUwX2Uhw" client="_uSgsUBnMEeeT3cOUwX2Uhw" supplier="_N7iIgBnNEeeT3cOUwX2Uhw" contract="_N7iIgBnNEeeT3cOUwX2Uhw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_xlSrsBnMEeeT3cOUwX2Uhw" name="AbstractHandler">
+    <generalization xmi:id="_BPG5MBnNEeeT3cOUwX2Uhw" general="_196RwBnMEeeT3cOUwX2Uhw"/>
+    <interfaceRealization xmi:id="_YeP5UBnNEeeT3cOUwX2Uhw" client="_xlSrsBnMEeeT3cOUwX2Uhw" supplier="_b9ZLoBnLEeeT3cOUwX2Uhw" contract="_b9ZLoBnLEeeT3cOUwX2Uhw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_196RwBnMEeeT3cOUwX2Uhw" name="ContainerLifeCycle">
+    <generalization xmi:id="_AxZCcBnNEeeT3cOUwX2Uhw" general="_8o5jEBnMEeeT3cOUwX2Uhw"/>
+    <interfaceRealization xmi:id="_myOVQBnNEeeT3cOUwX2Uhw" client="_196RwBnMEeeT3cOUwX2Uhw" supplier="_eZYbABnNEeeT3cOUwX2Uhw" contract="_eZYbABnNEeeT3cOUwX2Uhw"/>
+    <interfaceRealization xmi:id="_rv1ewBnNEeeT3cOUwX2Uhw" client="_196RwBnMEeeT3cOUwX2Uhw" supplier="_i3_mQBnLEeeT3cOUwX2Uhw" contract="_i3_mQBnLEeeT3cOUwX2Uhw"/>
+    <interfaceRealization xmi:id="_s0QwMBnNEeeT3cOUwX2Uhw" client="_196RwBnMEeeT3cOUwX2Uhw" supplier="_pP7t0BnNEeeT3cOUwX2Uhw" contract="_pP7t0BnNEeeT3cOUwX2Uhw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_8o5jEBnMEeeT3cOUwX2Uhw" name="AbstractLifeCycle">
+    <interfaceRealization xmi:id="_DFAD0BnNEeeT3cOUwX2Uhw" client="_8o5jEBnMEeeT3cOUwX2Uhw" supplier="_e7NAkBnLEeeT3cOUwX2Uhw" contract="_e7NAkBnLEeeT3cOUwX2Uhw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_GkVRcBnNEeeT3cOUwX2Uhw" name="Attributes"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_N7iIgBnNEeeT3cOUwX2Uhw" name="HandlerContainer">
+    <generalization xmi:id="_UnDlUBnNEeeT3cOUwX2Uhw" general="_e7NAkBnLEeeT3cOUwX2Uhw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_eZYbABnNEeeT3cOUwX2Uhw" name="Container"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_pP7t0BnNEeeT3cOUwX2Uhw" name="Dumpable">
+    <ownedOperation xmi:id="_3QWfIBnOEeeT3cOUwX2Uhw" name="dump">
+      <ownedParameter xmi:id="_4KRwwBnOEeeT3cOUwX2Uhw" type="_lEH_QBnOEeeT3cOUwX2Uhw" direction="return">
+        <name xsi:nil="true"/>
+      </ownedParameter>
+    </ownedOperation>
+    <ownedOperation xmi:id="_pqshwBnOEeeT3cOUwX2Uhw" name="dump">
+      <ownedParameter xmi:id="_uJoyQBnOEeeT3cOUwX2Uhw" name="out" type="_hP778BnOEeeT3cOUwX2Uhw"/>
+      <ownedParameter xmi:id="_wZlboBnOEeeT3cOUwX2Uhw" name="ident" type="_lEH_QBnOEeeT3cOUwX2Uhw"/>
+    </ownedOperation>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_hP778BnOEeeT3cOUwX2Uhw" name="java.lang.Appendable"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_lEH_QBnOEeeT3cOUwX2Uhw" name="java.lang.String"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_pCQzUBnPEeeT3cOUwX2Uhw" name="java.util.EventListener"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_vSs2oBnPEeeT3cOUwX2Uhw" name="LifeCycle.Listener">
+    <generalization xmi:id="_w9lEEBnPEeeT3cOUwX2Uhw" general="_pCQzUBnPEeeT3cOUwX2Uhw"/>
+    <ownedOperation xmi:id="_Uhr1wBnQEeeT3cOUwX2Uhw" name="lifeCycleStarting">
+      <ownedParameter xmi:id="_zKUL8BnQEeeT3cOUwX2Uhw" name="LifeCycle" type="_e7NAkBnLEeeT3cOUwX2Uhw"/>
+    </ownedOperation>
+    <ownedOperation xmi:id="_UyCl8BnQEeeT3cOUwX2Uhw" name="lifeCycleStarted">
+      <ownedParameter xmi:id="_1ohTwBnQEeeT3cOUwX2Uhw" name="event" type="_e7NAkBnLEeeT3cOUwX2Uhw"/>
+    </ownedOperation>
+    <ownedOperation xmi:id="_VAvJQBnQEeeT3cOUwX2Uhw" name="lifeCycleFailure">
+      <ownedParameter xmi:id="_31aCEBnQEeeT3cOUwX2Uhw" name="event" type="_e7NAkBnLEeeT3cOUwX2Uhw"/>
+      <ownedParameter xmi:id="_-im54BnQEeeT3cOUwX2Uhw" name="cause" type="_bSgCQBnQEeeT3cOUwX2Uhw"/>
+    </ownedOperation>
+    <ownedOperation xmi:id="_VO9LcBnQEeeT3cOUwX2Uhw" name="lifeCycleStopping">
+      <ownedParameter xmi:id="_5ptRQBnQEeeT3cOUwX2Uhw" name="event" type="_e7NAkBnLEeeT3cOUwX2Uhw"/>
+    </ownedOperation>
+    <ownedOperation xmi:id="_VgC7cBnQEeeT3cOUwX2Uhw" name="lifeCycleStopped">
+      <ownedParameter xmi:id="_7exVcBnQEeeT3cOUwX2Uhw" name="event" type="_e7NAkBnLEeeT3cOUwX2Uhw"/>
+    </ownedOperation>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_bSgCQBnQEeeT3cOUwX2Uhw" name="java.lang.Throwable"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_idFZoBnQEeeT3cOUwX2Uhw" name="java.lang.Exception"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_afgCkBnREeeT3cOUwX2Uhw" name="java.io.IOException"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_ebyR8BnREeeT3cOUwX2Uhw" name="javax.servlet.ServletException"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_Q7aAsBnSEeeT3cOUwX2Uhw" name="Graceful"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_UXxZ4BnSEeeT3cOUwX2Uhw" name="Connector">
+    <generalization xmi:id="_Wh02oBnSEeeT3cOUwX2Uhw" general="_Q7aAsBnSEeeT3cOUwX2Uhw"/>
+    <generalization xmi:id="_Y8e7MBnSEeeT3cOUwX2Uhw" general="_e7NAkBnLEeeT3cOUwX2Uhw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_dQfuEBnSEeeT3cOUwX2Uhw" name="AbstractConnector">
+    <generalization xmi:id="_2xkUkBnSEeeT3cOUwX2Uhw" general="_196RwBnMEeeT3cOUwX2Uhw"/>
+    <interfaceRealization xmi:id="_mzegMBnSEeeT3cOUwX2Uhw" client="_dQfuEBnSEeeT3cOUwX2Uhw" supplier="_UXxZ4BnSEeeT3cOUwX2Uhw" contract="_UXxZ4BnSEeeT3cOUwX2Uhw"/>
+    <interfaceRealization xmi:id="_rnTbkBnSEeeT3cOUwX2Uhw" client="_dQfuEBnSEeeT3cOUwX2Uhw" supplier="_pP7t0BnNEeeT3cOUwX2Uhw" contract="_pP7t0BnNEeeT3cOUwX2Uhw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_6-WeEBnSEeeT3cOUwX2Uhw" name="NetworkConnector">
+    <generalization xmi:id="_BuFsgBnTEeeT3cOUwX2Uhw" general="_UXxZ4BnSEeeT3cOUwX2Uhw"/>
+    <generalization xmi:id="_Ce-98BnTEeeT3cOUwX2Uhw" general="__ALUwBnSEeeT3cOUwX2Uhw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="__ALUwBnSEeeT3cOUwX2Uhw" name="java.io.Closeable"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_E77hgBnTEeeT3cOUwX2Uhw" name="AbstractNetworkConnector">
+    <generalization xmi:id="_HkkXsBnTEeeT3cOUwX2Uhw" general="_dQfuEBnSEeeT3cOUwX2Uhw"/>
+    <interfaceRealization xmi:id="_Icwj8BnTEeeT3cOUwX2Uhw" client="_E77hgBnTEeeT3cOUwX2Uhw" supplier="_6-WeEBnSEeeT3cOUwX2Uhw" contract="_6-WeEBnSEeeT3cOUwX2Uhw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_L9gG0BnTEeeT3cOUwX2Uhw" name="ServerConnector">
+    <generalization xmi:id="_NN3igBnTEeeT3cOUwX2Uhw" general="_E77hgBnTEeeT3cOUwX2Uhw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_mdGLEBnTEeeT3cOUwX2Uhw" name="ServletHandler">
+    <generalization xmi:id="_xq8jkBnTEeeT3cOUwX2Uhw" general="_qoTAMBnTEeeT3cOUwX2Uhw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_qoTAMBnTEeeT3cOUwX2Uhw" name="ScopedHandler">
+    <generalization xmi:id="_yOLMcBnTEeeT3cOUwX2Uhw" general="_pdtgkBnMEeeT3cOUwX2Uhw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_w0Hh4BnWEeeT3cOUwX2Uhw" name="ResourceHandler">
+    <generalization xmi:id="_5N20ABnWEeeT3cOUwX2Uhw" general="_pdtgkBnMEeeT3cOUwX2Uhw"/>
+    <interfaceRealization xmi:id="_3qhZABnWEeeT3cOUwX2Uhw" client="_w0Hh4BnWEeeT3cOUwX2Uhw" supplier="_zfFTUBnWEeeT3cOUwX2Uhw" contract="_zfFTUBnWEeeT3cOUwX2Uhw"/>
+    <interfaceRealization xmi:id="_4C1LUBnWEeeT3cOUwX2Uhw" client="_w0Hh4BnWEeeT3cOUwX2Uhw" supplier="_13WyQBnWEeeT3cOUwX2Uhw" contract="_13WyQBnWEeeT3cOUwX2Uhw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_zfFTUBnWEeeT3cOUwX2Uhw" name="ResourceFactory"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_13WyQBnWEeeT3cOUwX2Uhw" name="WelcomeFactory"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_Eg4ncBnXEeeT3cOUwX2Uhw" name="ContextHandler">
+    <generalization xmi:id="_G5dBUBnXEeeT3cOUwX2Uhw" general="_qoTAMBnTEeeT3cOUwX2Uhw"/>
+    <interfaceRealization xmi:id="_NQpM4BnXEeeT3cOUwX2Uhw" client="_Eg4ncBnXEeeT3cOUwX2Uhw" supplier="_GkVRcBnNEeeT3cOUwX2Uhw" contract="_GkVRcBnNEeeT3cOUwX2Uhw"/>
+    <interfaceRealization xmi:id="_O9KZEBnXEeeT3cOUwX2Uhw" client="_Eg4ncBnXEeeT3cOUwX2Uhw" supplier="_Q7aAsBnSEeeT3cOUwX2Uhw" contract="_Q7aAsBnSEeeT3cOUwX2Uhw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_WhXxYBnXEeeT3cOUwX2Uhw" name="ServletContextHandler">
+    <generalization xmi:id="_YgRHABnXEeeT3cOUwX2Uhw" general="_Eg4ncBnXEeeT3cOUwX2Uhw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_dTlsEBnXEeeT3cOUwX2Uhw" name="WebAppContext">
+    <generalization xmi:id="_tHGBEBnXEeeT3cOUwX2Uhw" general="_WhXxYBnXEeeT3cOUwX2Uhw"/>
+    <interfaceRealization xmi:id="_0gG2ABnXEeeT3cOUwX2Uhw" client="_dTlsEBnXEeeT3cOUwX2Uhw" supplier="_wPLzYBnXEeeT3cOUwX2Uhw" contract="_wPLzYBnXEeeT3cOUwX2Uhw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_jwzAEBnXEeeT3cOUwX2Uhw" name="java.net.URLClassLoader">
+    <generalization xmi:id="_8nOHEBnXEeeT3cOUwX2Uhw" general="_6LLicBnXEeeT3cOUwX2Uhw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_oF9CcBnXEeeT3cOUwX2Uhw" name="WebAppClassLoader">
+    <generalization xmi:id="_px-fYBnXEeeT3cOUwX2Uhw" general="_jwzAEBnXEeeT3cOUwX2Uhw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_wPLzYBnXEeeT3cOUwX2Uhw" name="WebAppClassLoader.Context"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_6LLicBnXEeeT3cOUwX2Uhw" name="java.security.SecureClassLoader">
+    <generalization xmi:id="_EfOlIBnYEeeT3cOUwX2Uhw" general="_CELfABnYEeeT3cOUwX2Uhw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_CELfABnYEeeT3cOUwX2Uhw" name="java.lang.ClassLoader"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_jFL9oBnfEeeT3cOUwX2Uhw" name="ConnectionFactory"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_tEjJwBnfEeeT3cOUwX2Uhw" name="Upgrading">
+    <generalization xmi:id="_bXCwwBngEeeT3cOUwX2Uhw" general="_jFL9oBnfEeeT3cOUwX2Uhw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_BpiQwBngEeeT3cOUwX2Uhw" name="AbstractConnectionFactory">
+    <interfaceRealization xmi:id="_cg6i4BngEeeT3cOUwX2Uhw" client="_BpiQwBngEeeT3cOUwX2Uhw" supplier="_jFL9oBnfEeeT3cOUwX2Uhw" contract="_jFL9oBnfEeeT3cOUwX2Uhw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_Ee4GMBngEeeT3cOUwX2Uhw" name="HttpConnectionFactory">
+    <generalization xmi:id="_dzqkMBngEeeT3cOUwX2Uhw" general="_BpiQwBngEeeT3cOUwX2Uhw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_JZhbQBngEeeT3cOUwX2Uhw" name="NegotiatingServerConnectionFactory">
+    <generalization xmi:id="_ePDfsBngEeeT3cOUwX2Uhw" general="_BpiQwBngEeeT3cOUwX2Uhw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_Mg_igBngEeeT3cOUwX2Uhw" name="ProxyConnectionFactory">
+    <generalization xmi:id="_el6ggBngEeeT3cOUwX2Uhw" general="_BpiQwBngEeeT3cOUwX2Uhw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_P_4rQBngEeeT3cOUwX2Uhw" name="SslConnectionFactory">
+    <generalization xmi:id="_fAPsEBngEeeT3cOUwX2Uhw" general="_BpiQwBngEeeT3cOUwX2Uhw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_sqRzIBngEeeT3cOUwX2Uhw" name="SessionHandler">
+    <generalization xmi:id="_xouqIBngEeeT3cOUwX2Uhw" general="_qoTAMBnTEeeT3cOUwX2Uhw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_VS9fsBnmEeeT3cOUwX2Uhw" name="ServletMapping"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_bOXuMBnmEeeT3cOUwX2Uhw" name="FilterMapping"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_nvV7cBnmEeeT3cOUwX2Uhw" name="BaseHolder"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_pp6xwBnmEeeT3cOUwX2Uhw" name="Holder">
+    <generalization xmi:id="_ru0owBnmEeeT3cOUwX2Uhw" general="_nvV7cBnmEeeT3cOUwX2Uhw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_s-ikMBnmEeeT3cOUwX2Uhw" name="FilterHolder">
+    <generalization xmi:id="_yajg8BnmEeeT3cOUwX2Uhw" general="_pp6xwBnmEeeT3cOUwX2Uhw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_wURw8BnmEeeT3cOUwX2Uhw" name="ServletHolder">
+    <generalization xmi:id="_y0tGUBnmEeeT3cOUwX2Uhw" general="_pp6xwBnmEeeT3cOUwX2Uhw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_4RtIQBnrEeeT3cOUwX2Uhw" name="has" memberEnd="_4RtIQRnrEeeT3cOUwX2Uhw _4R-OABnrEeeT3cOUwX2Uhw" navigableOwnedEnd="_4R-OABnrEeeT3cOUwX2Uhw">
+    <ownedEnd xmi:id="_4RtIQRnrEeeT3cOUwX2Uhw" name="servletHandlers" type="_mdGLEBnTEeeT3cOUwX2Uhw" aggregation="composite" association="_4RtIQBnrEeeT3cOUwX2Uhw">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_4R8_4BnrEeeT3cOUwX2Uhw"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_4R9m8BnrEeeT3cOUwX2Uhw" value="1"/>
+    </ownedEnd>
+    <ownedEnd xmi:id="_4R-OABnrEeeT3cOUwX2Uhw" name="filterMappings" type="_bOXuMBnmEeeT3cOUwX2Uhw" association="_4RtIQBnrEeeT3cOUwX2Uhw">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_4SUzUBnrEeeT3cOUwX2Uhw"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_4SUzURnrEeeT3cOUwX2Uhw" value="*"/>
+    </ownedEnd>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_5Dd8YBnrEeeT3cOUwX2Uhw" name="has" memberEnd="_5Dd8YRnrEeeT3cOUwX2Uhw _5DfKghnrEeeT3cOUwX2Uhw" navigableOwnedEnd="_5DfKghnrEeeT3cOUwX2Uhw">
+    <ownedEnd xmi:id="_5Dd8YRnrEeeT3cOUwX2Uhw" name="servletHandlers" type="_mdGLEBnTEeeT3cOUwX2Uhw" aggregation="composite" association="_5Dd8YBnrEeeT3cOUwX2Uhw">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_5DfKgBnrEeeT3cOUwX2Uhw"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_5DfKgRnrEeeT3cOUwX2Uhw" value="1"/>
+    </ownedEnd>
+    <ownedEnd xmi:id="_5DfKghnrEeeT3cOUwX2Uhw" name="servletMappings" type="_VS9fsBnmEeeT3cOUwX2Uhw" association="_5Dd8YBnrEeeT3cOUwX2Uhw">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_5DfxkBnrEeeT3cOUwX2Uhw"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_5DfxkRnrEeeT3cOUwX2Uhw" value="*"/>
+    </ownedEnd>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_HVsr4BnsEeeT3cOUwX2Uhw" name="has" memberEnd="_HVtS8BnsEeeT3cOUwX2Uhw _HVt6AhnsEeeT3cOUwX2Uhw" navigableOwnedEnd="_HVt6AhnsEeeT3cOUwX2Uhw">
+    <ownedEnd xmi:id="_HVtS8BnsEeeT3cOUwX2Uhw" name="servletHandlers" type="_mdGLEBnTEeeT3cOUwX2Uhw" aggregation="composite" association="_HVsr4BnsEeeT3cOUwX2Uhw">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_HVt6ABnsEeeT3cOUwX2Uhw"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_HVt6ARnsEeeT3cOUwX2Uhw" value="1"/>
+    </ownedEnd>
+    <ownedEnd xmi:id="_HVt6AhnsEeeT3cOUwX2Uhw" name="filterHolders" type="_s-ikMBnmEeeT3cOUwX2Uhw" association="_HVsr4BnsEeeT3cOUwX2Uhw">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_HVt6AxnsEeeT3cOUwX2Uhw"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_HVuhEBnsEeeT3cOUwX2Uhw" value="*"/>
+    </ownedEnd>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_I1XH0BnsEeeT3cOUwX2Uhw" name="has" memberEnd="_I1Xu4BnsEeeT3cOUwX2Uhw _I1YV8hnsEeeT3cOUwX2Uhw" navigableOwnedEnd="_I1YV8hnsEeeT3cOUwX2Uhw">
+    <ownedEnd xmi:id="_I1Xu4BnsEeeT3cOUwX2Uhw" name="servletHandlers" type="_mdGLEBnTEeeT3cOUwX2Uhw" aggregation="composite" association="_I1XH0BnsEeeT3cOUwX2Uhw">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_I1YV8BnsEeeT3cOUwX2Uhw"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_I1YV8RnsEeeT3cOUwX2Uhw" value="1"/>
+    </ownedEnd>
+    <ownedEnd xmi:id="_I1YV8hnsEeeT3cOUwX2Uhw" name="servletHolders" type="_wURw8BnmEeeT3cOUwX2Uhw" association="_I1XH0BnsEeeT3cOUwX2Uhw">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_I1YV8xnsEeeT3cOUwX2Uhw"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_I1YV9BnsEeeT3cOUwX2Uhw" value="*"/>
+    </ownedEnd>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_cTbDABnsEeeT3cOUwX2Uhw" name="javax.servlet.Filter"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_gfFyMBnsEeeT3cOUwX2Uhw" name="javax.servlet.Servlet"/>
+  <packagedElement xmi:type="uml:Association" xmi:id="_xupOcBnsEeeT3cOUwX2Uhw" name="has" memberEnd="_xup1gBnsEeeT3cOUwX2Uhw _xuqckBnsEeeT3cOUwX2Uhw" navigableOwnedEnd="_xuqckBnsEeeT3cOUwX2Uhw">
+    <ownedEnd xmi:id="_xup1gBnsEeeT3cOUwX2Uhw" name="filterHolders" type="_s-ikMBnmEeeT3cOUwX2Uhw" aggregation="composite" association="_xupOcBnsEeeT3cOUwX2Uhw">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_xup1gRnsEeeT3cOUwX2Uhw"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_xup1ghnsEeeT3cOUwX2Uhw" value="1"/>
+    </ownedEnd>
+    <ownedEnd xmi:id="_xuqckBnsEeeT3cOUwX2Uhw" name="javax.servlet.Filters" type="_cTbDABnsEeeT3cOUwX2Uhw" association="_xupOcBnsEeeT3cOUwX2Uhw">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_xuqckRnsEeeT3cOUwX2Uhw"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_xuqckhnsEeeT3cOUwX2Uhw" value="*"/>
+    </ownedEnd>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_yRfc0BnsEeeT3cOUwX2Uhw" name="has" memberEnd="_yRfc0RnsEeeT3cOUwX2Uhw _yRgq8BnsEeeT3cOUwX2Uhw" navigableOwnedEnd="_yRgq8BnsEeeT3cOUwX2Uhw">
+    <ownedEnd xmi:id="_yRfc0RnsEeeT3cOUwX2Uhw" name="servletHolders" type="_wURw8BnmEeeT3cOUwX2Uhw" aggregation="composite" association="_yRfc0BnsEeeT3cOUwX2Uhw">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_yRgD4BnsEeeT3cOUwX2Uhw"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_yRgD4RnsEeeT3cOUwX2Uhw" value="1"/>
+    </ownedEnd>
+    <ownedEnd xmi:id="_yRgq8BnsEeeT3cOUwX2Uhw" name="javax.servlet.Servlets" type="_gfFyMBnsEeeT3cOUwX2Uhw" association="_yRfc0BnsEeeT3cOUwX2Uhw">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_yRgq8RnsEeeT3cOUwX2Uhw"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_yRhSABnsEeeT3cOUwX2Uhw" value="*"/>
+    </ownedEnd>
+  </packagedElement>
+</uml:Model>

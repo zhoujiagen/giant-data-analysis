@@ -8,7 +8,7 @@ reserve `.project` file.
 In eclipse:
 (1) import as regualr project;
 (2) change project facets using 'Migrate to UML Designer 4.0'
-(3) observe in `Modeling` perspective.
+(3) observe in `Modeling` perspective and `Model Explorer` view.
 
 # 2 模块说明
 
