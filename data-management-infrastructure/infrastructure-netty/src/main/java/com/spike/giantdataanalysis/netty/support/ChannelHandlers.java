@@ -16,6 +16,13 @@ import io.netty.channel.ChannelOutboundHandlerAdapter;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.ChannelPromise;
 import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.handler.codec.http.websocketx.BinaryWebSocketFrame;
+import io.netty.handler.codec.http.websocketx.CloseWebSocketFrame;
+import io.netty.handler.codec.http.websocketx.ContinuationWebSocketFrame;
+import io.netty.handler.codec.http.websocketx.PingWebSocketFrame;
+import io.netty.handler.codec.http.websocketx.PongWebSocketFrame;
+import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
+import io.netty.handler.codec.http.websocketx.WebSocketFrame;
 import io.netty.util.ReferenceCountUtil;
 
 import java.net.SocketAddress;
@@ -24,11 +31,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
+import com.spike.giantdataanalysis.netty.support.ChannelHandlers.SimpleWebSocketFrame.FrameType;
 
 public class ChannelHandlers {
   private static final Logger LOG = LoggerFactory.getLogger(ChannelHandlers.class);
 
   // ======================================== properties
+
+  public static final String SSL_NAME = "ssl";
+  public static final String DECODER_NAME = "decoder";
+  public static final String ENCODER_NAME = "encoder";
+  public static final String CODEC_NAME = "codec";
+  public static final String AGGREGATOR_NAME = "aggregator";
+  public static final int CONTENT_LENGTH_512B = 512 * 1024;
+  public static final int CONTENT_LENGTH_64B = 64 * 1024;
+  public static final String DECOMPRESSOR_NAME = "decompressor";
+  public static final String COMPRESSOR_NAME = "compressor";
 
   // ======================================== methods
 
@@ -217,6 +235,104 @@ public class ChannelHandlers {
    */
   public static interface NettyCallable<MSG, RES> {
     RES call(ChannelHandlerContext ctx, MSG msg);
+  }
+
+  /**
+   * {@link WebSocketFrame}与{@link SimpleWebSocketFrame}的转换工具类
+   * @author zhoujiagen
+   */
+  public static final class WebSocketFrameConverters {
+    public static WebSocketFrame convert(SimpleWebSocketFrame simpleWebSocketFrame, boolean retain) {
+      if (simpleWebSocketFrame == null) return null;
+
+      WebSocketFrame result = null;
+
+      FrameType frameType = simpleWebSocketFrame.getFrameType();
+      ByteBuf payload = simpleWebSocketFrame.getData().duplicate();
+      if (retain) {
+        payload.retain();
+      }
+
+      if (FrameType.BINARY.equals(frameType)) {
+        result = new BinaryWebSocketFrame(payload);
+      } else if (FrameType.TEXT.equals(frameType)) {
+        result = new TextWebSocketFrame(payload);
+      } else if (FrameType.CLOSE.equals(frameType)) {
+        result = new CloseWebSocketFrame(true, 0, payload);
+      } else if (FrameType.CONTINUATION.equals(frameType)) {
+        result = new ContinuationWebSocketFrame(payload);
+      } else if (FrameType.PING.equals(frameType)) {
+        result = new PingWebSocketFrame(payload);
+      } else if (FrameType.PONG.equals(frameType)) {
+        result = new PongWebSocketFrame(payload);
+      }
+
+      if (result == null) {
+        throw new IllegalArgumentException("不支持的SimpleWebSocketFrame: " + simpleWebSocketFrame);
+      }
+      return result;
+    }
+
+    public static SimpleWebSocketFrame convert(WebSocketFrame webSocketFrame, boolean retain) {
+      if (webSocketFrame == null) return null;
+      SimpleWebSocketFrame result = null;
+
+      ByteBuf payload = webSocketFrame.content();
+      if (retain) {
+        payload.retain();
+      }
+
+      if (webSocketFrame instanceof BinaryWebSocketFrame) {
+        result = new SimpleWebSocketFrame(FrameType.BINARY, payload);
+      } else if (webSocketFrame instanceof TextWebSocketFrame) {
+        result = new SimpleWebSocketFrame(FrameType.TEXT, payload);
+      } else if (webSocketFrame instanceof CloseWebSocketFrame) {
+        result = new SimpleWebSocketFrame(FrameType.CLOSE, payload);
+      } else if (webSocketFrame instanceof ContinuationWebSocketFrame) {
+        result = new SimpleWebSocketFrame(FrameType.CONTINUATION, payload);
+      } else if (webSocketFrame instanceof PingWebSocketFrame) {
+        result = new SimpleWebSocketFrame(FrameType.PING, payload);
+      } else if (webSocketFrame instanceof PongWebSocketFrame) {
+        result = new SimpleWebSocketFrame(FrameType.PONG, payload);
+      }
+
+      if (result == null) {
+        throw new IllegalArgumentException("不支持的WebSocketFrame: " + webSocketFrame);
+      }
+      return result;
+
+    }
+  }
+
+  /**
+   * 自定义WebSocket帧抽象
+   */
+  public static final class SimpleWebSocketFrame {
+    public enum FrameType {
+      BINARY, CLOSE, PING, PONG, TEXT, CONTINUATION
+    }
+
+    private final FrameType frameType;
+    private final ByteBuf data;
+
+    public SimpleWebSocketFrame(FrameType frameType, ByteBuf data) {
+      this.frameType = frameType;
+      this.data = data;
+    }
+
+    public FrameType getFrameType() {
+      return frameType;
+    }
+
+    public ByteBuf getData() {
+      return data;
+    }
+
+    @Override
+    public String toString() {
+      return "SimpleWebSocketFrame [frameType=" + frameType + ", data=" + ByteBufs.STRING(data)
+          + "]";
+    }
   }
 
 }
