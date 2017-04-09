@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+
+	<!-- STANDALONE MODE START -->
+	<property>
+		<name>hbase.rootdir</name>
+		<value>file:///Users/zhang/data/hbase</value>
+	</property>
+	<property>
+		<name>hbase.zookeeper.property.dataDir</name>
+		<value>/Users/zhang/data/zookeeper</value>
+	</property>
+	<!-- STANDALONE MODE END -->
+
+
+	<!-- PSEUDO DISTRIBUTED MODE START -->
+	<property>
+		<name>hbase.cluster.distributed</name>
+		<value>true</value>
+	</property>
+	<property>
+		<name>hbase.rootdir</name>
+		<value>hdfs://localhost:9000/hbase</value>
+	</property>
+	<property>
+		<name>hbase.zookeeper.property.dataDir</name>
+		<value>/Users/zhang/data/zookeeper</value>
+	</property>
+	<!-- PSEUDO DISTRIBUTED MODE END -->
+
+
+	￼<!-- FULLY DISTRIBUTED MODE START -->
+	<property>
+		<name>hbase.cluster.distributed</name>
+		<value>true</value>
+	</property>
+	<property>
+		<name>hbase.rootdir</name>
+		<value>hdfs://localhost:9000/hbase</value>
+	</property>
+	<property>
+		<name>hbase.zookeeper.quorum</name>
+		<value>node-a.example.com,node-b.example.com,node-c.example.com
+		</value>
+	</property>
+	<property>
+		<name>hbase.zookeeper.property.dataDir</name>
+		<value>/usr/local/zookeeper</value>
+	</property>
+	￼<!-- FULLY DISTRIBUTED MODE END -->
+
+
+	<!-- CLIENT START -->
+	<property>
+		<name>hbase.zookeeper.quorum</name>
+		<value>example1,example2,example3</value>
+		<description>The directory shared by region servers.</description>
+	</property>
+	<!-- CLIENT END -->
+
+
+	<!-- 默认版本数量 -->
+	<property>
+		<name>hbase.column.max.version</name>
+		<value>3</value>
+		<!-- <source>hbase-default.xml</source> -->
+	</property>
+</configuration>

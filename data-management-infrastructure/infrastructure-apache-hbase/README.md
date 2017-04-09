@@ -1,6 +1,3 @@
-# TODO
-
-		create package `com.spike.giantdataanalysis.<specific-project>`
 
 # 0 实践版本
 
