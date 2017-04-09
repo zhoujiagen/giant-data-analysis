@@ -10,10 +10,12 @@
 	<inceptionYear>2017</inceptionYear>
 
 	<modules>
-		<module>../../data-management-infrastructure/infrastructure-apache-hadoop</module>
-		<module>../../data-management-infrastructure/infrastructure-apache-hbase</module>
 		<module>../../data-management-infrastructure/infrastructure-netty</module>
 		<module>../../data-management-infrastructure/infrastructure-jetty</module>
+		<module>../../data-management-infrastructure/infrastructure-apache-zookeeper</module>
+		<module>../../data-management-infrastructure/infrastructure-apache-curator</module>
+		<module>../../data-management-infrastructure/infrastructure-apache-hadoop</module>
+		<module>../../data-management-infrastructure/infrastructure-apache-hbase</module>
 		<module>../../data-representation/representation-titan</module>
 		<module>../../data-representation/representation-apache-tinkerpop</module>
 		<module>../../data-representation/representation-apache-giraph</module>
@@ -51,6 +53,7 @@
 		<junit.version>4.11</junit.version>
 		<!-- infrastructure -->
 		<zookeeper.version>3.4.6</zookeeper.version>
+		<curator.version>2.12.0</curator.version>
 		<hadoop.version>2.7.2</hadoop.version>
 		<mrunit.version>1.1.0</mrunit.version>
 		<hbase.version>1.2.3</hbase.version>
@@ -68,6 +71,87 @@
 
 	<dependencyManagement>
 		<dependencies>
+			<!-- Apache Commons依赖 START -->
+			<!-- Lang -->
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-lang3</artifactId>
+				<version>3.4</version>
+			</dependency>
+			<!-- Collections -->
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-collections4</artifactId>
+				<version>4.0</version>
+			</dependency>
+			<!-- Codec -->
+			<dependency>
+				<groupId>commons-codec</groupId>
+				<artifactId>commons-codec</artifactId>
+				<version>1.10</version>
+			</dependency>
+			<!-- Math -->
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-math3</artifactId>
+				<version>3.6.1</version>
+			</dependency>
+			<!-- BeanUtils -->
+			<dependency>
+				<groupId>commons-beanutils</groupId>
+				<artifactId>commons-beanutils</artifactId>
+				<version>1.9.2</version>
+			</dependency>
+			<!-- Configuration -->
+			<dependency>
+				<groupId>commons-configuration</groupId>
+				<artifactId>commons-configuration</artifactId>
+				<version>1.10</version>
+				<exclusions>
+					<exclusion>
+						<groupId>commons-lang</groupId>
+						<artifactId>commons-lang</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<!-- Net -->
+			<dependency>
+				<groupId>commons-net</groupId>
+				<artifactId>commons-net</artifactId>
+				<version>3.4</version>
+			</dependency>
+			<!-- IO -->
+			<dependency>
+				<groupId>commons-io</groupId>
+				<artifactId>commons-io</artifactId>
+				<version>2.4</version>
+			</dependency>
+			<!-- Logging -->
+			<dependency>
+				<groupId>commons-logging</groupId>
+				<artifactId>commons-logging</artifactId>
+				<version>1.2</version>
+			</dependency>
+			<!-- Pool -->
+			<dependency>
+				<groupId>commons-pool</groupId>
+				<artifactId>commons-pool</artifactId>
+				<version>1.6</version>
+			</dependency>
+			<!-- Proxy -->
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-proxy</artifactId>
+				<version>1.0</version>
+			</dependency>
+			<!-- Compress -->
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-compress</artifactId>
+				<version>1.11</version>
+			</dependency>
+			<!-- Apache Commons依赖 END -->
+
 			<!-- guave -->
 			<dependency>
 				<groupId>com.google.guava</groupId>
