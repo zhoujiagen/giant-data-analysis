@@ -25,8 +25,15 @@
 
 ## 1 数据管理基础设施 - data-management-infrastructure
 
-+ Hadoop 2.7.2/1.2.1 - infrastructure-apache-hadoop
-+ Spark 1.5.2 - scala-infrastructure-apache-spark
++ datasets
+
++ Apache Hadoop 2.7.2/1.2.1 - infrastructure-apache-hadoop
++ Apache Spark 1.5.2 - scala-infrastructure-apache-spark
++ Netty 4.1.8.Final - infrastructure-netty
++ Jetty 9.4.3.v20170317 - infrastructure-jetty
++ Apache ZooKeeper 3.4.6 - infrastructure-apache-zookeeper
++ Apache Curator 2.12.0 - infrastructure-apache-curator
++ Apache HBase 1.2.3 - infrastructure-apache-hbase
 
 + DOING Netty for network communications
 + TODO 收集和整理Hadoop2运行示例和配置; Hadoop MapReduce抽象矩阵惩罚和关系代数运算.
@@ -36,9 +43,11 @@
 
 ## 2 时序数据和实时算法 - temporal-data-and-realtime-algorithm
 
-+ Apache Storm
-+ Alibaba JStorm
-+ Spark Streaming
++ Apache Kafka 0.9.0.0 - temporal-apache-kafka
++ Apache Storm 0.9.7 - temporal-apache-storm
++ Alibaba JStorm - temporal-alibaba-jstorm
++ Apache Spark Streaming 1.5.2 - temporal-apache-spark-streaming
+
 
 Strike 1: Apache Storm word count example.
 
