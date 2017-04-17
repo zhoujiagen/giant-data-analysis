@@ -52,7 +52,7 @@
 			<version>${curator.version}</version>
 		</dependency>
 		<!-- dependency with LOG!!! -->
-		<!-- <dependency> <groupId>org.apache.curator</groupId> <artifactId>curator-x-rpc</artifactId> 
+		<!-- <dependency> <groupId>org.apache.curator</groupId> <artifactId>curator-x-rpc</artifactId>
 			<version>${curator.version}</version> </dependency> -->
 
 		<dependency>
@@ -133,34 +133,6 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
-
-			<!-- 作为SE项目执行 -->
-			<!-- run with: mvn clean compile exec:java -->
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>exec-maven-plugin</artifactId>
-				<version>1.1</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>java</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<mainClass>com.spike.giantdataanalysis.jetty.example.HelloWorldJetty</mainClass>
-				</configuration>
-			</plugin>
-
-			<!-- Jetty Maven Plugin -->
-			<!-- 作为Web项目部署 -->
-			<!-- run with: mvn jetty:run -->
-			<plugin>
-				<groupId>org.eclipse.jetty</groupId>
-				<artifactId>jetty-maven-plugin</artifactId>
-				<version>${jetty.version}</version>
-			</plugin>
-
 		</plugins>
 	</build>
 </project>
