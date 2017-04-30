@@ -1,0 +1,41 @@
+---
+##############################################################################
+# 执行: $ ansible-playbook web-tls.yml 
+#
+# 不使用Handlers, 直接用task重启服务
+##############################################################################
+- name: 用Nginx配置webserver
+  hosts: webservers
+  sudo: true
+  vars: # 变量定义
+    key_file: /etc/nginx/ssl/nginx.key
+    cert_file: /etc/nginx/ssl/nginx.crt
+    conf_file: /etc/nginx/sites-available/default
+    server_name: localhost
+  tasks:
+    - name: 安装Nginx
+      apt: name=nginx update_cache=yes
+
+    - name: 创建SSL证书目录
+      file: path=/etc/nginx/ssl state=directory
+
+    - name: 拷贝TLS key
+      copy: src=files/nginx.key dest={{ key_file }} owner=root mode=0600
+
+    - name: 拷贝TLS证书
+      copy: src=files/nginx.crt dest={{ cert_file }}
+
+    - name: 从模板生成Nginx配置文件
+      template: src=templates/nginx.conf.j2 dest={{ conf_file }}
+
+    - name: 激活Nginx配置
+      file: >
+        dest=/etc/nginx/sites-enabled/default
+        src={{ conf_file }}
+        state=link
+
+    - name: 准备首页页面
+      template: src=templates/index.html.j2 dest=/usr/share/nginx/html/index.html mode=0644
+
+    - name: 重启Nginx
+      service: name=nginx state=restarted

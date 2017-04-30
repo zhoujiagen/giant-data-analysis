@@ -34,9 +34,10 @@
 + Apache ZooKeeper 3.4.6 - infrastructure-apache-zookeeper
 + Apache Curator 2.12.0 - infrastructure-apache-curator
 + Apache HBase 1.2.3 - infrastructure-apache-hbase
++ Ansible 2.3.0.0 - infrastructure-ansible
 
-+ DOING Netty for network communications
-+ TODO 收集和整理Hadoop2运行示例和配置; Hadoop MapReduce抽象矩阵惩罚和关系代数运算.
++ DOING: Ansible
++ TODO 收集和整理Hadoop2运行示例和配置; Hadoop MapReduce抽象矩阵乘法和关系代数运算.
 + TODO Apache Jena Elephant子项目的示例; 可能的尽快实现类SPARQL端点的功能.
 
 > TBD

@@ -1,0 +1,22 @@
+---
+- name: 用Nginx配置webserver
+  hosts: webservers
+  sudo: true
+  tasks:
+    - name: 安装Nginx
+      apt: name=nginx update_cache=yes
+
+    - name: 拷贝Nginx配置文件
+      copy: src=files/nginx.conf dest=/etc/nginx/sites-available/default
+
+    - name: 激活Nginx配置
+      file: >
+        dest=/etc/nginx/sites-enabled/default
+        src=/etc/nginx/sites-available/default
+        state=link
+
+    - name: 准备首页页面
+      template: src=templates/index.html.j2 dest=/usr/share/nginx/html/index.html mode=0644
+
+    - name: 重启Nginx
+      service: name=nginx state=restarted
