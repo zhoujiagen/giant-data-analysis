@@ -1,0 +1,24 @@
+cp ~/.m2/repository/javax/validation/validation-api/1.0.0.GA/validation-api-1.0.0.GA.jar lib/
+cp ~/.m2/repository/javax/validation/validation-api/1.0.0.GA/validation-api-1.0.0.GA-sources.jar lib/
+cp ~/.m2/repository/net/opentsdb/opentsdb/2.3.0/opentsdb-2.3.0.jar lib/
+cp ~/.m2/repository/com/google/guava/guava/19.0/guava-19.0.jar lib/
+cp ~/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.4.3/jackson-annotations-2.4.3.jar lib/
+cp ~/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.4.3/jackson-core-2.4.3.jar lib/
+cp ~/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.4.3/jackson-databind-2.4.3.jar lib/
+cp ~/.m2/repository/io/netty/netty/3.9.4.Final/netty-3.9.4.Final.jar lib/
+cp ~/.m2/repository/com/stumbleupon/async/1.4.0/async-1.4.0.jar lib/
+cp ~/.m2/repository/org/slf4j/slf4j-api/1.7.7/slf4j-api-1.7.7.jar lib/
+cp ~/.m2/repository/org/apache/commons/commons-math3/3.4.1/commons-math3-3.4.1.jar lib/
+cp ~/.m2/repository/org/apache/commons/commons-jexl/2.1.1/commons-jexl-2.1.1.jar lib/
+cp ~/.m2/repository/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar lib/
+cp ~/.m2/repository/org/jgrapht/jgrapht-core/0.9.1/jgrapht-core-0.9.1.jar lib/
+cp ~/.m2/repository/com/google/gwt/gwt-user/2.6.0/gwt-user-2.6.0.jar lib/
+cp ~/.m2/repository/org/json/json/20090211/json-20090211.jar lib/
+cp ~/.m2/repository/net/opentsdb/opentsdb_gwt_theme/1.0.0/opentsdb_gwt_theme-1.0.0.jar lib/
+cp ~/.m2/repository/org/hbase/asynchbase/1.7.2/asynchbase-1.7.2.jar lib/
+cp ~/.m2/repository/com/google/protobuf/protobuf-java/2.5.0/protobuf-java-2.5.0.jar lib/
+cp ~/.m2/repository/org/apache/zookeeper/zookeeper/3.4.6/zookeeper-3.4.6.jar lib/
+cp ~/.m2/repository/org/slf4j/slf4j-log4j12/1.7.7/slf4j-log4j12-1.7.7.jar lib/
+cp ~/.m2/repository/log4j/log4j/1.2.17/log4j-1.2.17.jar lib/
+
+cp ~/.m2/repository/com/spike/giantdataanalysis/infrastructure-opentsdb/0.0.1-SNAPSHOT/infrastructure-opentsdb-0.0.1-SNAPSHOT.jar infrastructure-opentsdb-0.0.1-SNAPSHOT.jar
