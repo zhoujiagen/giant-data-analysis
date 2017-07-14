@@ -17,11 +17,11 @@ conf/hbase-site.xml
 
 	  <property>
 	    <name>hbase.rootdir</name>
-	    <value>file:///Users/zhang/data/hbase</value>
+	    <value>file:///Users/jiedong/data/hbase</value>
 	  </property>
 	  <property>
 	    <name>hbase.zookeeper.property.dataDir</name>
-	    <value>/Users/zhang/data/zookeeper</value>
+	    <value>file:///Users/jiedong/data/zookeeper</value>
 	  </property>
 
 启动/停止:
