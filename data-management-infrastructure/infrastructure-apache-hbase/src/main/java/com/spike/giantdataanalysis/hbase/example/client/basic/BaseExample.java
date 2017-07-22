@@ -1,56 +1,32 @@
-/*-
- * [[[LICENSE-START]]]
- * GDA[infrastructure-apache-hbase]
- * ==============================================================================
- * Copyright (C) 2017 zhoujiagen@gmail.com
- * ==============================================================================
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- * [[[LICENSE-END]]]
- */
-
 package com.spike.giantdataanalysis.hbase.example.client.basic;
 
 import java.io.IOException;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
-import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Admin;
 import org.apache.hadoop.hbase.client.Connection;
 import org.apache.hadoop.hbase.client.Table;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.spike.giantdataanalysis.hbase.support.HBaseAdmins;
+import com.spike.giantdataanalysis.hbase.support.HBaseColumnFamilies;
+import com.spike.giantdataanalysis.hbase.support.HBaseConnections;
+import com.spike.giantdataanalysis.hbase.support.HBaseTables;
 import com.spike.giantdataanalysis.hbase.support.HBases;
 
 /**
- * 示例支持基类 TODO 如何查看Schema(HBase Shell?)
+ * <pre>
+ * 示例支持基类
+ * 
+ * 使用无参数的构造器, 仅初始化连接和管理客户端;
+ * 使用带参数的构造器, 额外会检查表是否存在, 如果不存在则执行创建, 同时初始化客户端.
+ * </pre>
  * @author zhoujiagen
  */
 public abstract class BaseExample {
   private static final Logger LOG = LoggerFactory.getLogger(BaseExample.class);
-
-  // 应用常量
-  public interface AppConstants {
-    String ROWKEY_1 = "com.cnn.www";
-    String ROWKEY_2 = "com.example.www";
-  }
 
   protected Configuration conf;
   // heavy-weighted and thread-safe object
@@ -58,34 +34,70 @@ public abstract class BaseExample {
   protected Admin admin;
   protected Table table;
 
+  /**
+   * 初始化连接{@link Connection}和管理客户端{@link Admin}
+   */
+  public BaseExample() {
+    try {
+      conf = HBaseConfiguration.create();
+      // 从类路径加载资源
+      conf.addResource("conf/hbase-site.xml");
+      // System.out.println("\n======");
+      // conf.writeXml(System.out);
+      // System.out.println("\n======");
+
+      connection = HBaseConnections.connection(conf);
+      admin = HBaseAdmins.admin(connection);
+    } catch (IOException e) {
+      LOG.error("初始化客户端失败", e);
+    }
+  }
+
   public BaseExample(String tableName, String... columnFamilyNames) {
 
     try {
-      Configuration conf = HBaseConfiguration.create();
+      conf = HBaseConfiguration.create();
       // 从类路径加载资源
       conf.addResource("conf/hbase-site.xml");
+      // System.out.println("\n======");
+      // conf.writeXml(System.out);
+      // System.out.println("\n======");
 
-      connection = HBases.connection(conf);
-      admin = HBases.admin(connection);
+      connection = HBaseConnections.connection(conf);
+      admin = HBaseAdmins.admin(connection);
       // 不存在则创建表
-      if (HBases.checkTableExists(admin, tableName)) {
-        LOG.info("表[" + tableName + "]存在");
-        table = connection.getTable(TableName.valueOf(tableName));
+      if (HBaseTables.checkTableExists(admin, tableName)) {
+        LOG.info("表{}存在", tableName);
+
+        if (columnFamilyNames != null && columnFamilyNames.length > 0) {
+          for (String cfn : columnFamilyNames) {
+            if (!HBaseColumnFamilies.checkColumnFamilyExists(admin, tableName, cfn)) {
+              LOG.info("在表{}中添加列族{}", tableName, cfn);
+              HBaseColumnFamilies.addColumnFamily(admin, tableName, cfn);
+            }
+          }
+        }
+
+        table = HBaseTables.table(connection, tableName);
       } else {
-        if (columnFamilyNames == null || columnFamilyNames.length == 0) {
-          throw new IOException("列族为空");
+        // if (columnFamilyNames == null || columnFamilyNames.length == 0) {
+        // throw new IOException("列族为空");
+        // }
+
+        LOG.info("表{}不存在, 开始创建...", tableName);
+        HBaseTables.createTable(admin, tableName, columnFamilyNames[0]);
+        if (columnFamilyNames != null && columnFamilyNames.length != 0) {
+          // 添加列族
+          for (int i = 0, len = columnFamilyNames.length; i < len; i++) {
+            if (!HBaseColumnFamilies
+                .checkColumnFamilyExists(admin, tableName, columnFamilyNames[i])) {
+              LOG.info("在表{}中添加列族{}", tableName, columnFamilyNames[i]);
+              HBaseColumnFamilies.addColumnFamily(admin, tableName, columnFamilyNames[i]);
+            }
+          }
         }
 
-        LOG.info("表[" + tableName + "]不存在, 开始");
-        HBases.createTable(admin, tableName, columnFamilyNames[0]);
-        table = connection.getTable(TableName.valueOf(tableName));
-      }
-
-      // 添加列族
-      for (int i = 1, len = columnFamilyNames.length; i < len; i++) {
-        if (!HBases.checkColumnFamilyExists(admin, tableName, columnFamilyNames[i])) {
-          HBases.addColumnFamily(admin, tableName, columnFamilyNames[i]);
-        }
+        table = HBaseTables.table(connection, tableName);
       }
 
       LOG.info("初始化客户端完成");
@@ -108,13 +120,13 @@ public abstract class BaseExample {
   }
 
   /**
-   * delegate to {@link #doSomething()}, 提供事后资源清理.
+   * delegate to {@link #doExecute()}, 提供事后资源清理.
    * @throws IOException
    */
-  public void doWork() throws IOException {
+  public void execute() throws IOException {
 
     try {
-      doSomething();
+      doExecute();
     } finally {
       LOG.info("执行清理工作");
       HBases.releaseResource(connection, admin, table);
@@ -122,6 +134,6 @@ public abstract class BaseExample {
 
   }
 
-  protected abstract void doSomething() throws IOException;
+  protected abstract void doExecute() throws IOException;
 
 }

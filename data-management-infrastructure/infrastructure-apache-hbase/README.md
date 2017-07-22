@@ -33,5 +33,15 @@ conf/hbase-site.xml
 
 	bin/hbase shell
 
+# 4 数据存储模式
+
+	(Table, RowKey, Family, Column, Timestamp) -> Value
+	
+	SortedMap<RowKey, List<SortedMap<Column, List<Value, Timestamp>>>>
+	
+	10^9行 * 10^6列 * 10^3版本 = TB/PB级存储 
+
+
+
 
 	

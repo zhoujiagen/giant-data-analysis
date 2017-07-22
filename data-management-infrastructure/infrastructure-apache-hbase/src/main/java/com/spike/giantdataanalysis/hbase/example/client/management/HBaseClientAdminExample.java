@@ -1,29 +1,3 @@
-/*-
- * [[[LICENSE-START]]]
- * GDA[infrastructure-apache-hbase]
- * ==============================================================================
- * Copyright (C) 2017 zhoujiagen@gmail.com
- * ==============================================================================
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- * [[[LICENSE-END]]]
- */
-
 package com.spike.giantdataanalysis.hbase.example.client.management;
 
 import java.io.IOException;
@@ -52,6 +26,18 @@ public class HBaseClientAdminExample {
 
   private static final String TABLE_NAME = "MY_TABLE_NAME_TOO";
   private static final String CF_DEFAULT = "DEFAULT_COLUMN_FAMILY";
+
+  public static void main(String... args) throws IOException {
+    Configuration config = HBaseConfiguration.create();
+
+    // 已在CLASSPATH:conf/目录下, 不再从系统环境中获取
+    // Add any necessary configuration files (hbase-site.xml, core-site.xml)
+    // config.addResource(new Path(System.getenv("HBASE_CONF_DIR"), "hbase-site.xml"));
+    // config.addResource(new Path(System.getenv("HADOOP_CONF_DIR"), "core-site.xml"));
+
+    createSchemaTables(config);
+    modifySchema(config);
+  }
 
   // 创建或覆盖表定义
   public static void createOrOverwrite(Admin admin, HTableDescriptor table) throws IOException {
@@ -114,15 +100,4 @@ public class HBaseClientAdminExample {
     }
   }
 
-  public static void main(String... args) throws IOException {
-    Configuration config = HBaseConfiguration.create();
-
-    // 已在CLASSPATH:conf/目录下, 不再从系统环境中获取
-    // Add any necessary configuration files (hbase-site.xml, core-site.xml)
-    // config.addResource(new Path(System.getenv("HBASE_CONF_DIR"), "hbase-site.xml"));
-    // config.addResource(new Path(System.getenv("HADOOP_CONF_DIR"), "core-site.xml"));
-
-    createSchemaTables(config);
-    modifySchema(config);
-  }
 }

@@ -1,29 +1,3 @@
-/*-
- * [[[LICENSE-START]]]
- * GDA[infrastructure-apache-hbase]
- * ==============================================================================
- * Copyright (C) 2017 zhoujiagen@gmail.com
- * ==============================================================================
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- * [[[LICENSE-END]]]
- */
-
 package com.spike.giantdataanalysis.hbase.example.client.basic;
 
 import java.io.IOException;
@@ -36,9 +10,17 @@ import org.slf4j.LoggerFactory;
 import com.spike.giantdataanalysis.hbase.example.domain.WebTable;
 
 /**
- * Put示例 > put 'webtable', 'com.cnn.www', 'anchor:cssnsi.com', 'CNN' 如何获取Cell中多版本: > create
- * 'webtable', 'anchor' > put 'webtable', 'com.cnn.www', 'anchor:cssnsi.com', 'CNN' > put
- * 'webtable', 'com.cnn.www', 'anchor:cssnsi.com', 'CNN' # 返回多个版本 > scan 'webtable', {VERSIONS => 3}
+ * <pre>
+ * Put示例 
+ * 
+ * > create 'webtable', 'anchor' 
+ * > put 'webtable', 'com.cnn.www', 'anchor:cssnsi.com', 'CNN' 
+ * > put 'webtable', 'com.cnn.www', 'anchor:cssnsi.com', 'CNN' 
+ * > put 'webtable', 'com.cnn.www', 'anchor:cssnsi.com', 'CNN' 
+ * 
+ * 返回多个版本 
+ * > scan 'webtable', {VERSIONS => 3}
+ * </pre>
  * @author zhoujiagen
  */
 public class PutExample extends BaseExample {
@@ -49,25 +31,36 @@ public class PutExample extends BaseExample {
   }
 
   public static void main(String[] args) throws IOException {
-    PutExample example = new PutExample(WebTable.TABLE_NAME, //
-        WebTable.CF_ANCHOR, WebTable.CF_CONTENTS, WebTable.CF_PEOPLE);
+    PutExample example = new PutExample(WebTable.T_NAME, //
+        WebTable.CF_ANCHOR, WebTable.CF_CONTENTS);
 
-    example.doWork();
+    example.execute();
   }
 
   @Override
-  protected void doSomething() throws IOException {
+  protected void doExecute() throws IOException {
 
     try {
-      Put put = new Put(Bytes.toBytes(AppConstants.ROWKEY_1));
+
+      byte[] row = Bytes.toBytes(WebTable.ROWKEY_1);
+      byte[] family = Bytes.toBytes(WebTable.CF_ANCHOR);
+      byte[] qualifier = Bytes.toBytes(WebTable.C_ANCHOR_CSSNSI_COM);
+      Put put = new Put(row);
       put.addColumn(//
-        Bytes.toBytes(WebTable.CF_ANCHOR), //
-        Bytes.toBytes(WebTable.C_ANCHOR_CSSNSI_COM),//
-        // 1L, //
+        family, //
+        qualifier,//
+        // 1L, // version timestamp
         Bytes.toBytes("CNN"));
+
       LOG.info("PUT " + put.toString());
       table.put(put);
 
+      // compare-and-set
+      // Atomically checks if a row/family/qualifier value matches the expected value.
+      // If it does, it adds the put.
+      // If the passed value is null, the check is for the lack of column (ie: non-existance)
+      boolean cas = table.checkAndPut(row, family, qualifier, null, put);
+      System.out.println(cas);
     } catch (IOException e) {
       LOG.error("Put failed", e);
     }

@@ -1,78 +1,110 @@
-/*-
- * [[[LICENSE-START]]]
- * GDA[infrastructure-apache-hbase]
- * ==============================================================================
- * Copyright (C) 2017 zhoujiagen@gmail.com
- * ==============================================================================
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- * [[[LICENSE-END]]]
- */
-
 package com.spike.giantdataanalysis.hbase.example.client.basic;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
+import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.util.Bytes;
-// import org.slf4j.Logger;
-// import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.spike.giantdataanalysis.hbase.example.domain.WebTable;
-import com.spike.giantdataanalysis.hbase.support.HBases;
+import com.spike.giantdataanalysis.hbase.example.domain.TestTable;
+import com.spike.giantdataanalysis.hbase.support.Log4jCounterAppender;
 
 public class ScanExample extends BaseExample {
-  // private static final Logger LOG =
-  // LoggerFactory.getLogger(ScanExample.class);
+  private static final Logger LOG = LoggerFactory.getLogger(ScanExample.class);
 
   public ScanExample(String tableName, String... columnFamilyNames) {
     super(tableName, columnFamilyNames);
   }
 
   public static void main(String[] args) throws IOException {
-    ScanExample example = new ScanExample(WebTable.TABLE_NAME, //
-        WebTable.CF_ANCHOR, WebTable.CF_CONTENTS, WebTable.CF_PEOPLE);
+    ScanExample example = new ScanExample(TestTable.T_NAME, //
+        Bytes.toString(TestTable.CF_1), Bytes.toString(TestTable.CF_2));
 
-    example.doWork();
+    // 只执行一次
+    // example.prepareData();
+
+    example.execute();
+  }
+
+  // 准备数据
+  void prepareData() throws IOException {
+    LOG.info("准备数据");
+
+    // 200个单元格
+    int rowCnt = 10;
+    int colCnt = 10;
+    List<Put> puts = new ArrayList<>();
+    for (int r = 0; r < rowCnt; r++) {
+      for (int c = 0; c < colCnt; c++) {
+        Put put = new Put(Bytes.toBytes(TestTable.PREFIX_ROW + r));
+        put.addColumn(//
+          TestTable.CF_1, //
+          Bytes.toBytes(TestTable.PREFIX_C + c),//
+          Bytes.toBytes(TestTable.PREFIX_V + (c * rowCnt + r)));
+        put.addColumn(//
+          TestTable.CF_2, //
+          Bytes.toBytes(TestTable.PREFIX_C + c),//
+          Bytes.toBytes(TestTable.PREFIX_V + (c * rowCnt + r)));
+        puts.add(put);
+      }
+    }
+    table.put(puts);
   }
 
   @Override
-  protected void doSomething() throws IOException {
-    Scan scan = new Scan()//
-        .addColumn(Bytes.toBytes(WebTable.CF_ANCHOR), Bytes.toBytes(WebTable.C_ANCHOR_CSSNSI_COM))
-        // Filter filter = null;
-        // scan.setFilter(filter);
-        .setRowPrefixFilter(Bytes.toBytes("com"))//
-        .setMaxVersions(3)//
-    // .setMaxResultSize(2L)//
-    ;
+  public void doExecute() throws IOException {
+    this.doScan(1, 1);
+    this.doScan(200, 1);
+    this.doScan(2000, 100);
+    this.doScan(2, 100);
+    this.doScan(2, 10);
+    this.doScan(5, 100);
+    this.doScan(5, 20);
+    this.doScan(10, 10);
+  }
+
+  void doScan(int caching, int batch) throws IOException {
+
+    AtomicLong resultCnt = new AtomicLong(0l);
+
+    Log4jCounterAppender appender = new Log4jCounterAppender();
+    appender.init();
+
+    Scan scan = new Scan();
+    /**
+     * <pre>
+     * setBatch()
+     * Set the maximum number of values to return for each call to next(). 
+     * Callers should be aware that invoking this method with any value is equivalent to 
+     * calling setAllowPartialResults(boolean) with a value of true; 
+     * partial results may be returned if this method is called. 
+     * Use setMaxResultSize(long)} to limit the size of a Scan's Results instead.
+     * </pre>
+     */
+    // TODO(zhoujiagen) 待确认是否是特性
+    // 预期: PC请求的次数=(行数x每行的列数)/Min(每行的列数，批量大小)/扫描器缓存
+    // 情况: 返回结果数量是正确的, 返回PRC数量为0
+    // 已确认不是未调用HTable的问题, 以及同时在客户端和服务器端设置hbase.client.scanner.caching为1
+    scan.setCaching(caching);// 行级操作
+    scan.setBatch(batch); // 列级操作: 行内扫描
 
     try (ResultScanner resultScanner = table.getScanner(scan);) {
-      Iterator<Result> iter = resultScanner.iterator();
-      // int i = 0;
-      while (iter.hasNext()) {
-        // LOG.info("Result[" + (i++) + "]=" + iter.next().toString());
-        HBases.renderer(iter.next());
+      Iterator<Result> it = resultScanner.iterator();
+      while (it.hasNext()) {
+        it.next();
+        // LOG.info(HBases.asString(it.next(), true));
+        resultCnt.incrementAndGet();
       }
     }
-
+    System.err.println("C=" + caching + ", B=" + batch + " "//
+        + "RPC: " + appender.getCounter() + ", RESULT: " + resultCnt.get());
   }
 }
