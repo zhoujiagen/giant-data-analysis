@@ -89,7 +89,100 @@ public class HBaseTables {
     tableDescriptor.addFamily(columnDescriptor);
     // ADD MORE COLUMN CONFIGURATION...
 
-    forceCreateTable(admin, tableDescriptor);
+    forceCreateTable(admin, tableDescriptor, null);
+  }
+
+  /**
+   * 创建表, 同时指定分区拆分.
+   * @param admin
+   * @param tableName
+   * @param cfName
+   * @param rsp
+   * @throws IOException
+   */
+  public static void createTable(Admin admin, String tableName, String cfName,
+      RegionSplitParameter rsp) throws IOException {
+    Preconditions.checkArgument(admin != null, "Argument admin must not be null!");
+    Preconditions.checkArgument(StringUtils.isNotBlank(tableName),
+      "Argument tableName must not be null or empty!");
+    Preconditions.checkArgument(rsp != null, "Argument rsp must not be null!");
+    Preconditions.checkArgument(rsp.isValid(), "Non vaild argument rsp");
+
+    Preconditions.checkArgument(!checkTableExists(admin, tableName), "表[" + tableName + "]已存在!");
+    Preconditions.checkArgument(
+      !HBaseColumnFamilies.checkColumnFamilyExists(admin, tableName, cfName), //
+      "表[" + tableName + "]中列族[" + cfName + "]已存在!");
+
+    HTableDescriptor tableDescriptor = new HTableDescriptor(TableName.valueOf(tableName));
+    // 默认的Region拆分策略
+    // tableDescriptor.setRegionSplitPolicyClassName(IncreasingToUpperBoundRegionSplitPolicy.class.getCanonicalName());
+
+    HColumnDescriptor columnDescriptor = new HColumnDescriptor(cfName);
+    columnDescriptor.setMaxVersions(3);// 默认最大版本
+    tableDescriptor.addFamily(columnDescriptor);
+    // ADD MORE COLUMN CONFIGURATION...
+
+    forceCreateTable(admin, tableDescriptor, rsp);
+  }
+
+  /**
+   * 指定分区拆分的参数封装实体
+   */
+  public static class RegionSplitParameter {
+    private boolean doSpilt = false;
+
+    // 方式1: [startKey, endKey)之间均分
+    private byte[] startKey;
+    private byte[] endKey;
+    private int numRegions;
+
+    // 方式2: 直接指定各个[startKey, endKey)
+    private byte[][] splitKeys;
+
+    public RegionSplitParameter(boolean doSpilt) {
+      this.doSpilt = doSpilt;
+    }
+
+    public RegionSplitParameter(boolean doSpilt, byte[] startKey, byte[] endKey, int numRegions) {
+      this.doSpilt = doSpilt;
+      this.startKey = startKey;
+      this.endKey = endKey;
+      this.numRegions = numRegions;
+    }
+
+    public RegionSplitParameter(boolean doSpilt, byte[][] splitKeys) {
+      this.doSpilt = doSpilt;
+      this.splitKeys = splitKeys;
+    }
+
+    public boolean isValid() {
+      if (doSpilt) {
+        if (splitKeys != null) return true;
+        else if (startKey != null && endKey != null && numRegions > 0) return true;
+      }
+      return false;
+    }
+
+    public boolean isDoSpilt() {
+      return doSpilt;
+    }
+
+    public byte[] getStartKey() {
+      return startKey;
+    }
+
+    public byte[] getEndKey() {
+      return endKey;
+    }
+
+    public int getNumRegions() {
+      return numRegions;
+    }
+
+    public byte[][] getSplitKeys() {
+      return splitKeys;
+    }
+
   }
 
   /**
@@ -126,10 +219,11 @@ public class HBaseTables {
    * 强制创建表, 类内部用
    * @param admin
    * @param tableDescriptor
+   * @param rsp 分区拆分参数, 不指定则直接传入null
    * @throws IOException
    */
-  private static void forceCreateTable(Admin admin, HTableDescriptor tableDescriptor)
-      throws IOException {
+  private static void forceCreateTable(Admin admin, HTableDescriptor tableDescriptor,
+      RegionSplitParameter rsp) throws IOException {
     // 存在则删除
     if (admin.tableExists(tableDescriptor.getTableName())) {
       admin.disableTable(tableDescriptor.getTableName());
@@ -137,7 +231,16 @@ public class HBaseTables {
     }
 
     // 执行创建
-    admin.createTable(tableDescriptor);
+    if (rsp == null || !rsp.isDoSpilt()) {
+      admin.createTable(tableDescriptor);
+    } else {
+      Preconditions.checkArgument(rsp.isValid(), "Non vaild argument rsp");
+      if (rsp.getSplitKeys() != null) {
+        admin.createTable(tableDescriptor, rsp.getSplitKeys());
+      } else {
+        admin.createTable(tableDescriptor, rsp.getStartKey(), rsp.getEndKey(), rsp.getNumRegions());
+      }
+    }
   }
 
   /**
