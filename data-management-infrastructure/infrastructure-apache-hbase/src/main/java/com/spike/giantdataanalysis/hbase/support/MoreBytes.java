@@ -1,14 +1,48 @@
 package com.spike.giantdataanalysis.hbase.support;
 
+import java.util.BitSet;
+
 import com.google.common.base.Preconditions;
 
-public class ByteOps {
+public class MoreBytes {
 
-  /** 位 */
-  public static final byte[] BITS = new byte[] { (byte) 0, (byte) 1 };
-
+  /** 位0 */
   public static final byte b0 = (byte) 0;
+  /** 位1 */
   public static final byte b1 = (byte) 1;
+  public static final byte[] BITS = new byte[] { b0, b1 };
+
+  public static final String BIT_ONE = "1";
+  public static final String BIT_ZERO = "0";
+
+  public static final long FACTOR_1 = (long) Math.pow(2, 1);
+  public static final long FACTOR_2 = (long) Math.pow(2, 2);
+  public static final long FACTOR_4 = (long) Math.pow(2, 4);
+  public static final long FACTOR_8 = (long) Math.pow(2, 8);
+  public static final long FACTOR_16 = (long) Math.pow(2, 16);
+  public static final long FACTOR_32 = (long) Math.pow(2, 32);
+
+  public static String asString(BitSet bs) {
+    StringBuffer buf = new StringBuffer();
+    buf.append("[\n");
+    for (int i = 0; i < bs.size(); i++) {
+      if (i < bs.size() - 1) {
+        buf.append(asString(bs.get(i)) + ",");
+      } else {
+        buf.append(asString(bs.get(i)));
+      }
+      if ((i + 1) % 8 == 0 && i != 0) {
+        buf.append("\n");
+      }
+    }
+    buf.append("]");
+    return buf.toString();
+  }
+
+  private static String asString(boolean bool) {
+    if (bool) return BIT_ONE;
+    else return BIT_ZERO;
+  }
 
   /**
    * 位拷贝, 注意pos从右向左
@@ -86,19 +120,48 @@ public class ByteOps {
     return (source & 1) == 1;
   }
 
-  public static byte[] toBitArray(byte b) {
-    byte[] array = new byte[8];
-    for (int i = 7; i >= 0; i--) {
-      array[i] = (byte) (b & 1);
-      b = (byte) (b >> 1);
+  /**
+   * 从右向左指定字节中的位
+   * <p>
+   * 例 [1, 0, 0, 0]结果为: 00000001; [1, 0,0,0,0, 1,0,0,0]结果为00100001.
+   * @param bytes
+   * @return
+   */
+  public static byte fromBitArray(byte... bits) {
+    byte result = b0;
+
+    int inputSize = bits.length;
+    if (inputSize != 0) {
+      if (inputSize > Byte.SIZE) {
+        inputSize = Byte.SIZE;
+      }
+      for (int i = 0; i < inputSize; i++) {
+        result = setBitValue(result, i, bits[i]);
+      }
     }
-    return array;
+
+    return result;
   }
 
   /**
-   * 把byte转为字符串的bit
+   * 将字节转换为位数组
+   * @param b
+   * @return
    */
-  public static String byteToBit(byte b) {
+  public static byte[] toBitArray(byte b) {
+    byte[] result = new byte[8];
+
+    for (int i = 7; i >= 0; i--) {
+      result[i] = (byte) (b & 1);
+      b = (byte) (b >> 1);
+    }
+    return result;
+  }
+
+  /**
+   * 把字节转为位字符串
+   */
+  public static String asBitString(byte b) {
     return "" //
         + (byte) ((b >> 7) & 0x1)//
         + (byte) ((b >> 6) & 0x1)//
@@ -110,23 +173,26 @@ public class ByteOps {
         + (byte) ((b >> 0) & 0x1);
   }
 
-  public static byte decodeBinaryString(String byteStr) {
-    int re, len;
-    if (null == byteStr) {
-      return 0;
+  public static byte fromBitString(String bitString) {
+    if (bitString == null) {
+      return b0;
     }
-    len = byteStr.length();
+
+    int re = b0;
+
+    int len = bitString.length();
     if (len != 4 && len != 8) {
       return 0;
     }
+
     if (len == 8) {// 8 bit处理
-      if (byteStr.charAt(0) == '0') {// 正数
-        re = Integer.parseInt(byteStr, 2);
+      if (bitString.charAt(0) == '0') {// 正数
+        re = Integer.parseInt(bitString, 2);
       } else {// 负数
-        re = Integer.parseInt(byteStr, 2) - 256;
+        re = Integer.parseInt(bitString, 2) - 256;
       }
     } else {// 4 bit处理
-      re = Integer.parseInt(byteStr, 2);
+      re = Integer.parseInt(bitString, 2);
     }
     return (byte) re;
   }

@@ -9,8 +9,8 @@ import org.apache.hadoop.hbase.util.Bytes;
 
 /**
  * 自定义值过滤器
- * 
- * <p>使用: 包含在HBASE_CLASSPATH中, 重启进程.
+ * <p>
+ * 使用: 包含在HBASE_CLASSPATH中, 重启进程.
  */
 public class SpikeValueFilter extends FilterBase {
 

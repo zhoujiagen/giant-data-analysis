@@ -1,6 +1,5 @@
 /**
- * HBase客户端API示例 - 协处理器
- * TODO(zhoujiagen) 添加协处理器示例.
+ * HBase客户端API示例 - 协处理器 TODO(zhoujiagen) 添加协处理器示例.
  * 
  * <pre>
  * 主要思想: 将代码移动到数据的存放端.
