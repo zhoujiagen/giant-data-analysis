@@ -24,14 +24,16 @@ public class HadoopConfigXMLFileParser {
     String dir = System.getProperty("user.dir") + "/src/main/resources/";
     // dir += "hadoop1/conf/"; // V1
     // dir += "hadoop2/etc/hadoop/"; // V2
-    dir += "hadoop2/_default/";// V2 default
-
+    // dir += "hadoop2/_default/";// V2 default
+    dir += "hbase1.2.6/";
+    
     // String fileName = dir + "core-site.xml";
     // String fileName = dir + "hdfs-site.xml";
     // String fileName = dir + "mapred-site.xml";
     // String fileName = dir + "yarn-site.xml";
-    String fileName = dir + "hdfs-default.xml";
-
+    // String fileName = dir + "hdfs-default.xml";
+    String fileName = dir + "hbase-default.xml";
+    
     XMLConfiguration conf = new XMLConfiguration(fileName);
 
     // Iterator<?> keys = conf.getKeys();
