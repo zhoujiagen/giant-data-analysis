@@ -2,7 +2,16 @@
 <?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
 <configuration>
 	<!-- CLIENT START -->
-	<!-- <property> <name>hbase.zookeeper.quorum</name> <value>example1,example2,example3</value> 
-		<description>The directory shared by region servers.</description> </property> -->
+	<property>
+		<name>hbase.zookeeper.quorum</name>
+		<!-- <value>118.178.253.28</value> -->
+		<value>127.0.0.1</value>
+		<description>The directory shared by region servers.</description>
+	</property>
+
+	<property>
+		<name>hbase.client.scanner.caching</name>
+		<value>1</value>
+	</property>
 	<!-- CLIENT END -->
 </configuration>

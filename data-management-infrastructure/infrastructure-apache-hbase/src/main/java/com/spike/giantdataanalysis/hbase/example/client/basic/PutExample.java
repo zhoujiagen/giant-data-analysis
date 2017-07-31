@@ -10,9 +10,17 @@ import org.slf4j.LoggerFactory;
 import com.spike.giantdataanalysis.hbase.example.domain.WebTable;
 
 /**
- * Put示例 > put 'webtable', 'com.cnn.www', 'anchor:cssnsi.com', 'CNN' 如何获取Cell中多版本: > create
- * 'webtable', 'anchor' > put 'webtable', 'com.cnn.www', 'anchor:cssnsi.com', 'CNN' > put
- * 'webtable', 'com.cnn.www', 'anchor:cssnsi.com', 'CNN' # 返回多个版本 > scan 'webtable', {VERSIONS => 3}
+ * <pre>
+ * Put示例 
+ * 
+ * > create 'webtable', 'anchor' 
+ * > put 'webtable', 'com.cnn.www', 'anchor:cssnsi.com', 'CNN' 
+ * > put 'webtable', 'com.cnn.www', 'anchor:cssnsi.com', 'CNN' 
+ * > put 'webtable', 'com.cnn.www', 'anchor:cssnsi.com', 'CNN' 
+ * 
+ * 返回多个版本 
+ * > scan 'webtable', {VERSIONS => 3}
+ * </pre>
  * @author zhoujiagen
  */
 public class PutExample extends BaseExample {
@@ -23,25 +31,36 @@ public class PutExample extends BaseExample {
   }
 
   public static void main(String[] args) throws IOException {
-    PutExample example = new PutExample(WebTable.TABLE_NAME, //
-        WebTable.CF_ANCHOR, WebTable.CF_CONTENTS, WebTable.CF_PEOPLE);
+    PutExample example = new PutExample(WebTable.T_NAME, //
+        WebTable.CF_ANCHOR, WebTable.CF_CONTENTS);
 
-    example.doWork();
+    example.execute();
   }
 
   @Override
-  protected void doSomething() throws IOException {
+  protected void doExecute() throws IOException {
 
     try {
-      Put put = new Put(Bytes.toBytes(AppConstants.ROWKEY_1));
+
+      byte[] row = Bytes.toBytes(WebTable.ROWKEY_1);
+      byte[] family = Bytes.toBytes(WebTable.CF_ANCHOR);
+      byte[] qualifier = Bytes.toBytes(WebTable.C_ANCHOR_CSSNSI_COM);
+      Put put = new Put(row);
       put.addColumn(//
-        Bytes.toBytes(WebTable.CF_ANCHOR), //
-        Bytes.toBytes(WebTable.C_ANCHOR_CSSNSI_COM),//
-        // 1L, //
+        family, //
+        qualifier,//
+        // 1L, // version timestamp
         Bytes.toBytes("CNN"));
+
       LOG.info("PUT " + put.toString());
       table.put(put);
 
+      // compare-and-set
+      // Atomically checks if a row/family/qualifier value matches the expected value.
+      // If it does, it adds the put.
+      // If the passed value is null, the check is for the lack of column (ie: non-existance)
+      boolean cas = table.checkAndPut(row, family, qualifier, null, put);
+      System.out.println(cas);
     } catch (IOException e) {
       LOG.error("Put failed", e);
     }

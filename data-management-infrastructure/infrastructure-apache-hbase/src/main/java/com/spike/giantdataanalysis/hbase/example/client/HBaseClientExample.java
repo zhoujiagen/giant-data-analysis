@@ -14,7 +14,7 @@ import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.util.Bytes;
 
-import com.spike.giantdataanalysis.hbase.support.HBases;
+import com.spike.giantdataanalysis.hbase.support.HBaseConfigurations;
 
 /**
  * <pre>
@@ -35,7 +35,7 @@ public class HBaseClientExample {
 
   public static void main(String[] args) throws IOException {
 
-    Configuration conf = HBases.loadDefaultConfiguration();
+    Configuration conf = HBaseConfigurations.loadDefaultConfiguration();
 
     Connection connection = ConnectionFactory.createConnection(conf);
 

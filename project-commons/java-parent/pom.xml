@@ -6,30 +6,34 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
+	<name>Giant Data Analysis</name>
 	<description>giant-data-analysis中Java项目的Maven父项目</description>
 	<inceptionYear>2017</inceptionYear>
+	<organization>
+		<name>GDA</name>
+		<url>https://github.com/zhoujiagen/giant-data-analysis</url>
+	</organization>
 
 	<modules>
-		<module>../../data-management-infrastructure/infrastructure-netty</module>
+		<!--<module>../../data-management-infrastructure/infrastructure-netty</module>
 		<module>../../data-management-infrastructure/infrastructure-jetty</module>
 		<module>../../data-management-infrastructure/infrastructure-apache-zookeeper</module>
 		<module>../../data-management-infrastructure/infrastructure-apache-curator</module>
-		<module>../../data-management-infrastructure/infrastructure-apache-hadoop</module>
+		<module>../../data-management-infrastructure/infrastructure-apache-hadoop</module>-->
 		<module>../../data-management-infrastructure/infrastructure-apache-hbase</module>
 		<module>../../data-management-infrastructure/infrastructure-opentsdb</module>
-		<module>../../data-representation/representation-titan</module>
+		<!--<module>../../data-representation/representation-titan</module>
 		<module>../../data-representation/representation-apache-tinkerpop</module>
 		<module>../../data-representation/representation-apache-giraph</module>
 		<module>../../temporal-data-and-realtime-algorithm/temporal-apache-storm</module>
 		<module>../../temporal-data-and-realtime-algorithm/temporal-apache-kafka</module>
+	-->
 	</modules>
 
 	<licenses>
 		<license>
-			<name>Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</name>
-			<url>http://creativecommons.org/licenses/by-nc-sa/4.0/</url>
-			<distribution>repo</distribution>
-			<comments>知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</comments>
+			<name>MIT License</name>
+			<url>http://www.opensource.org/licenses/mit-license.php</url>
 		</license>
 	</licenses>
 
@@ -57,7 +61,7 @@
 		<curator.version>2.12.0</curator.version>
 		<hadoop.version>2.7.2</hadoop.version>
 		<mrunit.version>1.1.0</mrunit.version>
-		<hbase.version>1.2.3</hbase.version>
+		<hbase.version>1.2.6</hbase.version>
 		<netty.version>4.1.8.Final</netty.version>
 		<jetty.version>9.4.3.v20170317</jetty.version>
 		<opentsdb.version>2.3.0</opentsdb.version>
@@ -201,6 +205,12 @@
 					<artifactId>maven-surefire-plugin</artifactId>
 					<version>2.12.4</version>
 				</plugin>
+				<!-- License: http://www.mojohaus.org/license-maven-plugin/index.html-->
+				<plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>license-maven-plugin</artifactId>
+          <version>1.13</version>
+        </plugin>
 			</plugins>
 		</pluginManagement>
 		<plugins>
@@ -210,6 +220,26 @@
 				<configuration>
 					<source>1.7</source>
 					<target>1.7</target>
+				</configuration>
+			</plugin>
+
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<configuration>
+					<addJavaLicenseAfterPackage>false</addJavaLicenseAfterPackage>
+					<licenseName>mit</licenseName>
+					<verbose>false</verbose>
+					<copyrightOwners>zhoujiagen@gmail.com</copyrightOwners>
+					<sectionDelimiter>==============================================================================</sectionDelimiter>
+					<descriptionTemplate>../../_license/myDescriptionTemplate.ftl</descriptionTemplate>
+					<processStartTag>[[[LICENSE-START]]]</processStartTag>
+					<processEndTag>[[[LICENSE-END]]]</processEndTag>
+					<roots>
+						<root>src/main/java</root>
+						<root>src/test</root>
+					</roots>
 				</configuration>
 			</plugin>
 		</plugins>

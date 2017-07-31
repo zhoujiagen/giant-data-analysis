@@ -9,6 +9,7 @@ public class HBaseDomain {
   protected String tableName;// 表名称
   protected String columnFamilyName;// 列族名称
   protected String qualifierName; // 列限定符名称
+  protected byte[] row; // 行键值
   protected byte[] value; // 值
   protected int timestamp; // version
 
@@ -51,6 +52,14 @@ public class HBaseDomain {
     this.qualifierName = qualifierName;
   }
 
+  public byte[] getRow() {
+    return row;
+  }
+
+  public void setRow(byte[] row) {
+    this.row = row;
+  }
+
   public byte[] getValue() {
     return value;
   }
@@ -74,6 +83,7 @@ public class HBaseDomain {
     private String tableName;// 表名称
     private String columnFamilyName;// 列族名称
     private String qualifierName; // 列限定符名称
+    private byte[] row; // 行键值
     private byte[] value; // 值
     private int timestamp; // version
 
@@ -100,6 +110,11 @@ public class HBaseDomain {
       return this;
     }
 
+    public HBaseDomainBuilder row(byte[] row) {
+      this.row = row;
+      return this;
+    }
+
     public HBaseDomainBuilder value(byte[] value) {
       this.value = value;
       return this;
@@ -116,6 +131,7 @@ public class HBaseDomain {
       result.setTableName(tableName);
       result.setColumnFamilyName(columnFamilyName);
       result.setQualifierName(qualifierName);
+      result.setRow(row);
       result.setValue(value);
       result.setTimestamp(timestamp);
       return result;

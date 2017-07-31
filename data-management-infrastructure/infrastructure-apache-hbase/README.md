@@ -17,11 +17,11 @@ conf/hbase-site.xml
 
 	  <property>
 	    <name>hbase.rootdir</name>
-	    <value>file:///Users/zhang/data/hbase</value>
+	    <value>file:///Users/jiedong/data/hbase</value>
 	  </property>
 	  <property>
 	    <name>hbase.zookeeper.property.dataDir</name>
-	    <value>/Users/zhang/data/zookeeper</value>
+	    <value>file:///Users/jiedong/data/zookeeper</value>
 	  </property>
 
 启动/停止:
@@ -32,6 +32,16 @@ conf/hbase-site.xml
 脚本连接:
 
 	bin/hbase shell
+
+# 4 数据存储模式
+
+	(Table, RowKey, Family, Column, Timestamp) -> Value
+	
+	SortedMap<RowKey, List<SortedMap<Column, List<Value, Timestamp>>>>
+	
+	10^9行 * 10^6列 * 10^3版本 = TB/PB级存储 
+
+
 
 
 	

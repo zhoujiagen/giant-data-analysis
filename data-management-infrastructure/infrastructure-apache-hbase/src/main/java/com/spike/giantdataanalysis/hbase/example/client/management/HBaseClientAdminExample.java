@@ -27,6 +27,18 @@ public class HBaseClientAdminExample {
   private static final String TABLE_NAME = "MY_TABLE_NAME_TOO";
   private static final String CF_DEFAULT = "DEFAULT_COLUMN_FAMILY";
 
+  public static void main(String... args) throws IOException {
+    Configuration config = HBaseConfiguration.create();
+
+    // 已在CLASSPATH:conf/目录下, 不再从系统环境中获取
+    // Add any necessary configuration files (hbase-site.xml, core-site.xml)
+    // config.addResource(new Path(System.getenv("HBASE_CONF_DIR"), "hbase-site.xml"));
+    // config.addResource(new Path(System.getenv("HADOOP_CONF_DIR"), "core-site.xml"));
+
+    createSchemaTables(config);
+    modifySchema(config);
+  }
+
   // 创建或覆盖表定义
   public static void createOrOverwrite(Admin admin, HTableDescriptor table) throws IOException {
     if (admin.tableExists(table.getTableName())) {
@@ -88,15 +100,4 @@ public class HBaseClientAdminExample {
     }
   }
 
-  public static void main(String... args) throws IOException {
-    Configuration config = HBaseConfiguration.create();
-
-    // 已在CLASSPATH:conf/目录下, 不再从系统环境中获取
-    // Add any necessary configuration files (hbase-site.xml, core-site.xml)
-    // config.addResource(new Path(System.getenv("HBASE_CONF_DIR"), "hbase-site.xml"));
-    // config.addResource(new Path(System.getenv("HADOOP_CONF_DIR"), "core-site.xml"));
-
-    createSchemaTables(config);
-    modifySchema(config);
-  }
 }
