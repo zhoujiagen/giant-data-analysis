@@ -1,0 +1,74 @@
+digraph Neo {
+  node [
+    shape = "Mrecord"
+    fontsize = "8"
+    fontname = "Bitstream Vera Sans"
+  ]
+  edge [
+    fontsize = "8"
+    fontname = "Bitstream Vera Sans"
+  ]
+  N0 [
+    label = "{Users (0)|'name' = 'John' : String\l}"
+  ]
+  N0 -> N1 [
+    label = "IS_FRIEND_OF\n"
+  ]
+  N0 -> N2 [
+    label = "WORKS_WITH\n"
+  ]
+  N0 -> N6 [
+    label = "LIKES\n"
+  ]
+  N1 [
+    label = "{Users (1)|'name' = 'Kate' : String\l}"
+  ]
+  N1 -> N5 [
+    label = "LIKES\n"
+  ]
+  N1 -> N3 [
+    label = "WORKS_WITH\n"
+  ]
+  N1 -> N4 [
+    label = "WORKS_WITH\n"
+  ]
+  N2 [
+    label = "{Users (2)|'name' = 'Emma' : String\l}"
+  ]
+  N2 -> N4 [
+    label = "WORKS_WITH\n"
+  ]
+  N2 -> N7 [
+    label = "LIKES\n"
+  ]
+  N3 [
+    label = "{Users (3)|'name' = 'Alex' : String\l}"
+  ]
+  N3 -> N8 [
+    label = "LIKES\n"
+  ]
+  N4 [
+    label = "{Users (4)|'name' = 'Jack' : String\l}"
+  ]
+  N4 -> N8 [
+    label = "LIKES\n"
+  ]
+  N4 -> N9 [
+    label = "LIKES\n"
+  ]
+  N5 [
+    label = "{Movies (5)|'title' = 'Fargo' : String\l}"
+  ]
+  N6 [
+    label = "{Movies (6)|'title' = 'Top Gun' : String\l}"
+  ]
+  N7 [
+    label = "{Movies (7)|'title' = 'Alien' : String\l}"
+  ]
+  N8 [
+    label = "{Movies (8)|'title' = 'Godfather' : String\l}"
+  ]
+  N9 [
+    label = "{Movies (9)|'title' = 'Great Dictator' : String\l}"
+  ]
+}

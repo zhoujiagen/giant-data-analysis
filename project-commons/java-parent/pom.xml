@@ -15,19 +15,26 @@
 	</organization>
 
 	<modules>
+		<!-- data-management-infrastructure -->
 		<!--<module>../../data-management-infrastructure/infrastructure-netty</module>
 		<module>../../data-management-infrastructure/infrastructure-jetty</module>
 		<module>../../data-management-infrastructure/infrastructure-apache-zookeeper</module>
 		<module>../../data-management-infrastructure/infrastructure-apache-curator</module>
-		<module>../../data-management-infrastructure/infrastructure-apache-hadoop</module>-->
+		<module>../../data-management-infrastructure/infrastructure-apache-hadoop</module>
 		<module>../../data-management-infrastructure/infrastructure-apache-hbase</module>
-		<module>../../data-management-infrastructure/infrastructure-opentsdb</module>
-		<!--<module>../../data-representation/representation-titan</module>
+		<module>../../data-management-infrastructure/infrastructure-opentsdb</module>-->
+
+		<!-- data-representation -->
+		<module>../../data-representation/representation-titan</module>
 		<module>../../data-representation/representation-apache-tinkerpop</module>
 		<module>../../data-representation/representation-apache-giraph</module>
+		<module>../../data-representation/representation-neo4j</module>
+
+		<!-- temporal-data-and-realtime-algorithm -->
+		<!--
 		<module>../../temporal-data-and-realtime-algorithm/temporal-apache-storm</module>
 		<module>../../temporal-data-and-realtime-algorithm/temporal-apache-kafka</module>
-	-->
+		-->
 	</modules>
 
 	<licenses>
@@ -69,6 +76,9 @@
 		<titan.version>1.0.0</titan.version>
 		<tinkerpop.version>3.2.3</tinkerpop.version>
 		<giraph.version>1.2.0-hadoop2</giraph.version>
+		<neo4j.version>3.2.2</neo4j.version>
+		<neo4j.driver.java.version>1.4.0</neo4j.driver.java.version>
+		<spring.data.neo4j.version>4.2.6.RELEASE</spring.data.neo4j.version>
 		<!-- temporal -->
 		<storm.version>0.9.7</storm.version>
 		<twitter4j.version>4.0.6</twitter4j.version>

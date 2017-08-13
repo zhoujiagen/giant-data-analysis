@@ -1,0 +1,65 @@
+digraph Neo {
+  node [
+    shape = "Mrecord"
+    fontsize = "8"
+    fontname = "Bitstream Vera Sans"
+  ]
+  edge [
+    fontsize = "8"
+    fontname = "Bitstream Vera Sans"
+  ]
+  N0 [
+    label = "{Users (0)|'name' = 'Jane' : String\l}"
+  ]
+  N0 -> N1 [
+    label = "KNOWS\n"
+  ]
+  N0 -> N2 [
+    label = "KNOWS\n"
+  ]
+  N1 [
+    label = "{Users (1)|'name' = 'John' : String\l}"
+  ]
+  N1 -> N0 [
+    label = "KNOWS\n"
+  ]
+  N1 -> N2 [
+    label = "KNOWS\n"
+  ]
+  N1 -> N3 [
+    label = "KNOWS\n"
+  ]
+  N1 -> N4 [
+    label = "KNOWS\n"
+  ]
+  N2 [
+    label = "{Users (2)|'name' = 'Kate' : String\l}"
+  ]
+  N2 -> N0 [
+    label = "KNOWS\n"
+  ]
+  N2 -> N1 [
+    label = "KNOWS\n"
+  ]
+  N2 -> N5 [
+    label = "KNOWS\n"
+  ]
+  N3 [
+    label = "{Users (3)|'name' = 'Jack' : String\l}"
+  ]
+  N3 -> N1 [
+    label = "KNOWS\n"
+  ]
+  N4 [
+    label = "{Users (4)|'name' = 'Ben' : String\l}"
+  ]
+  N4 -> N1 [
+    label = "KNOWS\n"
+  ]
+  N5 [
+    label = "{Users (5)|'name' = 'Emma' : String\l}"
+  ]
+  N5 -> N2 [
+    label = "KNOWS\n"
+  ]
+}

@@ -33,7 +33,7 @@
 + Jetty 9.4.3.v20170317 - infrastructure-jetty
 + Apache ZooKeeper 3.4.6 - infrastructure-apache-zookeeper
 + Apache Curator 2.12.0 - infrastructure-apache-curator
-+ Apache HBase 1.2.3 - infrastructure-apache-hbase
++ Apache HBase 1.2.6 - infrastructure-apache-hbase
 + Ansible 2.3.0.0 - infrastructure-ansible
 
 + DOING: Ansible
@@ -58,10 +58,13 @@ Strike 1: Apache Storm word count example.
 
 ## 3 数据表示 - data-representation
 
-+ graph-apache-tinkerpop: 图计算框架; 图遍历语言Gremlin抽象
-+ graph-titan: 分布式图数据库
++ graph-apache-tinkerpop - representation-apache-tinkerpop 图计算框架; 图遍历语言Gremlin抽象
++ graph-titan 1.0.0 - representation-titan 分布式图数据库
++ Neo4j 3.2.2 - representation-neo4j 图数据库
 
 + TODO 继续整理Step示例; 完成NoSQL Distilled中关系图信息查询.
++ TinkerPop栈, Neo4j遍历API, 准备应用: 描述逻辑的DSL.
++ Neo4j已完成基本探索, 准备实现描述逻辑的基础构造. 20170813
 
 > TBD
 

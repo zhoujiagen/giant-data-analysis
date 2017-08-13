@@ -1,0 +1,59 @@
+digraph Neo {
+  node [
+    shape = "Mrecord"
+    fontsize = "8"
+    fontname = "Bitstream Vera Sans"
+  ]
+  edge [
+    fontsize = "8"
+    fontname = "Bitstream Vera Sans"
+  ]
+  N0 [
+    label = "{Users (0)|'name' = 'John Johnson' : String\l'year_of_brith' = 1982 : int\l}"
+  ]
+  N0 -> N3 [
+    label = "HAS_SEEN\n'stars' = 5 : int\l"
+  ]
+  N0 -> N2 [
+    label = "IS_FRIEND_OF\n"
+  ]
+  N0 -> N1 [
+    label = "IS_FRIEND_OF\n"
+  ]
+  N1 [
+    label = "{Users (1)|'name' = 'Kate Smith' : String\l'locked' = true : boolean\l}"
+  ]
+  N1 -> N5 [
+    label = "HAS_SEEN\n'stars' = 3 : int\l"
+  ]
+  N2 [
+    label = "{Users (2)|'name' = 'Jack Jeffries' : String\l'cars_owned' = ['BMW', 'Audi'] : String[]\l}"
+  ]
+  N2 -> N4 [
+    label = "HAS_SEEN\n'stars' = 5 : int\l"
+  ]
+  N2 -> N3 [
+    label = "HAS_SEEN\n'stars' = 4 : int\l"
+  ]
+  N3 [
+    label = "{Movies (3)|'name' = 'Fargo' : String\l}"
+  ]
+  N4 [
+    label = "{Movies (4)|'name' = 'Alien' : String\l}"
+  ]
+  N5 [
+    label = "{Movies (5)|'name' = 'Heat' : String\l}"
+  ]
+  N6 [
+    label = "{Users (6)|'email' = 'jsmith@new.example.org' : String\l'name' = 'John Smith' : String\l}"
+  ]
+  N7 [
+    label = "{Movies (7)|'name' = 'Michael Collins' : String\l}"
+  ]
+  N8 [
+    label = "{Users (8)|'name' = 'Michael Collins' : String\l}"
+  ]
+  N9 [
+    label = "{Users (9)|'name' = 'Cartman' : String\l'age' = 30 : int\l}"
+  ]
+}
