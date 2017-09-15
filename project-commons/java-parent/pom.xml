@@ -16,6 +16,7 @@
 
 	<modules>
 		<!-- data-management-infrastructure -->
+		<module>../../data-management-infrastructure/infrastructure-benchmark</module>
 		<!--<module>../../data-management-infrastructure/infrastructure-netty</module>
 		<module>../../data-management-infrastructure/infrastructure-jetty</module>
 		<module>../../data-management-infrastructure/infrastructure-apache-zookeeper</module>
@@ -64,6 +65,7 @@
 		<!-- test -->
 		<junit.version>4.11</junit.version>
 		<!-- infrastructure -->
+		<ganglia.gmetric4j.version>1.0.10</ganglia.gmetric4j.version>
 		<zookeeper.version>3.4.6</zookeeper.version>
 		<curator.version>2.12.0</curator.version>
 		<hadoop.version>2.7.2</hadoop.version>
