@@ -27,7 +27,7 @@
 
 + datasets
 
-+ Apache Hadoop 2.7.2/1.2.1 - infrastructure-apache-hadoop
++ Apache Hadoop 2.7.4/1.2.1 - infrastructure-apache-hadoop
 + Apache Spark 1.5.2 - scala-infrastructure-apache-spark
 + Netty 4.1.8.Final - infrastructure-netty
 + Jetty 9.4.3.v20170317 - infrastructure-jetty
@@ -61,6 +61,7 @@ Strike 1: Apache Storm word count example.
 + graph-apache-tinkerpop - representation-apache-tinkerpop 图计算框架; 图遍历语言Gremlin抽象
 + graph-titan 1.0.0 - representation-titan 分布式图数据库
 + Neo4j 3.2.2 - representation-neo4j 图数据库
++ Apache Jena 3.4.0 - representation-apache-jena
 
 + TODO 继续整理Step示例; 完成NoSQL Distilled中关系图信息查询.
 + TinkerPop栈, Neo4j遍历API, 准备应用: 描述逻辑的DSL.
@@ -69,6 +70,8 @@ Strike 1: Apache Storm word count example.
 > TBD
 
 ## 4 数据模型 - data-models
+
++ 图模型 - datamodel-graph
 
 > TBD
 

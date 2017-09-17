@@ -1,0 +1,656 @@
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dc:    <http://purl.org/dc/elements/1.1/> .
+
+
+<wordnet_uri/Sponsorship> @
+        a       owl:Class .
+
+<eswc_uri#MeetingRoomPlace> @
+        a                owl:Class ;
+        rdfs:label       "Meeting Room Place" ;
+        rdfs:subClassOf  <eswc_uri#Place> .
+
+<eswc_uri#Reviewer> @
+        a                owl:Class ;
+        rdfs:label       "Reviewer" ;
+        rdfs:subClassOf  <eswc_uri#Role> .
+
+<eswc_uri#hasRole> @
+        a            owl:ObjectProperty ;
+        rdfs:domain  <eswc_uri#AcademicEvent> ;
+        rdfs:label   "has role" ;
+        rdfs:range   <eswc_uri#Role> .
+
+<eswc_uri#hasSubmissionInstructions> @
+        a            owl:DatatypeProperty ;
+        rdfs:domain  <eswc_uri#Call> ;
+        rdfs:label   "has submission instructions" ;
+        rdfs:range   xsd:string .
+
+<eswc_uri#Programme> @
+        a                owl:Class ;
+        rdfs:label       "Programme" ;
+        rdfs:subClassOf  <eswc_uri#Artefact> .
+
+<eswc_uri#Excursion> @
+        a                owl:Class ;
+        rdfs:label       "Excursion" ;
+        rdfs:subClassOf  <eswc_uri#SocialEvent> .
+
+<eswc_uri#hasCameraReadyDeadline> @
+        a            owl:DatatypeProperty ;
+        rdfs:domain  <eswc_uri#Call> ;
+        rdfs:label   "has camera-ready deadline" ;
+        rdfs:range   xsd:dateTime .
+
+<eswc_uri#hasProgramme> @
+        a            owl:ObjectProperty ;
+        rdfs:domain  <eswc_uri#OrganisedEvent> ;
+        rdfs:label   "has programme" ;
+        rdfs:range   <eswc_uri#Programme> .
+
+<eswc_uri#holdsRole> @
+        a            owl:ObjectProperty ;
+        rdfs:domain  <http://xmlns.com/foaf/0.1/Person> ;
+        rdfs:label   "holds role" ;
+        rdfs:range   <eswc_uri#Role> .
+
+<eswc_uri#MealEvent> @
+        a                owl:Class ;
+        rdfs:label       "Meal Event" ;
+        rdfs:subClassOf  <eswc_uri#NonAcademicEvent> .
+
+<eswc_uri#ConferenceDinner> @
+        a                owl:Class ;
+        rdfs:label       "Conference Dinner" ;
+        rdfs:subClassOf  <eswc_uri#MealEvent> , <eswc_uri#SocialEvent> .
+
+<eswc_uri#implements> @
+        a            owl:ObjectProperty ;
+        rdfs:domain  <eswc_uri#Paper> ;
+        rdfs:label   "implements" ;
+        rdfs:range   <wordnet_uri/Document> .
+
+<eswc_uri#AdditionalReviewer> @
+        a                owl:Class ;
+        rdfs:label       "Additional Reviewer" ;
+        rdfs:subClassOf  <eswc_uri#Role> .
+
+<eswc_uri#isLocationFor> @
+        a            owl:ObjectProperty ;
+        rdfs:domain  <eswc_uri#Place> ;
+        rdfs:label   "is location of" ;
+        rdfs:range   <eswc_uri#OrganisedEvent> .
+
+<eswc_uri#KeynoteTalk> @
+        a                owl:Class ;
+        rdfs:label       "Keynote Talk" ;
+        rdfs:subClassOf  <eswc_uri#TalkEvent> .
+
+<eswc_uri#CallForProposals> @
+        a                owl:Class ;
+        rdfs:label       "Call For Proposals" ;
+        rdfs:subClassOf  <eswc_uri#Call> .
+
+<wordnet_uri/Event-1> @
+        a       owl:Class .
+
+<eswc_uri#isProviderOf> @
+        a            owl:ObjectProperty ;
+        rdfs:domain  <http://xmlns.com/foaf/0.1/Organisation> ;
+        rdfs:label   "is provider of" ;
+        rdfs:range   <eswc_uri#Sponsorship> .
+
+<eswc_uri#Call> @
+        a                owl:Class ;
+        rdfs:label       "Call" ;
+        rdfs:subClassOf  <wordnet_uri/Announcement> .
+
+<eswc_uri#PublicityChair> @
+        a                owl:Class ;
+        rdfs:label       "Publicity Chair" ;
+        rdfs:subClassOf  <eswc_uri#Role> .
+
+<eswc_uri#extends> @
+        a            owl:ObjectProperty ;
+        rdfs:domain  <eswc_uri#Paper> ;
+        rdfs:label   "extends" ;
+        rdfs:range   <wordnet_uri/Document> .
+
+<eswc_uri#AccommodationPlace> @
+        a                owl:Class ;
+        rdfs:label       "Accommodation Place" ;
+        rdfs:subClassOf  <eswc_uri#Place> .
+
+<eswc_uri#Sponsorship> @
+        a                owl:Class ;
+        rdfs:label       "Sponsorship" ;
+        rdfs:subClassOf  <wordnet_uri/Sponsorship> .
+
+<eswc_uri#PosterPresentation> @
+        a                owl:Class ;
+        rdfs:label       "Poster Presentation" ;
+        rdfs:subClassOf  <eswc_uri#TalkEvent> .
+
+<eswc_uri#isProvidedBy> @
+        a            owl:ObjectProperty ;
+        rdfs:domain  <eswc_uri#Sponsorship> ;
+        rdfs:label   "is provided by" ;
+        rdfs:range   <http://xmlns.com/foaf/0.1/Organisation> .
+
+<eswc_uri#FreeTimeBreak> @
+        a                owl:Class ;
+        rdfs:label       "Free Time Break" ;
+        rdfs:subClassOf  <eswc_uri#BreakEvent> .
+
+<eswc_uri#hasCostAmount> @
+        a            owl:DatatypeProperty ;
+        rdfs:domain  <eswc_uri#Sponsorship> ;
+        rdfs:label   "has cost amount" ;
+        rdfs:range   xsd:integer .
+
+<eswc_uri#Role> @
+        a                owl:Class ;
+        rdfs:label       "Role" ;
+        rdfs:subClassOf  <wordnet_uri/Role-1> .
+
+<eswc_uri#Webmaster> @
+        a                owl:Class ;
+        rdfs:label       "Webmaster" ;
+        rdfs:subClassOf  <eswc_uri#Role> .
+
+<eswc_uri#CoffeeBreak> @
+        a                owl:Class ;
+        rdfs:label       "Coffee Break" ;
+        rdfs:subClassOf  <eswc_uri#BreakEvent> .
+
+<eswc_uri#hasMenu> @
+        a            owl:ObjectProperty ;
+        rdfs:domain  <eswc_uri#MealEvent> ;
+        rdfs:label   "has menu" ;
+        rdfs:range   <wordnet_uri/Menu> .
+
+<eswc_uri#NonAcademicEvent> @
+        a                owl:Class ;
+        rdfs:label       "Non-Academic Event" ;
+        rdfs:subClassOf  <eswc_uri#OrganisedEvent> .
+
+<eswc_uri#disagreesWith> @
+        a            owl:ObjectProperty ;
+        rdfs:domain  <eswc_uri#Paper> ;
+        rdfs:label   "disagrees with" ;
+        rdfs:range   <wordnet_uri/Document> .
+
+<eswc_uri#CallForPapers> @
+        a                owl:Class ;
+        rdfs:label       "Call For Papers" ;
+        rdfs:subClassOf  <eswc_uri#Call> .
+
+<eswc_uri#ProgrammeChair> @
+        a                owl:Class ;
+        rdfs:label       "Programme Chair" ;
+        rdfs:subClassOf  <eswc_uri#Role> .
+
+<eswc_uri#SessionEvent> @
+        a                owl:Class ;
+        rdfs:label       "Session Event" ;
+        rdfs:subClassOf  <eswc_uri#AcademicEvent> .
+
+<eswc_uri#agreesWith> @
+        a            owl:ObjectProperty ;
+        rdfs:domain  <eswc_uri#Paper> ;
+        rdfs:label   "agrees with" ;
+        rdfs:range   <wordnet_uri/Document> .
+
+<eswc_uri#WorkshopEvent> @
+        a                owl:Class ;
+        rdfs:label       "Workshop Event" ;
+        rdfs:subClassOf  <eswc_uri#AcademicEvent> .
+
+<eswc_uri#hasEndDateTime> @
+        a            owl:DatatypeProperty ;
+        rdfs:domain  <eswc_uri#OrganisedEvent> ;
+        rdfs:label   "has end date and time" ;
+        rdfs:range   xsd:dateTime .
+
+<eswc_uri#hasNotificationDeadline> @
+        a            owl:DatatypeProperty ;
+        rdfs:domain  <eswc_uri#Call> ;
+        rdfs:label   "has notification deadline" ;
+        rdfs:range   xsd:dateTime .
+
+<eswc_uri#biblioReference> @
+        a            owl:DatatypeProperty ;
+        rdfs:domain  <eswc_uri#Artefact> ;
+        rdfs:label   "bibliographic reference" ;
+        rdfs:range   xsd:string .
+
+<eswc_uri#PosterSession> @
+        a                owl:Class ;
+        rdfs:label       "Poster Session" ;
+        rdfs:subClassOf  <eswc_uri#SessionEvent> .
+
+<eswc_uri#ProgrammeCommitteeMember> @
+        a                owl:Class ;
+        rdfs:label       "Programme Committee Member" ;
+        rdfs:subClassOf  <eswc_uri#Role> .
+
+dc:description  a  owl:DatatypeProperty . @
+
+<eswc_uri#IndustryChair> @
+        a                owl:Class ;
+        rdfs:label       "Industry Chair" ;
+        rdfs:subClassOf  <eswc_uri#Role> .
+
+<eswc_uri#Reception> @
+        a                owl:Class ;
+        rdfs:label       "Reception" ;
+        rdfs:subClassOf  <eswc_uri#SocialEvent> .
+
+<eswc_uri>
+        a       owl:Ontology .
+
+dc:creator  a   owl:DatatypeProperty . @
+
+<eswc_uri#SessionChair> @
+        a                owl:Class ;
+        rdfs:label       "Session Chair" ;
+        rdfs:subClassOf  <eswc_uri#Role> .
+
+<eswc_uri#hasPart> @
+        a            owl:ObjectProperty ;
+        rdfs:domain  owl:Thing ;
+        rdfs:label   "has part" ;
+        rdfs:range   owl:Thing .
+
+<wordnet_uri/Announcement> @
+        a       owl:Class .
+
+<eswc_uri#Tutor> @
+        a                owl:Class ;
+        rdfs:label       "Tutor" ;
+        rdfs:subClassOf  <eswc_uri#Role> .
+
+<eswc_uri#DrinkingPlace> @
+        a                owl:Class ;
+        rdfs:label       "Drinking Place" ;
+        rdfs:subClassOf  <eswc_uri#Place> .
+
+<eswc_uri#hasRelatedArtefact> @
+        a            owl:ObjectProperty ;
+        rdfs:domain  <eswc_uri#AcademicEvent> ;
+        rdfs:label   "has related artefact" ;
+        rdfs:range   <eswc_uri#Artefact> .
+
+<eswc_uri#plansToAttend> @
+        a            owl:ObjectProperty ;
+        rdfs:domain  <http://xmlns.com/foaf/0.1/Person> ;
+        rdfs:label   "plans to attend" ;
+        rdfs:range   <eswc_uri#OrganisedEvent> .
+
+<eswc_uri#WelcomeTalk> @
+        a                owl:Class ;
+        rdfs:label       "Welcome Talk" ;
+        rdfs:subClassOf  <eswc_uri#TalkEvent> .
+
+<eswc_uri#attendeeAt> @
+        a            owl:ObjectProperty ;
+        rdfs:domain  <http://xmlns.com/foaf/0.1/Person> ;
+        rdfs:label   "attendee at" ;
+        rdfs:range   <eswc_uri#OrganisedEvent> .
+
+<eswc_uri#PaperSession> @
+        a                owl:Class ;
+        rdfs:label       "Paper Session" ;
+        rdfs:subClassOf  <eswc_uri#SessionEvent> .
+
+<eswc_uri#TutorialsChair> @
+        a                owl:Class ;
+        rdfs:label       "Tutorials Chair" ;
+        rdfs:subClassOf  <eswc_uri#Role> .
+
+<eswc_uri#TrackEvent> @
+        a                owl:Class ;
+        rdfs:label       "Track Event" ;
+        rdfs:subClassOf  <eswc_uri#AcademicEvent> .
+
+<eswc_uri#Administrator> @
+        a                owl:Class ;
+        rdfs:label       "Administrator" ;
+        rdfs:subClassOf  <eswc_uri#Role> .
+
+<eswc_uri#evidenceAgainst> @
+        a            owl:ObjectProperty ;
+        rdfs:domain  <eswc_uri#Paper> ;
+        rdfs:label   "evidence against" ;
+        rdfs:range   <wordnet_uri/Document> .
+
+<eswc_uri#Place> @
+        a                owl:Class ;
+        rdfs:label       "Place" ;
+        rdfs:subClassOf  <http://www.w3.org/2003/01/geo/wgs84_pos#SpatialThing> .
+
+<eswc_uri#SocialEvent> @
+        a                owl:Class ;
+        rdfs:label       "Social Event" ;
+        rdfs:subClassOf  <eswc_uri#NonAcademicEvent> .
+
+<eswc_uri#hasCostCurrency> @
+        a            owl:DatatypeProperty ;
+        rdfs:domain  <eswc_uri#Sponsorship> ;
+        rdfs:label   "has cost currency" ;
+        rdfs:range   xsd:string .
+
+xsd:dateTime  a  owl:Class . @
+
+<eswc_uri#IndustrialTrack> @
+        a                owl:Class ;
+        rdfs:label       "Industrial Track" ;
+        rdfs:subClassOf  <eswc_uri#TrackEvent> .
+
+<eswc_uri#DemosChair> @
+        a                owl:Class ;
+        rdfs:label       "Demos Chair" ;
+        rdfs:subClassOf  <eswc_uri#Role> .
+
+<eswc_uri#PostersChair> @
+        a                owl:Class ;
+        rdfs:label       "Posters Chair" ;
+        rdfs:subClassOf  <eswc_uri#Role> .
+
+<eswc_uri#heldBy> @
+        a            owl:ObjectProperty ;
+        rdfs:domain  <eswc_uri#Role> ;
+        rdfs:label   "held by" ;
+        rdfs:range   <http://xmlns.com/foaf/0.1/Person> .
+
+<eswc_uri#TutorialEvent> @
+        a                owl:Class ;
+        rdfs:label       "Tutorial Event" ;
+        rdfs:subClassOf  <eswc_uri#AcademicEvent> .
+
+<eswc_uri#WorkshopsChair> @
+        a                owl:Class ;
+        rdfs:label       "Workshops Chair" ;
+        rdfs:subClassOf  <eswc_uri#Role> .
+
+<eswc_uri#ConferenceVenuePlace> @
+        a                owl:Class ;
+        rdfs:label       "Conference Venue Place" ;
+        rdfs:subClassOf  <eswc_uri#Place> .
+
+<eswc_uri#TalkEvent> @
+        a                owl:Class ;
+        rdfs:label       "Talk Event" ;
+        rdfs:subClassOf  <eswc_uri#AcademicEvent> .
+
+<eswc_uri#Artefact> @
+        a                owl:Class ;
+        rdfs:label       "Artefact" ;
+        rdfs:subClassOf  <wordnet_uri/Document> .
+
+<eswc_uri#CallForPosters> @
+        a                owl:Class ;
+        rdfs:label       "Call For Posters" ;
+        rdfs:subClassOf  <eswc_uri#Call> .
+
+<eswc_uri#CommunalPlace> @
+        a                owl:Class ;
+        rdfs:label       "Communal Place" ;
+        rdfs:subClassOf  <eswc_uri#Place> .
+
+<eswc_uri#relatedToEvent> @
+        a            owl:ObjectProperty ;
+        rdfs:domain  <eswc_uri#Artefact> ;
+        rdfs:label   "related to event" ;
+        rdfs:range   <eswc_uri#AcademicEvent> .
+
+<eswc_uri#>
+        a               owl:Thing , owl:Ontology ;
+        dc:contributor  "ESWC2006 Organising Committee" ;
+        dc:creator      "Tom Heath" ;
+        dc:date         "$Date: 2006/05/26 00:00:00 $" ;
+        dc:description  "An ontology for describing academic conferences, designed to support the 3rd European Semantic Web Conference (ESWC2006)\"" ;
+        dc:title        "The ESWC2006 Conference Ontology" .
+
+<eswc_uri#evidenceFor>
+        a            owl:ObjectProperty ;
+        rdfs:domain  <eswc_uri#Paper> ;
+        rdfs:label   "evidence for" ;
+        rdfs:range   <wordnet_uri/Document> .
+        
+evidenceFor [label="evidence for"]
+evidenceFor -> Paper [label="rdfs:domain"]
+evidenceFor -> Document [label="rdfs:range"]
+
+<eswc_uri#CallForParticipation> @
+        a                owl:Class ;
+        rdfs:label       "Call For Participation" ;
+        rdfs:subClassOf  <eswc_uri#Call> .
+
+<eswc_uri#hasLocation> @
+        a            owl:ObjectProperty ;
+        rdfs:domain  <eswc_uri#OrganisedEvent> ;
+        rdfs:label   "has location" ;
+        rdfs:range   <eswc_uri#Place> .
+
+<eswc_uri#hasSubmissionDeadline> @
+        a            owl:DatatypeProperty ;
+        rdfs:domain  <eswc_uri#Call> ;
+        rdfs:label   "has submission deadline" ;
+        rdfs:range   xsd:dateTime .
+
+<eswc_uri#hasTopic> @
+        a           owl:ObjectProperty ;
+        rdfs:label  "has topic" ;
+        rdfs:range  <http://swrc.ontoware.org/ontology#ResearchTopic> .
+
+
+<http://www.w3.org/2003/01/geo/wgs84_pos#SpatialThing> @
+        a       owl:Class .
+
+<eswc_uri#influencedBy> @
+        a            owl:ObjectProperty ;
+        rdfs:domain  <eswc_uri#Paper> ;
+        rdfs:label   "influenced by" ;
+        rdfs:range   <wordnet_uri/Document> .
+
+<eswc_uri#DogfoodTsar> @
+        a                owl:Class ;
+        rdfs:comment     "A role that is only relevant in relation to the topic of the conference e.g. Semantic \n    Web Technologies Coordinator at a Semantic Web Conference." ;
+        rdfs:label       "Dogfood Tsar" ;
+        rdfs:subClassOf  <eswc_uri#Role> .
+
+<eswc_uri#DemoSession> @
+        a                owl:Class ;
+        rdfs:label       "Demo Session" ;
+        rdfs:subClassOf  <eswc_uri#SessionEvent> .
+
+<eswc_uri#ResearchTrack> @
+        a                owl:Class ;
+        rdfs:label       "Research Track" ;
+        rdfs:subClassOf  <eswc_uri#TrackEvent> .
+
+<eswc_uri#hasCall> @
+        a            owl:ObjectProperty ;
+        rdfs:domain  <eswc_uri#AcademicEvent> ;
+        rdfs:label   "has call" ;
+        rdfs:range   <eswc_uri#Call> .
+
+<eswc_uri#BreakEvent> @
+        a                owl:Class ;
+        rdfs:label       "Break Event" ;
+        rdfs:subClassOf  <eswc_uri#NonAcademicEvent> .
+
+dc:date  a      owl:DatatypeProperty . @
+
+xsd:anyURI  a   owl:Class . @
+
+<eswc_uri#ConferenceEvent> @
+        a                owl:Class ;
+        rdfs:label       "Conference Event" ;
+        rdfs:subClassOf  <eswc_uri#AcademicEvent> .
+
+<eswc_uri#isPartOf> @
+        a            owl:ObjectProperty ;
+        rdfs:domain  owl:Thing ;
+        rdfs:label   "is part of" ;
+        rdfs:range   owl:Thing .
+
+<eswc_uri#Event> @
+        a                owl:Class ;
+        rdfs:label       "Event" ;
+        rdfs:subClassOf  <wordnet_uri/Event-1> .
+
+<eswc_uri#Proceedings> @
+        a                owl:Class ;
+        rdfs:label       "Proceedings" ;
+        rdfs:subClassOf  <eswc_uri#Artefact> .
+
+<eswc_uri#isTopicOf> @
+        a            owl:ObjectProperty ;
+        rdfs:domain  <http://swrc.ontoware.org/ontology#ResearchTopic> ;
+        rdfs:label   "is topic of" .
+
+<http://swrc.ontoware.org/ontology#ResearchTopic> @
+        a       owl:Class .
+
+<eswc_uri#LocalOrganiser> @
+        a                owl:Class ;
+        rdfs:label       "Local Organiser" ;
+        rdfs:subClassOf  <eswc_uri#Role> .
+
+<eswc_uri#forEvent> @
+        a            owl:ObjectProperty ;
+        rdfs:domain  <eswc_uri#Call> ;
+        rdfs:label   "for event" ;
+        rdfs:range   <eswc_uri#AcademicEvent> .
+
+<eswc_uri#AcademicEvent> @
+        a                owl:Class ;
+        rdfs:label       "Academic Event" ;
+        rdfs:subClassOf  <eswc_uri#OrganisedEvent> .
+
+<http://xmlns.com/foaf/0.1/Person> @
+        a       owl:Class .
+
+<eswc_uri#SlideSet> @
+        a                owl:Class ;
+        rdfs:label       "Slide Set" ;
+        rdfs:subClassOf  <eswc_uri#Artefact> .
+
+<eswc_uri#PaperPresentation> @
+        a                owl:Class ;
+        rdfs:label       "Paper Presentation" ;
+        rdfs:subClassOf  <eswc_uri#TalkEvent> .
+
+<wordnet_uri/Role-1> @
+        a       owl:Class .
+
+<eswc_uri#isRoleAt> @
+        a            owl:ObjectProperty ;
+        rdfs:domain  <eswc_uri#Role> ;
+        rdfs:label   "is role at" ;
+        rdfs:range   <eswc_uri#AcademicEvent> .
+
+<eswc_uri#OrganisingCommitteeMember> @
+        a                owl:Class ;
+        rdfs:label       "Organising Committee Member" ;
+        rdfs:subClassOf  <eswc_uri#Role> .
+
+dc:contributor  a  owl:DatatypeProperty . @
+
+<eswc_uri#hasStartDateTime> @
+        a            owl:DatatypeProperty ;
+        rdfs:domain  <eswc_uri#OrganisedEvent> ;
+        rdfs:label   "has start date and time" ;
+        rdfs:range   xsd:dateTime .
+
+
+<eswc_uri#SubmissionsChair> @
+        a                owl:Class ;
+        rdfs:label       "Submissions Chair" ;
+        rdfs:subClassOf  <eswc_uri#Role> .
+
+<http://xmlns.com/foaf/0.1/Organisation> @
+        a       owl:Class .
+
+<eswc_uri#DemoPresentation> @
+        a                owl:Class ;
+        rdfs:label       "Demo Presentation" ;
+        rdfs:subClassOf  <eswc_uri#TalkEvent> .
+
+<eswc_uri#EatingPlace> @
+        a                owl:Class ;
+        rdfs:label       "Eating Place" ;
+        rdfs:subClassOf  <eswc_uri#Place> .
+
+xsd:integer  a  owl:Class .
+
+<eswc_uri#ConferenceChair> @
+        a                owl:Class ;
+        rdfs:label       "Conference Chair" ;
+        rdfs:subClassOf  <eswc_uri#Role> .
+
+<eswc_uri#Presenter> @
+        a                owl:Class ;
+        rdfs:label       "Presenter" ;
+        rdfs:subClassOf  <eswc_uri#Role> .
+
+<eswc_uri#CallForDemos> @
+        a                owl:Class ;
+        rdfs:label       "Call For Demos" ;
+        rdfs:subClassOf  <eswc_uri#Call> .
+
+<eswc_uri#hasSponsorship> @
+        a            owl:ObjectProperty ;
+        rdfs:domain  <eswc_uri#OrganisedEvent> ;
+        rdfs:label   "has sponsorship" ;
+        rdfs:range   <eswc_uri#Sponsorship> .
+
+<eswc_uri#SponsorshipChair> @
+        a                owl:Class ;
+        rdfs:label       "Sponsorship Chair" ;
+        rdfs:subClassOf  <eswc_uri#Role> .
+
+<wordnet_uri/Document> @
+        a       owl:Class .
+
+<eswc_uri#Delegate> @
+        a                owl:Class ;
+        rdfs:label       "Delegate" ;
+        rdfs:subClassOf  <eswc_uri#Role> .
+
+dc:title  a     owl:DatatypeProperty . @
+
+<eswc_uri#hasAttendee> @
+        a            owl:ObjectProperty ;
+        rdfs:domain  <eswc_uri#OrganisedEvent> ;
+        rdfs:label   "has attendee" ;
+        rdfs:range   <http://xmlns.com/foaf/0.1/Person> .
+
+<eswc_uri#OrganisedEvent> @
+        a                owl:Class ;
+        rdfs:label       "Organised Event" ;
+        rdfs:subClassOf  <eswc_uri#Event> .
+
+<eswc_uri#Poster> @
+        a                owl:Class ;
+        rdfs:label       "Poster" ;
+        rdfs:subClassOf  <eswc_uri#Artefact> .
+
+<eswc_uri#Paper> @
+        a                owl:Class ;
+        rdfs:label       "Paper" ;
+        rdfs:subClassOf  <eswc_uri#Artefact> .
+
+<wordnet_uri/Menu> @
+        a       owl:Class .
+
+<eswc_uri#MealBreak> @
+        a                owl:Class ;
+        rdfs:label       "Meal Break" ;
+        rdfs:subClassOf  <eswc_uri#BreakEvent> .

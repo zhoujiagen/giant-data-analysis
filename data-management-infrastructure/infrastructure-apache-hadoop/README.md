@@ -6,11 +6,11 @@
 # 0 实践版本
 
 	1.2.1
-	2.7.2
+	2.7.4
 
 # 1 资源
 
-+ 2.7.2本地文档: `share/doc/hadoop`
++ 2.7.4本地文档: `share/doc/hadoop`
 + eclipse plugin
 hadoop2x-eclipse-plugin for 2.2.0/2.4.1: https://github.com/winghc/hadoop2x-eclipse-plugin
 2.7.2 https://github.com/moxm/hadoop-eclipse-plugin-2.7.2.jar

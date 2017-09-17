@@ -1,0 +1,470 @@
+digraph eswc2006 {
+
+
+
+  /********************************************************
+  * 标题
+  ********************************************************/
+  labelloc=t label="title: The ESWC2006 Conference Ontology\n
+  description: An ontology for describing academic conferences, designed to support the 3rd European Semantic Web Conference (ESWC2006)\n
+  creator: Tom Heath\n 
+  contributor: ESWC2006 Organising Committee\n 
+  date: 2006/05/26 00:00:00"
+  
+  /********************************************************
+  * 全局属性
+  ********************************************************/
+  rankdir=LR
+  splines=true
+  node [style=filled]
+
+  /********************************************************
+  * 使用子图作为不同的本体
+  ********************************************************/
+  subgraph cluster_0 { 
+   	/* 标题 */
+    label="http://www.w3.org/2001/XMLSchema#"
+    // color=lightblue  style=filled
+    
+    /* 节点 */
+    // V(1) Class
+	node [color=skyblue  shape=box]
+    string [label="xsd:string"]
+    datetime [label="xsd:dateTime"]
+    integer [label="xsd:integer"]
+    anyURI [label="xsd:anyURI"]
+	// V(2) ObjectProperty
+	node [color=khaki  shape=box]
+	// V(3) DatatypeProperty 
+	node [color=thistle  shape=box]
+    
+    /* 边 */ 
+    // E(1) subClassOf
+	// E(2) ObjectProperty domain/range 
+	// E(3) DatatypeProperty
+  }
+  
+  subgraph cluster_1 {
+  /* 标题 */
+    label="http://www.w3.org/2003/01/geo/wgs84_pos#"
+    // color=lightblue  style=filled
+    
+    /* 节点 */
+	// V(1) Class
+	node [color=skyblue  shape=box]
+	SpatialThing
+	// V(2) ObjectProperty
+	node [color=khaki  shape=box]
+	// V(3) DatatypeProperty 
+	node [color=thistle  shape=box]
+    
+    
+    /* 边 */
+	// E(1) subClassOf
+	// E(2) ObjectProperty domain/range 
+	// E(3) DatatypeProperty
+  }
+  
+  subgraph cluster_2 {
+    /* 标题 */
+    label="http://xmlns.com/wordnet/1.6/"
+    // color=lightblue  style=filled
+    
+    /* 节点 */
+	// V(1) Class
+	node [color=skyblue  shape=box]
+	// V(2) ObjectProperty
+	node [color=khaki  shape=box]
+	// V(3) DatatypeProperty 
+	node [color=thistle  shape=box]
+    Sponsorship 
+    Menu
+    Document
+    Event1 [label="Event-1"]
+    Role1 [label="Role-1"]
+    Announcement
+    
+    /* 边 */
+    // E(1) subClassOf
+	// E(2) ObjectProperty domain/range 
+	// E(3) DatatypeProperty
+  }
+
+  subgraph cluster_3 {
+  	/* 标题 */
+    label="http://swrc.ontoware.org/ontology#"
+    // color=lightblue  style=filled
+    
+    /* 节点 */
+    // V(1) Class
+	node [color=skyblue  shape=box]
+	ResearchTopic
+	// V(2) ObjectProperty
+	node [color=khaki  shape=box]
+	// V(3) DatatypeProperty 
+	node [color=thistle  shape=box]
+    
+    /* 边 */
+    // E(1) subClassOf
+	// E(2) ObjectProperty domain/range 
+	// E(3) DatatypeProperty
+  }
+
+  subgraph cluster_4 {
+  	/* 标题 */
+    label="http://xmlns.com/foaf/0.1/"
+    // color=lightblue  style=filled
+
+    /* 节点 */
+    // V(1) Class
+	node [color=skyblue  shape=box]
+	Organisation
+	Person
+	// V(2) ObjectProperty
+	node [color=khaki  shape=box]
+	// V(3) DatatypeProperty 
+	node [color=thistle  shape=box]
+
+    /* 边 */
+    // E(1) subClassOf
+	// E(2) ObjectProperty domain/range 
+	// E(3) DatatypeProperty
+  }
+	
+  subgraph cluster_5 {
+  	/* 标题 */
+    label="http://purl.org/dc/elements/1.1/"
+    // color=lightblue  style=filled
+    
+    /* 节点 */
+    // V(1) Class
+	node [color=skyblue  shape=box]
+	// V(2) ObjectProperty
+	node [color=khaki  shape=box]
+	// V(3) DatatypeProperty 
+	node [color=thistle  shape=box]
+    description
+    creator
+    title
+    contributor
+    date
+    
+    /* 边 */
+    // E(1) subClassOf
+	// E(2) ObjectProperty domain/range 
+	// E(3) DatatypeProperty
+  }
+  
+  subgraph cluster_6 {
+  	/* 标题 */
+    label="http://www.w3.org/2002/07/owl#"
+    // color=lightblue  style=filled
+    /* 节点 */
+    // V(1) Class
+	node [color=skyblue  shape=box]
+	Thing
+	Ontology
+	// V(2) ObjectProperty
+	node [color=khaki  shape=box]
+	// V(3) DatatypeProperty 
+	node [color=thistle  shape=box]
+
+    /* 边 */
+    // E(1) subClassOf
+	// E(2) ObjectProperty domain/range 
+	// E(3) DatatypeProperty
+  }
+
+  subgraph cluster_7 {
+    /* 标题 */
+    label="http://www.eswc2006.org/technologies/ontology#"  
+    // color=lightskyblue style=filled
+	/* 节点 */
+	// V(1) Class
+    node [color=skyblue  shape=box]
+    Place [label="Place"]
+    MeetingRoomPlace [label="Meeting Room Place"]
+    AccommodationPlace [label="Accommodation Place"]
+    DrinkingPlace [label="Drinking Place"]
+    ConferenceVenuePlace [label="Conference Venue Place"]
+    CommunalPlace [label="Communal Place"]
+    EatingPlace [label="Eating Place"]
+    Role [label="Role"]
+    Reviewer [label="Reviewer"]
+    AdditionalReviewer [label="Additional Reviewer"]
+    PublicityChair [label="Publicity Chair"]
+    Programme [label="Programme"]
+    Proceedings [label="Proceedings"]
+    Paper [label="Paper"]
+    Poster [label="Poster"]
+    SlideSet [label="Slide Set"]
+    Artefact [label="Artefact"]
+    Webmaster [label="Webmaster"]
+    ProgrammeChair [label="Programme Chair"]
+    ProgrammeCommitteeMember [label="Programme Committee Member"]
+    IndustryChair [label="Industry Chair"]
+    SessionChair [label="Session Chair"]
+    Tutor [label="Session Chair"]
+    TutorialsChair [label="Tutorials Chair"]
+    Administrator [label="Administrator"]
+    DemosChair [label="Demos Chair"]
+    PostersChair [label="Posters Chair"]
+    WorkshopsChair [label="Workshops Chair"]
+    DogfoodTsar [label="Dogfood Tsar"] // 节点注释属性
+    Delegate [label="Delegate"]
+    SponsorshipChair [label="Sponsorship Chair"]
+    Presenter [label="Presenter"]
+    ConferenceChair [label="Conference Chair"]
+    SubmissionsChair [label="Submissions Chair"]
+    OrganisingCommitteeMember [label="Organising Committee Member"]
+    LocalOrganiser [label="Local Organiser"]
+    Excursion [label="Excursion"]
+    Event [label="Event"]
+    SocialEvent [label="Social Event"]
+    Reception [label="Reception"]
+    MealEvent [label="Meal Event"]
+    OrganisedEvent [label="Organised Event"]
+    NonAcademicEvent [label="Non-Academic Event"]
+    KeynoteTalk [label="Keynote Talk"]
+    TalkEvent [label="Talk Event"]
+    PosterPresentation [lable="Poster Presentation"]
+    WelcomeTalk [lable="Welcome Talk"]
+    DemoPresentation [lable="Demo Presentation"]
+    PaperPresentation [label="Paper Presentation"]
+    BreakEvent [label="Break Event"]
+    FreeTimeBreak [label="Free Time Break"]
+    CoffeeBreak [label="Coffee Break"]
+    MealBreak [label="Meal Break"]
+    AcademicEvent [label="Academic Event"]
+    ConferenceEvent [label="Conference Event"]
+    TrackEvent [label="Track Event"]
+    IndustrialTrack [label="Industrial Track"]
+    ResearchTrack [label="Research Track"]
+    SessionEvent [label="Session Event"]
+    PosterSession [label="Poster Session"]
+    PaperSession [label="Paper Session"]
+    DemoSession [label="Demo Session"]
+    WorkshopEvent [label="Workshop Event"]
+    TutorialEvent [label="Tutorial Event"]
+    ConferenceDinner [lable="Conference Dinner"]
+    Call [lable="Call"]
+    CallForProposals [lable="Call For Proposals"]
+    CallForPapers [label="Call For Papers"]
+    CallForPosters [label="Call For Posters"]
+    CallForParticipation [label="Call For Participation"]
+    CallForDemos [label="Call For Demos"]
+    ESWCSponsorship [label="Sponsorship"] // 注意同名节点
+    
+    // V(2) ObjectProperty
+    node [color=khaki  shape=box]
+    hasRole [label="has role"]
+    hasProgramme [label="has programme"]
+    holdsRole [label="holds role"]
+    implements [label="implements"]
+    isLocationFor [label="is location of"]
+    isProviderOf [label="is provider of"]
+    extends [label="extends"]
+    isProvidedBy [label="is provided by"]
+    hasMenu [label="has menu"]
+    disagreesWith [label="disagrees with"]
+    agreesWith [label="agrees with"]
+    hasPart [label="has part"]
+    hasRelatedArtefact [label="has related artefact"]
+    plansToAttend [label="plans to attend"]
+    attendeeAt [label="attendee at"]
+    evidenceAgainst [label="evidence against"]
+    heldBy [label="held by"]
+    relatedToEvent [label="related to event"]
+	evidenceFor [label="evidence for"]
+	hasLocation [label="has location"]
+	hasTopic [label="has topic"]
+	influencedBy [label="influenced by"]
+	hasCall [label="has call"]
+	isPartOf [label="is part of"]
+	isTopicOf [label="is topic of"]
+	forEvent [label="for event"]
+	isRoleAt [label="is role at"]
+	hasSponsorship [label="has sponsorship"]
+	hasAttendee [label="has attendee"]
+    
+    // V(3) DatatypeProperty 
+    node [color=thistle  shape=box]
+    hasSubmissionInstructions [label="has submission instructions"]
+    hasCameraReadyDeadline [label="has camera-ready deadline"]
+    hasCostAmount [label="has cost amount"]
+    hasEndDateTime [label="has end date and time"]
+    hasNotificationDeadline [label="has notification deadline"]
+    biblioReference [label="bibliographic reference"]
+    hasCostCurrency [label="has cost currency"]
+    hasSubmissionDeadline [label="has submission deadline"]
+	hasStartDateTime [label="has start date and time"]
+
+	// V(4) Individual
+	node [color=yellowgreen shape=ellipse]
+	/*
+	eswc
+	eswc -> Thing [label="rdf:type"]
+	eswc -> Ontology [label="rdf:type"]
+	eswc -> "ESWC2006 Organising Committee" [label="contributor"]
+	eswc -> "Tom Heath" [label="creator"]
+	eswc -> "2006/05/26 00:00:00" [label="contributor"]
+	eswc -> "ESWC2006 Organising Committee" [label="date"]
+	eswc -> "An ontology for describing academic conferences, designed to support the 3rd European Semantic Web Conference ESWC2006" [label="description"]
+	eswc -> "The ESWC2006 Conference Ontology" [label="title"]
+	*/
+
+    /* 边 */
+    // E(1) subClassOf
+    Place -> SpatialThing [label="rdfs:subClassOf"]
+    MeetingRoomPlace -> Place [label="rdfs:subClassOf"]
+    AccommodationPlace -> Place [label="rdfs:subClassOf"]
+    DrinkingPlace -> Place [label="rdfs:subClassOf"]
+    ConferenceVenuePlace -> Place [label="rdfs:subClassOf"]
+    CommunalPlace -> Place [label="rdfs:subClassOf"]
+    EatingPlace -> Place [label="rdfs:subClassOf"]
+    Reviewer -> Role [label="rdfs:subClassOf"]
+    AdditionalReviewer -> Role [label="rdfs:subClassOf"]
+    PublicityChair -> Role [label="rdfs:subClassOf"]
+    Webmaster -> Role [label="rdfs:subClassOf"]
+    ProgrammeChair -> Role [label="rdfs:subClassOf"]
+    ProgrammeCommitteeMember -> Role [label="rdfs:subClassOf"]
+    IndustryChair -> Role [label="rdfs:subClassOf"]
+    SessionChair -> Role [label="rdfs:subClassOf"]
+    Tutor -> Role [label="rdfs:subClassOf"]
+    TutorialsChair -> Role [label="rdfs:subClassOf"]
+    Administrator -> Role [label="rdfs:subClassOf"]
+    DemosChair -> Role [label="rdfs:subClassOf"]
+    PostersChair -> Role [label="rdfs:subClassOf"]
+    WorkshopsChair -> Role [label="rdfs:subClassOf"]
+    DogfoodTsar -> Role [label="rdfs:subClassOf"]
+    Delegate -> Role [label="rdfs:subClassOf"]
+    SponsorshipChair -> Role [label="rdfs:subClassOf"]
+    Presenter -> Role [label="rdfs:subClassOf"]
+    ConferenceChair -> Role [label="rdfs:subClassOf"]
+    SubmissionsChair -> Role [label="rdfs:subClassOf"]
+    OrganisingCommitteeMember -> Role [label="rdfs:subClassOf"]
+    LocalOrganiser -> Role [label="rdfs:subClassOf"]
+    Artefact -> Document [label="rdfs:subClassOf"]
+    Programme -> Artefact [label="rdfs:subClassOf"]
+    Proceedings -> Artefact [label="rdfs:subClassOf"]
+    Paper -> Artefact [label="rdfs:subClassOf"]
+    Poster -> Artefact [label="rdfs:subClassOf"]
+    SlideSet -> Artefact [label="rdfs:subClassOf"]
+    Excursion -> SocialEvent [label="rdfs:subClassOf"]
+    Event -> Event1 [label="rdfs:subClassOf"]
+    OrganisedEvent -> Event [label="rdfs:subClassOf"]
+    NonAcademicEvent -> OrganisedEvent [label="rdfs:subClassOf"]
+    AcademicEvent -> OrganisedEvent [label="rdfs:subClassOf"]
+    MealEvent -> NonAcademicEvent [label="rdfs:subClassOf"]
+    SocialEvent -> NonAcademicEvent [label="rdfs:subClassOf"]
+    BreakEvent -> NonAcademicEvent [label="rdfs:subClassOf"]
+    ConferenceDinner -> MealEvent [label="rdfs:subClassOf"]
+    ConferenceDinner -> SocialEvent [label="rdfs:subClassOf"]
+    Reception -> SocialEvent [label="rdfs:subClassOf"]
+    KeynoteTalk -> TalkEvent [label="rdfs:subClassOf"]
+    PosterPresentation -> TalkEvent [label="rdfs:subClassOf"]
+    WelcomeTalk -> TalkEvent [label="rdfs:subClassOf"]
+    DemoPresentation -> TalkEvent [label="rdfs:subClassOf"]
+    PaperPresentation -> TalkEvent [label="rdfs:subClassOf"]
+    FreeTimeBreak -> BreakEvent [label="rdfs:subClassOf"]
+    CoffeeBreak -> BreakEvent [label="rdfs:subClassOf"]
+    MealBreak -> BreakEvent [label="rdfs:subClassOf"]
+    SessionEvent -> AcademicEvent [label="rdfs:subClassOf"]
+    TrackEvent -> AcademicEvent [label="rdfs:subClassOf"]
+    WorkshopEvent -> AcademicEvent [label="rdfs:subClassOf"]
+    TutorialEvent -> AcademicEvent [label="rdfs:subClassOf"]
+    TalkEvent -> AcademicEvent [label="rdfs:subClassOf"]
+    ConferenceEvent -> AcademicEvent [label="rdfs:subClassOf"]
+    IndustrialTrack -> TrackEvent [label="rdfs:subClassOf"]
+    ResearchTrack -> TrackEvent [label="rdfs:subClassOf"]
+    PosterSession -> SessionEvent [label="rdfs:subClassOf"]
+    PaperSession -> SessionEvent [label="rdfs:subClassOf"]
+    DemoSession -> SessionEvent [label="rdfs:subClassOf"]
+    Call -> Announcement [label="rdfs:subClassOf"]
+    CallForProposals -> Call [label="rdfs:subClassOf"]
+    CallForPapers -> Call [label="rdfs:subClassOf"]
+    CallForPosters -> Call [label="rdfs:subClassOf"]
+    CallForParticipation -> Call [label="rdfs:subClassOf"]
+    CallForDemos -> Call [label="rdfs:subClassOf"]
+    ESWCSponsorship -> Sponsorship [label="rdfs:subClassOf"]
+    Role -> Role1 [label="rdfs:subClassOf"]
+    
+    // E(2) ObjectProperty domain/range 
+    hasRole -> AcademicEvent [label="rdfs:domain"]
+    hasRole -> Role [label="rdfs:range"]
+    hasProgramme -> OrganisedEvent [label="rdfs:domain"]
+    hasProgramme -> Programme [label="rdfs:range"]
+    holdsRole -> Person [label="rdfs:domain"]
+    holdsRole -> Role [label="rdfs:range"]
+    implements -> Paper [label="rdfs:domain"]
+    implements -> Document [label="rdfs:range"]
+    isLocationFor -> Place [label="rdfs:domain"]
+    isLocationFor -> OrganisedEvent [label="rdfs:range"]
+    isProviderOf -> Organisation [label="rdfs:domain"]
+    isProviderOf -> ESWCSponsorship [label="rdfs:range"]
+    extends -> Paper [label="rdfs:domain"]
+    extends -> Document [label="rdfs:range"]
+    isProvidedBy -> ESWCSponsorship [label="rdfs:domain"]
+    isProvidedBy -> Organisation [label="rdfs:range"]
+    hasMenu -> MealEvent [label="rdfs:domain"]
+    hasMenu -> Menu [label="rdfs:range"]
+    disagreesWith -> Paper [label="rdfs:domain"]
+    disagreesWith -> Document [label="rdfs:range"]
+    agreesWith -> Paper [label="rdfs:domain"]
+    agreesWith  -> Document [label="rdfs:range"]
+    hasPart ->  Thing [label="rdfs:domain"]
+    hasPart ->  Thing [label="rdfs:range"]
+    hasRelatedArtefact -> AcademicEvent [label="rdfs:domain"]
+    hasRelatedArtefact -> Artefact [label="rdfs:range"]
+    plansToAttend -> Person [label="rdfs:domain"]
+    plansToAttend -> OrganisedEvent [label="rdfs:range"]
+    attendeeAt -> Person [label="rdfs:domain"]
+    attendeeAt -> OrganisedEvent [label="rdfs:range"]
+    evidenceAgainst -> Paper [label="rdfs:domain"]
+    evidenceAgainst -> Document [label="rdfs:range"]
+    heldBy -> Role [label="rdfs:domain"]
+    heldBy -> Person [label="rdfs:range"]  
+    relatedToEvent -> Artefact [label="rdfs:domain"]
+    relatedToEvent -> AcademicEvent [label="rdfs:range"]    
+    evidenceFor -> Paper [label="rdfs:domain"]
+	evidenceFor -> Document [label="rdfs:range"]
+	hasLocation -> OrganisedEvent [label="rdfs:domain"]
+	hasLocation -> Place [label="rdfs:range"]
+	hasTopic -> ResearchTopic [label="rdfs:range"]
+	influencedBy -> Paper [label="rdfs:domain"]
+	influencedBy -> Document [label="rdfs:range"]
+	hasCall -> AcademicEvent [label="rdfs:domain"]
+	hasCall -> Call [label="rdfs:range"]
+	isPartOf -> Thing [label="rdfs:domain"]
+	isPartOf -> Thing [label="rdfs:range"]
+	isTopicOf -> ResearchTopic [label="rdfs:domain"]
+	forEvent -> Call [label="rdfs:domain"]
+	forEvent -> AcademicEvent [label="rdfs:range"]
+	isRoleAt -> Role [label="rdfs:domain"]
+	isRoleAt -> AcademicEvent [label="rdfs:range"]
+	hasSponsorship -> OrganisedEvent [label="rdfs:domain"]
+	hasSponsorship -> ESWCSponsorship [label="rdfs:range"]
+	hasAttendee -> OrganisedEvent [label="rdfs:domain"]
+	hasAttendee -> Person [label="rdfs:range"]
+    
+    // E(3) DatatypeProperty domain/range
+    hasSubmissionInstructions -> Call [label="rdfs:domain"]
+    hasSubmissionInstructions -> string [label="rdfs:range"]
+    hasCameraReadyDeadline -> Call [label="rdfs:domain"]
+    hasSubmissionInstructions -> datetime [label="rdfs:range"]
+    hasCostAmount -> ESWCSponsorship [label="rdfs:domain"]
+    hasCostAmount -> integer [label="rdfs:range"]
+	hasEndDateTime -> OrganisedEvent [label="rdfs:domain"]
+	hasEndDateTime -> datetime [label="rdfs:range"]
+	hasNotificationDeadline -> Call [label="rdfs:domain"]
+	hasNotificationDeadline -> datetime [label="rdfs:range"]
+	biblioReference -> Artefact [label="rdfs:domain"]
+	biblioReference -> string [label="rdfs:range"]
+	hasCostCurrency -> ESWCSponsorship [label="rdfs:domain"]
+	hasCostCurrency -> string [label="rdfs:range"]
+	hasSubmissionDeadline -> Call [label="rdfs:domain"]
+	hasSubmissionDeadline -> dateTime [label="rdfs:range"]
+	hasStartDateTime -> OrganisedEvent [label="rdfs:domain"]
+	hasStartDateTime -> dateTime [label="rdfs:range"]
+  }
+}
