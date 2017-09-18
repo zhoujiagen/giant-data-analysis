@@ -16,29 +16,27 @@
 
 	<modules>
 		<!-- data-management-infrastructure -->
-		<module>../../data-management-infrastructure/infrastructure-benchmark</module>
-		<!--<module>../../data-management-infrastructure/infrastructure-netty</module>
-		<module>../../data-management-infrastructure/infrastructure-jetty</module>
-		<module>../../data-management-infrastructure/infrastructure-apache-zookeeper</module>
-		<module>../../data-management-infrastructure/infrastructure-apache-curator</module>-->
-		<module>../../data-management-infrastructure/infrastructure-apache-hadoop</module>
-		<module>../../data-management-infrastructure/infrastructure-apache-hbase</module>
-		<!-- <module>../../data-management-infrastructure/infrastructure-opentsdb</module>-->
+		<!--<module>../../data-management-infrastructure/infrastructure-benchmark</module> -->
+		<!--<module>../../data-management-infrastructure/infrastructure-netty</module> -->
+		<!--<module>../../data-management-infrastructure/infrastructure-jetty</module> -->
+		<!--<module>../../data-management-infrastructure/infrastructure-apache-zookeeper</module> -->
+		<!--<module>../../data-management-infrastructure/infrastructure-apache-curator</module> -->
+		<!--<module>../../data-management-infrastructure/infrastructure-apache-hadoop</module> -->
+		<!--<module>../../data-management-infrastructure/infrastructure-apache-hbase</module> -->
+		<!-- <module>../../data-management-infrastructure/infrastructure-opentsdb</module> -->
 
 		<!-- data-representation -->
-		<module>../../data-representation/representation-titan</module>
-		<module>../../data-representation/representation-apache-tinkerpop</module>
+		<!--<module>../../data-representation/representation-titan</module> -->
+		<!--<module>../../data-representation/representation-apache-tinkerpop</module> -->
 		<module>../../data-representation/representation-apache-giraph</module>
-		<module>../../data-representation/representation-neo4j</module>
+		<!--<module>../../data-representation/representation-neo4j</module> -->
 
 		<!-- temporal-data-and-realtime-algorithm -->
-		<!--
-		<module>../../temporal-data-and-realtime-algorithm/temporal-apache-storm</module>
-		<module>../../temporal-data-and-realtime-algorithm/temporal-apache-kafka</module>
-		-->
+		<!-- <module>../../temporal-data-and-realtime-algorithm/temporal-apache-storm</module> 
+			<module>../../temporal-data-and-realtime-algorithm/temporal-apache-kafka</module> -->
 
 		<!-- data-models -->
-		<module>../../data-models/datamodel-graph</module>
+		<!--<module>../../data-models/datamodel-graph</module> -->
 
 	</modules>
 
@@ -72,7 +70,8 @@
 		<ganglia.gmetric4j.version>1.0.10</ganglia.gmetric4j.version>
 		<zookeeper.version>3.4.6</zookeeper.version>
 		<curator.version>2.12.0</curator.version>
-		<hadoop.version>2.7.4</hadoop.version>
+		<hadoop1.version>1.2.1</hadoop1.version>
+		<hadoop2.version>2.7.4</hadoop2.version>
 		<mrunit.version>1.1.0</mrunit.version>
 		<hbase.version>1.2.6</hbase.version>
 		<netty.version>4.1.8.Final</netty.version>
@@ -81,7 +80,8 @@
 		<!-- representation -->
 		<titan.version>1.0.0</titan.version>
 		<tinkerpop.version>3.2.3</tinkerpop.version>
-		<giraph.version>1.2.0-hadoop2</giraph.version>
+		<giraph.hadoop1.version>1.2.0</giraph.hadoop1.version>
+		<giraph.hadoop2.version>1.2.0-hadoop2</giraph.hadoop2.version>
 		<neo4j.version>3.2.2</neo4j.version>
 		<neo4j.driver.java.version>1.4.0</neo4j.driver.java.version>
 		<spring.data.neo4j.version>4.2.6.RELEASE</spring.data.neo4j.version>
@@ -221,12 +221,12 @@
 					<artifactId>maven-surefire-plugin</artifactId>
 					<version>2.12.4</version>
 				</plugin>
-				<!-- License: http://www.mojohaus.org/license-maven-plugin/index.html-->
+				<!-- License: http://www.mojohaus.org/license-maven-plugin/index.html -->
 				<plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>license-maven-plugin</artifactId>
-          <version>1.13</version>
-        </plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>license-maven-plugin</artifactId>
+					<version>1.13</version>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 		<plugins>

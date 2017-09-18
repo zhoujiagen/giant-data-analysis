@@ -1,10 +1,8 @@
 # TODO
 
-		create package `com.spike.giantdataanalysis.giraph`
-
 # 0 实践版本
 
-	1.2.0
+	1.2.0/Hadoop1.2.1/Hadoop2.7.4
 
 # 1 资源
 
