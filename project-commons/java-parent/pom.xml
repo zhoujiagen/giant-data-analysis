@@ -17,13 +17,14 @@
 	<modules>
 		<!-- data-management-infrastructure -->
 		<!--<module>../../data-management-infrastructure/infrastructure-benchmark</module> -->
+		<module>../../data-management-infrastructure/infrastructure-etl</module>
 		<!--<module>../../data-management-infrastructure/infrastructure-netty</module> -->
 		<!--<module>../../data-management-infrastructure/infrastructure-jetty</module> -->
 		<!--<module>../../data-management-infrastructure/infrastructure-apache-zookeeper</module> -->
 		<!--<module>../../data-management-infrastructure/infrastructure-apache-curator</module> -->
 		<!--<module>../../data-management-infrastructure/infrastructure-apache-hadoop</module> -->
 		<!--<module>../../data-management-infrastructure/infrastructure-apache-hbase</module> -->
-		<!-- <module>../../data-management-infrastructure/infrastructure-opentsdb</module> -->
+		<!--<module>../../data-management-infrastructure/infrastructure-opentsdb</module> -->
 
 		<!-- data-representation -->
 		<!--<module>../../data-representation/representation-titan</module> -->
@@ -32,7 +33,7 @@
 		<!--<module>../../data-representation/representation-neo4j</module> -->
 
 		<!-- temporal-data-and-realtime-algorithm -->
-		<!-- <module>../../temporal-data-and-realtime-algorithm/temporal-apache-storm</module> 
+		<!-- <module>../../temporal-data-and-realtime-algorithm/temporal-apache-storm</module>
 			<module>../../temporal-data-and-realtime-algorithm/temporal-apache-kafka</module> -->
 
 		<!-- data-models -->
