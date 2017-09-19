@@ -140,9 +140,10 @@ public class ExampleMain {
           continue;
         }
 
-        if (tryHandleCount > ProgressHolder.I().handledCount(filePath) + batchLineCount) {
-          LOG.info("读取速度{}超出导入速度{}, 等待一下", tryHandleCount, ProgressHolder.I()
-              .handledCount(filePath));
+        if (tryHandleCount > ProgressHolder.I().handledCount(filePath) + batchLineCount//
+            && datas.size() >= batchLineCount) {
+          LOG.info("读取速度{}超出导入速度{}, 等待一下, 当前数据准备量[{}]", //
+            tryHandleCount, ProgressHolder.I().handledCount(filePath), datas.size());
           try {
             Thread.sleep(1000l);
           } catch (InterruptedException e) {/* ignore */
