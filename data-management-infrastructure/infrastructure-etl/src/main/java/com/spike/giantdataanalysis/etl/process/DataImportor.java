@@ -8,10 +8,11 @@ public interface DataImportor<T> {
 
   /**
    * 处理数据导入.
+   * @param filepath 数据文件路径
    * @param datas 数据列表
    * @return
    * @throws ETLException
    */
-  boolean handle(List<T> datas) throws ETLException;
+  boolean handle(String filepath, List<T> datas) throws ETLException;
 
 }

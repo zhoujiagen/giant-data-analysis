@@ -18,6 +18,7 @@ import com.spike.giantdataanalysis.etl.process.DataImportor;
 import com.spike.giantdataanalysis.etl.process.LineParser;
 import com.spike.giantdataanalysis.etl.progress.ProgressEnum;
 import com.spike.giantdataanalysis.etl.progress.ProgressHolder;
+import com.spike.giantdataanalysis.etl.progress.ProgressReportThread;
 import com.spike.giantdataanalysis.etl.progress.WorkCheckerThread;
 import com.spike.giantdataanalysis.etl.progress.WorkStatus;
 import com.spike.giantdataanalysis.etl.supports.ETLConstants;
@@ -38,7 +39,7 @@ public class ExampleMain {
 
     // 之前正在做的(可能是补做)
     List<String> doingDataFiles = DataFileOps.I().locate(dataFileDirs, ProgressEnum.DOING);
-    ProgressHolder.I().set(doingDataFiles, ProgressEnum.NONE);
+    // ProgressHolder.I().set(doingDataFiles, ProgressEnum.NONE); // 不需要标记, 以免与进展文件冲突
     for (String doingDataFile : doingDataFiles) {
       final String f_doingDataFile = doingDataFile;
       ES.execute(new Runnable() {
@@ -62,10 +63,17 @@ public class ExampleMain {
       });
     }
 
+    LOG.info("启动检查任务线程: {}", WorkCheckerThread.class.getSimpleName());
     Thread checkerThread = new Thread(new WorkCheckerThread());
     checkerThread.start();
+
+    LOG.info("启动进展报告线程: {}", ProgressReportThread.class.getSimpleName());
+    Thread progressThread = new Thread(new ProgressReportThread());
+    progressThread.start();
+
     try {
       checkerThread.join();
+      progressThread.join();
     } catch (InterruptedException e) {
       LOG.error("", e);
     }
@@ -89,27 +97,37 @@ public class ExampleMain {
       return;
     }
 
-    long handledLineCount = 0; // 重做时已经处理的数量
+    long handledLineCount = 0l; // 重做时已经处理的行数量
 
-    if (ProgressEnum.NONE.equals(DataFileOps.I().progress(filePath))) {
+    // 文件名称表示的处理状态
+    ProgressEnum showProgressEnum = DataFileOps.I().progress(filePath);
+
+    if (ProgressEnum.NONE.equals(showProgressEnum)) {
       filePath = DataFileOps.I().mark(filePath, ProgressEnum.DOING);
       file = new File(filePath);
-    } else if (ProgressEnum.DOING.equals(DataFileOps.I().progress(filePath))) {
+    } else if (ProgressEnum.DOING.equals(showProgressEnum)) {
       WorkStatus workStatus =
           ProgressHolder.I().loadFormProgressFile(ETLConfig.progressFile(), filePath);
+      LOG.info("DOING workStatus = {}", workStatus);
       if (workStatus != null) {
         if (ProgressEnum.FINISHED.equals(workStatus.getProgressEnum())) {
+          DataFileOps.I().mark(filePath, ProgressEnum.FINISHED);
           return; // may never happened
         }
         handledLineCount = workStatus.getHandledCount();
       }
-    } else if (ProgressEnum.FINISHED.equals(DataFileOps.I().progress(filePath))) {
+    } else if (ProgressEnum.FINISHED.equals(showProgressEnum)) {
       return;
     }
+
     // now filePath shall end with .DOING
-    ProgressHolder.I().update(filePath, ProgressEnum.DOING, 0);
+    LOG.info("文件={}, 已处理行数={}", filePath, handledLineCount);
+    ProgressHolder.I().update(filePath, ProgressEnum.DOING, handledLineCount);
 
     List<List<String>> datas = new ArrayList<>();
+
+    // 调整读取与导入速度
+    long tryHandleCount = 0l;
 
     try (BufferedReader reader = new BufferedReader(new FileReader(file), 8192);) {
 
@@ -118,7 +136,17 @@ public class ExampleMain {
       long lineIndex = 0;
       while ((line = reader.readLine()) != null) {
         if (lineIndex < handledLineCount) { // 跳过已经处理的部分
+          lineIndex++;
           continue;
+        }
+
+        if (tryHandleCount > ProgressHolder.I().handledCount(filePath) + batchLineCount) {
+          LOG.info("读取速度{}超出导入速度{}, 等待一下", tryHandleCount, ProgressHolder.I()
+              .handledCount(filePath));
+          try {
+            Thread.sleep(1000l);
+          } catch (InterruptedException e) {/* ignore */
+          }
         }
 
         if (!ETLConstants.BLANK.equals(line)) {
@@ -127,7 +155,7 @@ public class ExampleMain {
         if (datas.size() >= batchLineCount) {
 
           try {
-            handleResult = importor.handle(datas);
+            handleResult = importor.handle(filePath, datas);
             ProgressHolder.I().update(filePath, ProgressEnum.DOING, datas.size());
           } catch (ETLException e) {
             LOG.error("import failed");
@@ -137,13 +165,14 @@ public class ExampleMain {
           }
         }
 
+        tryHandleCount++;
         lineIndex++;
       }
 
       // 处理剩下的
       if (datas.size() > 0) {
         try {
-          importor.handle(datas);
+          importor.handle(filePath, datas);
           ProgressHolder.I().update(filePath, ProgressEnum.DOING, datas.size());
         } catch (ETLException e) {
           LOG.error("import failed");

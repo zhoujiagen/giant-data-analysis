@@ -35,7 +35,33 @@ public final class ProgressHolder {
     return INSTANCE;
   }
 
-  private final Map<String, WorkStatus> progress = Maps.newConcurrentMap();
+  /** 进展记录 */
+  private Map<String, WorkStatus> progress = Maps.newConcurrentMap();
+  /** 已经处理的数量 */
+  private Map<String, Long> handledCountMap = Maps.newConcurrentMap();
+
+  public void updateHandled(String workId, long deltaCount) {
+    LOG.debug("更新已处理数量, workId={}, deltaCount={}", workId, deltaCount);
+
+    if (workId == null || "".equals(workId)) return;
+
+    workId = DataFileOps.I().stripProgressSuffix(workId);// ~
+
+    Long count = handledCountMap.get(workId);
+    if (count == null) count = 0l;
+    count += deltaCount;
+    handledCountMap.put(workId, count);
+  }
+
+  public long handledCount(String workId) {
+    if (workId == null || "".equals(workId)) return 0l;
+
+    workId = DataFileOps.I().stripProgressSuffix(workId);// ~
+
+    Long result = handledCountMap.get(workId);
+    if (result == null) return 0l;
+    return result;
+  }
 
   /** 设置进展 */
   public void set(List<String> workIds, ProgressEnum progressEnum) {
@@ -131,7 +157,7 @@ public final class ProgressHolder {
       throw ETLException.newException(e);
     }
 
-    return null;
+    return result;
   }
 
   /** 转储到文件 */
