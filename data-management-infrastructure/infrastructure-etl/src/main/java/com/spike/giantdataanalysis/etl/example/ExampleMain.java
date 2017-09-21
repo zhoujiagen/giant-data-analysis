@@ -81,7 +81,7 @@ public class ExampleMain {
 
   private static void parseAndImport(String filePath, int batchLineCount,
       LineParser<List<String>> lineParser, DataImportor<List<String>> importor) {
-    LOG.debug("开始处理文件: filePath={}, 参数batchLineCount={}", filePath, batchLineCount);
+    LOG.info("开始处理文件: filePath={}, 参数batchLineCount={}", filePath, batchLineCount);
 
     if (filePath == null || "".equals(filePath.trim())) {
       return;
@@ -101,18 +101,19 @@ public class ExampleMain {
 
     // 文件名称表示的处理状态
     ProgressEnum showProgressEnum = DataFileOps.I().progress(filePath);
-
+    // 目标文件路径, 后续操作均是对目标文件的操作
+    String targetFilePath = filePath;
     if (ProgressEnum.NONE.equals(showProgressEnum)) {
-      filePath = DataFileOps.I().mark(filePath, ProgressEnum.DOING);
-      file = new File(filePath);
+      targetFilePath = DataFileOps.I().mark(filePath, ProgressEnum.DOING);
     } else if (ProgressEnum.DOING.equals(showProgressEnum)) {
       WorkStatus workStatus =
           ProgressHolder.I().loadFormProgressFile(ETLConfig.progressFile(), filePath);
       LOG.info("DOING workStatus = {}", workStatus);
       if (workStatus != null) {
+        // may never happened
         if (ProgressEnum.FINISHED.equals(workStatus.getProgressEnum())) {
           DataFileOps.I().mark(filePath, ProgressEnum.FINISHED);
-          return; // may never happened
+          return;
         }
         handledLineCount = workStatus.getHandledCount();
       }
@@ -120,16 +121,19 @@ public class ExampleMain {
       return;
     }
 
-    // now filePath shall end with .DOING
-    LOG.info("文件={}, 已处理行数={}", filePath, handledLineCount);
-    ProgressHolder.I().update(filePath, ProgressEnum.DOING, handledLineCount);
+    // 现在文件路径以.DOING结尾
+
+    LOG.info("文件={}, 已处理行数={}", targetFilePath, handledLineCount);
+    // 更新进展记录中已处理行数
+    ProgressHolder.I().update(targetFilePath, ProgressEnum.DOING, handledLineCount);
 
     List<List<String>> datas = new ArrayList<>();
 
     // 调整读取与导入速度
     long tryHandleCount = 0l;
 
-    try (BufferedReader reader = new BufferedReader(new FileReader(file), 8192);) {
+    // TODO(zhoujiagen) tuning buffer size???
+    try (BufferedReader reader = new BufferedReader(new FileReader(targetFilePath), 8192);) {
 
       String line = null;
       boolean handleResult = false;
@@ -140,10 +144,16 @@ public class ExampleMain {
           continue;
         }
 
-        if (tryHandleCount > ProgressHolder.I().handledCount(filePath) + batchLineCount//
+        if (lineIndex > 0 && lineIndex % 1000 == 0) {
+          LOG.info(
+            "\n文件: {}, 已读取行数[{}], 尝试处理行数[{}], 实际已处理行数[{}], 当前待处理行数[{}]", //
+            targetFilePath, lineIndex, tryHandleCount,
+            ProgressHolder.I().handledCount(targetFilePath), datas.size());
+        }
+        if (tryHandleCount > ProgressHolder.I().handledCount(targetFilePath) + batchLineCount //
             && datas.size() >= batchLineCount) {
-          LOG.info("读取速度{}超出导入速度{}, 等待一下, 当前数据准备量[{}]", //
-            tryHandleCount, ProgressHolder.I().handledCount(filePath), datas.size());
+          LOG.info("\n读取速度[{}]超出导入速度[{}], 等待一下, 当前准备数据量[{}]", //
+            tryHandleCount, ProgressHolder.I().handledCount(targetFilePath), datas.size());
           try {
             Thread.sleep(1000l);
           } catch (InterruptedException e) {/* ignore */
@@ -156,10 +166,12 @@ public class ExampleMain {
         if (datas.size() >= batchLineCount) {
 
           try {
-            handleResult = importor.handle(filePath, datas);
-            ProgressHolder.I().update(filePath, ProgressEnum.DOING, datas.size());
+            // 执行导入
+            handleResult = importor.handle(targetFilePath, datas);
+            // 更新进展记录中实际处理行数
+            ProgressHolder.I().update(targetFilePath, ProgressEnum.DOING, datas.size());
           } catch (ETLException e) {
-            LOG.error("import failed");
+            LOG.error("import failed", e);
           }
           if (handleResult) {
             datas.clear();
@@ -170,19 +182,19 @@ public class ExampleMain {
         lineIndex++;
       }
 
-      // 处理剩下的
+      // 处理剩下的记录
       if (datas.size() > 0) {
         try {
-          importor.handle(filePath, datas);
-          ProgressHolder.I().update(filePath, ProgressEnum.DOING, datas.size());
+          importor.handle(targetFilePath, datas);
+          ProgressHolder.I().update(targetFilePath, ProgressEnum.DOING, datas.size());
         } catch (ETLException e) {
           LOG.error("import failed");
         }
       }
-      DataFileOps.I().mark(filePath, ProgressEnum.FINISHED);
-      ProgressHolder.I().update(filePath, ProgressEnum.FINISHED, 0);
+      DataFileOps.I().mark(targetFilePath, ProgressEnum.FINISHED);
+      ProgressHolder.I().update(targetFilePath, ProgressEnum.FINISHED, 0);
     } catch (Exception e) {
-      LOG.error("处理文件失败", e);
+      LOG.error("处理文件[" + targetFilePath + "]失败", e);
     }
 
   }
