@@ -13,6 +13,8 @@ import org.slf4j.LoggerFactory;
 
 /**
  * 计算单源最短路径.
+ * <p>
+ * 见sssp.png.
  */
 public class ExampleSingleSourceShortestPath extends
     BasicComputation<Text, DoubleWritable, DoubleWritable, DoubleWritable> {
