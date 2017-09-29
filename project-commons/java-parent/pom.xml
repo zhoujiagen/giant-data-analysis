@@ -16,8 +16,8 @@
 
 	<modules>
 		<!-- data-management-infrastructure -->
-		<!--<module>../../data-management-infrastructure/infrastructure-benchmark</module> -->
-		<module>../../data-management-infrastructure/infrastructure-etl</module>
+		<module>../../data-management-infrastructure/infrastructure-benchmark</module>
+		<!--<module>../../data-management-infrastructure/infrastructure-etl</module> -->
 		<!--<module>../../data-management-infrastructure/infrastructure-netty</module> -->
 		<!--<module>../../data-management-infrastructure/infrastructure-jetty</module> -->
 		<!--<module>../../data-management-infrastructure/infrastructure-apache-zookeeper</module> -->
