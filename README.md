@@ -59,14 +59,12 @@ Strike 1: Apache Storm word count example.
 ## 3 数据表示 - data-representation
 
 + graph-apache-tinkerpop - representation-apache-tinkerpop 图计算框架; 图遍历语言Gremlin抽象
-+ graph-titan 1.0.0 - representation-titan 分布式图数据库
 + Neo4j 3.2.2 - representation-neo4j 图数据库
 + Apache Jena 3.4.0 - representation-apache-jena
 + Apache Giraph 1.2.1 - representation-apache-giraph 基于BSP的图处理框架
++ Titan 1.0.0 - representation-titan 分布式图数据库(HBase 1.0.3/0.98.2-hadoop1, ES 1.5.2)
 
-+ TODO 继续整理Step示例; 完成NoSQL Distilled中关系图信息查询.
-+ TinkerPop栈, Neo4j遍历API, 准备应用: 描述逻辑的DSL.
-+ Neo4j已完成基本探索, 准备实现描述逻辑的基础构造. 20170813 move `com.spike.giantdataanalysis.neo4j.dsl` to `data-models/datamodel-graph`
++ TODO TinkerPop栈.
 
 > TBD
 

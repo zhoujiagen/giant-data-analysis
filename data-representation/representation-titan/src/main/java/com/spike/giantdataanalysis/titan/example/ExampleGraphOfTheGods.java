@@ -12,6 +12,7 @@ import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.spike.giantdataanalysis.titan.support.TitanOps;
 import com.thinkaurelius.titan.core.EdgeLabel;
 import com.thinkaurelius.titan.core.Multiplicity;
 import com.thinkaurelius.titan.core.PropertyKey;
@@ -29,23 +30,29 @@ import com.thinkaurelius.titan.example.GraphOfTheGodsFactory;
  * @author zhoujiagen
  * @see GraphOfTheGodsFactory
  */
-public class GraphOfTheGodsExample {
-  private static final Logger LOG = LoggerFactory.getLogger(GraphOfTheGodsExample.class);
+public class ExampleGraphOfTheGods {
+  private static final Logger LOG = LoggerFactory.getLogger(ExampleGraphOfTheGods.class);
 
   public static void main(String[] args) {
-    System.out.println(new File(".").getAbsolutePath());
-    TitanGraph graph = TitanFactory.open("src/main/resources/conf/titan-cassandra-es.properties");
+    // TitanGraph graph =
+    // TitanOps.newGraph("src/main/resources/conf/titan-cassandra-es.properties");
+    TitanGraph graph = TitanOps.newMemoryGraph();
 
-    // load only once
-    load(graph);
+    // 创建Schema, 创建节点和边
+    // createSchema(graph, INDEX_NAME, true);
+    // createData(graph, INDEX_NAME, true);
+    createSchema(graph, null, true);// 不创建索引
+    createData(graph, null, true);
 
+    // 遍历具有name属性的节点
     GraphTraversalSource gts = graph.traversal();
     List<Object> names = gts.V().values("name").toList();
-
     LOG.info(names.toString());
 
+    // 关闭图
     graph.close();
-    // TitanCleanup.clear(graph); // 清空图中索引和数据
+    // 清空图中索引和数据
+    TitanOps.clean(graph);
   }
 
   public static final String INDEX_NAME = "search";
@@ -74,21 +81,7 @@ public class GraphOfTheGodsExample {
     return graph;
   }
 
-  public static void load(final TitanGraph graph) {
-    load(graph, INDEX_NAME, true);
-  }
-
-  public static void load(final TitanGraph graph, String mixedIndexName,
-      boolean uniqueNameCompositeIndex) {
-
-    // 1 创建Schema
-    loadSchema(graph, mixedIndexName, uniqueNameCompositeIndex);
-
-    // 2 创建节点和边
-    loadData(graph, mixedIndexName, uniqueNameCompositeIndex);
-  }
-
-  public static void loadSchema(final TitanGraph graph, String mixedIndexName,
+  public static void createSchema(final TitanGraph graph, String mixedIndexName,
       boolean uniqueNameCompositeIndex) {
 
     // Create Schema
@@ -107,6 +100,7 @@ public class GraphOfTheGodsExample {
       // vertices索引: age
       mgmt.buildIndex("vertices", Vertex.class).addKey(age).buildMixedIndex(mixedIndexName);// 混合索引
     }
+
     // 边属性
     final PropertyKey time = mgmt.makePropertyKey("time").dataType(Integer.class).make();
     final PropertyKey reason = mgmt.makePropertyKey("reason").dataType(String.class).make();
@@ -138,7 +132,7 @@ public class GraphOfTheGodsExample {
     mgmt.commit();
   }
 
-  public static void loadData(final TitanGraph graph, String mixedIndexName,
+  public static void createData(final TitanGraph graph, String mixedIndexName,
       boolean uniqueNameCompositeIndex) {
 
     TitanTransaction tx = graph.newTransaction();
