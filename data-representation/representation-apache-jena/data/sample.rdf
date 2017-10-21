@@ -1,0 +1,11 @@
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:vcard="http://www.w3.org/2001/vcard-rdf/3.0#">
+  <rdf:Description rdf:about="http://gda.jena.spike.com/EricCartman2">
+    <vcard:N rdf:parseType="Resource">
+      <vcard:Family>Cartman</vcard:Family>
+      <vcard:Given>Eric</vcard:Given>
+    </vcard:N>
+    <vcard:FN>Alice</vcard:FN>
+  </rdf:Description>
+</rdf:RDF>

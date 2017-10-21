@@ -5,3 +5,8 @@
 .settings/
 
 target/
+
+/_bsp/
+/output/
+aggregatorValues_*
+.aggregatorValues_*

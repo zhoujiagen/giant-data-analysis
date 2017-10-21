@@ -15,11 +15,11 @@ READING LIST:
 + [Titan 1.0.0文档](http://s3.thinkaurelius.com/docs/titan/1.0.0/index.html)
 + [Titan存储索引后端的兼容性](http://s3.thinkaurelius.com/docs/titan/1.0.0/version-compat.html)
 
-Titan 			1.0.0
+Titan 			1.0.0(hadoop1)
 Faunus 			-
 Cassandra 		1.2.z, 2.0.z, 2.1.z
-HBase 			0.94.z, 0.96.z, 0.98.z, 1.0.z
-Elasticsearch 	1.5.z
+HBase 			0.94.z, 0.96.z, 0.98.z, 1.0.z(1.0.3)
+Elasticsearch 	1.5.z(1.5.2)
 Solr 			5.2.z
 TinkerPop		3.0.z
 

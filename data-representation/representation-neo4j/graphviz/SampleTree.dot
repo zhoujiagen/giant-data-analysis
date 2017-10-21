@@ -1,0 +1,62 @@
+digraph Neo {
+  node [
+    shape = "Mrecord"
+    fontsize = "8"
+    fontname = "Bitstream Vera Sans"
+  ]
+  edge [
+    fontsize = "8"
+    fontname = "Bitstream Vera Sans"
+  ]
+  N0 [
+    label = "'id' = '1' : String\l"
+  ]
+  N0 -> N1 [
+    label = "CHILD\n"
+  ]
+  N0 -> N2 [
+    label = "CHILD\n"
+  ]
+  N0 -> N3 [
+    label = "CHILD\n"
+  ]
+  N1 [
+    label = "'id' = '2' : String\l"
+  ]
+  N1 -> N4 [
+    label = "CHILD\n"
+  ]
+  N1 -> N5 [
+    label = "CHILD\n"
+  ]
+  N2 [
+    label = "'id' = '3' : String\l"
+  ]
+  N2 -> N6 [
+    label = "CHILD\n"
+  ]
+  N2 -> N7 [
+    label = "CHILD\n"
+  ]
+  N3 [
+    label = "'id' = '4' : String\l"
+  ]
+  N3 -> N8 [
+    label = "CHILD\n"
+  ]
+  N4 [
+    label = "'id' = '5' : String\l"
+  ]
+  N5 [
+    label = "'id' = '6' : String\l"
+  ]
+  N6 [
+    label = "'id' = '7' : String\l"
+  ]
+  N7 [
+    label = "'id' = '8' : String\l"
+  ]
+  N8 [
+    label = "'id' = '9' : String\l"
+  ]
+}

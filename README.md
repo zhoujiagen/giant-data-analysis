@@ -27,13 +27,13 @@
 
 + datasets
 
-+ Apache Hadoop 2.7.2/1.2.1 - infrastructure-apache-hadoop
++ Apache Hadoop 2.7.4/1.2.1 - infrastructure-apache-hadoop
 + Apache Spark 1.5.2 - scala-infrastructure-apache-spark
 + Netty 4.1.8.Final - infrastructure-netty
 + Jetty 9.4.3.v20170317 - infrastructure-jetty
 + Apache ZooKeeper 3.4.6 - infrastructure-apache-zookeeper
 + Apache Curator 2.12.0 - infrastructure-apache-curator
-+ Apache HBase 1.2.3 - infrastructure-apache-hbase
++ Apache HBase 1.2.6 - infrastructure-apache-hbase
 + Ansible 2.3.0.0 - infrastructure-ansible
 
 + DOING: Ansible
@@ -58,14 +58,19 @@ Strike 1: Apache Storm word count example.
 
 ## 3 数据表示 - data-representation
 
-+ graph-apache-tinkerpop: 图计算框架; 图遍历语言Gremlin抽象
-+ graph-titan: 分布式图数据库
++ graph-apache-tinkerpop - representation-apache-tinkerpop 图计算框架; 图遍历语言Gremlin抽象
++ Neo4j 3.2.2 - representation-neo4j 图数据库
++ Apache Jena 3.4.0 - representation-apache-jena
++ Apache Giraph 1.2.1 - representation-apache-giraph 基于BSP的图处理框架
++ Titan 1.0.0 - representation-titan 分布式图数据库(HBase 1.0.3/0.98.2-hadoop1, ES 1.5.2)
 
-+ TODO 继续整理Step示例; 完成NoSQL Distilled中关系图信息查询.
++ TODO TinkerPop栈.
 
 > TBD
 
 ## 4 数据模型 - data-models
+
++ 图模型 - datamodel-graph
 
 > TBD
 

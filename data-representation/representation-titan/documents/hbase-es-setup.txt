@@ -1,0 +1,50 @@
+
+#################################################
+# HBase 1.0.3
+#################################################
+https://archive.apache.org/dist/hbase/hbase-1.0.3/
+
+本地文件上启动:
+
+conf/hbase-env.sh
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_112.jdk/Contents/Home
+
+conf/hbase-site.xml
+<configuration>
+  <property>
+    <name>hbase.rootdir</name>
+    <value>file:///Users/jiedong/data/hbase</value>
+  </property>
+  <property>
+    <name>hbase.zookeeper.property.dataDir</name>
+    <value>/Users/jiedong/data/zookeeper</value>
+  </property>
+</configuration>
+
+bin/start-hbase.sh 
+
+http://localhost:16010/
+
+WARNING: 客户端使用0.98.2-hadoop1
+
+#################################################
+# ES 1.5.2
+#################################################
+https://www.elastic.co/guide/en/elasticsearch/reference/1.5/index.html
+https://www.elastic.co/guide/en/elasticsearch/guide/1.x/index.html
+
+cd bin
+./elasticsearch
+http://localhost:9200/
+
+### ES Ops
+
+查看索引
+GET http://localhost:9200/titan/_stats
+
+获取索引中映射
+GET http://localhost:9200/titan/_mapping
+
+删除索引
+DELETE http://localhost:9200/titan/
+
