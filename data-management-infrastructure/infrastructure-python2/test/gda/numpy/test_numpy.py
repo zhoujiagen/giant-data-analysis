@@ -104,7 +104,7 @@ def benchmark_compare_python_numpy():
 def random_routine():
     """随机工具"""
     mu, sigma = 2, 0.5
-    v = np.random.normal(mu, sigma, 10000)  # 生成10000个正态分布点
+    v = np.random.normal([mu, sigma, 10000])  # 生成10000个正态分布点
     print v[:10]
 
     # 绘图
@@ -115,7 +115,7 @@ def random_routine():
 def histogram_routine():
     """直方图"""
     mu, sigma = 2, 0.5
-    v = np.random.normal(mu, sigma, 10000)  # 生成10000个正态分布点
+    v = np.random.normal([mu, sigma, 10000])  # 生成10000个正态分布点
     # |bin1-n1|bin2-n2|bin3-n3|
     (n, bins) = np.histogram(v, bins = 100, density = True)
 
