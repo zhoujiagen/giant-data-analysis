@@ -10,9 +10,7 @@
 		<relativePath>../../project-commons/java-parent</relativePath>
 	</parent>
 
-	<groupId>com.spike.giantdataanalysis</groupId>
 	<artifactId>infrastructure-task</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>infrastructure-task</name>
@@ -42,7 +40,7 @@
 	<dependencyManagement>
 		<dependencies>
 			<!-- Import dependency management from Spring Boot -->
-			<!-- <dependency> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-dependencies</artifactId>
+			<!-- <dependency> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-dependencies</artifactId> 
 				<version>1.5.8.RELEASE</version> <type>pom</type> <scope>import</scope> </dependency> -->
 
 			<dependency>

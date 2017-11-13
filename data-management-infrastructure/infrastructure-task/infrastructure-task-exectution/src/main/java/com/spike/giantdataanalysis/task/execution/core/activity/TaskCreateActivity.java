@@ -1,12 +1,13 @@
 package com.spike.giantdataanalysis.task.execution.core.activity;
 
+import org.apache.commons.collections4.MapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.spike.giantdataanalysis.coordination.election.ElectionCoordination;
+import com.spike.giantdataanalysis.task.execution.application.core.ApplicationWorkloadCreator;
+import com.spike.giantdataanalysis.task.execution.application.core.ApplicationWorkloadHandler;
 import com.spike.giantdataanalysis.task.execution.config.TaskExecutionProperties;
 import com.spike.giantdataanalysis.task.execution.exception.TaskExecutionException;
-import com.spike.giantdataanalysis.task.store.service.TaskStoreService;
 
 /**
  * 任务创建活动实体.
@@ -15,55 +16,54 @@ import com.spike.giantdataanalysis.task.store.service.TaskStoreService;
 public class TaskCreateActivity extends AbstractTaskActivity {
   private static final Logger LOG = LoggerFactory.getLogger(TaskCreateActivity.class);
 
-  private TaskActivitys taskActivitys;
-  @SuppressWarnings("unused")
   private TaskExecutionProperties config;
-  @SuppressWarnings("unused")
-  private TaskStoreService taskStore;
-  @SuppressWarnings("unused")
-  private ElectionCoordination electionCoordination;
 
-  /** 集群中单实例 */
-  private boolean singletonInCluster = true;
+  private long checkWorkPeriod;
 
-  public TaskCreateActivity(String id, TaskActivitys taskActivitys) {
+  public TaskCreateActivity(String id, TaskExecutionProperties config) {
     super(id);
-    this.taskActivitys = taskActivitys;
-    this.config = this.taskActivitys.getConfig();
-    this.taskStore = this.taskActivitys.getTaskStore();
-  }
-
-  @Override
-  public boolean enabled() throws TaskExecutionException {
-    return singletonInCluster;
+    this.config = config;
   }
 
   @Override
   public void initialize() throws TaskExecutionException {
     LOG.info("执行初始化工作 START");
 
+    checkWorkPeriod = config.getCreatorConfig().getCheckWorkPeriod();
+
     LOG.info("执行初始化工作 END");
   }
 
   @Override
-  protected void prePlay() throws TaskExecutionException {
-    LOG.info("{}-{}", this.getClass().getSimpleName(), "");
+  public void clean() throws TaskExecutionException {
+  }
 
-    try {
-      Thread.sleep(2000l);
-    } catch (InterruptedException e) {
-      throw TaskExecutionException.newException(e);
+  @Override
+  protected void doPlay() throws TaskExecutionException {
+    LOG.info("{}开始执行, 使用负载处理器: {}", this.getClass().getSimpleName(), workloadHandlers);
+
+    if (MapUtils.isNotEmpty(workloadHandlers)) {
+      for (String id : workloadHandlers.keySet()) {
+        workloadHandlers.get(id).handle();
+      }
+    }
+
+    if (checkWorkPeriod > 0) {
+      try {
+        Thread.sleep(checkWorkPeriod);
+      } catch (InterruptedException e) {
+        throw TaskExecutionException.newException(e);
+      }
     }
   }
 
   @Override
-  protected void play() throws TaskExecutionException {
-    LOG.info("{}-{}", this.getClass().getSimpleName(), "");
-  }
+  public boolean isValidWorkloadHandler(ApplicationWorkloadHandler workloadHandler) {
+    if (workloadHandler == null || !(workloadHandler instanceof ApplicationWorkloadCreator)) {
+      return false;
+    }
 
-  @Override
-  protected void postPlay() throws TaskExecutionException {
-    LOG.info("{}-{}", this.getClass().getSimpleName(), "");
+    return true;
   }
 
 }

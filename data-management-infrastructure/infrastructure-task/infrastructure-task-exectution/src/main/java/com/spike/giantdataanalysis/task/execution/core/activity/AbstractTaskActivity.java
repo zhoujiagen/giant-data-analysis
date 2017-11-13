@@ -1,14 +1,22 @@
 package com.spike.giantdataanalysis.task.execution.core.activity;
 
+import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.Maps;
+import com.spike.giantdataanalysis.task.execution.application.core.ApplicationWorkloadHandler;
 import com.spike.giantdataanalysis.task.execution.exception.TaskExecutionException;
 
 public abstract class AbstractTaskActivity implements TaskActivity {
   private static final Logger LOG = LoggerFactory.getLogger(AbstractTaskActivity.class);
 
   protected String id;
+  protected volatile boolean enabled = true;
+
+  protected Map<String, ApplicationWorkloadHandler> workloadHandlers = Maps.newConcurrentMap();
 
   public AbstractTaskActivity(String id) {
     this.id = id;
@@ -19,31 +27,19 @@ public abstract class AbstractTaskActivity implements TaskActivity {
     return this.id;
   }
 
-  /** 空实现. */
-  @Override
-  public void initialize() throws TaskExecutionException {
-  }
-
-  /** 空实现. */
-  @Override
-  public void clean() throws TaskExecutionException {
-  }
-
-  /** 默认有效. */
   @Override
   public boolean enabled() throws TaskExecutionException {
-    return true;
+    return enabled;
   }
 
-  /** 空实现. */
   @Override
   public void disable() throws TaskExecutionException {
+    this.enabled = false;
   }
 
   @Override
   public void run() {
     LOG.info("活动{}初始化.", this.getClass().getSimpleName());
-
     try {
       this.initialize();
     } catch (TaskExecutionException e) {
@@ -52,41 +48,63 @@ public abstract class AbstractTaskActivity implements TaskActivity {
     }
 
     LOG.info("活动{}启动.", this.getClass().getSimpleName());
+    try {
+      this.play();
+    } catch (TaskExecutionException e) {
+      LOG.error("活动执行出现异常", e);
+    }
+  }
 
+  @Override
+  public void registWorkloadHandler(String name, ApplicationWorkloadHandler workloadHandler)
+      throws TaskExecutionException {
+    if (StringUtils.isBlank(name) || !isValidWorkloadHandler(workloadHandler)) {
+      throw TaskExecutionException.newException("Invalid argument: workloadHandler");
+    }
+
+    LOG.info("{}注册负载处理器: {}", this.getClass().getSimpleName(), workloadHandler.getClass()
+        .getSimpleName());
+    workloadHandlers.put(name, workloadHandler);
+  }
+
+  @Override
+  public void unregistWorkloadHandler(String name) throws TaskExecutionException {
+    if (StringUtils.isBlank(name)) {
+      return;
+    }
+
+    LOG.info("{}取消注册负载处理器: {}", this.getClass().getSimpleName(), name);
+    workloadHandlers.remove(name);
+  }
+
+  /**
+   * 执行工作.
+   * @throws TaskExecutionException
+   */
+  private void play() throws TaskExecutionException {
     while (true) {
-
       try {
-        LOG.debug("执行工作前工作");
-        this.prePlay();
+        // 判断是否失效
+        if (!this.enabled()) {
+          LOG.info("活动{}已置为失效状态, 执行清理工作 START", this.getClass().getSimpleName());
+          this.clean();
+          LOG.info("活动{}已置为失效状态, 执行清理工作 END", this.getClass().getSimpleName());
+          break;
+        }
 
-        LOG.debug("执行工作");
-        this.play();
-
-        LOG.debug("执行工作后工作");
-        this.postPlay();
+        // 执行工作
+        this.doPlay();
       } catch (TaskExecutionException e) {
-        LOG.error("执行工作出现异常", e);
+        LOG.error("执行工作失败", e);
       }
 
     }
   }
 
   /**
-   * 执行工作前工作.
+   * 实际执行的工作.
    * @throws TaskExecutionException
    */
-  protected abstract void prePlay() throws TaskExecutionException;
-
-  /**
-   * 执行工作.
-   * @throws TaskExecutionException
-   */
-  protected abstract void play() throws TaskExecutionException;
-
-  /**
-   * 执行工作后工作.
-   * @throws TaskExecutionException
-   */
-  protected abstract void postPlay() throws TaskExecutionException;
+  protected abstract void doPlay() throws TaskExecutionException;
 
 }

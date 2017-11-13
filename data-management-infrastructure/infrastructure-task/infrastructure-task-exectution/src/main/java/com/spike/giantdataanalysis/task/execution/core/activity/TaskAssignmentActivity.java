@@ -14,11 +14,12 @@ import com.google.common.collect.Sets;
 import com.spike.giantdataanalysis.coordination.CoordinationRole;
 import com.spike.giantdataanalysis.coordination.Coordinations;
 import com.spike.giantdataanalysis.coordination.group.GroupCoordination;
+import com.spike.giantdataanalysis.task.execution.application.core.ApplicationWorkloadAssignor;
+import com.spike.giantdataanalysis.task.execution.application.core.ApplicationWorkloadHandler;
 import com.spike.giantdataanalysis.task.execution.config.TaskExecutionProperties;
 import com.spike.giantdataanalysis.task.execution.core.executor.TaskExecutorDuty;
 import com.spike.giantdataanalysis.task.execution.core.executor.TaskExecutorInfo;
 import com.spike.giantdataanalysis.task.execution.exception.TaskExecutionException;
-import com.spike.giantdataanalysis.task.store.service.TaskStoreService;
 
 /**
  * 任务指派活动实体.
@@ -28,26 +29,25 @@ public class TaskAssignmentActivity extends AbstractTaskActivity {
 
   private static final Logger LOG = LoggerFactory.getLogger(TaskAssignmentActivity.class);
 
-  private TaskActivitys taskActivitys;
   private TaskExecutionProperties config;
-  @SuppressWarnings("unused")
-  private TaskStoreService taskStore;
 
   // 群组协同
   private GroupCoordination groupCoordination;
 
   private ObjectMapper objectMapper = new ObjectMapper();
 
-  public TaskAssignmentActivity(String id, TaskActivitys taskActivitys) {
+  private long checkWorkPeriod;
+
+  public TaskAssignmentActivity(String id, TaskExecutionProperties config) {
     super(id);
-    this.taskActivitys = taskActivitys;
-    this.config = this.taskActivitys.getConfig();
-    this.taskStore = this.taskActivitys.getTaskStore();
+    this.config = config;
   }
 
   @Override
   public void initialize() throws TaskExecutionException {
     LOG.info("执行初始化工作 START");
+
+    checkWorkPeriod = config.getAssignorConfig().getCheckWorkPeriod();
 
     String zookeeperConnectionString = config.getCoordination().getZookeeperConnectionString();
     String membershipPath = config.getCoordination().getMembershippath();
@@ -107,24 +107,31 @@ public class TaskAssignmentActivity extends AbstractTaskActivity {
   }
 
   @Override
-  protected void prePlay() throws TaskExecutionException {
-    LOG.info("{}-{}", this.getClass().getSimpleName(), "");
+  protected void doPlay() throws TaskExecutionException {
+    LOG.info("{}开始执行, 使用负载处理器: {}", this.getClass().getSimpleName(), workloadHandlers);
 
-    try {
-      Thread.sleep(2000l);
-    } catch (InterruptedException e) {
-      throw TaskExecutionException.newException(e);
+    if (MapUtils.isNotEmpty(workloadHandlers)) {
+      for (String id : workloadHandlers.keySet()) {
+        workloadHandlers.get(id).handle();
+      }
+    }
+
+    if (checkWorkPeriod > 0) {
+      try {
+        Thread.sleep(checkWorkPeriod);
+      } catch (InterruptedException e) {
+        throw TaskExecutionException.newException(e);
+      }
     }
   }
 
   @Override
-  protected void play() throws TaskExecutionException {
-    LOG.info("{}-{}", this.getClass().getSimpleName(), "");
-  }
+  public boolean isValidWorkloadHandler(ApplicationWorkloadHandler workloadHandler) {
+    if (workloadHandler == null || !(workloadHandler instanceof ApplicationWorkloadAssignor)) {
+      return false;
+    }
 
-  @Override
-  protected void postPlay() throws TaskExecutionException {
-    LOG.info("{}-{}", this.getClass().getSimpleName(), "");
+    return true;
   }
 
 }

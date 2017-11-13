@@ -15,6 +15,7 @@ import com.spike.giantdataanalysis.coordination.CoordinationRole;
 @ConfigurationProperties(prefix = "task")
 public class TaskExecutionProperties {
 
+  // ======================================== task.*
   // task.role
   private String role;
 
@@ -24,11 +25,70 @@ public class TaskExecutionProperties {
   // task.checkAlivePeriod
   private long checkAlivePeriod;
 
-  // task.worker.*
-  private final Worker worker = new Worker();
+  // ======================================== task.creator.*
+  private final Creator creatorConfig = new Creator();
 
-  public class Worker {
+  public class Creator {
+
+    private long checkWorkPeriod;
+    private long initStart;
+    private long initEnd;
+
+    public long getCheckWorkPeriod() {
+      return checkWorkPeriod;
+    }
+
+    public void setCheckWorkPeriod(long checkWorkPeriod) {
+      this.checkWorkPeriod = checkWorkPeriod;
+    }
+
+    public long getInitStart() {
+      return initStart;
+    }
+
+    public void setInitStart(long initStart) {
+      this.initStart = initStart;
+    }
+
+    public long getInitEnd() {
+      return initEnd;
+    }
+
+    public void setInitEnd(long initEnd) {
+      this.initEnd = initEnd;
+    }
+  }
+
+  // ======================================== task.assignor.*
+  private final Assignor assignorConfig = new Assignor();
+
+  public class Assignor {
+    private long checkWorkPeriod;
+
+    public long getCheckWorkPeriod() {
+      return checkWorkPeriod;
+    }
+
+    public void setCheckWorkPeriod(long checkWorkPeriod) {
+      this.checkWorkPeriod = checkWorkPeriod;
+    }
+
+  }
+
+  // ======================================== task.executor.*
+  private final Executor executorConfig = new Executor();
+
+  public class Executor {
+    private long checkWorkPeriod;
     private int slots;
+
+    public long getCheckWorkPeriod() {
+      return checkWorkPeriod;
+    }
+
+    public void setCheckWorkPeriod(long checkWorkPeriod) {
+      this.checkWorkPeriod = checkWorkPeriod;
+    }
 
     public int getSlots() {
       return slots;
@@ -40,7 +100,7 @@ public class TaskExecutionProperties {
 
   }
 
-  // task.coordication.*
+  // ======================================== task.coordication.*
   private final Coordination coordination = new Coordination();
 
   /** 协同相关配置属性 */
@@ -107,8 +167,16 @@ public class TaskExecutionProperties {
     return coordination;
   }
 
-  public Worker getWorker() {
-    return worker;
+  public Creator getCreatorConfig() {
+    return creatorConfig;
+  }
+
+  public Assignor getAssignorConfig() {
+    return assignorConfig;
+  }
+
+  public Executor getExecutorConfig() {
+    return executorConfig;
   }
 
 }

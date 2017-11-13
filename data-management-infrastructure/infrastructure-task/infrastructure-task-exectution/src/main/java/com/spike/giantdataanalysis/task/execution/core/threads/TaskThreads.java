@@ -23,9 +23,9 @@ public class TaskThreads {
   private Set<ThreadInfo> threads = Sets.newConcurrentHashSet();
 
   public synchronized void startBackgroundDaemon(long checkAlivePeriod) {
-    LOG.info("start backgroun daemon");
+    LOG.info("启动背景线程");
 
-    new Thread(new BackgroundDaemon(checkAlivePeriod, this)).start();
+    new Thread(new BackgroundDaemon(checkAlivePeriod, INSTANCE)).start();
   }
 
   /** 创建线程 */

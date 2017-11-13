@@ -2,6 +2,9 @@ package com.spike.giantdataanalysis.task.execution.core.executor;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.collect.Lists;
 import com.spike.giantdataanalysis.coordination.CoordinationRole;
 import com.spike.giantdataanalysis.coordination.Coordinations;
@@ -15,6 +18,8 @@ import com.spike.giantdataanalysis.task.execution.core.threads.TaskThreads;
  */
 public class TaskMaster {
 
+  private static final Logger LOG = LoggerFactory.getLogger(TaskMaster.class);
+
   private final TaskActivitys taskActivityFactory;
 
   private List<TaskActivity> taskActivities = Lists.newArrayList();
@@ -27,6 +32,8 @@ public class TaskMaster {
   }
 
   public void start() {
+    LOG.info("{}启动", this.getClass().getSimpleName());
+
     String id = Coordinations.id();
     TaskActivity taskCreateActivity = taskActivityFactory.newTaskCreateActivity(id);
     Thread taskCreateActivityThread =
@@ -45,6 +52,8 @@ public class TaskMaster {
   }
 
   public void cancel() {
+    LOG.info("{}被取消", this.getClass().getSimpleName());
+
     for (TaskActivity ta : taskActivities) {
       taskActivityFactory.delete(ta);
     }

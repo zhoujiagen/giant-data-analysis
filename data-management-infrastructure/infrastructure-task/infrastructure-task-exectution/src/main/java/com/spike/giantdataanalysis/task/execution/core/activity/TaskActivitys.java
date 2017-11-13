@@ -4,12 +4,17 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.spike.giantdataanalysis.task.execution.application.core.ApplicationWorkloadAssignor;
+import com.spike.giantdataanalysis.task.execution.application.core.ApplicationWorkloadCreator;
+import com.spike.giantdataanalysis.task.execution.application.core.ApplicationWorkloadExecutor;
 import com.spike.giantdataanalysis.task.execution.config.TaskExecutionProperties;
 import com.spike.giantdataanalysis.task.store.service.TaskStoreService;
 
@@ -20,6 +25,8 @@ import com.spike.giantdataanalysis.task.store.service.TaskStoreService;
 @Service
 public class TaskActivitys {
 
+  private static final Logger LOG = LoggerFactory.getLogger(TaskActivitys.class);
+
   @Autowired
   private TaskExecutionProperties config;
 
@@ -29,20 +36,46 @@ public class TaskActivitys {
   /** Map[组标识, 活动实体ID集合] */
   private Map<String, Set<String>> threads = Maps.newHashMap();
 
+  @Autowired
+  private Map<String, ApplicationWorkloadCreator> workloadCreators;
+
+  @Autowired
+  private Map<String, ApplicationWorkloadAssignor> workloadAssignors;
+
+  @Autowired
+  private Map<String, ApplicationWorkloadExecutor> workloadExecutors;
+
+  // TODO(zhoujiagen) 改为使用反射方式创建???
+
   public TaskCreateActivity newTaskCreateActivity(String id) {
-    TaskCreateActivity taskActivity = new TaskCreateActivity(id, this);
+    LOG.info("创建活动定义: {}, id: {}", TaskCreateActivity.class.getSimpleName(), id);
+
+    TaskCreateActivity taskActivity = new TaskCreateActivity(id, config);
+    for (String beanName : workloadCreators.keySet()) {
+      taskActivity.registWorkloadHandler(beanName, workloadCreators.get(beanName));
+    }
     this.add(TaskCreateActivity.class.getSimpleName(), taskActivity);
     return taskActivity;
   }
 
   public TaskAssignmentActivity newTaskAssignmentActivity(String id) {
-    TaskAssignmentActivity taskActivity = new TaskAssignmentActivity(id, this);
+    LOG.info("创建活动定义: {}, id: {}", TaskAssignmentActivity.class.getSimpleName(), id);
+
+    TaskAssignmentActivity taskActivity = new TaskAssignmentActivity(id, config);
+    for (String beanName : workloadAssignors.keySet()) {
+      taskActivity.registWorkloadHandler(beanName, workloadAssignors.get(beanName));
+    }
     this.add(TaskAssignmentActivity.class.getSimpleName(), taskActivity);
     return taskActivity;
   }
 
   public TaskExecuteActivity newTaskExecuteActivity(String id) {
-    TaskExecuteActivity taskActivity = new TaskExecuteActivity(id, this);
+    LOG.info("创建活动定义: {}, id: {}", TaskExecuteActivity.class.getSimpleName(), id);
+
+    TaskExecuteActivity taskActivity = new TaskExecuteActivity(id, config);
+    for (String beanName : workloadExecutors.keySet()) {
+      taskActivity.registWorkloadHandler(beanName, workloadExecutors.get(beanName));
+    }
     this.add(TaskExecuteActivity.class.getSimpleName(), taskActivity);
     return taskActivity;
   }
@@ -50,15 +83,7 @@ public class TaskActivitys {
   /** to work around to destroy representing java.lang.Thread */
   public void delete(TaskActivity taskActivity) {
     taskActivity.disable();
-    taskActivity.clean();
 
-    // if (taskActivity instanceof TaskCreateActivity) {
-    // this.remove(TaskCreateActivity.class.getSimpleName(), taskActivity);
-    // } else if (taskActivity instanceof TaskAssignmentActivity) {
-    // this.remove(TaskAssignmentActivity.class.getSimpleName(), taskActivity);
-    // } else if (taskActivity instanceof TaskExecuteActivity) {
-    // this.remove(TaskExecuteActivity.class.getSimpleName(), taskActivity);
-    // }
     this.remove(taskActivity.getClass().getSimpleName(), taskActivity);
   }
 

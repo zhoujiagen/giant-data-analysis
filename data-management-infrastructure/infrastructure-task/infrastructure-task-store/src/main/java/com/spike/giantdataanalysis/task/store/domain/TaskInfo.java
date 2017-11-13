@@ -32,7 +32,7 @@ public class TaskInfo extends BaseModel {
 
   @Comment("负载分片大小")
   @Column(name = "workload_size", nullable = true)
-  private long workloadSize;
+  private Long workloadSize;
 
   /** 任务类型 */
   public enum TaskType {
@@ -80,11 +80,11 @@ public class TaskInfo extends BaseModel {
     this.workloadShardInfo = workloadShardInfo;
   }
 
-  public long getWorkloadSize() {
+  public Long getWorkloadSize() {
     return workloadSize;
   }
 
-  public void setWorkloadSize(long workloadSize) {
+  public void setWorkloadSize(Long workloadSize) {
     this.workloadSize = workloadSize;
   }
 

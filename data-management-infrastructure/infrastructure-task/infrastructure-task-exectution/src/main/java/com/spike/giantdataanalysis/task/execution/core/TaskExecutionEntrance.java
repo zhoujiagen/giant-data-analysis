@@ -1,8 +1,8 @@
-package com.spike.giantdataanalysis.task.execution.core.executor;
+package com.spike.giantdataanalysis.task.execution.core;
 
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.recipes.leader.CancelLeadershipException;
-import org.apache.curator.framework.recipes.leader.LeaderSelector;
+import org.apache.curator.framework.recipes.leader.LeaderSelectorListener;
 import org.apache.curator.framework.state.ConnectionState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,21 +14,22 @@ import org.springframework.stereotype.Service;
 import com.spike.giantdataanalysis.coordination.CoordinationRole;
 import com.spike.giantdataanalysis.coordination.Coordinations;
 import com.spike.giantdataanalysis.coordination.election.ElectionCoordination;
-import com.spike.giantdataanalysis.coordination.exception.CoordinationException;
 import com.spike.giantdataanalysis.task.execution.config.TaskExecutionProperties;
 import com.spike.giantdataanalysis.task.execution.core.activity.TaskActivitys;
 import com.spike.giantdataanalysis.task.execution.core.activity.TaskAssignmentActivity;
 import com.spike.giantdataanalysis.task.execution.core.activity.TaskCreateActivity;
 import com.spike.giantdataanalysis.task.execution.core.activity.TaskExecuteActivity;
+import com.spike.giantdataanalysis.task.execution.core.executor.TaskMaster;
+import com.spike.giantdataanalysis.task.execution.core.executor.TaskWorker;
 import com.spike.giantdataanalysis.task.execution.core.threads.TaskThreads;
 
 /**
- * 任务执行者: 扮演Master, Worker.
+ * 任务执行入口: 扮演Master, Worker.
  * @author zhoujiagen
  */
 @Service
-public class TaskExecutor implements ApplicationListener<ApplicationReadyEvent> {
-  private static final Logger LOG = LoggerFactory.getLogger(TaskExecutor.class);
+public class TaskExecutionEntrance implements ApplicationListener<ApplicationReadyEvent> {
+  private static final Logger LOG = LoggerFactory.getLogger(TaskExecutionEntrance.class);
 
   @Autowired
   private TaskExecutionProperties config;
@@ -65,61 +66,7 @@ public class TaskExecutor implements ApplicationListener<ApplicationReadyEvent> 
       isSingletonInCluster = config.isSingletonInCluster();
       LOG.info("isSingletonInCluster={}", isSingletonInCluster);
       if (isSingletonInCluster) {
-        String zookeeperConnectionString = config.getCoordination().getZookeeperConnectionString();
-        String leadershipPath = config.getCoordination().getLeadershippath();
-        String memberId = Coordinations.id();
-        electionCoordination =
-            new ElectionCoordination(zookeeperConnectionString, leadershipPath, memberId) {
-              @Override
-              public void playAsLeader(CuratorFramework client) throws CoordinationException {
-                if (taskMaster == null) {
-                  taskMaster = new TaskMaster(taskActivityFactory);
-                  taskMaster.start();
-                  taskMaster.join();
-                }
-                while (!taskMaster.isCanceled()) {
-                  try {
-                    Thread.sleep(1000l);
-                  } catch (InterruptedException e) {
-                    // ignore
-                  }
-                }
-              }
-
-              @Override
-              public void palyAsFollower(LeaderSelector leaderSelector, CuratorFramework client)
-                  throws CoordinationException {
-                while (true) {
-                  if (leaderSelector.hasLeadership()) {
-                    // take over leader work
-                    taskMaster = new TaskMaster(taskActivityFactory);
-                    taskMaster.start();
-                    taskMaster.join();
-
-                    break;
-                  }
-                  try {
-                    LOG.debug("Stand by...");
-                    Thread.sleep(2000l);
-                  } catch (InterruptedException e) {
-                    // ignore
-                  }
-                }
-
-              }
-
-              @Override
-              public void
-                  handleLeaderStateChanged(CuratorFramework client, ConnectionState newState) {
-                if (client.getConnectionStateErrorPolicy().isErrorState(newState)) {
-                  // cancel leader current work
-                  taskMaster.cancel();
-                  throw new CancelLeadershipException();
-                }
-              }
-            };
-
-        electionCoordination.blockingCheckLeadership();
+        this.playAsSingletonMasterInCluster();
       }
 
     } else {
@@ -127,6 +74,89 @@ public class TaskExecutor implements ApplicationListener<ApplicationReadyEvent> 
       LOG.info("扮演的角色: {}.", TaskExecuteActivity.class.getSimpleName());
       taskWorker = new TaskWorker(taskActivityFactory);
       taskWorker.start();
+    }
+  }
+
+  private void playAsSingletonMasterInCluster() {
+
+    final String zookeeperConnectionString =
+        config.getCoordination().getZookeeperConnectionString();
+    final String leadershipPath = config.getCoordination().getLeadershippath();
+    final String memberId = Coordinations.id();
+
+    LeaderSelectorListener lsl = new LeaderSelectorListener() {
+      @Override
+      public void stateChanged(CuratorFramework client, ConnectionState newState) {
+        LOG.info("处理ZK连接状态改变为: {} START", newState);
+
+        if (client.getConnectionStateErrorPolicy().isErrorState(newState)) {
+          LOG.info("ZK连接出现问题, 放弃Leader关系");
+          // cancel leader current work
+          taskMaster.cancel();
+          throw new CancelLeadershipException();
+        }
+        LOG.info("处理ZK连接状态改变为: {}, END", newState);
+      }
+
+      @Override
+      public void takeLeadership(CuratorFramework client) throws Exception {
+
+        while (true) {
+
+          if (taskMaster.isCanceled()) {
+            LOG.info("TaskMaster已被取消.");
+            break;
+          }
+
+          LOG.info("{}是Leader", memberId);
+          try {
+            Thread.sleep(10000l);
+          } catch (InterruptedException e) {
+            // ignore
+          }
+        }
+
+        LOG.info("{}放弃成为Leader: {}", memberId);
+      }
+    };
+
+    electionCoordination =
+        new ElectionCoordination(zookeeperConnectionString, leadershipPath, memberId, lsl);
+
+    boolean isLeader = electionCoordination.blockingCheckLeadership();
+    if (isLeader) {
+
+      LOG.info("启动TaskMaster.");
+      taskMaster = new TaskMaster(taskActivityFactory);
+      taskMaster.start();
+      taskMaster.join();
+
+    } else {
+
+      LOG.info("{}成为Follower START", memberId);
+
+      while (true) {
+        if (electionCoordination.getLeaderSelector().hasLeadership()) {
+          LOG.info("Follower获得了Leadership...");
+
+          // take over leader work
+          taskMaster = new TaskMaster(taskActivityFactory);
+          taskMaster.start();
+          taskMaster.join();
+
+          break;
+        }
+
+        try {
+          LOG.debug("Stand by...");
+          Thread.sleep(2000l);
+        } catch (InterruptedException e) {
+          // ignore
+        }
+      }
+
+      LOG.info("{}成为Follower END", memberId);
+
     }
   }
 

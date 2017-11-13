@@ -25,20 +25,22 @@
 		<!--<module>../../data-management-infrastructure/infrastructure-apache-hadoop</module> -->
 		<!--<module>../../data-management-infrastructure/infrastructure-apache-hbase</module> -->
 		<!--<module>../../data-management-infrastructure/infrastructure-opentsdb</module> -->
+		<module>../../data-management-infrastructure/infrastructure-coordination</module>
+		<module>../../data-management-infrastructure/infrastructure-task</module>
 
 		<!-- data-representation -->
-		<module>../../data-representation/representation-titan</module>
-		<module>../../data-representation/representation-apache-tinkerpop</module>
-		<module>../../data-representation/representation-apache-jena</module>
-		<module>../../data-representation/representation-apache-giraph</module>
-		<module>../../data-representation/representation-neo4j</module>
+		<!--<module>../../data-representation/representation-titan</module> -->
+		<!--<module>../../data-representation/representation-apache-tinkerpop</module> -->
+		<!--<module>../../data-representation/representation-apache-jena</module> -->
+		<!--<module>../../data-representation/representation-apache-giraph</module> -->
+		<!--<module>../../data-representation/representation-neo4j</module> -->
 
 		<!-- temporal-data-and-realtime-algorithm -->
 		<!-- <module>../../temporal-data-and-realtime-algorithm/temporal-apache-storm</module>
 			<module>../../temporal-data-and-realtime-algorithm/temporal-apache-kafka</module> -->
 
 		<!-- data-models -->
-		<module>../../data-models/datamodel-graph</module>
+		<!--<module>../../data-models/datamodel-graph</module> -->
 
 	</modules>
 
