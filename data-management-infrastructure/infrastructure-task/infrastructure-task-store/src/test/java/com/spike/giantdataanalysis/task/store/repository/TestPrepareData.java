@@ -1,12 +1,10 @@
 package com.spike.giantdataanalysis.task.store.repository;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,14 +15,13 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.spike.giantdataanalysis.task.store.beans.TaskInfoWorkloadShard;
 import com.spike.giantdataanalysis.task.store.domain.TaskInfo;
 
 // 注意: 不回滚事务.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @Rollback(false)
-public class TestTaskInfoRepository {
+public class TestPrepareData {
 
   @Autowired
   private TaskInfoRepository taskInfoDao;
@@ -34,19 +31,6 @@ public class TestTaskInfoRepository {
   @Before
   public void setUp() {
     objectMapper = new ObjectMapper();
-  }
-
-  @Test
-  public void resources() {
-    Assert.assertNotNull(taskInfoDao);
-    Assert.assertNotNull(objectMapper);
-  }
-
-  @Test
-  public void query() {
-    Set<String> workloadIds = StatisticDataFactory.I().getWorkloadIds(9);
-    List<TaskInfoWorkloadShard> result = taskInfoDao.queryWorkloadShardCount(workloadIds);
-    System.out.println(result);
   }
 
   @Test
@@ -78,12 +62,4 @@ public class TestTaskInfoRepository {
     }
 
   }
-
-  @Test
-  public void nativeQuery() {
-    Set<String> workloadIds = StatisticDataFactory.I().getWorkloadIds(9);
-    List<TaskInfo> result = taskInfoDao.queryLastFinishedRegularTaskInfos(workloadIds);
-    System.out.println(result);
-  }
-
 }

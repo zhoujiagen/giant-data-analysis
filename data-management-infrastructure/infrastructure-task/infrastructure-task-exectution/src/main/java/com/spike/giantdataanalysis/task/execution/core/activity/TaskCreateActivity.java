@@ -7,29 +7,35 @@ import org.slf4j.LoggerFactory;
 import com.spike.giantdataanalysis.task.execution.application.core.ApplicationWorkloadCreator;
 import com.spike.giantdataanalysis.task.execution.application.core.ApplicationWorkloadHandler;
 import com.spike.giantdataanalysis.task.execution.config.TaskExecutionProperties;
+import com.spike.giantdataanalysis.task.execution.core.context.DefaultTaskExecutionContext;
 import com.spike.giantdataanalysis.task.execution.exception.TaskExecutionException;
+import com.spike.giantdataanalysis.task.store.service.TaskStoreService;
 
 /**
  * 任务创建活动实体.
  * @author zhoujiagen
  */
-public class TaskCreateActivity extends AbstractTaskActivity {
+public final class TaskCreateActivity extends AbstractTaskActivity {
   private static final Logger LOG = LoggerFactory.getLogger(TaskCreateActivity.class);
-
-  private TaskExecutionProperties config;
 
   private long checkWorkPeriod;
 
-  public TaskCreateActivity(String id, TaskExecutionProperties config) {
+  public TaskCreateActivity(String id, TaskExecutionProperties config,
+      TaskStoreService taskStoreService) {
     super(id);
     this.config = config;
+    this.taskStoreService = taskStoreService;
   }
 
   @Override
   public void initialize() throws TaskExecutionException {
     LOG.info("执行初始化工作 START");
 
-    checkWorkPeriod = config.getCreatorConfig().getCheckWorkPeriod();
+    checkWorkPeriod = config.getCreator().getCheckWorkPeriod();
+
+    context = new DefaultTaskExecutionContext();
+    context.setTaskStoreService(taskStoreService);
+    context.setConfig(config);
 
     LOG.info("执行初始化工作 END");
   }
@@ -44,7 +50,7 @@ public class TaskCreateActivity extends AbstractTaskActivity {
 
     if (MapUtils.isNotEmpty(workloadHandlers)) {
       for (String id : workloadHandlers.keySet()) {
-        workloadHandlers.get(id).handle();
+        workloadHandlers.get(id).handle(context);
       }
     }
 

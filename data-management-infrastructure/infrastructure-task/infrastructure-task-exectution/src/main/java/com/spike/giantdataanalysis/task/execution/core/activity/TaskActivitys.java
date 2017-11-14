@@ -48,35 +48,50 @@ public class TaskActivitys {
   // TODO(zhoujiagen) 改为使用反射方式创建???
 
   public TaskCreateActivity newTaskCreateActivity(String id) {
-    LOG.info("创建活动定义: {}, id: {}", TaskCreateActivity.class.getSimpleName(), id);
+    LOG.info("创建任务创建活动: {}, id: {}", TaskCreateActivity.class.getSimpleName(), id);
 
-    TaskCreateActivity taskActivity = new TaskCreateActivity(id, config);
+    TaskCreateActivity taskActivity = new TaskCreateActivity(id, config, taskStore);
+    ApplicationWorkloadCreator bean = null;
     for (String beanName : workloadCreators.keySet()) {
-      taskActivity.registWorkloadHandler(beanName, workloadCreators.get(beanName));
+      bean = workloadCreators.get(beanName);
+      bean.assignId(beanName);
+      taskActivity.registWorkloadHandler(beanName, bean);
     }
+
     this.add(TaskCreateActivity.class.getSimpleName(), taskActivity);
+
     return taskActivity;
   }
 
   public TaskAssignmentActivity newTaskAssignmentActivity(String id) {
-    LOG.info("创建活动定义: {}, id: {}", TaskAssignmentActivity.class.getSimpleName(), id);
+    LOG.info("创建任务指派活动: {}, id: {}", TaskAssignmentActivity.class.getSimpleName(), id);
 
-    TaskAssignmentActivity taskActivity = new TaskAssignmentActivity(id, config);
+    TaskAssignmentActivity taskActivity = new TaskAssignmentActivity(id, config, taskStore);
+    ApplicationWorkloadAssignor bean = null;
     for (String beanName : workloadAssignors.keySet()) {
-      taskActivity.registWorkloadHandler(beanName, workloadAssignors.get(beanName));
+      bean = workloadAssignors.get(beanName);
+      bean.assignId(beanName);
+      taskActivity.registWorkloadHandler(beanName, bean);
     }
+
     this.add(TaskAssignmentActivity.class.getSimpleName(), taskActivity);
+
     return taskActivity;
   }
 
   public TaskExecuteActivity newTaskExecuteActivity(String id) {
-    LOG.info("创建活动定义: {}, id: {}", TaskExecuteActivity.class.getSimpleName(), id);
+    LOG.info("创建任务执行活动: {}, id: {}", TaskExecuteActivity.class.getSimpleName(), id);
 
-    TaskExecuteActivity taskActivity = new TaskExecuteActivity(id, config);
+    TaskExecuteActivity taskActivity = new TaskExecuteActivity(id, config, taskStore);
+    ApplicationWorkloadExecutor bean = null;
     for (String beanName : workloadExecutors.keySet()) {
-      taskActivity.registWorkloadHandler(beanName, workloadExecutors.get(beanName));
+      bean = workloadExecutors.get(beanName);
+      bean.assignId(beanName);
+      taskActivity.registWorkloadHandler(beanName, bean);
     }
+
     this.add(TaskExecuteActivity.class.getSimpleName(), taskActivity);
+
     return taskActivity;
   }
 

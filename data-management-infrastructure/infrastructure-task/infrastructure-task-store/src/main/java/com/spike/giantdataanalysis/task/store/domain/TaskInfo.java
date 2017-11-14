@@ -42,7 +42,7 @@ public class TaskInfo extends BaseModel {
   @Comment("任务类型")
   @Enumerated(EnumType.STRING)
   @Column(name = "task_type")
-  private TaskType taskType = TaskType.REGUALR;
+  private TaskInfo.TaskType taskType = TaskInfo.TaskType.REGUALR;
 
   @Comment("任务是否已指派标志")
   @Column(name = "is_assigned")
@@ -51,7 +51,7 @@ public class TaskInfo extends BaseModel {
   @Comment("任务状态")
   @Enumerated(EnumType.STRING)
   @Column(name = "task_status")
-  private TaskExecution.TaskStatus taskStatus;
+  private TaskExecution.TaskStatus taskStatus = TaskExecution.TaskStatus.READY;
 
   /**
    * @return 任务定义是否有效
@@ -88,11 +88,11 @@ public class TaskInfo extends BaseModel {
     this.workloadSize = workloadSize;
   }
 
-  public TaskType getTaskType() {
+  public TaskInfo.TaskType getTaskType() {
     return taskType;
   }
 
-  public void setTaskType(TaskType taskType) {
+  public void setTaskType(TaskInfo.TaskType taskType) {
     this.taskType = taskType;
   }
 
@@ -110,6 +110,13 @@ public class TaskInfo extends BaseModel {
 
   public void setAssigned(boolean assigned) {
     this.assigned = assigned;
+  }
+
+  @Override
+  public String toString() {
+    return "TaskInfo [workloadShardKey=" + workloadShardKey + ", workloadShardInfo="
+        + workloadShardInfo + ", workloadSize=" + workloadSize + ", taskType=" + taskType
+        + ", assigned=" + assigned + ", taskStatus=" + taskStatus + "]";
   }
 
 }

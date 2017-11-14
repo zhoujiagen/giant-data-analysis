@@ -23,7 +23,9 @@ public class TestTaskExecutionProperties {
 
     String membershippath = taskExecutionProperties.getCoordination().getMembershippath();
     System.err.println(membershippath);
-    Assert.assertNotNull(membershippath);
+
+    System.err.println(taskExecutionProperties.getCreator().getInitStart());
+    System.err.println(taskExecutionProperties.getCreator().getInitEnd());
   }
 
 }

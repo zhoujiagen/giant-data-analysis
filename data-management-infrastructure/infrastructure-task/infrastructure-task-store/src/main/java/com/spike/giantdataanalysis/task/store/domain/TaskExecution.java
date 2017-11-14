@@ -11,6 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import com.spike.giantdataanalysis.task.store.annotation.Comment;
 
@@ -58,11 +59,15 @@ public class TaskExecution extends BaseModel {
   @Comment("任务状态")
   @Enumerated(EnumType.STRING)
   @Column(name = "task_status")
-  private TaskStatus taskStatus;
+  private TaskExecution.TaskStatus taskStatus;
 
   @Comment("任务状态信息")
   @Column(name = "task_status_info")
   private String taskStatusInfo;
+
+  // ======================================== 临时字段
+  @Transient
+  private long taskInfoId;
 
   public TaskAssignment getTaskAssignment() {
     return taskAssignment;
@@ -96,11 +101,11 @@ public class TaskExecution extends BaseModel {
     this.endTime = endTime;
   }
 
-  public TaskStatus getTaskStatus() {
+  public TaskExecution.TaskStatus getTaskStatus() {
     return taskStatus;
   }
 
-  public void setTaskStatus(TaskStatus taskStatus) {
+  public void setTaskStatus(TaskExecution.TaskStatus taskStatus) {
     this.taskStatus = taskStatus;
   }
 
@@ -126,6 +131,22 @@ public class TaskExecution extends BaseModel {
 
   public void setWorkloadProgress(long workloadProgress) {
     this.workloadProgress = workloadProgress;
+  }
+
+  @Override
+  public String toString() {
+    return "TaskExecution [taskAssignment=" + taskAssignment + ", taskAssignmentId="
+        + taskAssignmentId + ", workerId=" + workerId + ", workloadProgress=" + workloadProgress
+        + ", startTime=" + startTime + ", endTime=" + endTime + ", taskStatus=" + taskStatus
+        + ", taskStatusInfo=" + taskStatusInfo + "]";
+  }
+
+  public long getTaskInfoId() {
+    return taskInfoId;
+  }
+
+  public void setTaskInfoId(long taskInfoId) {
+    this.taskInfoId = taskInfoId;
   }
 
 }

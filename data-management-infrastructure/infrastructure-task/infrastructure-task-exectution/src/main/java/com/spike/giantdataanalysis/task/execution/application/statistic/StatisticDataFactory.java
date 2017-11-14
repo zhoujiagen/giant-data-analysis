@@ -1,8 +1,8 @@
 package com.spike.giantdataanalysis.task.execution.application.statistic;
 
-import java.util.List;
+import java.util.Set;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 public class StatisticDataFactory {
   private static final StatisticDataFactory INSTANCE = new StatisticDataFactory();
@@ -14,8 +14,16 @@ public class StatisticDataFactory {
     return INSTANCE;
   }
 
-  public List<Long> getWorkloadIds() {
-    return Lists.newArrayList(1l, 2l, 3l, 4l, 5l, 6l, 7l, 8l, 9l);
+  public Set<String> getWorkloadIds(int size) {
+    if (size <= 0) {
+      size = 10;
+    }
+    Set<String> result = Sets.newHashSet();
+    for (int i = 1; i <= size; i++) {
+      result.add(String.valueOf(i));
+    }
+
+    return result;
   }
 
 }

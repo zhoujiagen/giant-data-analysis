@@ -6,17 +6,29 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Maps;
 import com.spike.giantdataanalysis.task.execution.application.core.ApplicationWorkloadHandler;
+import com.spike.giantdataanalysis.task.execution.config.TaskExecutionProperties;
+import com.spike.giantdataanalysis.task.execution.core.context.DefaultTaskExecutionContext;
 import com.spike.giantdataanalysis.task.execution.exception.TaskExecutionException;
+import com.spike.giantdataanalysis.task.store.service.TaskStoreService;
 
-public abstract class AbstractTaskActivity implements TaskActivity {
+abstract class AbstractTaskActivity implements TaskActivity {
   private static final Logger LOG = LoggerFactory.getLogger(AbstractTaskActivity.class);
 
   protected String id;
   protected volatile boolean enabled = true;
 
+  /** Map[Bean名称, 应用负载处理器] */
   protected Map<String, ApplicationWorkloadHandler> workloadHandlers = Maps.newConcurrentMap();
+
+  protected TaskStoreService taskStoreService;
+  protected TaskExecutionProperties config;
+  /** 任务执行上下文 */
+  protected DefaultTaskExecutionContext context;
+
+  protected ObjectMapper objectMapper = new ObjectMapper();
 
   public AbstractTaskActivity(String id) {
     this.id = id;

@@ -26,7 +26,7 @@ public class TaskExecutionProperties {
   private long checkAlivePeriod;
 
   // ======================================== task.creator.*
-  private final Creator creatorConfig = new Creator();
+  private final Creator creator = new Creator();
 
   public class Creator {
 
@@ -60,7 +60,7 @@ public class TaskExecutionProperties {
   }
 
   // ======================================== task.assignor.*
-  private final Assignor assignorConfig = new Assignor();
+  private final Assignor assignor = new Assignor();
 
   public class Assignor {
     private long checkWorkPeriod;
@@ -76,7 +76,7 @@ public class TaskExecutionProperties {
   }
 
   // ======================================== task.executor.*
-  private final Executor executorConfig = new Executor();
+  private final Executor executor = new Executor();
 
   public class Executor {
     private long checkWorkPeriod;
@@ -167,16 +167,16 @@ public class TaskExecutionProperties {
     return coordination;
   }
 
-  public Creator getCreatorConfig() {
-    return creatorConfig;
+  public Creator getCreator() {
+    return creator;
   }
 
-  public Assignor getAssignorConfig() {
-    return assignorConfig;
+  public Assignor getAssignor() {
+    return assignor;
   }
 
-  public Executor getExecutorConfig() {
-    return executorConfig;
+  public Executor getExecutor() {
+    return executor;
   }
 
 }

@@ -17,19 +17,19 @@ import com.spike.giantdataanalysis.coordination.group.GroupCoordination;
 import com.spike.giantdataanalysis.task.execution.application.core.ApplicationWorkloadAssignor;
 import com.spike.giantdataanalysis.task.execution.application.core.ApplicationWorkloadHandler;
 import com.spike.giantdataanalysis.task.execution.config.TaskExecutionProperties;
+import com.spike.giantdataanalysis.task.execution.core.context.DefaultTaskExecutionContext;
 import com.spike.giantdataanalysis.task.execution.core.executor.TaskExecutorDuty;
 import com.spike.giantdataanalysis.task.execution.core.executor.TaskExecutorInfo;
 import com.spike.giantdataanalysis.task.execution.exception.TaskExecutionException;
+import com.spike.giantdataanalysis.task.store.service.TaskStoreService;
 
 /**
  * 任务指派活动实体.
  * @author zhoujiagen
  */
-public class TaskAssignmentActivity extends AbstractTaskActivity {
+public final class TaskAssignmentActivity extends AbstractTaskActivity {
 
   private static final Logger LOG = LoggerFactory.getLogger(TaskAssignmentActivity.class);
-
-  private TaskExecutionProperties config;
 
   // 群组协同
   private GroupCoordination groupCoordination;
@@ -38,16 +38,21 @@ public class TaskAssignmentActivity extends AbstractTaskActivity {
 
   private long checkWorkPeriod;
 
-  public TaskAssignmentActivity(String id, TaskExecutionProperties config) {
+  public TaskAssignmentActivity(String id, TaskExecutionProperties config,
+      TaskStoreService taskStoreService) {
     super(id);
     this.config = config;
+    this.taskStoreService = taskStoreService;
   }
 
   @Override
   public void initialize() throws TaskExecutionException {
     LOG.info("执行初始化工作 START");
 
-    checkWorkPeriod = config.getAssignorConfig().getCheckWorkPeriod();
+    checkWorkPeriod = config.getAssignor().getCheckWorkPeriod();
+    context = new DefaultTaskExecutionContext();
+    context.setConfig(config);
+    context.setTaskStoreService(taskStoreService);
 
     String zookeeperConnectionString = config.getCoordination().getZookeeperConnectionString();
     String membershipPath = config.getCoordination().getMembershippath();
@@ -75,7 +80,6 @@ public class TaskAssignmentActivity extends AbstractTaskActivity {
   /**
    * 获取当前可用的Worker ID集合.
    */
-  @SuppressWarnings("unused")
   private Set<String> getCurrentAvailableWorkers() {
     Set<String> result = Sets.newHashSet();
 
@@ -110,9 +114,12 @@ public class TaskAssignmentActivity extends AbstractTaskActivity {
   protected void doPlay() throws TaskExecutionException {
     LOG.info("{}开始执行, 使用负载处理器: {}", this.getClass().getSimpleName(), workloadHandlers);
 
+    // 获取当前可用的工作者
+    context.setWorkers(this.getCurrentAvailableWorkers());
+
     if (MapUtils.isNotEmpty(workloadHandlers)) {
       for (String id : workloadHandlers.keySet()) {
-        workloadHandlers.get(id).handle();
+        workloadHandlers.get(id).handle(context);
       }
     }
 
