@@ -9,6 +9,7 @@
 	metrics-log4j
 	metrics-ganglia
 	metrics-jvm
+	metrics-servlets
 
 
 # 1 资源

@@ -18,7 +18,6 @@ public class ExampleTimer {
     void handlRequest(Request request, Response response) {
       Timer timer = ExampleMetricsHolder.I().timer(TIMERNAME);
       Timer.Context context = timer.time();
-      ExampleMetricsHolder.I().timer(TIMERNAME);
 
       long randomLong = new Random(new Date().getTime()).nextLong();
       if (randomLong < 0) randomLong = -randomLong;
