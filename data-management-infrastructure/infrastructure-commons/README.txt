@@ -14,3 +14,9 @@ jackson-dataformat-yaml: https://github.com/FasterXML/jackson-dataformats-text
 
 YEdit: an Eclipse editor for editing YAML files. http://marketplace.eclipse.org/content/yedit
 
+########################################################################
+文档性注解
+########################################################################
+见com.spike.giantdataanalysis.commons.annotation.
+
+

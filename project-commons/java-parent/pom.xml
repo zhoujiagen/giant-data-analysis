@@ -44,6 +44,7 @@
 
 		<!-- data-models -->
 		<module>../../data-models/datamodel-graph</module>
+		<module>../../data-models/datamodel-algorithms</module>
 
 	</modules>
 
