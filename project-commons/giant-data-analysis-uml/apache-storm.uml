@@ -1,2 +1,136 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_zLFqUATPEeeayaPQDZoXQw" name="storm"/>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_zLFqUATPEeeayaPQDZoXQw" name="storm">
+  <packagedElement xmi:type="uml:Class" xmi:id="_wxeHEO38Eee_eruW0QBbZw" name="BaseRichSpout">
+    <generalization xmi:id="_amZ9oO39Eee_eruW0QBbZw" general="_yDM0sO38Eee_eruW0QBbZw"/>
+    <interfaceRealization xmi:id="_pOjSwO39Eee_eruW0QBbZw" client="_wxeHEO38Eee_eruW0QBbZw" supplier="_gG1gUO39Eee_eruW0QBbZw" contract="_gG1gUO39Eee_eruW0QBbZw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_xqmugO38Eee_eruW0QBbZw" name="BaseRichBolt">
+    <generalization xmi:id="_c1iusO39Eee_eruW0QBbZw" general="_yDM0sO38Eee_eruW0QBbZw"/>
+    <interfaceRealization xmi:id="_Tf9tIO4CEee_eruW0QBbZw" client="_xqmugO38Eee_eruW0QBbZw" supplier="_LsqI4O4CEee_eruW0QBbZw" contract="_LsqI4O4CEee_eruW0QBbZw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_yDM0sO38Eee_eruW0QBbZw" name="BaseComponent" isAbstract="true"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_Stb2QO39Eee_eruW0QBbZw" name="IComponent">
+    <generalization xmi:id="_wKtMkO39Eee_eruW0QBbZw" general="_tGX44O39Eee_eruW0QBbZw"/>
+    <ownedOperation xmi:id="_pH6tAO4CEee_eruW0QBbZw" name="declareOutputFields">
+      <ownedParameter xmi:id="_04szcO4CEee_eruW0QBbZw" name="declarer" type="_rl1g8O4CEee_eruW0QBbZw"/>
+    </ownedOperation>
+    <ownedOperation xmi:id="_CnfesO4DEee_eruW0QBbZw" name="getComponentConfiguration"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_gG1gUO39Eee_eruW0QBbZw" name="IRichSpout">
+    <generalization xmi:id="_nMWKcO39Eee_eruW0QBbZw" general="_i2YPwO39Eee_eruW0QBbZw"/>
+    <generalization xmi:id="_nyC4gO39Eee_eruW0QBbZw" general="_Stb2QO39Eee_eruW0QBbZw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_i2YPwO39Eee_eruW0QBbZw" name="ISpout">
+    <generalization xmi:id="_vraogO39Eee_eruW0QBbZw" general="_tGX44O39Eee_eruW0QBbZw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_tGX44O39Eee_eruW0QBbZw" name="java.io.Serializable"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_LsqI4O4CEee_eruW0QBbZw" name="IRichBolt">
+    <generalization xmi:id="_PDKxsO4CEee_eruW0QBbZw" general="_N5bicO4CEee_eruW0QBbZw"/>
+    <generalization xmi:id="_PsfbgO4CEee_eruW0QBbZw" general="_Stb2QO39Eee_eruW0QBbZw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_N5bicO4CEee_eruW0QBbZw" name="IBolt">
+    <generalization xmi:id="_W5MSwO4CEee_eruW0QBbZw" general="_tGX44O39Eee_eruW0QBbZw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_rl1g8O4CEee_eruW0QBbZw" name="OutputFieldsDeclarer"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_otAnwO4EEee_eruW0QBbZw" name="SpoutOutputCollector">
+    <interfaceRealization xmi:id="_Hnos4O4FEee_eruW0QBbZw" client="_otAnwO4EEee_eruW0QBbZw" supplier="_s-m_0O4EEee_eruW0QBbZw" contract="_s-m_0O4EEee_eruW0QBbZw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_s-m_0O4EEee_eruW0QBbZw" name="ISpoutOutputCollector">
+    <generalization xmi:id="_F9dDAO4FEee_eruW0QBbZw" general="_2qGNsO4EEee_eruW0QBbZw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_2qGNsO4EEee_eruW0QBbZw" name="IErrorReporter"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_6YbgoO4EEee_eruW0QBbZw" name="OutputCollector">
+    <interfaceRealization xmi:id="_IEbWkO4FEee_eruW0QBbZw" client="_6YbgoO4EEee_eruW0QBbZw" supplier="_9zocMO4EEee_eruW0QBbZw" contract="_9zocMO4EEee_eruW0QBbZw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_9zocMO4EEee_eruW0QBbZw" name="IOutputCollector">
+    <generalization xmi:id="_Gfdj4O4FEee_eruW0QBbZw" general="_2qGNsO4EEee_eruW0QBbZw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_MC4JIO4FEee_eruW0QBbZw" name="Tuple">
+    <generalization xmi:id="_QBiXEO4FEee_eruW0QBbZw" general="_N6UL4O4FEee_eruW0QBbZw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_N6UL4O4FEee_eruW0QBbZw" name="ITuple"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_8tFF8O7XEee_eruW0QBbZw" name="TopologyBuilder"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_Dw01gO7YEee_eruW0QBbZw" name="StormTopology">
+    <interfaceRealization xmi:id="_MuvLsO7YEee_eruW0QBbZw" client="_Dw01gO7YEee_eruW0QBbZw" supplier="_KZS-UO7YEee_eruW0QBbZw" contract="_KZS-UO7YEee_eruW0QBbZw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_KZS-UO7YEee_eruW0QBbZw" name="org.apache.thrift.TBase"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_SQrKQO7YEee_eruW0QBbZw" name="TridentTopology"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_cm0esO7YEee_eruW0QBbZw" name="Stream">
+    <interfaceRealization xmi:id="_UfQvcO7dEee_eruW0QBbZw" client="_cm0esO7YEee_eruW0QBbZw" supplier="_QQVQ4O7dEee_eruW0QBbZw" contract="_QQVQ4O7dEee_eruW0QBbZw"/>
+    <interfaceRealization xmi:id="_U-C9MO7dEee_eruW0QBbZw" client="_cm0esO7YEee_eruW0QBbZw" supplier="_TZkSsO7dEee_eruW0QBbZw" contract="_TZkSsO7dEee_eruW0QBbZw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_4G1WwO7bEee_eruW0QBbZw" name="ITridentSpout">
+    <generalization xmi:id="_8l5jEO7bEee_eruW0QBbZw" general="_7LaiEO7bEee_eruW0QBbZw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_7LaiEO7bEee_eruW0QBbZw" name="ITridentDataSource"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_KiINYO7cEee_eruW0QBbZw" name="TopologyContext">
+    <generalization xmi:id="_S2w9EO7cEee_eruW0QBbZw" general="_MdxasO7cEee_eruW0QBbZw"/>
+    <interfaceRealization xmi:id="_YcRNAO7cEee_eruW0QBbZw" client="_KiINYO7cEee_eruW0QBbZw" supplier="_XIDMEO7cEee_eruW0QBbZw" contract="_XIDMEO7cEee_eruW0QBbZw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_MdxasO7cEee_eruW0QBbZw" name="WorkerTopologyContext">
+    <generalization xmi:id="_T90EsO7cEee_eruW0QBbZw" general="_Or--sO7cEee_eruW0QBbZw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_Or--sO7cEee_eruW0QBbZw" name="GeneralTopologyContext"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_XIDMEO7cEee_eruW0QBbZw" name="IMetricsContext"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_nRXZAO7cEee_eruW0QBbZw" name="ITridentSpout.BatchCoordinator"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_pQwd4O7cEee_eruW0QBbZw" name="ITridentSpout.Emitter"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_AaTzYO7dEee_eruW0QBbZw" name="Filter">
+    <generalization xmi:id="_JOPHIO7dEee_eruW0QBbZw" general="_CfFHgO7dEee_eruW0QBbZw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_CfFHgO7dEee_eruW0QBbZw" name="EachOperation">
+    <generalization xmi:id="_Jta9gO7dEee_eruW0QBbZw" general="_Ec4Q8O7dEee_eruW0QBbZw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_Ec4Q8O7dEee_eruW0QBbZw" name="Operation"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_QQVQ4O7dEee_eruW0QBbZw" name="IAggregatableStream"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_TZkSsO7dEee_eruW0QBbZw" name="ResourceDeclarer"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_qBVPIO7wEee_eruW0QBbZw" name="BaseFilter" isAbstract="true">
+    <generalization xmi:id="_ynS_YO7wEee_eruW0QBbZw" general="_uPOy8O7wEee_eruW0QBbZw"/>
+    <interfaceRealization xmi:id="_rsja0O7wEee_eruW0QBbZw" client="_qBVPIO7wEee_eruW0QBbZw" supplier="_AaTzYO7dEee_eruW0QBbZw" contract="_AaTzYO7dEee_eruW0QBbZw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_uPOy8O7wEee_eruW0QBbZw" name="BaseOperation">
+    <interfaceRealization xmi:id="_wuTdcO7wEee_eruW0QBbZw" client="_uPOy8O7wEee_eruW0QBbZw" supplier="_Ec4Q8O7dEee_eruW0QBbZw" contract="_Ec4Q8O7dEee_eruW0QBbZw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_KsDjcO7yEee_eruW0QBbZw" name="Function">
+    <generalization xmi:id="_L9sxgO7yEee_eruW0QBbZw" general="_CfFHgO7dEee_eruW0QBbZw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_oBHY8O7yEee_eruW0QBbZw" name="TridentTuple">
+    <generalization xmi:id="_qID3UO7yEee_eruW0QBbZw" general="_N6UL4O4FEee_eruW0QBbZw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_0isqMO7yEee_eruW0QBbZw" name="BaseFunction" isAbstract="true">
+    <generalization xmi:id="_3XbboO7yEee_eruW0QBbZw" general="_uPOy8O7wEee_eruW0QBbZw"/>
+    <interfaceRealization xmi:id="_1-ddkO7yEee_eruW0QBbZw" client="_0isqMO7yEee_eruW0QBbZw" supplier="_KsDjcO7yEee_eruW0QBbZw" contract="_KsDjcO7yEee_eruW0QBbZw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_s9sLMO7zEee_eruW0QBbZw" name="Aggregator">
+    <generalization xmi:id="_wxvEkO7zEee_eruW0QBbZw" general="_Ec4Q8O7dEee_eruW0QBbZw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_3F0RwO7zEee_eruW0QBbZw" name="CombinerAggregator"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_6KPsEO7zEee_eruW0QBbZw" name="ReducerAggregator"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_GLLHUO70Eee_eruW0QBbZw" name="TridentCollector"/>
+  <packagedElement xmi:type="uml:Dependency" xmi:id="_LamZkO70Eee_eruW0QBbZw" client="_4G1WwO7bEee_eruW0QBbZw" supplier="_nRXZAO7cEee_eruW0QBbZw"/>
+  <packagedElement xmi:type="uml:Dependency" xmi:id="_Mh-4YO70Eee_eruW0QBbZw" client="_4G1WwO7bEee_eruW0QBbZw" supplier="_pQwd4O7cEee_eruW0QBbZw"/>
+  <packagedElement xmi:type="uml:Dependency" xmi:id="_OqYvUO70Eee_eruW0QBbZw" client="_pQwd4O7cEee_eruW0QBbZw" supplier="_GLLHUO70Eee_eruW0QBbZw"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_Bw1NgO71Eee_eruW0QBbZw" name="GroupedStream">
+    <interfaceRealization xmi:id="_FqjREO71Eee_eruW0QBbZw" client="_Bw1NgO71Eee_eruW0QBbZw" supplier="_QQVQ4O7dEee_eruW0QBbZw" contract="_QQVQ4O7dEee_eruW0QBbZw"/>
+    <interfaceRealization xmi:id="_KQ80cO71Eee_eruW0QBbZw" client="_Bw1NgO71Eee_eruW0QBbZw" supplier="_IBWwYO71Eee_eruW0QBbZw" contract="_IBWwYO71Eee_eruW0QBbZw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_IBWwYO71Eee_eruW0QBbZw" name="GlobalAggregationScheme"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_JhJAwO74Eee_eruW0QBbZw" name="State"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_MSo4AO74Eee_eruW0QBbZw" name="TransactionalMap">
+    <interfaceRealization xmi:id="_beaeoO74Eee_eruW0QBbZw" client="_MSo4AO74Eee_eruW0QBbZw" supplier="_NweH8O74Eee_eruW0QBbZw" contract="_NweH8O74Eee_eruW0QBbZw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_NweH8O74Eee_eruW0QBbZw" name="MapState">
+    <generalization xmi:id="_fP0TsO74Eee_eruW0QBbZw" general="_ReU5wO74Eee_eruW0QBbZw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_ReU5wO74Eee_eruW0QBbZw" name="ReadOnlyMapState">
+    <generalization xmi:id="_gJXx4O74Eee_eruW0QBbZw" general="_JhJAwO74Eee_eruW0QBbZw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_WqUdgO74Eee_eruW0QBbZw" name="NonTransactionalMap">
+    <interfaceRealization xmi:id="_cAnMwO74Eee_eruW0QBbZw" client="_WqUdgO74Eee_eruW0QBbZw" supplier="_NweH8O74Eee_eruW0QBbZw" contract="_NweH8O74Eee_eruW0QBbZw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_aIRyIO74Eee_eruW0QBbZw" name="OpaqueMap">
+    <interfaceRealization xmi:id="_cmnc0O74Eee_eruW0QBbZw" client="_aIRyIO74Eee_eruW0QBbZw" supplier="_NweH8O74Eee_eruW0QBbZw" contract="_NweH8O74Eee_eruW0QBbZw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_KS5GcO77Eee_eruW0QBbZw" name="StateUpdater">
+    <generalization xmi:id="_NLg5YO77Eee_eruW0QBbZw" general="_Ec4Q8O7dEee_eruW0QBbZw"/>
+  </packagedElement>
+</uml:Model>
