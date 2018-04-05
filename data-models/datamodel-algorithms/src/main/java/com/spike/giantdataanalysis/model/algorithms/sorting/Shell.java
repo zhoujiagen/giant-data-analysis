@@ -8,7 +8,8 @@ import com.spike.giantdataanalysis.model.algorithms.sorting.core.SortingData;
  * 希尔排序.
  * 
  * <pre>
- * 插入排序的扩展: 一次比较移动相邻的元素 => 先将多个相距较远的h序列分别排序, 使得部分有序, 最终使用插入排序完成.
+ * h有序数组: 数组中任意间隔为h的元素都是有序的;
+ * 插入排序的扩展: 一次比较移动相邻的元素 => 先将多个各元素相距较远的h序列分别排序, 使得部分有序, 最终使用插入排序完成.
  * 
  * </pre>
  * @author zhoujiagen

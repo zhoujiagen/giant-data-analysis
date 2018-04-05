@@ -9,10 +9,8 @@
  * 基于有序数组的二分查找: BinarySearchST
  * 二叉查找树: BinarySearchTreeST
  * 
- * 
- * TODO 待实现的搜索用符号表 
- * 平衡查找树: 2-3查找树, 红黑二叉查找树.
- * 散列表: 拉链法, 线性探测法
+ * 平衡查找树: 2-3查找树, 红黑二叉查找树RedBlackBST.
+ * 散列表: 拉链法SeparateChainingHashST, 线性探测法LinearProbingHashST
  * 
  * </pre>
  * @author zhoujiagen

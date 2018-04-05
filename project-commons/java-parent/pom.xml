@@ -16,7 +16,9 @@
 
 	<modules>
 		<!-- data-management-infrastructure -->
-		<module>../../data-management-infrastructure/infrastructure-benchmark</module>
+		<module>../../data-management-infrastructure/infrastructure-test</module>
+		<module>../../data-management-infrastructure/infrastructure-commons</module>
+		<!--
 		<module>../../data-management-infrastructure/infrastructure-etl</module>
 		<module>../../data-management-infrastructure/infrastructure-netty</module>
 		<module>../../data-management-infrastructure/infrastructure-jetty</module>
@@ -25,26 +27,34 @@
 		<module>../../data-management-infrastructure/infrastructure-apache-hadoop</module>
 		<module>../../data-management-infrastructure/infrastructure-apache-hbase</module>
 		<module>../../data-management-infrastructure/infrastructure-opentsdb</module>
-		<module>../../data-management-infrastructure/infrastructure-coordination</module>
-		<module>../../data-management-infrastructure/infrastructure-task</module>
-		<module>../../data-management-infrastructure/infrastructure-test</module>
-		<module>../../data-management-infrastructure/infrastructure-commons</module>
-		<module>../../data-management-infrastructure/infrastructure-pipeline</module>
+		-->
+
+		<!-- data-pipeline -->
+		<module>../../data-pipeline/infrastructure-pipeline</module>
+		<module>../../data-pipeline/infrastructure-communication</module>
+		<module>../../data-pipeline/infrastructure-coordination</module>
+		<module>../../data-pipeline/infrastructure-task</module>
+		<module>../../data-pipeline/infrastructure-benchmark</module>
 
 		<!-- data-representation -->
+		<!--
 		<module>../../data-representation/representation-titan</module>
 		<module>../../data-representation/representation-apache-tinkerpop</module>
 		<module>../../data-representation/representation-apache-jena</module>
 		<module>../../data-representation/representation-apache-giraph</module>
 		<module>../../data-representation/representation-neo4j</module>
+		-->
 
 		<!-- temporal-data-and-realtime-algorithm -->
 		<module>../../temporal-data-and-realtime-algorithm/temporal-apache-storm</module>
 		<module>../../temporal-data-and-realtime-algorithm/temporal-apache-kafka</module>
+		<module>../../temporal-data-and-realtime-algorithm/temporal-apache-flink</module>
 
 		<!-- data-models -->
+		<!--
 		<module>../../data-models/datamodel-graph</module>
 		<module>../../data-models/datamodel-algorithms</module>
+		-->
 
 	</modules>
 
@@ -85,7 +95,7 @@
 		<netty.version>4.1.8.Final</netty.version>
 		<jetty.version>9.4.3.v20170317</jetty.version>
 		<opentsdb.version>2.3.0</opentsdb.version>
-		<flink.version>1.3.2</flink.version>
+
 		<!-- representation -->
 		<titan.version>1.0.0</titan.version>
 		<tinkerpop.version>3.2.3</tinkerpop.version>
@@ -97,7 +107,8 @@
 		<!-- temporal -->
 		<storm.version>0.9.7</storm.version>
 		<twitter4j.version>4.0.6</twitter4j.version>
-		<kafka.version>0.9.0.0</kafka.version>
+		<kafka.version>0.9.0.1</kafka.version> <!-- change at 20180312 -->
+		<flink.version>1.4.2</flink.version> <!-- change at 20180312 -->
 	</properties>
 
 	<dependencyManagement>
