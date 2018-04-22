@@ -22,6 +22,19 @@
 
 # 内容
 
+
+########################################################################
+## 数据管道
+########################################################################
+
++ infrastructure-pipeline - Data Transform Pipeline ahead of Data Analysis
+
++ infrastructure-benchmark - Performance Beanchmark
++ infrastructure-communication - Communication practices
++ infrastructure-coordination - Distributed Coordination: leader election, grouping, lock, etc
++ infrastructure-task - Task Partition and Execution
+
+
 ########################################################################
 ## 1 数据管理基础设施 - data-management-infrastructure
 ########################################################################
@@ -42,12 +55,8 @@
 
 + infrastructure-commons - 公共依赖项目
 + infrastructure-test - 测试
-+ infrastructure-benchmark - Performance Beanchmark
-+ infrastructure-etl - Data ETL
-+ infrastructure-coordination - Distributed Coordination: leader election, grouping, lock, etc
-+ infrastructure-task - Task Partition and Execution
 
-+ infrastructure-pipeline - Data Transform Pipeline ahead of Data Analysis
++ infrastructure-etl - Data ETL
 
 + infrastructure-python2 - Python2 facilities
 + infrastructure-python3 - Python3 facilities
@@ -56,7 +65,7 @@
 ## 2 时序数据和实时算法 - temporal-data-and-realtime-algorithm
 ########################################################################
 
-+ Apache Kafka 0.9.0.0 - temporal-apache-kafka
++ Apache Kafka 0.9.0.1 - temporal-apache-kafka
 + Apache Storm 0.9.7 - temporal-apache-storm
 + Apache Spark Streaming 1.5.2 - temporal-apache-spark-streaming
 
@@ -89,3 +98,9 @@
 ########################################################################
 ## 7 数据计算巨人 - data-computing-giants
 ########################################################################
+
+########################################################################
+## patches and code trace - patches
+########################################################################
+
++ patches-opentsdb
