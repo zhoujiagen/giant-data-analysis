@@ -9,10 +9,10 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.spike.giantdataanalysis.kafka.support.KafkaConfigurationConstants;
+import com.spike.giantdataanalysis.kafka.support.KafkaConsumerConfigEnum;
 
-public final class KafkaConsumerExample {
-  private static final Logger LOG = LoggerFactory.getLogger(KafkaConsumerExample.class);
+public final class ExampleConsumer {
+  private static final Logger LOG = LoggerFactory.getLogger(ExampleConsumer.class);
 
   /** 组ID */
   public static final String GROUP_NAME = "test";
@@ -20,18 +20,18 @@ public final class KafkaConsumerExample {
   public static void main(String[] args) {
 
     Properties props = new Properties();
-    props.put(KafkaConfigurationConstants.Consumer.BOOTSTRAP_SERVERS.getKey(), "localhost:9092");
+    props.put(KafkaConsumerConfigEnum.BOOTSTRAP_SERVERS.getKey(), "localhost:9092");
     // 消费者所属的组ID
-    props.put(KafkaConfigurationConstants.Consumer.GROUP_ID.getKey(), GROUP_NAME);
+    props.put(KafkaConsumerConfigEnum.GROUP_ID.getKey(), GROUP_NAME);
     // 开启自动提交
-    props.put(KafkaConfigurationConstants.Consumer.ENABLE_AUTO_COMMIT.getKey(), "true");
+    props.put(KafkaConsumerConfigEnum.ENABLE_AUTO_COMMIT.getKey(), "true");
     // 自动提交时间间隔
-    props.put(KafkaConfigurationConstants.Consumer.AUTO_COMMIT_INTERVAL_MS.getKey(), "1000");
+    props.put(KafkaConsumerConfigEnum.AUTO_COMMIT_INTERVAL_MS.getKey(), "1000");
     // 会话超时时间
-    props.put(KafkaConfigurationConstants.Consumer.SESSION_TIMEOUT_MS.getKey(), "30000");
-    props.put(KafkaConfigurationConstants.Consumer.KEY_DESERIALIZER.getKey(),
+    props.put(KafkaConsumerConfigEnum.SESSION_TIMEOUT_MS.getKey(), "30000");
+    props.put(KafkaConsumerConfigEnum.KEY_DESERIALIZER.getKey(),
       "org.apache.kafka.common.serialization.StringDeserializer");
-    props.put(KafkaConfigurationConstants.Consumer.VALUE_DESERIALIZER.getKey(),
+    props.put(KafkaConsumerConfigEnum.VALUE_DESERIALIZER.getKey(),
       "org.apache.kafka.common.serialization.StringDeserializer");
 
     try (KafkaConsumer<String, String> consumer = new KafkaConsumer<>(props);) {
@@ -41,8 +41,7 @@ public final class KafkaConsumerExample {
       while (true) {
         ConsumerRecords<String, String> records = consumer.poll(100);
         for (ConsumerRecord<String, String> record : records) {
-          System.out.printf("offset = %d, key = %s, value = %s\n", //
-            record.offset(), record.key(), record.value());
+          System.out.printf(record.toString());
         }
 
         Thread.sleep(3 * 1000L);

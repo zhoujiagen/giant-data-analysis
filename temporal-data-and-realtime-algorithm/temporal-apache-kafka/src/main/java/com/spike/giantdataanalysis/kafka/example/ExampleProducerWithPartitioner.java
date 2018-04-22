@@ -9,7 +9,6 @@ import java.util.Random;
 import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Partitioner;
-import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.apache.kafka.clients.producer.internals.DefaultPartitioner;
@@ -18,25 +17,38 @@ import org.apache.kafka.common.PartitionInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.spike.giantdataanalysis.kafka.support.KafkaConfigurationConstants;
+import com.spike.giantdataanalysis.kafka.support.KafkaProducerConfigEnum;
 
 /**
  * 带分区功能的Kafka Producer示例
  * @author zhoujiagen
  * @see KafkaProducerExample
  */
-public class KafkaProducerWithPartitionerExample implements AutoCloseable {
+public class ExampleProducerWithPartitioner {
 
-  private static final Logger LOG = LoggerFactory.getLogger(KafkaProducerExample.class);
+  private static final Logger LOG = LoggerFactory.getLogger(ExampleProducerWithPartitioner.class);
 
   private static final Random RANDOM = new Random(new Date().getTime());
 
-  /** 生产者 */
-  private Producer<String, String> kafkaProducer;
-
   public static void main(String[] args) {
+    Properties config = new Properties();
+    config.put(KafkaProducerConfigEnum.BOOTSTRAP_SERVERS.getKey(), "localhost:9092");
+    config.put(KafkaProducerConfigEnum.ACKS.getKey(), "all");
+    config.put(KafkaProducerConfigEnum.RETRIES.getKey(), 0);
+    config.put(KafkaProducerConfigEnum.BATCH_SIZE.getKey(), 16384);
+    config.put(KafkaProducerConfigEnum.LINGER_MS.getKey(), 1);
+    config.put(KafkaProducerConfigEnum.BUFFER_MEMORY.getKey(), 33554432);
+    config.put(KafkaProducerConfigEnum.KEY_SERIALIZER.getKey(),
+      "org.apache.kafka.common.serialization.StringSerializer");
+    config.put(KafkaProducerConfigEnum.VALUE_SERIALIZER.getKey(),
+      "org.apache.kafka.common.serialization.StringSerializer");
 
-    try (KafkaProducerWithPartitionerExample service = new KafkaProducerWithPartitionerExample();) {
+    // 指定分区实现类
+    config.put(KafkaProducerConfigEnum.PARTITIONER_CLASS.getKey(),
+      IPAddressPartitioner.class.getCanonicalName());
+
+    LOG.info("创建生产者...");
+    try (KafkaProducer<String, String> kafkaProducer = new KafkaProducer<String, String>(config);) {
       for (int i = 0; i < 10; i++) {
 
         Date now = new Date();
@@ -47,7 +59,26 @@ public class KafkaProducerWithPartitionerExample implements AutoCloseable {
         String messageKey = "192.168.11." + String.valueOf(lastFragmentInIPAddress);
         String messageValue = "Message Publish time: " + now;
 
-        service.publish(KafkaProducerExample.TOPIC_NAME, messageKey, messageValue);
+        ProducerRecord<String, String> record = new ProducerRecord<String, String>(//
+            ExampleProducer.TOPIC_NAME, //
+            messageKey, //
+            messageValue//
+            );
+
+        Callback callback = new Callback() {
+          @Override
+          public void onCompletion(RecordMetadata metadata, Exception exception) {
+            if (metadata != null) {
+              LOG.info("记录元信息: " + metadata);
+            }
+            if (exception != null) {
+              LOG.error("发送消息失败", exception);
+            }
+          }
+        };
+
+        LOG.info("发送消息：" + record.toString());
+        kafkaProducer.send(record, callback);
 
         Thread.sleep(1000L);
       }
@@ -55,59 +86,6 @@ public class KafkaProducerWithPartitionerExample implements AutoCloseable {
       LOG.error("发布消息失败", e);
     }
 
-  }
-
-  public KafkaProducerWithPartitionerExample() {
-    Properties config = new Properties();
-
-    config.put(KafkaConfigurationConstants.Producer.BOOTSTRAP_SERVERS.getKey(), "localhost:9092");
-    config.put(KafkaConfigurationConstants.Producer.ACKS.getKey(), "all");
-    config.put(KafkaConfigurationConstants.Producer.RETRIES.getKey(), 0);
-    config.put(KafkaConfigurationConstants.Producer.BATCH_SIZE.getKey(), 16384);
-    config.put(KafkaConfigurationConstants.Producer.LINGER_MS.getKey(), 1);
-    config.put(KafkaConfigurationConstants.Producer.BUFFER_MEMORY.getKey(), 33554432);
-    config.put(KafkaConfigurationConstants.Producer.KEY_SERIALIZER.getKey(),
-      "org.apache.kafka.common.serialization.StringSerializer");
-    config.put(KafkaConfigurationConstants.Producer.VALUE_SERIALIZER.getKey(),
-      "org.apache.kafka.common.serialization.StringSerializer");
-
-    // 指定分区实现类
-    config.put(KafkaConfigurationConstants.Producer.PARTITIONER_CLASS.getKey(),
-      IPAddressPartitioner.class.getCanonicalName());
-
-    LOG.info("创建生产者...");
-    kafkaProducer = new KafkaProducer<String, String>(config);
-
-  }
-
-  public void publish(String topic, String messageKey, String messageValue) {
-    ProducerRecord<String, String> record = new ProducerRecord<String, String>(//
-        topic, //
-        messageKey, //
-        messageValue//
-        );
-
-    Callback callback = new Callback() {
-      @Override
-      public void onCompletion(RecordMetadata metadata, Exception exception) {
-        if (metadata != null) {
-          LOG.info("记录元信息: " + metadata);
-        }
-
-        if (exception != null) {
-          LOG.error("发送消息失败", exception);
-        }
-      }
-    };
-
-    LOG.info("发送消息：" + record.toString());
-    kafkaProducer.send(record, callback);
-  }
-
-  @Override
-  public void close() throws Exception {
-    LOG.info("关闭生产者...");
-    kafkaProducer.close();
   }
 
   // =============================================================================支持类

@@ -29,9 +29,9 @@ import org.slf4j.LoggerFactory;
  * @author zhoujiagen
  * @see KafkaLog4jAppender
  */
-public class KafkaLog4jAppenderExample {
-  
-  private static final Logger LOG = LoggerFactory.getLogger(KafkaLog4jAppenderExample.class);
+public class ExampleKafkaLog4jAppender {
+
+  private static final Logger LOG = LoggerFactory.getLogger(ExampleKafkaLog4jAppender.class);
 
   public static void main(String[] args) {
     for (int i = 0; i < 100; i++) {
