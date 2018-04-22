@@ -1,0 +1,26 @@
+digraph BinarySearchTreeST {
+	size=100; ratio=0.8; splines=polyline
+	node [shape = "record", fixedsize=true, fontsize=11, width=.3, height=.3]
+	edge [arrowsize=0.5, minlen=1]
+
+	A[label="{<f1> A| {<f0> | <f2>}}"]
+	C[label="{<f1> C| {<f0> | <f2>}}"]
+	E[label="{<f1> E| {<f0> | <f2>}}"]
+	H[label="{<f1> H| {<f0> | <f2>}}"]
+	L[label="{<f1> L| {<f0> | <f2>}}"]
+	M[label="{<f1> M| {<f0> | <f2>}}"]
+	P[label="{<f1> P| {<f0> | <f2>}}"]
+	R[label="{<f1> R| {<f0> | <f2>}}"]
+	S[label="{<f1> S| {<f0> | <f2>}}"]
+	X[label="{<f1> X| {<f0> | <f2>}}"]
+
+	A:f2 -> C:f1
+	E:f0 -> A:f1
+	E:f2 -> R:f1
+	H:f2 -> M:f1
+	M:f0 -> L:f1
+	M:f2 -> P:f1
+	R:f0 -> H:f1
+	S:f0 -> E:f1
+	S:f2 -> X:f1
+}

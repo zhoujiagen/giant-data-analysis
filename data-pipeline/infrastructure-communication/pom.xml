@@ -1,0 +1,110 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.spike.giantdataanalysis</groupId>
+		<artifactId>java-parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../../project-commons/java-parent</relativePath>
+	</parent>
+
+	<artifactId>infrastructure-communication</artifactId>
+	<name>GDA Communication</name>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+	</properties>
+
+	<!-- <pluginRepositories> <pluginRepository> <id>dtrotts</id> <name>Repository 
+		for maven thrift plugin</name> <url>http://maven.davidtrott.com/repository</url> 
+		<layout>default</layout> </pluginRepository> </pluginRepositories> -->
+
+	<dependencies>
+		<dependency>
+			<groupId>com.spike.giantdataanalysis</groupId>
+			<artifactId>infrastructure-commons</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.thrift</groupId>
+			<artifactId>libthrift</artifactId>
+			<version>0.10.0</version>
+			<scope>compile</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>javax.servlet</groupId>
+					<artifactId>servlet-api</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+
+			<!-- FUCK the version: see https://github.com/pauldeschacht/impala-java-client/issues/6. -->
+			<!-- <plugin> <groupId>org.apache.thrift.tools</groupId> <artifactId>maven-thrift-plugin</artifactId> 
+				<version>0.1.11</version> <configuration> <thriftExecutable>/usr/local/bin/thrift</thriftExecutable> 
+				</configuration> <executions> <execution> <id>thrift-sources</id> <phase>generate-sources</phase> 
+				<goals> <goal>compile</goal> </goals> </execution> <execution> <id>thrift-test-sources</id> 
+				<phase>generate-test-sources</phase> <goals> <goal>testCompile</goal> </goals> 
+				</execution> </executions> </plugin> -->
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>1.4</version>
+				<executions>
+					<execution>
+						<id>add-source</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>add-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>${basedir}/src/main/thrift/generated-resources</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+
+		<!-- WARNING: 本地测试时注释掉, 打包时取消注释. -->
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<excludes>
+					<exclude>*.properties</exclude>
+				</excludes>
+			</resource>
+		</resources>
+	</build>
+
+</project>

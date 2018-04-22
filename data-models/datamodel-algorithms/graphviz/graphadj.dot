@@ -1,0 +1,41 @@
+digraph GraphAdj {
+	rankdir = LR; splines=polyline;
+	edge [arrowsize=0.5, minlen=1];
+	node [shape=record, width=.1, height=.1];
+	adj [label = " <p0> 0| <p1> 1| <p2> 2| <p3> 3| <p4> 4| <p5> 5", xlabel="adj[]", pos="1,1"]
+
+	node[ height=0.1 ];
+	adj05 [label=5]
+	adj:p0 -> adj05
+	adj01 [label=1]
+	adj05 -> adj01
+	adj02 [label=2]
+	adj01 -> adj02
+	adj12 [label=2]
+	adj:p1 -> adj12
+	adj10 [label=0]
+	adj12 -> adj10
+	adj24 [label=4]
+	adj:p2 -> adj24
+	adj23 [label=3]
+	adj24 -> adj23
+	adj21 [label=1]
+	adj23 -> adj21
+	adj20 [label=0]
+	adj21 -> adj20
+	adj35 [label=5]
+	adj:p3 -> adj35
+	adj34 [label=4]
+	adj35 -> adj34
+	adj32 [label=2]
+	adj34 -> adj32
+	adj43 [label=3]
+	adj:p4 -> adj43
+	adj42 [label=2]
+	adj43 -> adj42
+	adj53 [label=3]
+	adj:p5 -> adj53
+	adj50 [label=0]
+	adj53 -> adj50
+
+}

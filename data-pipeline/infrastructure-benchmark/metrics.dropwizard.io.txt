@@ -1,0 +1,51 @@
+########################################################################
+核心概念
+########################################################################
+
+=== 1 Meter
+A meter measures the rate of events over time (e.g., “requests per second”). 
+In addition to the mean rate, meters also track 1-, 5-, and 15-minute moving averages.
+
+=== 2 Reporter
+A Console Reporter is exactly what it sounds like - report to the console.
+Supported Reporters:
+STDOUT, using ConsoleReporter from metrics-core
+CSV files, using CsvReporter from metrics-core
+SLF4J loggers, using Slf4jReporter from metrics-core
+Ganglia, using GangliaReporter from metrics-ganglia
+Graphite, using GraphiteReporter from metrics-graphite
+
+report metrics via JMX: JmxReporter.
+
+Metrics also ships with a servlet (AdminServlet) which will serve a JSON representation of 
+all registered metrics. It will also run health checks, print out a thread dump, and 
+provide a simple “ping” response for load-balancers. 
+(It also has single servlets–MetricsServlet, HealthCheckServlet, ThreadDumpServlet, and 
+PingServlet–which do these individual tasks.)
+
+=== 3 Registry
+The centerpiece of Metrics is the MetricRegistry class, 
+which is the container for all your application’s metrics.
+
+=== 4 Gauges
+A gauge is an instantaneous measurement of a value. 
+For example, we may want to measure the number of pending jobs in a queue.
+
+=== 5 Counters
+A counter is just a gauge for an AtomicLong instance. You can increment or decrement its value. 
+For example, we may want a more efficient way of measuring the pending job in a queue.
+
+=== 6 Histograms
+A histogram measures the statistical distribution of values in a stream of data. 
+In addition to minimum, maximum, mean, etc., it also measures median, 
+75th, 90th, 95th, 98th, 99th, and 99.9th percentiles.
+
+=== 7 Timers
+A timer measures both the rate that a particular piece of code is called and 
+the distribution of its duration.
+
+=== 8 Health Checks
+Metrics also has the ability to centralize your service’s health checks with 
+the metrics-healthchecks module.
+
+

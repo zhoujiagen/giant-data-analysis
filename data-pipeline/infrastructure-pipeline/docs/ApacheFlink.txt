@@ -1,0 +1,84 @@
+########################################################################
+1 内容
+########################################################################
+0 概念
+编程模型 https://ci.apache.org/projects/flink/flink-docs-release-1.4/concepts/programming-model.html
+分布式运行时 https://ci.apache.org/projects/flink/flink-docs-release-1.4/concepts/runtime.html
+
+1 入门和示例
+入门 https://ci.apache.org/projects/flink/flink-docs-release-1.4/quickstart/setup_quickstart.html
+示例: https://ci.apache.org/projects/flink/flink-docs-release-1.4/examples/
+
+2 项目配置
+https://ci.apache.org/projects/flink/flink-docs-release-1.4/quickstart/java_api_quickstart.html
+
+Project Template for Java
+Project Template for Scala
+Configuring Dependencies, Connectors, Libraries
+IDE Setup
+Scala REPL
+Running Flink on Windows
+Building Flink from Source
+
+
+3 应用开发
+https://ci.apache.org/projects/flink/flink-docs-release-1.4/dev/api_concepts.html
+
+Basic API Concepts
+Streaming (DataStream API)
+Batch (DataSet API)
+Table API & SQL
+Data Types & Serialization
+Managing Execution
+Libraries
+Best Practices
+API Migration Guides
+
+
+4 部署和操作
+https://ci.apache.org/projects/flink/flink-docs-release-1.4/ops/deployment/cluster_setup.html
+
+Clusters & Deployment
+High Availability (HA)
+State & Fault Tolerance
+Configuration
+Production Readiness Checklist
+CLI
+Kerberos
+SSL Setup
+File Systems
+Upgrading Applications and Flink Versions
+
+5 调试和监控
+https://ci.apache.org/projects/flink/flink-docs-release-1.4/monitoring/metrics.html
+
+Metrics
+Logging
+History Server
+Monitoring Checkpointing
+Monitoring Back Pressure
+Monitoring REST API
+Debugging Windows & Event Time
+Debugging Classloading
+Application Profiling
+
+6 机制
+https://ci.apache.org/projects/flink/flink-docs-release-1.4/internals/components.html
+
+Component Stack
+Fault Tolerance for Data Streaming
+Jobs and Scheduling
+Task Lifecycle
+File Systems
+
+########################################################################
+# 2 Benchmark
+########################################################################
+
+Yahoo Streaming Benchmarks
+https://github.com/yahoo/streaming-benchmarks
+
+References
+Sanket Chintapalli, Derek Dagit, Bobby Evans, et al. 
+"Benchmarking Streaming Computation Engines: Storm, Flink and Spark Streaming. " 
+First Annual Workshop on Emerging Parallel and Distributed Runtime Systems and Middleware. IEEE, 2016.

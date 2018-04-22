@@ -7,6 +7,15 @@
 
 + 本地文档: hbase-1.2.3/docs/index.html
 
++ 异步客户端
+
+[asynchbase](https://github.com/OpenTSDB/asynchbase)
+A fully asynchronous, non-blocking, thread-safe, high-performance HBase client.
+
+[async](https://github.com/OpenTSDB/async)
+Building blocks for asynchronous Java processing inspired by Twisted's API. 
+
+
 # 2 运行实例
 
 # 3 安装和配置

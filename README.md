@@ -23,40 +23,55 @@
 # 内容
 
 
-## 1 数据管理基础设施 - data-management-infrastructure
+########################################################################
+## 数据管道
+########################################################################
 
-+ datasets
++ infrastructure-pipeline - Data Transform Pipeline ahead of Data Analysis
+
++ infrastructure-benchmark - Performance Beanchmark
++ infrastructure-communication - Communication practices
++ infrastructure-coordination - Distributed Coordination: leader election, grouping, lock, etc
++ infrastructure-task - Task Partition and Execution
+
+
+########################################################################
+## 1 数据管理基础设施 - data-management-infrastructure
+########################################################################
+
++ datasets - 数据集信息
 
 + Apache Hadoop 2.7.4/1.2.1 - infrastructure-apache-hadoop
 + Apache Spark 1.5.2 - scala-infrastructure-apache-spark
 + Netty 4.1.8.Final - infrastructure-netty
 + Jetty 9.4.3.v20170317 - infrastructure-jetty
 + Apache ZooKeeper 3.4.6 - infrastructure-apache-zookeeper
-+ Apache Curator 2.12.0 - infrastructure-apache-curator
++ Apache Curator 4.0.0 - infrastructure-apache-curator
 + Apache HBase 1.2.6 - infrastructure-apache-hbase
 + Ansible 2.3.0.0 - infrastructure-ansible
++ OpenTSDB 2.3.0 - infrastructure-opentsdb
 
-+ DOING: Ansible
-+ TODO 收集和整理Hadoop2运行示例和配置; Hadoop MapReduce抽象矩阵乘法和关系代数运算.
-+ TODO Apache Jena Elephant子项目的示例; 可能的尽快实现类SPARQL端点的功能.
+辅助项目:
 
-> TBD
++ infrastructure-commons - 公共依赖项目
++ infrastructure-test - 测试
 
++ infrastructure-etl - Data ETL
+
++ infrastructure-python2 - Python2 facilities
++ infrastructure-python3 - Python3 facilities
+
+########################################################################
 ## 2 时序数据和实时算法 - temporal-data-and-realtime-algorithm
+########################################################################
 
-+ Apache Kafka 0.9.0.0 - temporal-apache-kafka
++ Apache Kafka 0.9.0.1 - temporal-apache-kafka
 + Apache Storm 0.9.7 - temporal-apache-storm
-+ Alibaba JStorm - temporal-alibaba-jstorm
 + Apache Spark Streaming 1.5.2 - temporal-apache-spark-streaming
 
-
-Strike 1: Apache Storm word count example.
-
-+ TODO Strike 2: Spark-Streaming + ElasticSearch + Kafka 日志应用
-
-> TBD
-
+########################################################################
 ## 3 数据表示 - data-representation
+########################################################################
 
 + graph-apache-tinkerpop - representation-apache-tinkerpop 图计算框架; 图遍历语言Gremlin抽象
 + Neo4j 3.2.2 - representation-neo4j 图数据库
@@ -64,24 +79,28 @@ Strike 1: Apache Storm word count example.
 + Apache Giraph 1.2.1 - representation-apache-giraph 基于BSP的图处理框架
 + Titan 1.0.0 - representation-titan 分布式图数据库(HBase 1.0.3/0.98.2-hadoop1, ES 1.5.2)
 
-+ TODO TinkerPop栈.
-
-> TBD
-
+########################################################################
 ## 4 数据模型 - data-models
+########################################################################
 
 + 图模型 - datamodel-graph
 
-> TBD
-
+########################################################################
 ## 5 数据采样 - data-sampling
+########################################################################
 
-> TBD
 
+########################################################################
 ## 6 数据交互 - data-interaction
+########################################################################
 
-> TBD
 
+########################################################################
 ## 7 数据计算巨人 - data-computing-giants
+########################################################################
 
-> TBD
+########################################################################
+## patches and code trace - patches
+########################################################################
+
++ patches-opentsdb
