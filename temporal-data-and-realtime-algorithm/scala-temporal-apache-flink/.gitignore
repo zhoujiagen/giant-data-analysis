@@ -1,0 +1,17 @@
+.cache-main
+.cache-tests
+
+*.class
+
+.classpath
+.project
+/.settings/*
+/project/target/*
+/project/project/*
+/target/*
+
+/data/output/*
+/bin/
+
+/.worksheet/*
+derby.log

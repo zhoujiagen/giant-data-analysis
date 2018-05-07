@@ -28,23 +28,26 @@ $M2_HOME/conf/settings.xml中添加国内镜像:
 
 设置阿里云镜像:
 
-  $ cat ~/.sbt/repositories
-  [repositories]
-    local
-    aliyun: http://maven.aliyun.com/nexus/content/groups/public/
-    central: http://repo1.maven.org/maven2/
+    $ cat ~/.sbt/repositories
+    [repositories]
+      local
+      aliyun: http://maven.aliyun.com/nexus/content/groups/public/
+      central: http://repo1.maven.org/maven2/
 
 or in build.sbt:
 
-  // resolver
-  resolvers += "aliyun Maven" at "http://maven.aliyun.com/nexus/content/groups/public/"
+    // resolver
+    resolvers += "aliyun Maven" at "http://maven.aliyun.com/nexus/content/groups/public/"
 
 stuck at getting 0.13.13:
 
 scala-parent/project/build.properties
-  # or another version you have in local
-  sbt.version=0.13.12
 
+    # or another version you have in local
+    sbt.version=0.13.12
+
+
+**TODO(zhoujiagen)** add more notes here.[20180507]
 
 + Go
 
