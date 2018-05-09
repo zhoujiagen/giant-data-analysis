@@ -43,5 +43,12 @@ pull & run:
 
 # MySQL
 
+REF：
+http://www.runoob.com/docker/docker-install-mysql.html
+https://stackoverflow.com/questions/49194719/authentication-plugin-caching-sha2-password-cannot-be-loaded
+    docker run -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -d mysql --default-authentication-plugin=mysql_native_password
+
+
+
     # https://github.com/docker-library/mysql/blob/master/5.7/Dockerfile
-    docker run -d -p 3306:3306 --name mysql5.7 mysql
+    docker run -p 3306:3306 --name mysql5.7 -v $PWD/conf:/etc/mysql/conf.d -v $PWD/logs:/logs -v $PWD/data:/mysql_data -e MYSQL_ROOT_PASSWORD=root -d mysql --default-authentication-plugin=mysql_native_password
