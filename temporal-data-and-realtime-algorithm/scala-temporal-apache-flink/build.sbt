@@ -11,8 +11,10 @@ libraryDependencies ++= Seq (
 	,"org.apache.flink" %% "flink-streaming-scala" % "1.4.2" withSources()
 	,"org.apache.flink" %% "flink-streaming-java" % "1.4.2" withSources() // % "provided"
 	,"org.apache.flink" %% "flink-clients" % "1.4.2" withSources()
-
-
+	// ,"org.slf4j" % "slf4j-api" % "1.7.7" // % "provided"
+	,"org.slf4j" % "slf4j-log4j12" % "1.7.7" // % "provided"
+	,"log4j" % "log4j" % "1.2.17" // % "provided"
+	
 	//,"org.apache.flink" %% "flink-test-utils" % "1.4.2" % Test
 
 )

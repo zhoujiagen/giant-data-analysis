@@ -52,3 +52,9 @@ https://stackoverflow.com/questions/49194719/authentication-plugin-caching-sha2-
 
     # https://github.com/docker-library/mysql/blob/master/5.7/Dockerfile
     docker run -p 3306:3306 --name mysql5.7 -v $PWD/conf:/etc/mysql/conf.d -v $PWD/logs:/logs -v $PWD/data:/mysql_data -e MYSQL_ROOT_PASSWORD=root -d mysql --default-authentication-plugin=mysql_native_password
+
+
+# Apache Kafka
+TODO(zhoujiagen)
+https://hub.docker.com/r/wurstmeister/kafka/
+https://wurstmeister.github.io/kafka-docker/
