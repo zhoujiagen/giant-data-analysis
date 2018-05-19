@@ -1,7 +1,5 @@
 package com.spike.giantdataanalysis.flink.example.model;
 
-import java.util.Random;
-
 import com.spike.giantdataanalysis.flink.example.model.PerformanceIndex.OperationSystem.CPU;
 import com.spike.giantdataanalysis.flink.example.model.PerformanceIndex.OperationSystem.Disk;
 import com.spike.giantdataanalysis.flink.example.model.PerformanceIndex.OperationSystem.DiskIO;
@@ -76,76 +74,6 @@ public class Metrics {
 
 	public static int METRIC_SIZE() {
 		return 7;
-	}
-
-	public static long LONG() {
-		Random rnd = new Random(System.currentTimeMillis());
-		return rnd.nextLong();
-	}
-
-	/**
-	 * @return [0.0d, 1.0d)
-	 */
-	public static double DOUBLE() {
-		Random rnd = new Random(System.currentTimeMillis());
-		return rnd.nextDouble();
-	}
-
-	/**
-	 * @return [0.0d, max)
-	 */
-	public static double DOUBLE(double max) {
-		Random rnd = new Random(System.currentTimeMillis());
-		double result = rnd.nextDouble() * max;
-		return result;
-	}
-
-	/**
-	 * @return [0.0f, 1.0f)
-	 */
-	public static float FLOAT() {
-		Random rnd = new Random(System.currentTimeMillis());
-		return rnd.nextFloat();
-	}
-
-	/**
-	 * @return [0.0f, max)
-	 */
-	public static float FLOAT(float max) {
-		Random rnd = new Random(System.currentTimeMillis());
-		return rnd.nextFloat();
-	}
-
-	public static int INT() {
-		Random rnd = new Random(System.currentTimeMillis());
-		return rnd.nextInt();
-	}
-
-	/**
-	 * @return [0, max)
-	 */
-	public static int INT(int max) {
-		Random rnd = new Random(System.currentTimeMillis());
-		return rnd.nextInt(max);
-	}
-
-	/**
-	 * @return 例50.2
-	 */
-	public static float PRECENT() {
-		Random rnd = new Random(System.currentTimeMillis());
-		float result = rnd.nextFloat() * 101f;
-		if (result > 100f)
-			result = 100f;
-		return result;
-	}
-
-	/**
-	 * @return [0.0f, max)
-	 */
-	public static float PERCENT(float max) {
-		Random rnd = new Random(System.currentTimeMillis());
-		return rnd.nextFloat() * max;
 	}
 
 }

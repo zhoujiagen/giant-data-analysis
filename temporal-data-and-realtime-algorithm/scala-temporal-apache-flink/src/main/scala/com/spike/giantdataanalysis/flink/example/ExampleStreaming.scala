@@ -3,7 +3,7 @@ package com.spike.giantdataanalysis.flink.example
 import org.apache.flink.streaming.api.scala._
 import org.apache.flink.streaming.api.windowing.time.Time
 import org.apache.flink.api.common.JobExecutionResult
-import com.spike.giantdataanalysis.flink.example.models.WordWithCount
+import models.WordWithCount
 
 /**
  * {@link DataStream} API示例.
