@@ -31,7 +31,7 @@
 
 		<!-- data-pipeline -->
 		<module>../../data-pipeline/infrastructure-pipeline</module>
-		<module>../../data-pipeline/infrastructure-communication</module>
+		<!--<module>../../data-pipeline/infrastructure-communication</module>-->
 		<module>../../data-pipeline/infrastructure-coordination</module>
 		<module>../../data-pipeline/infrastructure-task</module>
 		<module>../../data-pipeline/infrastructure-benchmark</module>
