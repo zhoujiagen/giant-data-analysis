@@ -56,6 +56,7 @@ public class JOLSample_25_ArrayAlignment {
      *   https://bugs.openjdk.java.net/browse/JDK-8139457
      */
 
+  // MARK 数组对准
     public static void main(String[] args) throws Exception {
         out.println(VM.current().details());
         out.println(ClassLayout.parseInstance(new long[0]).toPrintable());

@@ -55,6 +55,7 @@ public class JOLSample_22_Compaction {
      * the list into the one or few dense blocks.
      */
 
+  // MARK 压缩列表
     public static volatile Object sink;
 
     public static void main(String[] args) throws Exception {

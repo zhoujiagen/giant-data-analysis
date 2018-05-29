@@ -60,6 +60,7 @@ public class JOLSample_24_Difference {
      * It is a good idea to keep the allocations at minimum between the snapshots.
      */
 
+  // MARK 对象图布局的差
     public static void main(String[] args) throws Exception {
         out.println(VM.current().details());
 

@@ -53,6 +53,7 @@ public class JOLSample_11_ClassWord {
 
     public static void main(String[] args) throws Exception {
         out.println(VM.current().details());
+        // MARK 对象头构成: mark word, class word.
         // MARK 不同的class word
         out.println(ClassLayout.parseInstance(new A()).toPrintable());
         out.println(ClassLayout.parseInstance(new B()).toPrintable());

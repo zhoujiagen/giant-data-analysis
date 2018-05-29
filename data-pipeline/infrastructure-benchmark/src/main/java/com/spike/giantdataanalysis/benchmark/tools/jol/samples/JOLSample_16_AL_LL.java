@@ -37,7 +37,6 @@ import org.openjdk.jol.vm.VM;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 
 import static java.lang.System.out;
 
@@ -62,6 +61,8 @@ public class JOLSample_16_AL_LL {
      * from either root, and also avoids double-counting.
      */
 
+  // MARK 查看对象引用的对象(external)
+  
     public static void main(String[] args) throws Exception {
         out.println(VM.current().details());
 

@@ -53,6 +53,7 @@ public class JOLSample_23_Defragmentation {
      * This example generates PNG images in your current directory.
      */
 
+  // MARK 去碎片化
     public static volatile Object sink;
 
     public static void main(String[] args) throws Exception {

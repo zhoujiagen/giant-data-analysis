@@ -57,7 +57,7 @@ public class JOLSample_13_BiasedLocking {
     public static void main(String[] args) throws Exception {
         out.println(VM.current().details());
 
-        TimeUnit.SECONDS.sleep(6);
+        TimeUnit.SECONDS.sleep(6); // MARK wait for 偏向锁可用
 
         final A a = new A();
 

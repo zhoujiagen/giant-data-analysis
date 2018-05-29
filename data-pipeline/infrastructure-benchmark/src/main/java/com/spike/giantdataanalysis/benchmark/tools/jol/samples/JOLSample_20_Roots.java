@@ -59,6 +59,8 @@ public class JOLSample_20_Roots {
      * in memory.
      */
 
+  // MARK 对象可达性图的根集
+  
     static volatile Object sink;
 
     public interface L {

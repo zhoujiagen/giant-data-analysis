@@ -53,6 +53,8 @@ public class JOLSample_18_Layouts {
      * it further "degrades" to the tree.
      */
 
+  // MARK 冲突下, HashMap的降级实现
+  
     public static void main(String[] args) throws Exception {
         out.println(VM.current().details());
 
@@ -72,14 +74,14 @@ public class JOLSample_18_Layouts {
         map.put(new Dummy(2), null);
 
         System.gc();
-        pw.println(GraphLayout.parseInstance(map).toPrintable());
+        pw.println(GraphLayout.parseInstance(map).toPrintable()); // MARK linked list: next
 
         for (int c = 0; c < 12; c++) {
             map.put(new Dummy(2), null);
         }
 
         System.gc();
-        pw.println(GraphLayout.parseInstance(map).toPrintable());
+        pw.println(GraphLayout.parseInstance(map).toPrintable()); // MARK tree: left, right
 
         pw.close();
     }

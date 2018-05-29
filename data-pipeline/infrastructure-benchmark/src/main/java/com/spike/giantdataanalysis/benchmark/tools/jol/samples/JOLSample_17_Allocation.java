@@ -55,6 +55,8 @@ public class JOLSample_17_Allocation {
      * for the allocation rate.
      */
 
+  // MARK 展示对象分配的地址
+  
     public static void main(String[] args) throws Exception {
         out.println(VM.current().details());
 

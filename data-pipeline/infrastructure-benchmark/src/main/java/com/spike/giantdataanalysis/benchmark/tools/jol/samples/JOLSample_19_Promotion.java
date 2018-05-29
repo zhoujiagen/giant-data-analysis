@@ -56,6 +56,8 @@ public class JOLSample_19_Promotion {
      * bits change with each promotion.
      */
 
+  // MARK 演示对象提示, 对象的age存在对象头mark word中
+  
     static volatile Object sink;
 
     public static void main(String[] args) throws Exception {

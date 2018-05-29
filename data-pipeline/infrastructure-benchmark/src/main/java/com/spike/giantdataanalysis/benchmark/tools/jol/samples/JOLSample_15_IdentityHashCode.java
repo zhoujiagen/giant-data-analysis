@@ -64,7 +64,7 @@ public class JOLSample_15_IdentityHashCode {
         out.println();
 
         out.println("**** After identityHashCode()");
-        out.println(layout.toPrintable());
+        out.println(layout.toPrintable()); // MARK 将HashCode存在对象头中
     }
 
     public static class A {

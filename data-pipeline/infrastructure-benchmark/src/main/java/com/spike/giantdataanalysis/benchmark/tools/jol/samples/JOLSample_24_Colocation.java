@@ -59,6 +59,7 @@ public class JOLSample_24_Colocation {
      * This example generates PNG images in your current directory.
      */
 
+  // MARK 多线程操作ConcurrentHashMap的内存分配
     public static volatile Object sink;
 
     public static void main(String[] args) throws Exception {

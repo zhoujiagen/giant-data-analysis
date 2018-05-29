@@ -39,7 +39,7 @@ import static java.lang.System.out;
 /**
  * @author Aleksey Shipilev
  */
-public class JOLSample_12_ThinLocking {// TODO(zhoujiagen) start here
+public class JOLSample_12_ThinLocking {
 
     /*
      * This is another dive into the mark word.

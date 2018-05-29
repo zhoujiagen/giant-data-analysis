@@ -56,6 +56,8 @@ public class JOLSample_21_Arrays {
      *   https://bugs.openjdk.java.net/browse/JDK-8024394
      */
 
+  // MARK 将将被提升的对象放在栈底部
+  
     public static void main(String[] args) throws Exception {
         out.println(VM.current().details());
 
