@@ -15,3 +15,5 @@
 
 /.worksheet/*
 derby.log
+/.idea/*
+*.iml

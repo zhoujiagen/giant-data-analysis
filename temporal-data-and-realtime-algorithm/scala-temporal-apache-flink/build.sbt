@@ -2,7 +2,7 @@
 organization := "com.spike.giantdataanalysis"
 name := "scala-temporal-apache-flink"
 version := "1.0.0"
-scalaVersion := "2.11.8"
+scalaVersion := "2.11.12"
 
 
 libraryDependencies ++= Seq (

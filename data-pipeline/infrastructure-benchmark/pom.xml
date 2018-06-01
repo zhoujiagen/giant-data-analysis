@@ -21,6 +21,14 @@
 
 	<dependencies>
 
+		<dependency>
+			<groupId>com.spike.giantdataanalysis</groupId>
+			<artifactId>infrastructure-commons</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
+
+
 		<!-- Home: https://github.com/dropwizard/metrics -->
 		<!-- Search: http://mvnrepository.com/search?q=io.dropwizard.metrics -->
 		<dependency>
