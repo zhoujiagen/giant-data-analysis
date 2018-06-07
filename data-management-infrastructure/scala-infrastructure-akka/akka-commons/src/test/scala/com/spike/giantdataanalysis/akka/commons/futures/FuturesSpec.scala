@@ -3,12 +3,12 @@ package com.spike.giantdataanalysis.akka.commons.futures
 import java.util.concurrent.TimeUnit
 
 import akka.actor.{ActorRef, Props}
+import akka.pattern.ask
 import com.spike.giantdataanalysis.akka.commons._
 import com.spike.giantdataanalysis.akka.commons.actor.PingPongActor
 import org.scalatest.{FunSpecLike, Matchers}
 
 import scala.concurrent.{Await, Future}
-import akka.pattern.ask
 
 /**
   * 使用future获取actor的响应

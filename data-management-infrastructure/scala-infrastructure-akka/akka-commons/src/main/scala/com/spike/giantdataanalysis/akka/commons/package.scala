@@ -9,6 +9,7 @@ package object commons {
   object Akkas {
 
     import java.util.concurrent.{Executors, TimeUnit}
+
     import akka.actor.{Actor, ActorContext, ActorPath, ActorRef, ActorSelection, ActorSystem, Deploy, Props, Terminated}
 
     import scala.collection.immutable
@@ -36,7 +37,7 @@ package object commons {
       */
     def actorSystem(name: String,
                     config: com.typesafe.config.Config = com.typesafe.config.ConfigFactory.empty()): ActorSystem =
-      ActorSystem(name, com.typesafe.config.ConfigFactory.empty())
+      ActorSystem(name, config)
 
     /**
       * 创建应用默认的[[ActorSystem]], 使用application.conf中的配置.
@@ -50,21 +51,46 @@ package object commons {
 
     def terminate(actorSystem: ActorSystem): Future[Terminated] = actorSystem.terminate()
 
-    case class ActorSystemContent(
-                                   log: akka.event.LoggingAdapter,
-                                   deadLetters: ActorRef,
-                                   eventStream: akka.event.EventStream,
-                                   sheduler: akka.actor.Scheduler,
-                                   dispatcher: ExecutionContextExecutor
-                                 )
+    /**
+      * INTERNAL representation of ActorSystem's content
+      *
+      * @param log         logging adapter to eventStream
+      * @param deadLetters dead letter ActorRef
+      * @param eventStream main event bus
+      * @param scheduler   cheap asynchronous task scheduler
+      * @param dispatchers lookup configured dispatchers
+      * @param dispatcher  implicit, default dispatcher
+      * @see akka.dispatch.MessageDispatcher
+      * @see akka.dispatch.BalancingDispatcher deprecated
+      * @see akka.routing.BalancingPool
+      * @see akka.dispatch.PinnedDispatcher
+      *
+      */
+    private[commons] case class ActorSystemContent(log: akka.event.LoggingAdapter,
+                                                   deadLetters: ActorRef,
+                                                   eventStream: akka.event.EventStream,
+                                                   scheduler: akka.actor.Scheduler,
+                                                   dispatchers: akka.dispatch.Dispatchers,
+                                                   dispatcher: ExecutionContextExecutor)
 
-    def contentOf(actorSystem: ActorSystem): ActorSystemContent =
+    private[commons] def contentOf(actorSystem: ActorSystem): ActorSystemContent =
       new ActorSystemContent(
         actorSystem.log,
         actorSystem.deadLetters,
         actorSystem.eventStream,
         actorSystem.scheduler,
+        actorSystem.dispatchers,
         actorSystem.dispatcher)
+
+    //---------------------------------------------------------------------------
+    // Dispatcher
+    //---------------------------------------------------------------------------
+
+    def dispatcher(actorSystem: ActorSystem, id: String): akka.dispatch.MessageDispatcher =
+      actorSystem.dispatchers.lookup(id)
+
+    def dispatcher(actorSystem: ActorSystem): scala.concurrent.ExecutionContextExecutor =
+      actorSystem.dispatcher
 
     //---------------------------------------------------------------------------
     // Props
@@ -236,9 +262,10 @@ package object commons {
       *
       * @param length 量值
       * @param unit   单位
-      * @return [[scala.concurrent.duration.Duration]]
+      * @return [[scala.concurrent.duration.FiniteDuration]]
+      * @see [[scala.concurrent.duration.Duration]]
       */
-    def duration(length: Long, unit: scala.concurrent.duration.TimeUnit): scala.concurrent.duration.Duration = {
+    def duration(length: Long, unit: scala.concurrent.duration.TimeUnit): scala.concurrent.duration.FiniteDuration = {
       import scala.concurrent.duration._
 
       (length, unit) match {

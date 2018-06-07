@@ -7,7 +7,6 @@ import akka.actor.ActorRef
 case class KeyNotFoundException(key: String) extends Exception
 
 
-
 sealed trait Request
 
 /** 设置键值，返回状态 */

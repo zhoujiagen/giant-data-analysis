@@ -3,15 +3,14 @@ package com.spike.giantdataanalysis.akka.commons.actor
 
 import java.util.concurrent.TimeUnit
 
+import akka.actor.{ActorRef, ActorSystem, Props}
+import akka.pattern.ask
+import akka.testkit.{ImplicitSender, TestActorRef, TestKit, TestProbe}
 import com.spike.giantdataanalysis.akka.commons._
 import org.scalatest._
-import akka.actor.{ActorRef, ActorSystem, Props}
-import akka.testkit.{ImplicitSender, TestActorRef, TestKit, TestKitExtension, TestProbe}
-import akka.pattern.ask
-import com.typesafe.config.{Config, ConfigFactory}
 
-import scala.concurrent.{Await, Future}
 import scala.concurrent.duration._
+import scala.concurrent.{Await, Future}
 
 
 // unit test
