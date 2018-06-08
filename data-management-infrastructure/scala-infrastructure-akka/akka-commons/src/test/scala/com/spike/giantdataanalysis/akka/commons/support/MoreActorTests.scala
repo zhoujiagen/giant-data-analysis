@@ -1,4 +1,4 @@
-package com.spike.giantdataanalysis.akka.commons.test
+package com.spike.giantdataanalysis.akka.commons.support
 
 
 import akka.actor.Actor

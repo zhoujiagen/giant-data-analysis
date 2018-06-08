@@ -1,6 +1,6 @@
 package com.spike.giantdataanalysis.akka.commons.actor
 
-import akka.actor.{Actor, Status}
+import akka.actor.{Actor, ActorSystem, DeadLetter, Props, Status}
 import akka.event.Logging
 
 /**
@@ -42,10 +42,38 @@ class PingPongActor(val response: String = "Pong") extends Actor {
 
 object PingPongActor {
 
-  import akka.actor.Props
-
   def props(response: String): Props = {
     Props(classOf[PingPongActor], response)
   }
 }
+
+/**
+  * Dead Letter Listener Actor.
+  */
+class DeadLetterListener extends Actor {
+  val logger = Logging(context.system, this)
+
+  override def receive: Receive = {
+    case d: DeadLetter => logger.info("{}", d)
+  }
+}
+
+object DeadLetterListener {
+  def props: Props = Props(classOf[DeadLetterListener])
+
+  /**
+    * 在ActorSystem中订阅.
+    *
+    * @param actorSystem
+    * @param eventClass 事件类
+    * @see [[akka.actor.DeadLetter]]
+    * @see [[akka.actor.DeadLetterSuppression]]
+    * @see [[akka.actor.AllDeadLetters]]
+    *
+    */
+  def subscribe(actorSystem: ActorSystem, eventClass: Class[_]): Unit = {
+    actorSystem.eventStream.subscribe(actorSystem.actorOf(props), eventClass)
+  }
+}
+
 

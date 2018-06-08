@@ -13,7 +13,10 @@ import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}
 
 
-// unit test
+//---------------------------------------------------------------------------
+// Unit Test
+//---------------------------------------------------------------------------
+
 class PingPongActorSpec extends FunSpec with Matchers {
 
   //---------------------------------------------------------------------------
@@ -118,16 +121,18 @@ class PingPongActorSpec extends FunSpec with Matchers {
 
 }
 
-//import scala.collection.JavaConverters._
 
-// BDD test
+//---------------------------------------------------------------------------
+// BDD Test
+//---------------------------------------------------------------------------
+
 class PingPongActorBDDSpec(testSystem: ActorSystem)
   extends TestKit(testSystem)
     with ImplicitSender
     with FunSpecLike with Matchers with BeforeAndAfterAll {
 
-
   // NOT WIRKING
+  //import scala.collection.JavaConverters._
   //  def this() = this(ActorSystem("PingPongActorBDDAS",
   //    ConfigFactory.parseMap(Map("akka.test.default-timeout" -> 2000).asJava)))
 

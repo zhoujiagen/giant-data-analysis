@@ -257,6 +257,20 @@ package object commons {
       }
     }
 
+
+    /**
+      * 延迟的时间区间.
+      *
+      * @param length
+      * @param unit
+      * @return
+      * @see [[duration()]]
+      */
+    def delay(length: Long,
+              unit: scala.concurrent.duration.TimeUnit = TimeUnit.MICROSECONDS
+             ): scala.concurrent.duration.FiniteDuration =
+      duration(length, unit)
+
     /**
       * 时间区间.
       *
@@ -265,7 +279,9 @@ package object commons {
       * @return [[scala.concurrent.duration.FiniteDuration]]
       * @see [[scala.concurrent.duration.Duration]]
       */
-    def duration(length: Long, unit: scala.concurrent.duration.TimeUnit): scala.concurrent.duration.FiniteDuration = {
+    def duration(length: Long,
+                 unit: scala.concurrent.duration.TimeUnit = TimeUnit.MICROSECONDS
+                ): scala.concurrent.duration.FiniteDuration = {
       import scala.concurrent.duration._
 
       (length, unit) match {

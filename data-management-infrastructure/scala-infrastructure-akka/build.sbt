@@ -7,7 +7,8 @@ lazy val VERSION_AKKA = "2.5.12"
 lazy val VERSION_SCALATEST = "3.0.5"
 lazy val VERSION_LOGBACK = "1.2.3"
 lazy val VERSION_GDA = "0.0.1-SNAPSHOT"
-
+lazy val VERSION_LEVELDB = "0.7"
+lazy val VERSION_LEVELDB_JNI = "1.8"
 
 //---------------------------------------------------------------------------
 // Dependencies
@@ -16,7 +17,10 @@ lazy val VERSION_GDA = "0.0.1-SNAPSHOT"
 lazy val libraryDependenciesAkka = Seq(
   "com.typesafe.akka" %% "akka-actor" % VERSION_AKKA withSources(),
   "com.typesafe.akka" %% "akka-remote" % VERSION_AKKA withSources(),
+
   "com.typesafe.akka" %% "akka-persistence" % VERSION_AKKA withSources(),
+  "org.iq80.leveldb" % "leveldb" % VERSION_LEVELDB withSources(),
+  "org.fusesource.leveldbjni" % "leveldbjni-all" % VERSION_LEVELDB_JNI withSources(),
 
   "com.typesafe.akka" %% "akka-slf4j" % VERSION_AKKA withSources(),
   "ch.qos.logback" % "logback-classic" % VERSION_LOGBACK,

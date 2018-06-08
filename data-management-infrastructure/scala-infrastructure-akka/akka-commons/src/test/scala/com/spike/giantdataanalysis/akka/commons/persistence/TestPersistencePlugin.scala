@@ -10,9 +10,6 @@ import scala.collection.immutable
 import scala.concurrent.Future
 import scala.util.Try
 
-class TestPersistencePlugin {
-
-}
 
 object CURDMessages {
 
