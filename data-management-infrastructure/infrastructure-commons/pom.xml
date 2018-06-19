@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
@@ -15,6 +16,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<disruptor.version>3.4.2</disruptor.version>
 	</properties>
 
 	<dependencies>
@@ -48,6 +50,19 @@
 			<version>2.9.2</version>
 		</dependency>
 
+		<!-- OpenJDK jol: http://openjdk.java.net/projects/code-tools/jol/ -->
+		<dependency>
+			<groupId>org.openjdk.jol</groupId>
+			<artifactId>jol-core</artifactId>
+			<version>0.9</version>
+		</dependency>
+
+		<!-- Concurrent: Disruptor -->
+		<dependency>
+			<groupId>com.lmax</groupId>
+			<artifactId>disruptor</artifactId>
+			<version>${disruptor.version}</version>
+		</dependency>
 
 		<!-- 日志相关依赖 -->
 		<dependency>
@@ -55,10 +70,18 @@
 			<artifactId>slf4j-api</artifactId>
 			<scope>compile</scope>
 		</dependency>
-		<!-- <dependency> <groupId>org.slf4j</groupId> <artifactId>slf4j-log4j12</artifactId> 
-			<scope>test</scope> <optional>true</optional> </dependency> <dependency> 
-			<groupId>log4j</groupId> <artifactId>log4j</artifactId> <scope>test</scope> 
-			<optional>true</optional> </dependency> -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<scope>test</scope>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<scope>test</scope>
+			<optional>true</optional>
+		</dependency>
 
 	</dependencies>
 
