@@ -1,18 +1,14 @@
 
 # 0 实践版本
 
-	none
-	
-	io.dropwizard.metrics 3.2.3
-	metrics-core
-	metrics-healthchecks
-	metrics-log4j
-	metrics-ganglia
-	metrics-jvm
-	metrics-servlets
-
++ [Metrics](https://metrics.dropwizard.io) 3.2.3
++ [OpenJDK jmh](http://openjdk.java.net/projects/code-tools/jmh/) 1.21
++ [OpenJDK jol](http://openjdk.java.net/projects/code-tools/jol/)
 
 # 1 资源
+
++ [OpenJDK Code Tools Project](http://openjdk.java.net/projects/code-tools/)
++ [Caliper](https://github.com/google/caliper) NO!
 
 # 2 运行实例
 

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- REF: https://segmentfault.com/a/1190000004693427 -->
+<configuration>
+
+    <property name="USER_HOME" value="/Users/zhoujiagen/logs"/>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%p] [%t] %logger{20}\(%file:%line\) => %m%n</pattern>
+        </encoder>
+    </appender>
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>${USER_HOME}/gda-apache-storm.log</file>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%p] [%t] %logger\(%file:%line\) => %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="com.spike.giantdataanalysis" level="DEBUG" additivity="false">
+        <appender-ref ref="STDOUT"/>
+    </logger>
+
+    <root level="DEBUG">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
+    </root>
+</configuration>

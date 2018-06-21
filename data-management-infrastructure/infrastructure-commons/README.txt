@@ -19,4 +19,10 @@ YEdit: an Eclipse editor for editing YAML files. http://marketplace.eclipse.org/
 ########################################################################
 见com.spike.giantdataanalysis.commons.annotation.
 
+########################################################################
+LMAX Disruptor: High Performance Inter-Thread Messaging Library
+########################################################################
+见com.spike.giantdataanalysis.commons.messaging.disruptor
+
+Well, it's heavily rely on `sun.misc.Unsafe`.
 

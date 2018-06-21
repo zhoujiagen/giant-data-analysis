@@ -52,9 +52,10 @@ public class TestCommonsCLI {
       options.addOption(Option.builder().longOpt("block-size").hasArg().argName("SIZE")
           .desc("use SIZE-byte blocks").build());
       options.addOption("B", "ignore-backups", false, "do not list implied entried ending with ~");
-      options.addOption("c", false, "with -lt: sort by, and show, ctime (time of last "
-          + "modification of file status information) "
-          + "with -l: show ctime and sort by name otherwise: sort by ctime");
+      options.addOption("c", false,
+        "with -lt: sort by, and show, ctime (time of last "
+            + "modification of file status information) "
+            + "with -l: show ctime and sort by name otherwise: sort by ctime");
       options.addOption("C", false, "list entries by columns");
 
       HelpFormatter hf = new HelpFormatter();
@@ -106,25 +107,21 @@ public class TestCommonsCLI {
       Option logfile =
           Option.builder("logfile").hasArg().argName("file").desc("use given file for log").build();
 
-      Option logger =
-          Option.builder("logger").hasArg().argName("classname")
-              .desc("the class which is to perform logging").build();
+      Option logger = Option.builder("logger").hasArg().argName("classname")
+          .desc("the class which is to perform logging").build();
 
-      Option listener =
-          Option.builder("listener").hasArg().argName("classname")
-              .desc("add an instance of class as a project listener").build();
+      Option listener = Option.builder("listener").hasArg().argName("classname")
+          .desc("add an instance of class as a project listener").build();
 
       Option buildfile =
           Option.builder("buildfile").hasArg().argName("file").desc("use given buildfile").build();
 
-      Option find =
-          Option.builder("find").hasArg().argName("file")
-              .desc("search for buildfile towards the root of the filesystem and use it").build();
+      Option find = Option.builder("find").hasArg().argName("file")
+          .desc("search for buildfile towards the root of the filesystem and use it").build();
 
       // 创建Java属性选项
-      Option property =
-          Option.builder("D").argName("property=value").numberOfArgs(2).valueSeparator('=')
-              .desc("use value for given property").build();
+      Option property = Option.builder("D").argName("property=value").numberOfArgs(2)
+          .valueSeparator('=').desc("use value for given property").build();
 
       Options options = new Options();
       options.addOption(help);
