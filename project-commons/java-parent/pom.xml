@@ -28,6 +28,7 @@
 		<module>../../data-management-infrastructure/infrastructure-apache-hbase</module>
 		<module>../../data-management-infrastructure/infrastructure-opentsdb</module>
 		-->
+		<module>../../data-management-infrastructure/infrastructure-apache-cassandra</module>
 
 		<!-- data-pipeline -->
 		<module>../../data-pipeline/infrastructure-pipeline</module>
@@ -95,6 +96,7 @@
 		<netty.version>4.1.8.Final</netty.version>
 		<jetty.version>9.4.3.v20170317</jetty.version>
 		<opentsdb.version>2.3.0</opentsdb.version>
+		<cassandra.datastax.version>3.5.0</cassandra.datastax.version>
 
 		<!-- representation -->
 		<titan.version>1.0.0</titan.version>

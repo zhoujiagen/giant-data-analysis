@@ -50,6 +50,7 @@
 + Apache HBase 1.2.6 - infrastructure-apache-hbase
 + Ansible 2.3.0.0 - infrastructure-ansible
 + OpenTSDB 2.3.0 - infrastructure-opentsdb
++ Apache Cassandra 3.11.2 - infrastructure-apache-cassandra
 
 辅助项目:
 
