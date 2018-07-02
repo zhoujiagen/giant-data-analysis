@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.spike.giantdataanalysis</groupId>
+		<artifactId>java-parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../../project-commons/java-parent</relativePath>
+	</parent>
+
+	<artifactId>representation-text</artifactId>
+	<packaging>pom</packaging>
+
+	<name>representation-text</name>
+
+	<modules>
+		<module>../representation-text-raw</module>
+		<module>../representation-text-lucene</module>
+		<module>../representation-text-solr</module>
+		<module>../representation-text-elasticsearch</module>
+		<module>../representation-text-opennlp</module>
+		<module>../representation-text-mahout</module>
+	</modules>
+
+	<properties>
+		<!-- 将版本信息放在这里, 具体的依赖放到各自的项目中去. -->
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<slf4j.version>1.7.7</slf4j.version>
+		<log4j.version>1.2.17</log4j.version>
+		<!-- <lucene.version>5.3.0</lucene.version> -->
+		<lucene.version>5.2.0</lucene.version>
+		<lucene.analyzers.version>3.6.2</lucene.analyzers.version>
+		<tika.version>1.10</tika.version>
+		<elasticsearch.version>2.4.0</elasticsearch.version>
+		<randomizedtesting.version>2.3.2</randomizedtesting.version>
+		<opennlp.version>1.7.1</opennlp.version>
+		<mahout.version>0.9</mahout.version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<!-- commons -->
+			<dependency>
+				<groupId>com.spike.giantdataanalysis</groupId>
+				<artifactId>infrastructure-commons</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+				<version>${slf4j.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-log4j12</artifactId>
+				<version>${slf4j.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>log4j</groupId>
+				<artifactId>log4j</artifactId>
+				<version>${log4j.version}</version>
+			</dependency>
+
+			<!-- junit -->
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>4.11</version>
+				<scope>test</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.0</version>
+					<configuration>
+						<source>1.7</source>
+						<target>1.7</target>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>2.12.4</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+
+</project>

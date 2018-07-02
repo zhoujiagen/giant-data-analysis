@@ -45,6 +45,7 @@
 		<module>../../data-representation/representation-apache-giraph</module>
 		<module>../../data-representation/representation-neo4j</module>
 		-->
+		<module>../../data-representation/representation-text</module>
 
 		<!-- temporal-data-and-realtime-algorithm -->
 		<module>../../temporal-data-and-realtime-algorithm/temporal-apache-storm</module>
