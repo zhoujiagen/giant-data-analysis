@@ -1,22 +1,27 @@
 package com.spike.giantdataanalysis.text.elasticsearch.client.example.transport;
 
-import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.concurrent.TimeUnit;
 
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.settings.Settings.Builder;
-import org.elasticsearch.common.transport.InetSocketTransportAddress;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class TransportClientExample {
+import com.carrotsearch.randomizedtesting.RandomizedRunner;
+import com.spike.giantdataanalysis.text.elasticsearch.client.example.support.Clients;
 
-  private static final Logger LOG = LoggerFactory.getLogger(TransportClientExample.class);
+@RunWith(RandomizedRunner.class)
+public class ExampleTransportClient {
 
-  public static void main(String[] args) throws UnknownHostException {
-    Builder builder = Settings.settingsBuilder();
+  private static final Logger LOG = LoggerFactory.getLogger(ExampleTransportClient.class);
+
+  @Test
+  public void main() throws UnknownHostException {
+    Builder builder = Settings.builder();
     // 集群名称
     builder.put("cluster.name", "elasticsearch");
     // 是否忽略与连接节点验证集群名称
@@ -27,10 +32,7 @@ public class TransportClientExample {
     builder.put("client.transport.nodes_sampler_interval", 5, TimeUnit.SECONDS);
     Settings settings = builder.build();
 
-    try (TransportClient client = TransportClient.builder()//
-        .settings(settings).build()//
-        .addTransportAddress(//
-          new InetSocketTransportAddress(InetAddress.getByName("localhost"), 9300));) {
+    try (TransportClient client = Clients.newClient("localhost", 9300, settings);) {
       LOG.debug("using client: {}", client);
 
       LOG.info("listedNodes: {}", client.listedNodes());

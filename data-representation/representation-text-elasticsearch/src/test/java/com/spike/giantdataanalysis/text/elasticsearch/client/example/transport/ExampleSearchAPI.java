@@ -11,14 +11,16 @@ import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.Aggregations;
 import org.elasticsearch.search.aggregations.bucket.histogram.DateHistogramInterval;
-import org.elasticsearch.search.aggregations.bucket.histogram.InternalHistogram;
-import org.elasticsearch.search.aggregations.bucket.terms.MyStringTerms;
+import org.elasticsearch.search.aggregations.bucket.histogram.Histogram;
 import org.elasticsearch.search.aggregations.bucket.terms.StringTerms;
 import org.elasticsearch.search.sort.SortBuilders;
 import org.elasticsearch.search.sort.SortOrder;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.carrotsearch.randomizedtesting.RandomizedRunner;
 import com.spike.giantdataanalysis.text.elasticsearch.client.example.support.Clients;
 import com.spike.giantdataanalysis.text.elasticsearch.client.example.support.Responses;
 
@@ -31,23 +33,25 @@ import com.spike.giantdataanalysis.text.elasticsearch.client.example.support.Res
  * @see AggregationBuilders#terms(String)
  * @see AggregationBuilders#dateHistogram(String)
  */
-public final class SearchAPIs {
-  private static final Logger LOG = LoggerFactory.getLogger(SearchAPIs.class);
+@RunWith(RandomizedRunner.class)
+public final class ExampleSearchAPI {
+  private static final Logger LOG = LoggerFactory.getLogger(ExampleSearchAPI.class);
 
   static final String index = "twitter";// 索引名称
   static final String type = "tweet";// 文档类型
 
-  public static void main(String[] args) {
+  @Test
+  public void main() {
     try (TransportClient client = Clients.defaultClient();) {
 
       // 搜索
-      // search(client);
+      search(client);
       // 分页搜索
-      // scrollSearch(client);
+      scrollSearch(client);
       // 一次执行多个搜索
-      // multiSearch(client);
+      multiSearch(client);
       // 聚合搜索
-      // aggregationSearch(client);
+      aggregationSearch(client);
       // 限制每个分片获取文档的最大数量, 以提前终止
       terminateAfter(client);
 
@@ -56,6 +60,7 @@ public final class SearchAPIs {
     }
   }
 
+  // REF: https://www.elastic.co/guide/en/elasticsearch/client/java-api/6.2/java-search.html
   static void search(TransportClient client) {
     LOG.debug("搜索");
 
@@ -72,13 +77,8 @@ public final class SearchAPIs {
     LOG.info(Responses.asString(searchResponse));
   }
 
-  /**
-   * <pre>
-   * 分页搜索
-   * Scroll: https://www.elastic.co/guide/en/elasticsearch/reference/2.4/search-request-scroll.html
-   * </pre>
-   * @param client
-   */
+  // REF:
+  // https://www.elastic.co/guide/en/elasticsearch/client/java-api/6.2/java-search-scrolling.html
   static void scrollSearch(TransportClient client) {
     LOG.debug("分页搜索");
 
@@ -115,6 +115,7 @@ public final class SearchAPIs {
 
   }
 
+  // REF: https://www.elastic.co/guide/en/elasticsearch/client/java-api/6.2/java-search-msearch.html
   static void multiSearch(TransportClient client) {
     LOG.debug("一次执行多个搜索");
 
@@ -154,17 +155,18 @@ public final class SearchAPIs {
         .addAggregation(AggregationBuilders.terms(termAggName).field("user"))//
         .addAggregation(AggregationBuilders.dateHistogram(dateHistogramAggName)//
             .field("postDate")//
-            .interval(DateHistogramInterval.YEAR))//
-        .execute()//
-        .actionGet();
+            .dateHistogramInterval(DateHistogramInterval.YEAR))//
+        .get();
 
     Aggregations aggregations = searchResponse.getAggregations();
     StringTerms terms = aggregations.get(termAggName);
-    LOG.info(Responses.asString(new MyStringTerms(terms)));
-    InternalHistogram<?> dateHistogram = aggregations.get(dateHistogramAggName);
+    LOG.info(Responses.asString(terms));
+    Histogram dateHistogram = aggregations.get(dateHistogramAggName);
     LOG.info(Responses.asString(dateHistogram));
   }
 
+  // REF:
+  // https://www.elastic.co/guide/en/elasticsearch/client/java-api/6.2/java-search-terminate-after.html
   static void terminateAfter(TransportClient client) {
     LOG.debug("限制每个分片获取文档的最大数量");
 

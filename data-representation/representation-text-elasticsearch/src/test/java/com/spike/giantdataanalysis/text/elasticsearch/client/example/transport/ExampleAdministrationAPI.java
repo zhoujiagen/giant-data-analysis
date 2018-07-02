@@ -19,9 +19,12 @@ import org.elasticsearch.client.ClusterAdminClient;
 import org.elasticsearch.client.IndicesAdminClient;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.carrotsearch.randomizedtesting.RandomizedRunner;
 import com.spike.giantdataanalysis.text.elasticsearch.client.example.support.Jsons;
 import com.spike.giantdataanalysis.text.elasticsearch.client.example.support.Responses;
 
@@ -33,17 +36,20 @@ import com.spike.giantdataanalysis.text.elasticsearch.client.example.support.Res
  * 
  * (2) 集群管理 @see {@link #clusterAdministration()}
  * </pre>
+ * 
  * @author zhoujiagen
  */
-public final class AdministrationAPIs {
-  private static final Logger LOG = LoggerFactory.getLogger(AdministrationAPIs.class);
+@RunWith(RandomizedRunner.class)
+public final class ExampleAdministrationAPI {
+  private static final Logger LOG = LoggerFactory.getLogger(ExampleAdministrationAPI.class);
 
   // static StreamOutput ERR = new OutputStreamStreamOutput(new SystemErrStream());
 
   static final String index = "twitter"; // 索引名称
   static final String type = "type"; // 文档类型名称
 
-  public static void main(String[] args) {
+  @Test
+  public void main() {
     try (TransportClient client = defaultClient();) {
       AdminClient adminClient = adminClient(client);
 
@@ -101,9 +107,8 @@ public final class AdministrationAPIs {
     LOG.info(Responses.asString(createResponse));
   }
 
-  static void
-      createIndexWithType(IndicesAdminClient indiciesAdminClient, String index, String type)
-          throws IOException {
+  static void createIndexWithType(IndicesAdminClient indiciesAdminClient, String index, String type)
+      throws IOException {
     LOG.debug("创建索引{}和文档类型{}", index, type);
 
     Map<String, Object> map = Jsons.fileToMap("twitter_tweet_mapping.json");

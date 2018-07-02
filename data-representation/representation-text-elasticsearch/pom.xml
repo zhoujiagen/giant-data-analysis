@@ -15,19 +15,33 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<lucene.version>5.5.2</lucene.version><!-- 覆盖父项目中的版本 -->
-		<jackson.version>2.8.1</jackson.version>
+		<lucene.version>7.2.1</lucene.version><!-- 覆盖父项目中的版本 -->
+		<jackson.version>2.8.10</jackson.version>
 	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>com.spike.giantdataanalysis</groupId>
 			<artifactId>infrastructure-commons</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>com.fasterxml.jackson.dataformat</groupId>
+					<artifactId>jackson-dataformat-yaml</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<dependency>
 			<groupId>org.elasticsearch</groupId>
 			<artifactId>elasticsearch</artifactId>
+			<version>${elasticsearch.version}</version>
+		</dependency>
+
+
+		<!-- Java Client -->
+		<dependency>
+			<groupId>org.elasticsearch.client</groupId>
+			<artifactId>transport</artifactId>
 			<version>${elasticsearch.version}</version>
 		</dependency>
 
@@ -38,7 +52,6 @@
 			<artifactId>jackson-databind</artifactId>
 			<version>${jackson.version}</version>
 		</dependency>
-
 
 		<!-- ES测试的依赖 -->
 		<dependency>
@@ -58,12 +71,12 @@
 			<version>4.2.2</version>
 		</dependency>
 		<dependency>
-			<groupId>org.elasticsearch</groupId>
-			<artifactId>elasticsearch</artifactId>
+			<groupId>org.elasticsearch.test</groupId>
+			<artifactId>framework</artifactId>
 			<version>${elasticsearch.version}</version>
 			<scope>test</scope>
-			<type>test-jar</type>
 		</dependency>
+
 		<dependency><!-- for randomized testing -->
 			<groupId>com.carrotsearch.randomizedtesting</groupId>
 			<artifactId>randomizedtesting-runner</artifactId>

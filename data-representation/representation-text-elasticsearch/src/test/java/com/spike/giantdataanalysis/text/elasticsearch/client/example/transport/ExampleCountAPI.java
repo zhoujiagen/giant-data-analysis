@@ -1,5 +1,9 @@
 package com.spike.giantdataanalysis.text.elasticsearch.client.example.transport;
 
+import org.junit.runner.RunWith;
+
+import com.carrotsearch.randomizedtesting.RandomizedRunner;
+
 /**
  * <pre>
  * Deprecated in 2.1.0.
@@ -7,7 +11,9 @@ package com.spike.giantdataanalysis.text.elasticsearch.client.example.transport;
  * 
  * REF: https://www.elastic.co/guide/en/elasticsearch/client/java-api/2.4/count.html
  * </pre>
+ * 
  * @author zhoujiagen
  */
-public class CountAPIs {
+@RunWith(RandomizedRunner.class)
+public class ExampleCountAPI {
 }

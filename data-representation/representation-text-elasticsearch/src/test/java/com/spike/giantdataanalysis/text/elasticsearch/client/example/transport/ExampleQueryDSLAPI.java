@@ -5,9 +5,12 @@ import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.functionscore.ScoreFunctionBuilders;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.carrotsearch.randomizedtesting.RandomizedRunner;
 import com.spike.giantdataanalysis.text.elasticsearch.client.example.support.Clients;
 import com.spike.giantdataanalysis.text.elasticsearch.client.example.support.Responses;
 
@@ -16,8 +19,9 @@ import com.spike.giantdataanalysis.text.elasticsearch.client.example.support.Res
  * @author zhoujiagen
  * @see QueryBuilders
  */
-public final class QueryDSLAPIs {
-  private static final Logger LOG = LoggerFactory.getLogger(QueryDSLAPIs.class);
+@RunWith(RandomizedRunner.class)
+public final class ExampleQueryDSLAPI {
+  private static final Logger LOG = LoggerFactory.getLogger(ExampleQueryDSLAPI.class);
 
   static final String index = "twitter";// 索引名称
   static final String type = "tweet";// 文档类型
@@ -26,7 +30,8 @@ public final class QueryDSLAPIs {
   static final String field_user = "user";// 字段user
   static final String field_message = "message";// 字段message
 
-  public static void main(String[] args) {
+  @Test
+  public void main() {
 
     try (TransportClient client = Clients.defaultClient();) {
       // 匹配所有查询
@@ -69,22 +74,20 @@ public final class QueryDSLAPIs {
   private static void full_text_query(TransportClient client) {
     LOG.debug("全文检索");
 
-    SearchResponse searchResponse =
-        client.prepareSearch(index)//
-            .setTypes(type)//
-            // (1) matchQuery
-            // .setQuery(QueryBuilders.matchQuery(field_user, "catrtman elasticsearch"))//
-            // (2) multiMatchQuery
-            // .setQuery(
-            // QueryBuilders.multiMatchQuery("catrtman elasticsearch", field_user, field_message))//
-            // (3) commonTermsQuery
-            // .setQuery(QueryBuilders.commonTermsQuery(field_user, "cartman"))//
-            // (4) queryStringQuery
-            // .setQuery(QueryBuilders.queryStringQuery("+cartman -elasticsearch").field(field_user))//
-            // (5) simpleQueryStringQuery
-            .setQuery(
-              QueryBuilders.simpleQueryStringQuery("+cartman -elasticsearch").field(field_user))//
-            .get();
+    SearchResponse searchResponse = client.prepareSearch(index)//
+        .setTypes(type)//
+        // (1) matchQuery
+        // .setQuery(QueryBuilders.matchQuery(field_user, "catrtman elasticsearch"))//
+        // (2) multiMatchQuery
+        // .setQuery(
+        // QueryBuilders.multiMatchQuery("catrtman elasticsearch", field_user, field_message))//
+        // (3) commonTermsQuery
+        // .setQuery(QueryBuilders.commonTermsQuery(field_user, "cartman"))//
+        // (4) queryStringQuery
+        // .setQuery(QueryBuilders.queryStringQuery("+cartman -elasticsearch").field(field_user))//
+        // (5) simpleQueryStringQuery
+        .setQuery(QueryBuilders.simpleQueryStringQuery("+cartman -elasticsearch").field(field_user))//
+        .get();
     LOG.info(Responses.asString(searchResponse));
   }
 
@@ -140,6 +143,7 @@ public final class QueryDSLAPIs {
    * 文档可以有nested类型的字段;
    * 单个索引中两个文档类型之间可以有parent-child关系.
    * </pre>
+   * 
    * @param client
    * @see QueryBuilders#nestedQuery(String, QueryBuilder)
    * @see QueryBuilders#hasChildQuery(String, QueryBuilder)

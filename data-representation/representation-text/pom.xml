@@ -34,7 +34,7 @@
 		<lucene.version>5.2.0</lucene.version>
 		<lucene.analyzers.version>3.6.2</lucene.analyzers.version>
 		<tika.version>1.10</tika.version>
-		<elasticsearch.version>2.4.0</elasticsearch.version>
+		<elasticsearch.version>6.2.4</elasticsearch.version>
 		<randomizedtesting.version>2.3.2</randomizedtesting.version>
 		<opennlp.version>1.7.1</opennlp.version>
 		<mahout.version>0.9</mahout.version>

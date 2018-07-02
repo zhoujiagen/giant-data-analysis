@@ -10,7 +10,8 @@ import org.elasticsearch.client.IndicesAdminClient;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.settings.Settings.Builder;
-import org.elasticsearch.common.transport.InetSocketTransportAddress;
+import org.elasticsearch.common.transport.TransportAddress;
+import org.elasticsearch.transport.client.PreBuiltTransportClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,24 +59,33 @@ public final class Clients {
    * @throws UnknownHostException
    * @see {@link #defaultClient()}
    */
-  public static TransportClient newClient(String host, int port, Map<String, Object> configs)
+  public static TransportClient newClient(String host, int port, Map<String, String> configs)
       throws UnknownHostException {
 
     if (StringUtils.isBlank(host)) throw new UnknownHostException();
 
-    Builder builder = Settings.settingsBuilder();
+    Builder builder = Settings.builder();
     for (String key : configs.keySet()) {
       builder.put(key, configs.get(key));
     }
     Settings settings = builder.build();
 
-    TransportClient client = TransportClient.builder()//
-        .settings(settings).build()//
-        .addTransportAddress(//
-          new InetSocketTransportAddress(InetAddress.getByName(host), port));
+    @SuppressWarnings("resource")
+    TransportClient client = new PreBuiltTransportClient(settings).addTransportAddress(//
+      new TransportAddress(InetAddress.getByName(host), port));
 
     return client;
+  }
 
+  public static TransportClient newClient(String host, int port, Settings settings)
+      throws UnknownHostException {
+    if (StringUtils.isBlank(host)) throw new UnknownHostException();
+
+    @SuppressWarnings("resource")
+    TransportClient client = new PreBuiltTransportClient(settings)//
+        .addTransportAddress(new TransportAddress(InetAddress.getByName(host), port));
+
+    return client;
   }
 
   /**
@@ -85,7 +95,7 @@ public final class Clients {
    */
   public static TransportClient defaultClient() throws UnknownHostException {
 
-    Builder builder = Settings.settingsBuilder();
+    Builder builder = Settings.builder();
     // 集群名称
     builder.put("cluster.name", "elasticsearch");
     // 是否忽略与连接节点验证集群名称
@@ -96,12 +106,18 @@ public final class Clients {
     builder.put("client.transport.nodes_sampler_interval", 5, TimeUnit.SECONDS);
     Settings settings = builder.build();
 
-    TransportClient client = TransportClient.builder()//
-        .settings(settings).build()//
-        .addTransportAddress(//
-          new InetSocketTransportAddress(InetAddress.getByName("localhost"), 9300));
+    @SuppressWarnings("resource")
+    TransportClient client = new PreBuiltTransportClient(settings).addTransportAddress(//
+      new TransportAddress(InetAddress.getByName("localhost"), 9300));
 
     return client;
+  }
+
+  public void close(TransportClient client) {
+    if (client != null) {
+      LOG.info("close transport client");
+      client.close();
+    }
   }
 
   /**

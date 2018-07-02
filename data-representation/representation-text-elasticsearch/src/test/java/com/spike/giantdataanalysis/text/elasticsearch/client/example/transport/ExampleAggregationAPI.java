@@ -4,51 +4,55 @@ import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.join.aggregations.Children;
 import org.elasticsearch.script.Script;
 import org.elasticsearch.search.SearchHit;
-import org.elasticsearch.search.aggregations.AbstractAggregationBuilder;
+import org.elasticsearch.search.aggregations.AggregationBuilder;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
-import org.elasticsearch.search.aggregations.bucket.children.Children;
+import org.elasticsearch.search.aggregations.BucketOrder;
 import org.elasticsearch.search.aggregations.bucket.filter.Filter;
 import org.elasticsearch.search.aggregations.bucket.filter.FilterAggregationBuilder;
-import org.elasticsearch.search.aggregations.bucket.filters.Filters;
+import org.elasticsearch.search.aggregations.bucket.filter.Filters;
 import org.elasticsearch.search.aggregations.bucket.global.Global;
-import org.elasticsearch.search.aggregations.bucket.global.GlobalBuilder;
+import org.elasticsearch.search.aggregations.bucket.global.GlobalAggregationBuilder;
 import org.elasticsearch.search.aggregations.bucket.histogram.DateHistogramInterval;
 import org.elasticsearch.search.aggregations.bucket.histogram.Histogram;
-import org.elasticsearch.search.aggregations.bucket.histogram.HistogramBuilder;
+import org.elasticsearch.search.aggregations.bucket.histogram.HistogramAggregationBuilder;
 import org.elasticsearch.search.aggregations.bucket.missing.Missing;
 import org.elasticsearch.search.aggregations.bucket.nested.Nested;
 import org.elasticsearch.search.aggregations.bucket.range.Range;
-import org.elasticsearch.search.aggregations.bucket.range.RangeBuilder;
+import org.elasticsearch.search.aggregations.bucket.range.RangeAggregationBuilder;
 import org.elasticsearch.search.aggregations.bucket.significant.SignificantTerms;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
-import org.elasticsearch.search.aggregations.bucket.terms.TermsBuilder;
+import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
 import org.elasticsearch.search.aggregations.metrics.avg.Avg;
-import org.elasticsearch.search.aggregations.metrics.avg.AvgBuilder;
+import org.elasticsearch.search.aggregations.metrics.avg.AvgAggregationBuilder;
 import org.elasticsearch.search.aggregations.metrics.cardinality.Cardinality;
-import org.elasticsearch.search.aggregations.metrics.cardinality.CardinalityBuilder;
+import org.elasticsearch.search.aggregations.metrics.cardinality.CardinalityAggregationBuilder;
 import org.elasticsearch.search.aggregations.metrics.max.Max;
-import org.elasticsearch.search.aggregations.metrics.max.MaxBuilder;
+import org.elasticsearch.search.aggregations.metrics.max.MaxAggregationBuilder;
 import org.elasticsearch.search.aggregations.metrics.min.Min;
-import org.elasticsearch.search.aggregations.metrics.min.MinBuilder;
+import org.elasticsearch.search.aggregations.metrics.min.MinAggregationBuilder;
 import org.elasticsearch.search.aggregations.metrics.percentiles.Percentile;
 import org.elasticsearch.search.aggregations.metrics.percentiles.PercentileRanks;
-import org.elasticsearch.search.aggregations.metrics.percentiles.PercentileRanksBuilder;
+import org.elasticsearch.search.aggregations.metrics.percentiles.PercentileRanksAggregationBuilder;
 import org.elasticsearch.search.aggregations.metrics.percentiles.Percentiles;
-import org.elasticsearch.search.aggregations.metrics.percentiles.PercentilesBuilder;
+import org.elasticsearch.search.aggregations.metrics.percentiles.PercentilesAggregationBuilder;
 import org.elasticsearch.search.aggregations.metrics.scripted.ScriptedMetric;
-import org.elasticsearch.search.aggregations.metrics.scripted.ScriptedMetricBuilder;
+import org.elasticsearch.search.aggregations.metrics.scripted.ScriptedMetricAggregationBuilder;
 import org.elasticsearch.search.aggregations.metrics.stats.Stats;
-import org.elasticsearch.search.aggregations.metrics.stats.extended.ExtendedStatsBuilder;
+import org.elasticsearch.search.aggregations.metrics.stats.extended.ExtendedStatsAggregationBuilder;
 import org.elasticsearch.search.aggregations.metrics.sum.Sum;
-import org.elasticsearch.search.aggregations.metrics.sum.SumBuilder;
+import org.elasticsearch.search.aggregations.metrics.sum.SumAggregationBuilder;
 import org.elasticsearch.search.aggregations.metrics.tophits.TopHits;
 import org.elasticsearch.search.aggregations.metrics.valuecount.ValueCount;
-import org.elasticsearch.search.aggregations.metrics.valuecount.ValueCountBuilder;
+import org.elasticsearch.search.aggregations.metrics.valuecount.ValueCountAggregationBuilder;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.carrotsearch.randomizedtesting.RandomizedRunner;
 import com.spike.giantdataanalysis.text.elasticsearch.client.example.support.Clients;
 import com.spike.giantdataanalysis.text.elasticsearch.client.example.support.Jsons;
 import com.spike.giantdataanalysis.text.elasticsearch.client.example.support.Responses;
@@ -59,11 +63,13 @@ import com.spike.giantdataanalysis.text.elasticsearch.client.example.support.Res
  * 
  * 两类聚合: bucket, metric.
  * </pre>
+ * 
  * @author zhoujiagen
  * @see com.spike.giantdataanalysis.text.elasticsearch.client.example.support.Datas#TwitterTweet()
  */
-public class AggregationAPIs {
-  private static final Logger LOG = LoggerFactory.getLogger(AggregationAPIs.class);
+@RunWith(RandomizedRunner.class)
+public class ExampleAggregationAPI {
+  private static final Logger LOG = LoggerFactory.getLogger(ExampleAggregationAPI.class);
 
   static final String index = "twitter";// 索引名称
   static final String type = "tweet";// 文档类型
@@ -71,13 +77,14 @@ public class AggregationAPIs {
   static final String field_likes = "likes";// 字段likes
   static final String field_user = "user";// 字段user
 
-  public static void main(String[] args) {
+  @Test
+  public void main() {
 
     try (TransportClient client = Clients.defaultClient();) {
       // 多层聚合
-      // structuringAggregation(client);
+      structuringAggregation(client);
       // 度量值聚合
-      // metricAggregation(client);
+      metricAggregation(client);
       // 桶聚合
       bucketAggregation(client);
 
@@ -100,6 +107,8 @@ public class AggregationAPIs {
    * @see Histogram
    * @param client
    */
+  // REF:
+  // https://www.elastic.co/guide/en/elasticsearch/client/java-api/6.2/_bucket_aggregations.html
   static void bucketAggregation(TransportClient client) {
     LOG.debug("桶聚合");
 
@@ -113,7 +122,20 @@ public class AggregationAPIs {
 
   private static void bucketAggregation_global(TransportClient client) {
     LOG.debug("桶聚合-global");
-    GlobalBuilder builder = AggregationBuilders.global("aggName")//
+    // Fielddata is disabled on text fields by default. Set fielddata=true on [user] in order to
+    // load fielddata in memory by uninverting the inverted index. Note that this can however use
+    // significant memory. Alternatively use a keyword field instead.
+    // PUT /twitter/_mapping/tweet
+    // {
+    // "properties": {
+    // "user": {
+    // "type": "text",
+    // "fielddata": true
+    // }
+    // }
+    // }
+    
+    GlobalAggregationBuilder builder = AggregationBuilders.global("aggName")//
         .subAggregation(AggregationBuilders.terms("subAggName").field(field_user));
 
     SearchResponse searchResponse = _searchRequestBuilder(client)//
@@ -128,8 +150,7 @@ public class AggregationAPIs {
     LOG.debug("桶聚合-filter");
 
     FilterAggregationBuilder builder = AggregationBuilders//
-        .filter("aggName")//
-        .filter(QueryBuilders.termQuery(field_user, "cartman"));
+        .filter("aggName", QueryBuilders.termQuery(field_user, "cartman"));
 
     SearchResponse searchResponse = _searchRequestBuilder(client)//
         .addAggregation(builder).get();
@@ -142,7 +163,7 @@ public class AggregationAPIs {
   private static void bucketAggregation_term(TransportClient client) {
     LOG.debug("桶聚合-term");
 
-    TermsBuilder builder = AggregationBuilders//
+    TermsAggregationBuilder builder = AggregationBuilders//
         .terms("aggName")//
         .field(field_user);
 
@@ -158,11 +179,10 @@ public class AggregationAPIs {
   private static void bucketAggregation_order(TransportClient client) {
     LOG.debug("桶聚合-order");
 
-    TermsBuilder builder = AggregationBuilders//
+    TermsAggregationBuilder builder = AggregationBuilders//
         .terms("aggName")//
         .field(field_user)//
-        // .order(Terms.Order.term(true));
-        .order(Terms.Order.count(false));
+        .order(BucketOrder.count(false));
 
     SearchResponse searchResponse = _searchRequestBuilder(client)//
         .addAggregation(builder).get();
@@ -176,7 +196,7 @@ public class AggregationAPIs {
   private static void bucketAggregation_range(TransportClient client) {
     LOG.debug("桶聚合-range");
 
-    RangeBuilder builder = AggregationBuilders//
+    RangeAggregationBuilder builder = AggregationBuilders//
         .range("aggName")//
         .field(field_likes)//
         .addUnboundedTo(1)//
@@ -196,7 +216,7 @@ public class AggregationAPIs {
   private static void bucketAggregation_histogram(TransportClient client) {
     LOG.debug("桶聚合-histogram");
 
-    HistogramBuilder builder = AggregationBuilders//
+    HistogramAggregationBuilder builder = AggregationBuilders//
         .histogram("aggName")//
         .field(field_likes)//
         .interval(3l);
@@ -223,6 +243,8 @@ public class AggregationAPIs {
    * @see TopHits
    * @see ScriptedMetric
    */
+  // REF:
+  // https://www.elastic.co/guide/en/elasticsearch/client/java-api/6.2/_metrics_aggregations.html
   static void metricAggregation(TransportClient client) {
     LOG.debug("度量值聚合");
 
@@ -260,7 +282,7 @@ public class AggregationAPIs {
   private static void metricAggregation_min(TransportClient client) {
     LOG.debug("度量值聚合-min");
 
-    MinBuilder builder = AggregationBuilders.min("aggName").field(field_likes);
+    MinAggregationBuilder builder = AggregationBuilders.min("aggName").field(field_likes);
 
     SearchResponse searchResponse = _searchRequestBuilder(client)//
         .addAggregation(builder).get();
@@ -274,7 +296,7 @@ public class AggregationAPIs {
   private static void metricAggregation_max(TransportClient client) {
     LOG.debug("度量值聚合-max");
 
-    MaxBuilder builder = AggregationBuilders.max("aggName").field(field_likes);
+    MaxAggregationBuilder builder = AggregationBuilders.max("aggName").field(field_likes);
     SearchResponse searchResponse = _searchRequestBuilder(client)//
         .addAggregation(builder).get();
     LOG.info(Responses.asString(searchResponse));
@@ -287,7 +309,7 @@ public class AggregationAPIs {
   private static void metricAggregation_sum(TransportClient client) {
     LOG.debug("度量值聚合-sum");
 
-    SumBuilder builder = AggregationBuilders.sum("aggName").field(field_likes);
+    SumAggregationBuilder builder = AggregationBuilders.sum("aggName").field(field_likes);
     SearchResponse searchResponse = _searchRequestBuilder(client)//
         .addAggregation(builder).get();
     LOG.info(Responses.asString(searchResponse));
@@ -300,7 +322,7 @@ public class AggregationAPIs {
   private static void metricAggregation_avg(TransportClient client) {
     LOG.debug("度量值聚合-avg");
 
-    AvgBuilder builder = AggregationBuilders.avg("aggName").field(field_likes);
+    AvgAggregationBuilder builder = AggregationBuilders.avg("aggName").field(field_likes);
     SearchResponse searchResponse = _searchRequestBuilder(client)//
         .addAggregation(builder).get();
     LOG.info(Responses.asString(searchResponse));
@@ -314,7 +336,8 @@ public class AggregationAPIs {
     LOG.debug("度量值聚合-stats");
 
     // StatsBuilder builder = AggregationBuilders.stats("aggName").field(field);
-    ExtendedStatsBuilder builder = AggregationBuilders.extendedStats("aggName").field(field_likes);
+    ExtendedStatsAggregationBuilder builder =
+        AggregationBuilders.extendedStats("aggName").field(field_likes);
     SearchResponse searchResponse = _searchRequestBuilder(client)//
         .addAggregation(builder).get();
     LOG.info(Responses.asString(searchResponse));
@@ -326,7 +349,7 @@ public class AggregationAPIs {
   private static void metricAggregation_valuecount(TransportClient client) {
     LOG.debug("度量值聚合-valuecount");
 
-    ValueCountBuilder builder = AggregationBuilders.count("aggName").field(field_likes);
+    ValueCountAggregationBuilder builder = AggregationBuilders.count("aggName").field(field_likes);
     SearchResponse searchResponse = _searchRequestBuilder(client)//
         .addAggregation(builder).get();
     LOG.info(Responses.asString(searchResponse));
@@ -338,8 +361,9 @@ public class AggregationAPIs {
 
   private static void metricAggregation_percentile(TransportClient client) {
     LOG.debug("度量值聚合-percentile");
-    PercentilesBuilder builder = AggregationBuilders.percentiles("aggName").field(field_likes)//
-        .percentiles(1.0, 5.0, 10.0, 20.0, 30.0, 75.0, 95.0, 99.0);
+    PercentilesAggregationBuilder builder =
+        AggregationBuilders.percentiles("aggName").field(field_likes)//
+            .percentiles(1.0, 5.0, 10.0, 20.0, 30.0, 75.0, 95.0, 99.0);
     SearchResponse searchResponse = _searchRequestBuilder(client)//
         .addAggregation(builder).get();
     LOG.info(Responses.asString(searchResponse));
@@ -351,9 +375,8 @@ public class AggregationAPIs {
     }
 
     // rank
-    PercentileRanksBuilder builder2 =
-        AggregationBuilders.percentileRanks("aggName").field(field_likes)//
-            .percentiles(1.45, 7.75, 9.5);
+    PercentileRanksAggregationBuilder builder2 = AggregationBuilders
+        .percentileRanks("aggName", new double[] { 1.45, 7.75, 9.5 }).field(field_likes);
     searchResponse = _searchRequestBuilder(client)//
         .addAggregation(builder2).get();
     LOG.info(Responses.asString(searchResponse));
@@ -368,7 +391,8 @@ public class AggregationAPIs {
   private static void metricAggregation_cardinality(TransportClient client) {
     LOG.debug("度量值聚合-cardinality");
 
-    CardinalityBuilder builder = AggregationBuilders.cardinality("aggName").field(field_likes);
+    CardinalityAggregationBuilder builder =
+        AggregationBuilders.cardinality("aggName").field(field_likes);
     SearchResponse searchResponse = _searchRequestBuilder(client)//
         .addAggregation(builder).get();
     LOG.info(Responses.asString(searchResponse));
@@ -381,14 +405,14 @@ public class AggregationAPIs {
   private static void metricAggregation_tophits(TransportClient client) {
     LOG.debug("度量值聚合-tophits");
 
-    TermsBuilder builder = AggregationBuilders//
+    TermsAggregationBuilder builder = AggregationBuilders//
         .terms("aggName").field(field_likes)//
         .subAggregation(//
           AggregationBuilders.topHits("topHitsAggName")//
-              .setExplain(true)//
-              .setFrom(0)//
-              .setSize(10)//
-        );
+              .explain(true)//
+              .from(0)//
+              .size(10)//
+    );
     SearchResponse searchResponse = _searchRequestBuilder(client)//
         .addAggregation(builder).get();
     // LOG.info(Responses.asString(searchResponse));
@@ -413,29 +437,28 @@ public class AggregationAPIs {
    * # 使用script字段
    * script.inline: true
    * script.indexed: true
-   * 
    * </pre>
+   * 
    * @param client
    */
   private static void metricAggregation_scripted(TransportClient client) {
     LOG.debug("度量值聚合-scripted");
 
-    ScriptedMetricBuilder builder =
-        AggregationBuilders.scriptedMetric("aggName")
+    ScriptedMetricAggregationBuilder builder = AggregationBuilders.scriptedMetric("aggName")
         // (1) init
-            .initScript(new Script("_agg['likes'] = []"))
-            // (2) map
-            .mapScript(new Script("if (doc['user'].value == \"cartman\") " + //
-                "{ _agg.likes.add(doc['likes'].value) } " + //
-                "else " + //
-                "{ _agg.likes.add(-1 * doc['likes'].value) }"))
-            // (3*) combine
-            .combineScript(
-              new Script(
-                  "likes_sum = 0; for (t in _agg.likes) { likes_sum += t }; return likes_sum"))
-            // (4*) reduce
-            .reduceScript(//
-              new Script("likes_sum = 0; for (a in _aggs) { likes_sum += a }; return likes_sum"));
+        .initScript(new Script("params._agg['likes'] = []"))
+        // (2) map
+        .mapScript(new Script("if (doc['user'].value == \"cartman\") " + //
+            "{ params._agg.likes.add(doc['likes'].value) } " + //
+            "else " + //
+            "{ params._agg.likes.add(-1 * doc['likes'].value) }"))
+        // (3*) combine
+        .combineScript(new Script(
+            "double likes_sum = 0; for (t in params._agg.likes) { likes_sum += t } return likes_sum"))
+        // (4*) reduce
+        .reduceScript(//
+          new Script(
+              "double likes_sum = 0; for (a in params._aggs) { likes_sum += a } return likes_sum"));
     SearchResponse searchResponse = _searchRequestBuilder(client)//
         .addAggregation(builder).get();
 
@@ -444,18 +467,20 @@ public class AggregationAPIs {
     LOG.info("scriptedResult={}", Jsons.asJson(scriptedResult));
   }
 
+  // REF:
+  // https://www.elastic.co/guide/en/elasticsearch/client/java-api/6.2/_structuring_aggregations.html
   static void structuringAggregation(TransportClient client) {
     LOG.debug("多层聚合");
 
-    AbstractAggregationBuilder aggregation = //
+    AggregationBuilder aggregation = //
         AggregationBuilders.terms("by_country").field("country")// (1) bucket
             .subAggregation(//
               AggregationBuilders.dateHistogram("by_year").field("dateOfBirth")// (2) bucket
-                  .interval(DateHistogramInterval.YEAR)//
+                  .dateHistogramInterval(DateHistogramInterval.YEAR)//
                   .subAggregation(//
                     AggregationBuilders.avg("avg_children").field("children")// (3) metric
-                  )//
-            );
+              )//
+        );
     SearchResponse searchResponse = client.prepareSearch(index)//
         .setQuery(QueryBuilders.matchAllQuery())//
         .addAggregation(aggregation)//

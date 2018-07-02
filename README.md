@@ -79,6 +79,7 @@
 + Apache Jena 3.4.0 - representation-apache-jena
 + Apache Giraph 1.2.1 - representation-apache-giraph 基于BSP的图处理框架
 + Titan 1.0.0 - representation-titan 分布式图数据库(HBase 1.0.3/0.98.2-hadoop1, ES 1.5.2)
++ Elasticsearch 6.2.4 - representation-text-elasticsearch ES
 
 ########################################################################
 ## 4 数据模型 - data-models
