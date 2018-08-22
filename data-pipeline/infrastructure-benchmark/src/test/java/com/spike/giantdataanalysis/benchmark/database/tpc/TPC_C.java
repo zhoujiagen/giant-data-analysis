@@ -61,7 +61,7 @@ public class TPC_C {
     }
 
     String query =
-        "INSERT INTO `Item`(`I_ID`, `I_NAME`,`I_PRICE`,`I_DATA`) VALUES (%1$s,'%2$s',%3$s,'%4$s')";
+        "INSERT INTO `C_Item`(`I_ID`, `I_NAME`,`I_PRICE`,`I_DATA`) VALUES (%1$s,'%2$s',%3$s,'%4$s')";
     Connection connection = JDBCs.connection();
     String i_data = null;
     String postfix = "original";
@@ -85,7 +85,7 @@ public class TPC_C {
     LOG.info("load Warehouse START");
 
     String query =
-        "INSERT INTO `Warehouse` (`W_ID`,`W_NAME`,`W_STREET1`,`W_STREET2`,`W_CITY`,`W_STATE`,`W_ZIP`,`W_TAX`,`W_YTD`) "
+        "INSERT INTO `C_Warehouse` (`W_ID`,`W_NAME`,`W_STREET1`,`W_STREET2`,`W_CITY`,`W_STATE`,`W_ZIP`,`W_TAX`,`W_YTD`) "
             + "VALUES (%1$s,'%2$s','%3$s','%4$s','%5$s','%6$s','%7$s',%8$s,%9$s)";
     Connection connection = JDBCs.connection();
     String sql = null;
@@ -165,7 +165,7 @@ public class TPC_C {
       orig[pos] = true;
     }
 
-    String stockQuery = "INSERT INTO `Stock` (`S_I_ID`,`S_W_ID`,`S_QUANTITY`,"
+    String stockQuery = "INSERT INTO `C_Stock` (`S_I_ID`,`S_W_ID`,`S_QUANTITY`,"
         + "`S_DIST_01`,`S_DIST_02`,`S_DIST_03`,`S_DIST_04`,`S_DIST_05`,`S_DIST_06`,`S_DIST_07`,`S_DIST_08`,`S_DIST_09`,`S_DIST_10`,"
         + "`S_YTD`,`S_ORDER_CNT`,`S_REMOTE_CNT`,`S_DATA`) " + "VALUES (%1$s,%2$s,%3$s,"
         + "'%4$s','%5$s','%6$s','%7$s','%8$s','%9$s','%10$s','%11$s','%12$s','%13$s',"
@@ -197,7 +197,7 @@ public class TPC_C {
 
   static void District(int w_id) {
 
-    String districtQuery = "INSERT INTO `District` (`D_ID`,`D_W_ID`,`D_NAME`,"
+    String districtQuery = "INSERT INTO `C_District` (`D_ID`,`D_W_ID`,`D_NAME`,"
         + "`D_STREET_1`,`D_STREET_2`,`D_CITY`,`D_STATE`,`D_ZIP`,"
         + "`D_TAX`,`D_YTD`,`D_NEXT_O_ID`) " + "VALUES (%1$s,%2$s,'%3$s',"
         + "'%4$s','%5$s','%6$s','%7$s','%8$s'," + "%9$s,%10$s,%11$s)";
@@ -220,14 +220,14 @@ public class TPC_C {
 
   static void Customer(Connection connection, int w_id, int d_id) {
 
-    String query = "INSERT INTO `Customer`(`C_ID`,`C_D_ID`,`C_W_ID`,`C_FIRST`,`C_MIDDLE`,`C_LAST`,"
+    String query = "INSERT INTO `C_Customer`(`C_ID`,`C_D_ID`,`C_W_ID`,`C_FIRST`,`C_MIDDLE`,`C_LAST`,"
         + "`C_STREET_1`,`C_STREET_2`,`C_CITY`,`C_STATE`,`C_ZIP`,`C_PHONE`,`C_SINCE`,`C_CREDIT`,`C_CREDIT_LIM`,"
         + "`C_DISCOUNT`,`C_BALANCE`,`C_DATA`) " + "VALUES (%1$s,%2$s,%3$s,'%4$s','%5$s','%6$s',"
         + "'%7$s','%8$s','%9$s','%10$s','%11$s','%12$s','%13$s','%14$s',%15$s,"
         + "%16$s,%17$s,'%18$s')";
 
     String historyQuery =
-        "INSERT INTO `History`(`H_C_ID`,`H_C_D_ID`,`H_C_W_ID`,`H_D_ID`,`H_W_ID`,`H_DATE`,`H_AMOUNT`,`H_DATA`) "
+        "INSERT INTO `C_History`(`H_C_ID`,`H_C_D_ID`,`H_C_W_ID`,`H_D_ID`,`H_W_ID`,`H_DATE`,`H_AMOUNT`,`H_DATA`) "
             + "VALUES (%1$s,%2$s,%3$s,%4$s,%5$s,'%6$s',%7$s,'%8$s')";
     String sql = null;
     String historySql = null;
@@ -269,19 +269,19 @@ public class TPC_C {
   static void Orders(Connection connection, int w_id, int d_id) {
 
     String orderQuery =
-        "INSERT INTO Orders(`O_ID`,`O_D_ID`,`O_W_ID`,`O_C_ID`,`O_ENTRY_D`,`O_CARRIER_ID`,`O_OL_CNT`,`O_ALL_LOCAL`) "
+        "INSERT INTO `C_Orders`(`O_ID`,`O_D_ID`,`O_W_ID`,`O_C_ID`,`O_ENTRY_D`,`O_CARRIER_ID`,`O_OL_CNT`,`O_ALL_LOCAL`) "
             + "VALUES (%1$s,%2$s,%3$s,%4$s,'%5$s',%6$s,%7$s,%8$s)";
     String orderQueryUnDelivered =
-        "INSERT INTO Orders(`O_ID`,`O_D_ID`,`O_W_ID`,`O_C_ID`,`O_ENTRY_D`,`O_OL_CNT`,`O_ALL_LOCAL`) "
+        "INSERT INTO `C_Orders`(`O_ID`,`O_D_ID`,`O_W_ID`,`O_C_ID`,`O_ENTRY_D`,`O_OL_CNT`,`O_ALL_LOCAL`) "
             + "VALUES (%1$s,%2$s,%3$s,%4$s,'%5$s',%6$s,%7$s)";
     String newOrderQuery =
-        "INSERT INTO `NewOrder`(`NO_O_ID`,`NO_D_ID`,`NO_W_ID`) VALUES (%1$s,%2$s,%3$s)";
+        "INSERT INTO `C_NewOrder`(`NO_O_ID`,`NO_D_ID`,`NO_W_ID`) VALUES (%1$s,%2$s,%3$s)";
     String orderLineUnDelivered =
-        "INSERT INTO `OrderLine`(`OL_O_ID`,`OL_D_ID`,`OL_W_ID`,`OL_NUMBER`,`OL_I_ID`,"
+        "INSERT INTO `C_OrderLine`(`OL_O_ID`,`OL_D_ID`,`OL_W_ID`,`OL_NUMBER`,`OL_I_ID`,"
             + "`OL_SUPPLY_W_ID`,`OL_QUANTITY`,`OL_AMOUNT`,`OL_DIST_INFO`) "
             + "VALUES (%1$s,%2$s,%3$s,%4$s,%5$s,%6$s,%7$s,%8$s,'%9$s')";
     String orderLineQuery =
-        "INSERT INTO `OrderLine`(`OL_O_ID`,`OL_D_ID`,`OL_W_ID`,`OL_NUMBER`,`OL_I_ID`,"
+        "INSERT INTO `C_OrderLine`(`OL_O_ID`,`OL_D_ID`,`OL_W_ID`,`OL_NUMBER`,`OL_I_ID`,"
             + "`OL_SUPPLY_W_ID`,`OL_DELIVERY_D`,`OL_QUANTITY`,`OL_AMOUNT`,`OL_DIST_INFO`) "
             + "VALUES (%1$s,%2$s,%3$s,%4$s,%5$s,%6$s,'%7$s',%8$s,%9$s,'%10$s')";
 
