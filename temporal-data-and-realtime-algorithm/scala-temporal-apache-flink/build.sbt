@@ -15,8 +15,10 @@ libraryDependencies ++= Seq(
   , "org.apache.flink" %% "flink-clients" % FLINK_VERSION withSources()
   //,"org.apache.flink" %% "flink-streaming-contrib" % FLINK_VERSION withSources() // for mock sink
 
+  , "org.apache.flink" %% "flink-connector-rabbitmq" % FLINK_VERSION withSources()
+
   , "com.google.guava" % "guava" % "19.0" withSources()
-  // ,"org.slf4j" % "slf4j-api" % "1.7.7" // % "provided"
+   ,"org.slf4j" % "slf4j-api" % "1.7.7" // % "provided"
   , "org.slf4j" % "slf4j-log4j12" % "1.7.7" // % "provided"
   , "log4j" % "log4j" % "1.2.17" // % "provided"
 
@@ -25,3 +27,7 @@ libraryDependencies ++= Seq(
   , "com.data-artisans.streamingledger" % "da-streamingledger-sdk" % "1.0.0"
   , "com.data-artisans.streamingledger" % "da-streamingledger-runtime-serial" % "1.0.0"
 )
+
+// https://stackoverflow.com/questions/5137460/sbt-stop-run-without-exiting
+fork in run := true
+cancelable in Global := true

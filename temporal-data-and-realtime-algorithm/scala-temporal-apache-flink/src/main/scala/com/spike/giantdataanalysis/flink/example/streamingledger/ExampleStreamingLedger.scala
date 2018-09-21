@@ -25,7 +25,7 @@ object ExampleStreamingLedger {
     // enable checkpoints once a minute
     env.enableCheckpointing(60000)
     val uri = Paths.get("./checkpoints").toAbsolutePath.normalize.toUri
-    val backend: StateBackend = new FsStateBackend(uri, true)
+    val backend = new FsStateBackend(uri, true)
     env.setStateBackend(backend)
 
     // start building the transactional streams
