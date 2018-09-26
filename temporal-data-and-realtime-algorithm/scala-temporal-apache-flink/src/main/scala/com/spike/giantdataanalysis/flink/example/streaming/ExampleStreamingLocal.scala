@@ -4,6 +4,9 @@ import org.apache.flink.api.common.JobExecutionResult
 import org.apache.flink.streaming.api.datastream.DataStreamUtils
 import org.apache.flink.streaming.api.scala.StreamExecutionEnvironment
 
+import org.apache.flink.streaming.api.scala._
+import org.apache.flink.streaming.api.scala.extensions._
+
 case class WordWithCount(word: String, count: Int)
 
 // demonstration for local debug

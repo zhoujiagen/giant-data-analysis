@@ -5,6 +5,9 @@ import org.apache.flink.api.common.serialization.SimpleStringSchema
 import org.apache.flink.streaming.connectors.rabbitmq.common.RMQConnectionConfig
 import org.apache.flink.streaming.connectors.rabbitmq.{RMQSink, RMQSource}
 
+import org.apache.flink.streaming.api.scala._
+import org.apache.flink.streaming.api.scala.extensions._
+
 object RabbitMQConfiguration {
   val host = "192.168.56.110"
   val port = 5672

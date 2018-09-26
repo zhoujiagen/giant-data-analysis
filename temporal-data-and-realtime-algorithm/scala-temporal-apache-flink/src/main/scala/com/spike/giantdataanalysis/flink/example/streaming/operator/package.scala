@@ -1,8 +1,9 @@
 package com.spike.giantdataanalysis.flink.example.streaming
 
-import org.apache.flink.streaming.api.scala.{DataStream, StreamExecutionEnvironment}
-
 package object operator {
+
+  import org.apache.flink.streaming.api.scala._
+
   def stream(env: StreamExecutionEnvironment): DataStream[(String, Int)] = {
     //    env.socketTextStream("localhost", 9999)
     //      .flatMap {

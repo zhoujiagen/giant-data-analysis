@@ -5,7 +5,7 @@ package object streaming {
   import org.apache.flink.streaming.api.scala._
 
   // DataStream API extension
-  // import org.apache.flink.streaming.api.scala.extensions._
+  import org.apache.flink.streaming.api.scala.extensions._
 
 
   val localStreamEnv: StreamExecutionEnvironment = StreamExecutionEnvironment.createLocalEnvironment(1)

@@ -5,6 +5,8 @@ import org.apache.flink.streaming.api.windowing.assigners.EventTimeSessionWindow
 import org.apache.flink.streaming.api.windowing.time.Time
 
 import scala.util.Random
+import org.apache.flink.streaming.api.scala._
+import org.apache.flink.streaming.api.scala.extensions._
 
 /**
   * Demonstration of window join
