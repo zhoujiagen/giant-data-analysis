@@ -5,10 +5,9 @@ import java.util.Date
 import org.apache.flink.api.common.JobID
 import org.apache.flink.api.common.functions.ReduceFunction
 import org.apache.flink.api.common.state.{ReducingStateDescriptor, ValueStateDescriptor}
-import org.apache.flink.api.common.typeinfo.TypeInformation
 import org.apache.flink.queryablestate.client.QueryableStateClient
 import org.apache.flink.streaming.api.functions.source.SourceFunction
-import org.apache.flink.streaming.api.scala.{StreamExecutionEnvironment, _}
+import org.apache.flink.streaming.api.scala._
 
 /**
   * WARNING: Beta API.
@@ -55,10 +54,10 @@ class ExampleQueryableStateSource extends SourceFunction[(Long, Long)] {
 object ExampleStreamingQueryableStateClient {
   def main(args: Array[String]): Unit = {
     val client = new QueryableStateClient("10.12.13.42", 9069) // query log
-    val jobId: JobID = JobID.fromHexString("9ddad46c6c92139a8e838b4f96b1ad25") // use web ui
+    val jobId: JobID = JobID.fromHexString("0ea2162ab4cf7bf7cbbd60e138b44017") // use web ui
     val queryableStateName: String = "example-queryable"
     var key: Long = 5
-    val keyTypeInfo: TypeInformation[Long] = createTypeInformation[Long]
+    val keyTypeInfo = createTypeInformation[Long]
     val stateDescriptor = new ValueStateDescriptor[(Long, Long)]("example-queryable-reduce", createTypeInformation[(Long, Long)])
 
     while (true) {

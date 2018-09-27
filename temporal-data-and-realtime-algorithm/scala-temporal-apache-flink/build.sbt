@@ -11,7 +11,7 @@ libraryDependencies ++= Seq(
   , "org.apache.flink" %% "flink-scala" % FLINK_VERSION withSources()
   , "org.apache.flink" %% "flink-streaming-scala" % FLINK_VERSION withSources()
   , "org.apache.flink" % "flink-java" % FLINK_VERSION withSources()
-  , "org.apache.flink" %% "flink-streaming-java" % FLINK_VERSION withSources() // % "provided"
+  , "org.apache.flink" %% "flink-streaming-java" % FLINK_VERSION withSources()
   , "org.apache.flink" %% "flink-clients" % FLINK_VERSION withSources()
   //,"org.apache.flink" %% "flink-streaming-contrib" % FLINK_VERSION withSources() // for mock sink
 
@@ -21,11 +21,14 @@ libraryDependencies ++= Seq(
   , "org.apache.flink" %% "flink-queryable-state-client-java" % FLINK_VERSION % "provided" withSources()
 
   , "com.google.guava" % "guava" % "19.0" withSources()
-  , "org.slf4j" % "slf4j-api" % "1.7.7" // % "provided"
-  , "org.slf4j" % "slf4j-log4j12" % "1.7.7" // % "provided"
-  , "log4j" % "log4j" % "1.2.17" // % "provided"
+  , "org.slf4j" % "slf4j-api" % "1.7.7"
+  , "org.slf4j" % "slf4j-log4j12" % "1.7.7"
+  , "log4j" % "log4j" % "1.2.17"
 
-  , "org.apache.flink" %% "flink-test-utils" % FLINK_VERSION % Test
+  // test
+  , "org.scalactic" %% "scalactic" % "3.0.5"
+  , "org.scalatest" %% "scalatest" % "3.0.5" % "test"
+  , "org.apache.flink" %% "flink-test-utils" % FLINK_VERSION % "test"
 
   // Streaming Ledger
   , "com.data-artisans.streamingledger" % "da-streamingledger-sdk" % "1.0.0" withSources()
