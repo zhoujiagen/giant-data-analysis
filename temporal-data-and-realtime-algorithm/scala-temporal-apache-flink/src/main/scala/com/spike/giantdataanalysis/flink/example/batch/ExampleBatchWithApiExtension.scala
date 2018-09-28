@@ -7,7 +7,7 @@ import org.apache.flink.api.scala.extensions._
 /**
   * [[DataSet]] API实例.
   */
-object ExampleBatching {
+object ExampleBatchWithApiExtension {
   def main(args: Array[String]): Unit = {
     val benv = localBatchEnv
 
@@ -30,6 +30,7 @@ object ExampleBatching {
 
     gds.first(2).print()
 
-    println(benv.execute("ExampleBatching").getJobID)
+    val jobExecutionResult = benv.execute()
+    println(jobExecutionResult.getJobID)
   }
 }

@@ -10,8 +10,8 @@ libraryDependencies ++= Seq(
   "org.apache.flink" % "flink-core" % FLINK_VERSION withSources()
   , "org.apache.flink" %% "flink-scala" % FLINK_VERSION withSources()
   , "org.apache.flink" %% "flink-streaming-scala" % FLINK_VERSION withSources()
-  , "org.apache.flink" % "flink-java" % FLINK_VERSION withSources()
-  , "org.apache.flink" %% "flink-streaming-java" % FLINK_VERSION withSources()
+  //, "org.apache.flink" % "flink-java" % FLINK_VERSION withSources()
+  //, "org.apache.flink" %% "flink-streaming-java" % FLINK_VERSION withSources()
   , "org.apache.flink" %% "flink-clients" % FLINK_VERSION withSources()
   //,"org.apache.flink" %% "flink-streaming-contrib" % FLINK_VERSION withSources() // for mock sink
 
@@ -19,6 +19,11 @@ libraryDependencies ++= Seq(
   , "org.apache.flink" %% "flink-connector-rabbitmq" % FLINK_VERSION withSources()
   // queryable state
   , "org.apache.flink" %% "flink-queryable-state-client-java" % FLINK_VERSION % "provided" withSources()
+
+  // table and sql
+  , "org.apache.flink" %% "flink-table" % FLINK_VERSION withSources()
+  , "org.apache.flink" % "flink-jdbc" % FLINK_VERSION withSources()
+  , "mysql" % "mysql-connector-java" % "5.1.45"
 
   , "com.google.guava" % "guava" % "19.0" withSources()
   , "org.slf4j" % "slf4j-api" % "1.7.7"

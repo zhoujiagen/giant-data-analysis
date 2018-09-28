@@ -53,7 +53,7 @@ class ExampleQueryableStateSource extends SourceFunction[(Long, Long)] {
 
 object ExampleStreamingQueryableStateClient {
   def main(args: Array[String]): Unit = {
-    val client = new QueryableStateClient("10.12.13.42", 9069) // query log
+    val client = new QueryableStateClient("localhost", 9069) // query log
     val jobId: JobID = JobID.fromHexString("0ea2162ab4cf7bf7cbbd60e138b44017") // use web ui
     val queryableStateName: String = "example-queryable"
     var key: Long = 5
