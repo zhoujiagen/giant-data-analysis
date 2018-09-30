@@ -25,11 +25,6 @@ libraryDependencies ++= Seq(
   , "org.apache.flink" % "flink-jdbc" % FLINK_VERSION withSources()
   , "mysql" % "mysql-connector-java" % "5.1.45"
 
-  , "com.google.guava" % "guava" % "19.0" withSources()
-  , "org.slf4j" % "slf4j-api" % "1.7.7"
-  , "org.slf4j" % "slf4j-log4j12" % "1.7.7"
-  , "log4j" % "log4j" % "1.2.17"
-
   // test
   , "org.scalactic" %% "scalactic" % "3.0.5"
   , "org.scalatest" %% "scalatest" % "3.0.5" % "test"
@@ -38,6 +33,13 @@ libraryDependencies ++= Seq(
   // Streaming Ledger
   , "com.data-artisans.streamingledger" % "da-streamingledger-sdk" % "1.0.0" withSources()
   , "com.data-artisans.streamingledger" % "da-streamingledger-runtime-serial" % "1.0.0" withSources()
+
+  // utilities
+  , "com.google.guava" % "guava" % "19.0" withSources()
+  , "com.google.code.gson" % "gson" % "2.8.5" withSources()
+  , "org.slf4j" % "slf4j-api" % "1.7.7"
+  , "org.slf4j" % "slf4j-log4j12" % "1.7.7"
+  , "log4j" % "log4j" % "1.2.17"
 )
 
 // https://stackoverflow.com/questions/5137460/sbt-stop-run-without-exiting

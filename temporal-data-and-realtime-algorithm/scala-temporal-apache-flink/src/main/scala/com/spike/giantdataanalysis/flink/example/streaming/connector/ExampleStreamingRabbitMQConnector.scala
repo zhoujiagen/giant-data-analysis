@@ -2,11 +2,9 @@ package com.spike.giantdataanalysis.flink.example.streaming.connector
 
 import com.spike.giantdataanalysis.flink.example.streaming.localStreamEnv
 import org.apache.flink.api.common.serialization.SimpleStringSchema
+import org.apache.flink.streaming.api.scala._
 import org.apache.flink.streaming.connectors.rabbitmq.common.RMQConnectionConfig
 import org.apache.flink.streaming.connectors.rabbitmq.{RMQSink, RMQSource}
-
-import org.apache.flink.streaming.api.scala._
-import org.apache.flink.streaming.api.scala.extensions._
 
 object RabbitMQConfiguration {
   val host = "192.168.56.110"
@@ -33,7 +31,7 @@ object ExampleStreamingRabbitMQConnector {
     val stream = env.addSource(new RMQSource[String](
       connectionConfig,
       "FlinkStreamingSourceQueue",
-      true,
+      false,
       new SimpleStringSchema))
       .setParallelism(1)
 
