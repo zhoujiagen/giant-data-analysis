@@ -25,6 +25,10 @@ libraryDependencies ++= Seq(
   , "org.apache.flink" % "flink-jdbc" % FLINK_VERSION withSources()
   , "mysql" % "mysql-connector-java" % "5.1.45"
 
+  // lib
+  // CEP
+  , "org.apache.flink" %% "flink-cep" % FLINK_VERSION withSources()
+
   // test
   , "org.scalactic" %% "scalactic" % "3.0.5"
   , "org.scalatest" %% "scalatest" % "3.0.5" % "test"
