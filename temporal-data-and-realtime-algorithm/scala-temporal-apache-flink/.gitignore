@@ -17,3 +17,5 @@
 derby.log
 /.idea/*
 *.iml
+
+checkpoints/

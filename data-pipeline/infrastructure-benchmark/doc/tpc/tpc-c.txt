@@ -1,0 +1,202 @@
+
+# DDL
+
+		CREATE DATABASE `tpc` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_bin */;
+		USE `tpc`;
+
+		CREATE TABLE `C_Warehouse` (
+		  `W_ID` int(11) NOT NULL,
+		  `W_NAME` varchar(10) COLLATE utf8mb4_bin NOT NULL,
+		  `W_STREET1` varchar(20) COLLATE utf8mb4_bin NOT NULL,
+		  `W_STREET2` varchar(20) COLLATE utf8mb4_bin NOT NULL,
+		  `W_CITY` varchar(20) COLLATE utf8mb4_bin NOT NULL,
+		  `W_STATE` char(2) COLLATE utf8mb4_bin NOT NULL,
+		  `W_ZIP` char(9) COLLATE utf8mb4_bin NOT NULL,
+		  `W_TAX` decimal(4,4) NOT NULL COMMENT 'Sales tax',
+		  `W_YTD` decimal(12,2) NOT NULL COMMENT 'Year to date balance',
+		  PRIMARY KEY (`W_ID`)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='仓库';
+
+		CREATE TABLE `C_District` (
+		  `D_ID` tinyint(4) NOT NULL,
+		  `D_W_ID` int(11) NOT NULL,
+		  `D_NAME` varchar(10) COLLATE utf8mb4_bin NOT NULL,
+		  `D_STREET_1` varchar(20) COLLATE utf8mb4_bin NOT NULL,
+		  `D_STREET_2` varchar(20) COLLATE utf8mb4_bin NOT NULL,
+		  `D_CITY` varchar(20) COLLATE utf8mb4_bin NOT NULL,
+		  `D_STATE` char(2) COLLATE utf8mb4_bin NOT NULL,
+		  `D_ZIP` char(9) COLLATE utf8mb4_bin NOT NULL,
+		  `D_TAX` decimal(4,4) NOT NULL COMMENT 'Sales tax',
+		  `D_YTD` decimal(12,2) NOT NULL COMMENT 'Year to date balance',
+		  `D_NEXT_O_ID` int(11) NOT NULL COMMENT 'Next available Order Number',
+		  PRIMARY KEY (`D_ID`,`D_W_ID`),
+		  KEY `FK_Reference_1` (`D_W_ID`),
+		  CONSTRAINT `FK_Reference_1` FOREIGN KEY (`D_W_ID`) REFERENCES `C_Warehouse` (`w_id`)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='地区';
+
+		CREATE TABLE `C_Customer` (
+		  `C_ID` int(11) NOT NULL COMMENT '3000 are polulated per district',
+		  `C_D_ID` tinyint(4) NOT NULL,
+		  `C_W_ID` int(11) NOT NULL,
+		  `C_FIRST` varchar(16) COLLATE utf8mb4_bin NOT NULL,
+		  `C_MIDDLE` char(2) COLLATE utf8mb4_bin NOT NULL,
+		  `C_LAST` varchar(16) COLLATE utf8mb4_bin NOT NULL,
+		  `C_STREET_1` varchar(20) COLLATE utf8mb4_bin NOT NULL,
+		  `C_STREET_2` varchar(20) COLLATE utf8mb4_bin NOT NULL,
+		  `C_CITY` varchar(20) COLLATE utf8mb4_bin NOT NULL,
+		  `C_STATE` char(2) COLLATE utf8mb4_bin NOT NULL,
+		  `C_ZIP` char(9) COLLATE utf8mb4_bin NOT NULL,
+		  `C_PHONE` char(16) COLLATE utf8mb4_bin NOT NULL,
+		  `C_SINCE` datetime NOT NULL,
+		  `C_CREDIT` char(2) COLLATE utf8mb4_bin NOT NULL COMMENT 'GC=good, BC=bad',
+		  `C_CREDIT_LIM` decimal(12,2) NOT NULL,
+		  `C_DISCOUNT` decimal(4,4) NOT NULL,
+		  `C_BALANCE` decimal(12,2) NOT NULL,
+		  `C_YTD_PAYMENT` decimal(12,2) DEFAULT NULL,
+		  `C_PAYMENT_CNT` decimal(4,0) DEFAULT NULL,
+		  `C_DELIVERY_CNT` decimal(4,0) DEFAULT NULL,
+		  `C_DATA` varchar(500) COLLATE utf8mb4_bin NOT NULL COMMENT 'Miscellaneous information',
+		  PRIMARY KEY (`C_ID`,`C_D_ID`,`C_W_ID`),
+		  KEY `FK_Reference_2` (`C_D_ID`,`C_W_ID`),
+		  CONSTRAINT `FK_Reference_2` FOREIGN KEY (`C_D_ID`, `C_W_ID`) REFERENCES `C_District` (`d_id`, `d_w_id`)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='顾客';
+
+		CREATE TABLE `C_History` (
+		  `H_C_ID` int(11) NOT NULL,
+		  `H_C_D_ID` tinyint(4) NOT NULL,
+		  `H_C_W_ID` int(11) NOT NULL,
+		  `H_D_ID` tinyint(4) NOT NULL,
+		  `H_W_ID` int(11) NOT NULL,
+		  `H_DATE` datetime NOT NULL,
+		  `H_AMOUNT` decimal(6,2) NOT NULL,
+		  `H_DATA` varchar(24) COLLATE utf8mb4_bin NOT NULL COMMENT 'Miscellanceous information',
+		  KEY `FK_Reference_3` (`H_C_ID`,`H_C_D_ID`,`H_C_W_ID`),
+		  KEY `FK_Reference_4` (`H_D_ID`,`H_W_ID`),
+		  CONSTRAINT `FK_Reference_3` FOREIGN KEY (`H_C_ID`, `H_C_D_ID`, `H_C_W_ID`) REFERENCES `C_Customer` (`c_id`, `c_d_id`, `c_w_id`),
+		  CONSTRAINT `FK_Reference_4` FOREIGN KEY (`H_D_ID`, `H_W_ID`) REFERENCES `C_District` (`d_id`, `d_w_id`)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='顾客历史';
+
+		CREATE TABLE `C_Item` (
+		  `I_ID` int(11) NOT NULL,
+		  `I_IM_ID` int(11) NOT NULL DEFAULT '0' COMMENT 'Image ID associated to Item',
+		  `I_NAME` varchar(24) COLLATE utf8mb4_bin NOT NULL,
+		  `I_PRICE` decimal(5,2) NOT NULL,
+		  `I_DATA` varchar(50) COLLATE utf8mb4_bin NOT NULL COMMENT 'Brand information',
+		  PRIMARY KEY (`I_ID`)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='商品项';
+
+		CREATE TABLE `C_Orders` (
+		  `O_ID` int(11) NOT NULL,
+		  `O_D_ID` tinyint(4) NOT NULL,
+		  `O_W_ID` int(11) NOT NULL,
+		  `O_C_ID` int(11) NOT NULL,
+		  `O_ENTRY_D` datetime NOT NULL,
+		  `O_CARRIER_ID` tinyint(4) DEFAULT NULL,
+		  `O_OL_CNT` decimal(2,0) NOT NULL COMMENT 'Count of OrderLines',
+		  `O_ALL_LOCAL` decimal(1,0) NOT NULL,
+		  PRIMARY KEY (`O_ID`,`O_D_ID`,`O_W_ID`),
+		  KEY `FK_Reference_5` (`O_C_ID`,`O_D_ID`,`O_W_ID`),
+		  CONSTRAINT `FK_Reference_5` FOREIGN KEY (`O_C_ID`, `O_D_ID`, `O_W_ID`) REFERENCES `C_Customer` (`c_id`, `c_d_id`, `c_w_id`)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='订单';
+
+		CREATE TABLE `C_NewOrder` (
+		  `NO_O_ID` int(11) NOT NULL,
+		  `NO_D_ID` tinyint(4) NOT NULL,
+		  `NO_W_ID` int(11) NOT NULL,
+		  PRIMARY KEY (`NO_O_ID`,`NO_D_ID`,`NO_W_ID`),
+		  CONSTRAINT `FK_Reference_6` FOREIGN KEY (`NO_O_ID`, `NO_D_ID`, `NO_W_ID`) REFERENCES `C_Orders` (`o_id`, `o_d_id`, `o_w_id`)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='新订单';
+
+		CREATE TABLE `C_Stock` (
+		  `S_I_ID` int(11) NOT NULL,
+		  `S_W_ID` int(11) NOT NULL,
+		  `S_QUANTITY` decimal(4,0) NOT NULL,
+		  `S_DIST_01` char(24) COLLATE utf8mb4_bin NOT NULL,
+		  `S_DIST_02` char(24) COLLATE utf8mb4_bin NOT NULL,
+		  `S_DIST_03` char(24) COLLATE utf8mb4_bin NOT NULL,
+		  `S_DIST_04` char(24) COLLATE utf8mb4_bin NOT NULL,
+		  `S_DIST_05` char(24) COLLATE utf8mb4_bin NOT NULL,
+		  `S_DIST_06` char(24) COLLATE utf8mb4_bin NOT NULL,
+		  `S_DIST_07` char(24) COLLATE utf8mb4_bin NOT NULL,
+		  `S_DIST_08` char(24) COLLATE utf8mb4_bin NOT NULL,
+		  `S_DIST_09` char(24) COLLATE utf8mb4_bin NOT NULL,
+		  `S_DIST_10` char(24) COLLATE utf8mb4_bin NOT NULL,
+		  `S_YTD` decimal(8,0) NOT NULL,
+		  `S_ORDER_CNT` decimal(4,0) NOT NULL,
+		  `S_REMOTE_CNT` decimal(4,0) NOT NULL,
+		  `S_DATA` varchar(50) COLLATE utf8mb4_bin NOT NULL COMMENT 'Make information',
+		  PRIMARY KEY (`S_I_ID`,`S_W_ID`),
+		  KEY `FK_Reference_8` (`S_W_ID`),
+		  CONSTRAINT `FK_Reference_8` FOREIGN KEY (`S_W_ID`) REFERENCES `C_Warehouse` (`w_id`),
+		  CONSTRAINT `FK_Reference_9` FOREIGN KEY (`S_I_ID`) REFERENCES `C_Item` (`i_id`)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='库存';
+
+		CREATE TABLE `C_OrderLine` (
+		  `OL_O_ID` int(11) NOT NULL,
+		  `OL_D_ID` tinyint(4) NOT NULL,
+		  `OL_W_ID` int(11) NOT NULL,
+		  `OL_NUMBER` tinyint(4) NOT NULL,
+		  `OL_I_ID` int(11) NOT NULL,
+		  `OL_SUPPLY_W_ID` int(11) NOT NULL,
+		  `OL_DELIVERY_D` datetime DEFAULT NULL,
+		  `OL_QUANTITY` decimal(2,0) NOT NULL,
+		  `OL_AMOUNT` decimal(6,2) NOT NULL,
+		  `OL_DIST_INFO` char(24) COLLATE utf8mb4_bin NOT NULL,
+		  PRIMARY KEY (`OL_O_ID`,`OL_D_ID`,`OL_W_ID`,`OL_NUMBER`),
+		  KEY `FK_Reference_10` (`OL_I_ID`,`OL_SUPPLY_W_ID`),
+		  CONSTRAINT `FK_Reference_10` FOREIGN KEY (`OL_I_ID`, `OL_SUPPLY_W_ID`) REFERENCES `C_Stock` (`s_i_id`, `s_w_id`),
+		  CONSTRAINT `FK_Reference_7` FOREIGN KEY (`OL_O_ID`, `OL_D_ID`, `OL_W_ID`) REFERENCES `C_Orders` (`o_id`, `o_d_id`, `o_w_id`)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='订单项';
+
+
+
+
+# DML
+
+-- View Data
+
+		SELECT * FROM C_Customer; 			-- 顾客
+		SELECT * FROM C_District; 			-- 地区
+		SELECT * FROM C_History; 			-- 顾客历史
+		SELECT * FROM C_Item; 				-- 商品项
+		SELECT * FROM C_NewOrder; 			-- 新订单
+		SELECT * FROM C_OrderLine; 			-- 订单项
+		SELECT * FROM C_Orders; 			-- 订单
+		SELECT * FROM C_Stock; 				-- 库存
+		SELECT * FROM C_Warehouse; 			-- 仓库
+
+-- Clean up
+
+		delete from  C_NewOrder;
+		delete from  C_History;
+		delete from  C_OrderLine;
+		delete from  C_Stock;
+		delete from  C_Item;
+		delete from  C_Orders;
+		delete from  C_Customer;
+		delete from  C_District;
+		delete from  C_Warehouse;
+
+		drop table C_NewOrder;
+		drop table C_History;
+		drop table C_OrderLine;
+		drop table C_Stock;
+		drop table C_Item;
+		drop table C_Orders;
+		drop table C_Customer;
+		drop table C_District;
+		drop table C_Warehouse;
+
+# TODO
+
++ 整理事务类型及其含义
+
+		New-Order
+		Payment
+		Order-Status
+		Delivery
+		Stock-Level
+
++ 编写性能指标获取程序
+
++ 生成报告

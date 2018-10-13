@@ -1,20 +1,12 @@
 package com.spike.giantdataanalysis.flink
 
+/**
+  * Demonstrations.
+  * WARNING: some examples may be meaningless.
+  */
 package object example {
 
-  // batch
-  import org.apache.flink.api.scala._
-  // stream
-  import org.apache.flink.streaming.api.scala._
+  // 2D point
+  case class Point(x: Double, y: Double)
 
-  // DataSet API extension
-  //  import org.apache.flink.api.scala.extensions._
-  // DataStream API extension
-  //  import org.apache.flink.streaming.api.scala.extensions._
-
-  val localStreamEnv : StreamExecutionEnvironment = StreamExecutionEnvironment.createLocalEnvironment(1)
-  val prodStreamEnv : StreamExecutionEnvironment = StreamExecutionEnvironment.getExecutionEnvironment
-
-  val localBatchEnv : ExecutionEnvironment = ExecutionEnvironment.createLocalEnvironment(1)
-  val prodBatchEnv : ExecutionEnvironment = ExecutionEnvironment.getExecutionEnvironment
 }
