@@ -1,4 +1,12 @@
+*.classpath
+*.class
+*.project
+**/**/target/
+**/**/.settings/
+**/**/.idea/
 
 data-management-infrastructure/datasets/log.out
 data-management-infrastructure/datasets/output
 data-management-infrastructure/scala-infrastructure-apache-spark/metastore_db
+
+python/
