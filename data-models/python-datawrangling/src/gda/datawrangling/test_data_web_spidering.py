@@ -45,7 +45,6 @@ class PythonPackageSpider(CrawlSpider):
             if data[0].isdigit():
                 return int(data[0])
         return data[0]
-        return []
 
     def parse(self, response):
         item = PythonPackageItem()

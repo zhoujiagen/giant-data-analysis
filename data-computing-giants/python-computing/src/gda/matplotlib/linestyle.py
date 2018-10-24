@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-#!/usr/bin/env python
 
-'''
+"""
 线型设置
-'''
+"""
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -32,9 +31,9 @@ plt.setp(lines, 'color', 'r', 'linewidth', 2.0)
 '''
 # 返回matplotlib.lines.Line2D对象(http://matplotlib.org/api/lines_api.html#matplotlib.lines.Line2D)
 line, = plt.plot([1,2,4,3])
-print line
+print(line)
 # 查看可设置属性
-print plt.setp(line)
+print(plt.setp(line))
 
 line.set_linestyle('--')
 line.set_linewidth(2.)

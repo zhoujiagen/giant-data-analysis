@@ -1,28 +1,23 @@
 # -*- coding: utf-8 -*-  
 
-'''
-Created on 2017-11-01 18:54:05
+"""
 相似度计算.
 @author: zhoujiagen
-'''
+Created on 2017-11-01 18:54:05
+"""
 
 
 def pearson(x, y):
-    """计算两向量的皮尔逊相关系数.
+    """
+    计算两向量的皮尔逊相关系数.
 
                         Sum(XY) - (Sum(X) * Sum(Y))/N
     --------------------------------------------------------------------
     sqrt( (Sum(X^2) - (Sum(X))^2/N) * (Sum(Y^2) - (Sum(Y))^2/N) )
-
-    Args:
-        x: 向量.
-        y: 向量.
-
-    Returns:
-        向量的皮尔逊相关系数
-
-    Raises:
-        None
+    :param x: 向量.
+    :param y: 向量.
+    :return: 向量的皮尔逊相关系数
+    :raise None
     """
     if len(x) != len(y):
         return 0

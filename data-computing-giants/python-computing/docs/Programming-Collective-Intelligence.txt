@@ -1,6 +1,4 @@
-######################################################
-Strike 1: Programming Collective Intelligence
-######################################################
+# Programming Collective Intelligence
 
 ### 1 协同过滤(collaborative filtering)
 

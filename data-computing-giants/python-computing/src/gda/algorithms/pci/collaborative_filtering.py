@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
-'''
-Created on 2017-10-31 22:29:22
+"""
 协同过滤(Collaborative Filtering)
 @author: zhoujiagen
-'''
+Created on 2017-10-31 22:29:22
+"""
 
 from math import sqrt
 
@@ -13,18 +13,13 @@ from gda.tools.similarity import pearson
 
 # ##################################################### 基于用户的协同过滤
 def sim_distance(data, user1, user2):
-    """返回用户之前的相似度 - 欧几里德距离.
-
-    Args:
-        data: {用户: {电影: 评分}}.
-        user1: 用户1的名称.
-        user2: 用户2的名称.
-
-    Returns:
-        user1与user2之间的相似度.
-
-    Raises:
-        None
+    """
+    返回用户之前的相似度 - 欧几里德距离.
+    :param data: {用户: {电影: 评分}}.
+    :param user1: 用户1的名称.
+    :param user2: 用户2的名称.
+    :return: user1与user2之间的相似度.
+    :raise None
     """
     intersect_movies = {}  # user1/2均评过分的电影
     for movie in data[user1]:
@@ -43,18 +38,13 @@ def sim_distance(data, user1, user2):
 
 
 def sim_pearson(data, user1, user2):
-    """返回用户之前的相似度 - 皮尔逊相关系数.
-
-    Args:
-        data: {用户: {电影: 评分}}.
-        user1: 用户1的名称.
-        user2: 用户2的名称.
-
-    Returns:
-        user1与user2之间的相似度.
-
-    Raises:
-        None
+    """
+    返回用户之前的相似度 - 皮尔逊相关系数.
+    :param data: {用户: {电影: 评分}}.
+    :param user1: 用户1的名称.
+    :param user2: 用户2的名称.
+    :return: user1与user2之间的相似度.
+    :raise None
     """
     intersect_movies = {}  # user1/2均评过分的电影
     for movie in data[user1]:
@@ -73,7 +63,7 @@ def sim_pearson(data, user1, user2):
     return pearson(user1_scores, user2_scores)
 
 
-def top_match(data, subject, n = 5, sim_func = sim_pearson):
+def top_match(data, subject, n=5, sim_func=sim_pearson):
     """top_match_users的泛化."""
     sim_scores = [(sim_func(data, subject, other), other)
                   for other in data if other != subject]
@@ -82,20 +72,15 @@ def top_match(data, subject, n = 5, sim_func = sim_pearson):
     return sim_scores[0:n]
 
 
-def top_match_users(data, user, n = 5, sim_func = sim_pearson):
-    """计算与用户最为相似的用户列表.
-
-    Args:
-        data: {用户: {电影: 评分}}.
-        user: 用户名称.
-        n: 要求返回的用户数量.
-        sim_func: 相似度函数.
-
-    Returns:
-        [(sim, user)]: 相似度函数意义下, 与用户最为相似的用户列表.
-
-    Raises:
-        None
+def top_match_users(data, user, n=5, sim_func=sim_pearson):
+    """
+    计算与用户最为相似的用户列表.
+    :param data: {用户: {电影: 评分}}.
+    :param user: 用户名称.
+    :param n: 要求返回的用户数量.
+    :param sim_func: 相似度函数.
+    :return: [(sim, user)]: 相似度函数意义下, 与用户最为相似的用户列表.
+    :raise None
     """
     sim_scores = [(sim_func(data, user, other), other)
                   for other in data if other != user]
@@ -104,23 +89,18 @@ def top_match_users(data, user, n = 5, sim_func = sim_pearson):
     return sim_scores[0:n]
 
 
-def get_recommendations(data, user, sim_func = sim_pearson):
-    """给用户推荐影片.
+def get_recommendations(data, user, sim_func=sim_pearson):
+    """
+    给用户推荐影片.
 
     使用其他用户对影片评分的加权平均. 两个因素:
     (1) 其他用户对影片的评分;
     (2) 该用户与其他用户的相似度.
-
-    Args:
-        data: {用户: {电影: 评分}}.
-        user: 用户名称.
-        sim_func: 相似度函数.
-
-    Returns:
-        [(score, movie)]: 推荐的影片及预期评分.
-
-    Raises:
-        None
+    :param data: {用户: {电影: 评分}}.
+    :param user: 用户名称.
+    :param sim_func: 相似度函数.
+    :return: [(score, movie)]: 推荐的影片及预期评分.
+    :raise None
     """
 
     # 用户对影片的评分因用户间的相似度而贡献的评分之和: {影片: 评分加权总分}
@@ -159,16 +139,11 @@ def get_recommendations(data, user, sim_func = sim_pearson):
 
 
 def transfer_data(data):
-    """转换数据.
-
-    Args:
-        data: {用户: {电影: 评分}}.
-
-    Returns:
-        {电影: {用户: 评分}}.
-
-    Raises:
-        None
+    """
+    转换数据.
+    :param data: {用户: {电影: 评分}}.
+    :return: {电影: {用户: 评分}}.
+    :raise None
     """
     result = {}
     for user, movie_score in data.items():
@@ -181,19 +156,17 @@ def transfer_data(data):
 # ##################################################### 基于物品的协同过滤
 
 
-def get_sim_items(data, n = 10, sim_func = sim_distance):
-    """计算相似的物品集合.
-
-    Args:
-        data: {用户: {电影: 评分}}.
-        n: 相似物品的数量限制.
-        sim_func: 相似度函数.
-
-    Returns:
-        {movie: [(sim_movies, movie')]}
-
-    Raises:
-        None
+def get_sim_items(data, n=10, sim_func=sim_distance):
+    """
+    计算相似的物品集合.
+    :param data: {用户: {电影: 评分}}.
+    :type data: dict
+    :param n: 相似物品的数量限制.
+    :type n: int
+    :param sim_func: 相似度函数.
+    :type sim_func: function
+    :return: {movie: [(sim_movies, movie')]}
+    :raise None
     """
     result = {}
 
@@ -205,25 +178,21 @@ def get_sim_items(data, n = 10, sim_func = sim_distance):
             print("%d/%d" % (process_count, len(movie_data)))
 
         # 使用最佳匹配函数top_match
-        match_movies = top_match(movie_data, movie, n = n, sim_func = sim_func)
+        match_movies = top_match(movie_data, movie, n=n, sim_func=sim_func)
         result[movie] = match_movies
 
     return result
 
 
 def get_recommendations_by_item(data, sim_items, user):
-    """基于物品的推荐.
-
-    Args:
-        data: {用户: {电影: 评分}}.
-        sim_items: 相似的物品集合{movie: [(sim_movies, movie')]}, 见get_sim_items().
-        user: 用户名称.
-
-    Returns:
-        [(score, movie)]
-
-    Raises:
-        None
+    """
+    基于物品的推荐.
+    :param data: {用户: {电影: 评分}}.
+    :param sim_items: 相似的物品集合{movie: [(sim_movies, movie')]}, 见get_sim_items().
+    :param user: 用户名称.
+    :type user: str
+    :return: [(score, movie)]
+    :raise None
     """
     user_scores = data[user]  # 该用户的所有电影评分
     sum_weighted_scores = {}  # 评过分的电影评分的电影相似性加权的和

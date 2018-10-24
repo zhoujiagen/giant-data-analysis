@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-#!/usr/bin/env python
 
-'''
+"""
 多图和坐标
-'''
+"""
 
 import numpy as np
 import matplotlib.pyplot as plt

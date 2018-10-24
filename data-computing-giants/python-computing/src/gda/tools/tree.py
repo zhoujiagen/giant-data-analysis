@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
-'''
-Created on 2017-11-01 23:05:33
+"""
 树工具类
 @author: zhoujiagen
-'''
+Created on 2017-11-01 23:05:33
+"""
 
 from treelib import Tree
 

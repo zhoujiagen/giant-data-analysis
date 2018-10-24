@@ -50,6 +50,32 @@ class TestDataMySQL(unittest.TestCase):
             cursor.close()
             connection.close()
 
+    def test_insert_return_id(self):
+        """
+        REF: https://stackoverflow.com/questions/2548493/how-do-i-get-the-id-after-insert-into-mysql-database-with-python
+
+        table schema:
+        CREATE TABLE `AI_ID` (
+            `id` int(11) NOT NULL AUTO_INCREMENT,
+            `description` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
+            PRIMARY KEY (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+        """
+        connection = connect()
+        cursor = connection.cursor()
+        sql_str = "INSERT INTO AI_ID(`description`) VALUES('%s')" % "hello"
+        try:
+            cursor.execute(sql_str)
+            connection.commit()
+            print(cursor.lastrowid)
+        except Exception as e:
+            print(e)
+            connection.rollback()
+            raise e
+        finally:
+            cursor.close()
+            connection.close()
+
     def test_batch_insert(self):
         connection = connect()
         cursor = connection.cursor()

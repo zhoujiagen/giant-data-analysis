@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-#!/usr/bin/env python
 
-'''
+"""
 使用文本
-'''
+"""
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -13,7 +12,7 @@ import matplotlib.pyplot as plt
 np.random.seed(19680801)
 
 mu, sigma = 100, 15
-x  = mu + sigma * np.random.randn(10000)
+x = mu + sigma * np.random.randn(10000)
 
 
 plt.figure(1)

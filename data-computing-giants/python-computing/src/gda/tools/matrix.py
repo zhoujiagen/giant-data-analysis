@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
-'''
-Created on 2017-11-01 23:44:35
+"""
 矩阵工具模块.
 @author: zhoujiagen
-'''
+Created on 2017-11-01 23:44:35
+"""
 
 
 def rotate(matrix):
@@ -29,6 +29,7 @@ def rotate(matrix):
         new_matrix.append(new_row)
 
     return new_matrix
+
 
 if __name__ == '__main__':
     MATRIX = [[1, 2], [3, 4]]
