@@ -18,7 +18,7 @@ if __name__ == '__main__':
     plt.plot([1,2,3,4])
     # 图2: x,y
     plt.plot([1,2,3,4], [1,4,9,16], 'ro')
-    # 图3: x1,y1,ls1, x2,y2,l2, x3,y3,l3
+    # 图3: x1,y1,ls1, x2,y2,ls2, x3,y3,ls3
     t = np.arange(0., 5., 0.2)
     plt.plot(t, t, 'r--', t, t**2, 'bs', t, t**3, 'g^')
 

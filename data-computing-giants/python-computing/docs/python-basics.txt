@@ -1,0 +1,11 @@
+
+
+## Decorator
+
+Primer on Python Decorators: https://realpython.com/primer-on-python-decorators/
+PEP 318 -- Decorators for Functions and Methods: https://www.python.org/dev/peps/pep-0318/
+
+## Concurrenty
+
+Concurrency in Python - Quick Guide: https://www.tutorialspoint.com/concurrency_in_python/concurrency_in_python_quick_guide.htm
+The Python Standard Library - Concurrent Execution: https://docs.python.org/3/library/concurrency.html
