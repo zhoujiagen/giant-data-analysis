@@ -12,7 +12,7 @@ from enum import Enum
 # ---------------------------------------------------------------------------
 # Data and Data Structure
 # ---------------------------------------------------------------------------
-
+from gda.tools.data_structure import CompareOperation, BaseDataSample
 
 DEBUG = True
 
@@ -42,19 +42,9 @@ class ServiceChosen(Enum):
     PREMIUM = 'Premium'
 
 
-class CompareOperation(Enum):
-    """比较操作"""
-    EQ = 'EQ'
-    LT = 'LT'
-    LTE = 'LTE'
-    GT = 'GT'
-    GTE = 'GTE'
-
-
-class UserBehaviour(object):
+class UserBehaviour(BaseDataSample):
     def __init__(self, referrer, location, read_faq, pages_viewed, service_chosen):
-        self.value_dict = dict()
-        self.key_compare_op_dict = dict()
+        BaseDataSample.__init__(self)
         self.value_dict['referrer'] = referrer
         self.key_compare_op_dict['referrer'] = CompareOperation.EQ
         self.value_dict['location'] = location
@@ -74,22 +64,8 @@ class UserBehaviour(object):
             self.value_dict['service_chosen'] = ServiceChosen.NONE
         self.key_compare_op_dict['service_chosen'] = CompareOperation.EQ
 
-    def get_length(self):
-        return len(self.get_attr_keys())
-
-    def get_attr_keys(self):
-        result = set(self.value_dict.keys())
-        result.discard(self.get_target_key())
-        return result
-
     def get_target_key(self):
         return 'service_chosen'
-
-    def get_value(self, key):
-        return self.value_dict[key]
-
-    def get_key_compare_op(self, key):
-        return self.key_compare_op_dict[key]
 
     def referrer(self):
         return self.value_dict['referrer']
@@ -103,15 +79,12 @@ class UserBehaviour(object):
     def pages_viewed(self):
         return self.value_dict['pages_viewed']
 
-    def service_chosen(self):
-        return self.value_dict['service_chosen'].value
-
     def __repr__(self):
         return self.__str__()
 
     def __str__(self):
         return "{} {} {} {}: {}".format(
-            self.referrer(), self.location(), self.read_faq(), self.pages_viewed(), self.service_chosen())
+            self.referrer(), self.location(), self.read_faq(), self.pages_viewed(), self.get_target_value())
 
 
 class BinaryDecisionTreeNode(object):
@@ -172,7 +145,7 @@ def show_data(datas):
     table.align = "l"
 
     for data in datas:
-        table.add_row([data.referrer(), data.location(), data.read_faq(), data.pages_viewed(), data.service_chosen()])
+        table.add_row([data.referrer(), data.location(), data.read_faq(), data.pages_viewed(), data.get_target_value()])
     print(table)
 
 
@@ -222,8 +195,8 @@ def get_target_counts(datas):
     results = {}
 
     for data in datas:
-        results.setdefault(data.service_chosen(), 0)
-        results[data.service_chosen()] += 1
+        results.setdefault(data.get_target_value(), 0)
+        results[data.get_target_value()] += 1
 
     return results
 
@@ -249,6 +222,25 @@ def entropy(datas):
     for target in counts.keys():
         p = counts[target] / data_size
         result = result - p * log2(p)
+    return result
+
+
+def variance(datas):
+    """Variance of target attr value"""
+    if len(datas) == 0:
+        return 0
+    target_value_0 = datas[0].get_target_value
+    data_size = len(datas)
+
+    if not (isinstance(target_value_0, int) or isinstance(target_value_0, float)):
+        counts = get_target_counts(datas)
+        target_values = [v for (_, v) in counts.items()]
+    else:
+        # handle numeric target values
+        target_values = [data.get_target_value() for data in datas]
+
+    mean = sum(target_values) / data_size
+    result = sum([(value - mean) ** 2 for value in target_values]) / data_size
     return result
 
 

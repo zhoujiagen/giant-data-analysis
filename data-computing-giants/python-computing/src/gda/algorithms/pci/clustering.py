@@ -8,7 +8,7 @@ Created on 2017-11-01 16:53:49
 
 import random
 
-from gda.tools.similarity import pearson
+from gda.tools.numeric_function import pearson
 from math import sqrt
 
 

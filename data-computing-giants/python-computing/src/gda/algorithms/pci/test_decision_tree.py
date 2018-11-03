@@ -50,7 +50,7 @@ class TestDecisionTree(unittest.TestCase):
     def test_entropy(self):
         datas = get_data()
         print(entropy(datas))
-        (set1, set2) = divide_set(datas, 'read_faq', False)
+        (set1, set2, compare_value) = divide_set(datas, 'read_faq', False)
         print(entropy(set1))
         print(entropy(set2))
 

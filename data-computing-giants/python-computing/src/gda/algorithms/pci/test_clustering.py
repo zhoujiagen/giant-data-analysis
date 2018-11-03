@@ -14,7 +14,7 @@ from gda.algorithms.pci import WORKING_DIR
 from gda.algorithms.pci.clustering import hierarchical_clustering, \
     k_means_clustering, scale
 from gda.tools.feeds import load_feeds_from_file
-from gda.tools.matrix import rotate
+from gda.tools.data_structure import matrix_rotate
 
 
 def show_cluster_tree(root):
@@ -69,7 +69,7 @@ class TestHierarchicalClustering(unittest.TestCase):
         """单词的聚类"""
         # CAUTION: too slow
         _, words, matrix = load_feeds_from_file(WORKING_DIR + 'feeddata.txt')
-        rotated_matrix = rotate(matrix)
+        rotated_matrix = matrix_rotate(matrix)
         word_root = hierarchical_clustering(rotated_matrix, words)
         show_cluster_tree(word_root)
         self.assertTrue(1 == 1)

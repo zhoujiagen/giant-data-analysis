@@ -8,7 +8,7 @@ Created on 2017-10-31 22:29:22
 
 from math import sqrt
 
-from gda.tools.similarity import pearson
+from gda.tools.numeric_function import pearson
 
 
 # ##################################################### 基于用户的协同过滤

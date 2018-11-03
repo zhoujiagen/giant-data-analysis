@@ -6,8 +6,9 @@
 Created on 24/10/2018 5:16 PM
 """
 from gda.algorithms.pci import WORKING_DIR
-import pymysql
 import pprint
+
+from gda.tools.database import connect_mysql
 
 
 def load_data():
@@ -72,30 +73,6 @@ def show_data(data):
     for url_ref in data["url_refs"]:
         table.add_row([url_ref["from"], url_ref["to"], url_ref["text"]])
     print(table)
-
-
-def connect_mysql(host='127.0.0.1',
-                  port=3306,
-                  user='root',
-                  password='admin',
-                  database='pci',
-                  charset='utf8'):
-    """
-    获取MySQL连接.
-    :param host:
-    :param port:
-    :param user:
-    :param password:
-    :param database:
-    :param charset:
-    :return:
-    """
-    return pymysql.connect(host=host,
-                           port=port,
-                           user=user,
-                           password=password,
-                           database=database,
-                           charset=charset)
 
 
 def save_data_to_mysql(data):
