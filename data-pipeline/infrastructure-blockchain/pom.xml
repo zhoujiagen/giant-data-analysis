@@ -32,6 +32,13 @@
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 
+		<!-- https://docs.web3j.io/getting_started.html#maven -->
+		<dependency>
+			<groupId>org.web3j</groupId>
+			<artifactId>core</artifactId>
+			<version>3.4.0</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.ethereum</groupId>
 			<artifactId>ethereumj-core</artifactId>
@@ -48,10 +55,10 @@
 			<artifactId>commons-lang3</artifactId>
 		</dependency>
 
-	<!-- <dependency> <groupId>org.slf4j</groupId> <artifactId>slf4j-api</artifactId> 
-		</dependency> <dependency> <groupId>org.slf4j</groupId> <artifactId>slf4j-log4j12</artifactId> 
-		</dependency> <dependency> <groupId>log4j</groupId> <artifactId>log4j</artifactId> 
-		</dependency> -->
+		<!-- <dependency> <groupId>org.slf4j</groupId> <artifactId>slf4j-api</artifactId> 
+			</dependency> <dependency> <groupId>org.slf4j</groupId> <artifactId>slf4j-log4j12</artifactId> 
+			</dependency> <dependency> <groupId>log4j</groupId> <artifactId>log4j</artifactId> 
+			</dependency> -->
 
 		<dependency>
 			<groupId>junit</groupId>
