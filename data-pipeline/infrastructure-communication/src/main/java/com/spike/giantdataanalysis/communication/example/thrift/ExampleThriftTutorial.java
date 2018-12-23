@@ -1,4 +1,4 @@
-package com.spike.giantdataanalysis.communication.thrift;
+package com.spike.giantdataanalysis.communication.example.thrift;
 
 import java.util.HashMap;
 
@@ -15,25 +15,13 @@ import org.apache.thrift.transport.TServerTransport;
 import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
 
-import shared.SharedStruct;
-import tutorial.Calculator;
-import tutorial.Calculator.Client;
-import tutorial.InvalidOperation;
-import tutorial.Operation;
-import tutorial.Work;
-
 /**
- * 示例客户端和服务端应用.
- * 
- * <pre>
- * 相关文件: src/main/thrift/shared.thrift, tutorial.thrift
- * thrift编译生成的代码: src/main/thrift/generated-resources/shared, tutorial目录
- * </pre>
- * 
- * REF: http://thrift.apache.org/tutorial/java
- * @author zhoujiagen
+ * Apache Thrift示例.
+ * <p>
+ * REF <a href="https://thrift.apache.org/tutorial/java">Java Tutorial</a>
+ * @author zhoujiagen@gmail.com
  */
-public final class ExampleTutorial {
+public class ExampleThriftTutorial {
 
   // 客户端应用
   static class TutorialClient {
@@ -63,7 +51,7 @@ public final class ExampleTutorial {
       }
     }
 
-    static void play(Client client) throws TException {
+    static void play(Calculator.Client client) throws TException {
       // Calculator接口: void ping(),
       client.ping();
       System.out.println("ping()");
@@ -174,8 +162,8 @@ public final class ExampleTutorial {
     }
 
     public int calculate(int logid, Work work) throws InvalidOperation {
-      System.out.println("calculate(" + logid + ", {" + work.op + "," + work.num1 + "," + work.num2
-          + "})");
+      System.out.println(
+        "calculate(" + logid + ", {" + work.op + "," + work.num1 + "," + work.num2 + "})");
       int val = 0;
       switch (work.op) {
       case ADD:
@@ -232,4 +220,5 @@ public final class ExampleTutorial {
 
     TutorialClient.start("localhost", port, ssl);
   }
+
 }

@@ -12,6 +12,5 @@
  * (4) Transport: TCP, HTTP等
  * 通过网络读写的简单抽象.
  * </pre>
- * @author zhoujiagen
  */
-package com.spike.giantdataanalysis.communication.thrift;
+package com.spike.giantdataanalysis.communication.example.thrift;
