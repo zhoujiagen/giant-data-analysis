@@ -2,9 +2,6 @@ package com.spike.giantdataanalysis.communication.example.thrift;
 
 import java.util.HashMap;
 
-import org.apache.thrift.TException;
-import org.apache.thrift.protocol.TBinaryProtocol;
-import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.server.TServer;
 import org.apache.thrift.server.TServer.Args;
 import org.apache.thrift.server.TSimpleServer;
@@ -12,8 +9,6 @@ import org.apache.thrift.transport.TSSLTransportFactory;
 import org.apache.thrift.transport.TSSLTransportFactory.TSSLTransportParameters;
 import org.apache.thrift.transport.TServerSocket;
 import org.apache.thrift.transport.TServerTransport;
-import org.apache.thrift.transport.TSocket;
-import org.apache.thrift.transport.TTransport;
 
 /**
  * Apache Thrift示例.
@@ -21,88 +16,54 @@ import org.apache.thrift.transport.TTransport;
  * REF <a href="https://thrift.apache.org/tutorial/java">Java Tutorial</a>
  * @author zhoujiagen@gmail.com
  */
-public class ExampleThriftTutorial {
+public class ExampleThriftTutorialServer {
 
-  // 客户端应用
-  static class TutorialClient {
-    public static void start(String host, int port, boolean ssl) {
-      try {
-
-        TTransport transport = null;
-        if (!ssl) {
-          transport = new TSocket(host, port);
-          transport.open();
-        } else {
-          TSSLTransportParameters parameters = new TSSLTransportParameters();
-          String truststorepath = ".truststore";
-          parameters.setTrustStore(truststorepath, "thrift", "SunX509", "JKS");
-          transport = TSSLTransportFactory.getClientSocket(host, port, 0, parameters);
-        }
-
-        TProtocol protocol = new TBinaryProtocol(transport);
-        Calculator.Client client = new Calculator.Client(protocol);
-
-        play(client);
-
-        transport.close();
-
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-    }
-
-    static void play(Calculator.Client client) throws TException {
-      // Calculator接口: void ping(),
-      client.ping();
-      System.out.println("ping()");
-
-      // Calculator接口: i32 add(1:i32 num1, 2:i32 num2),
-      int sum = client.add(1, 1);
-      System.out.println("1+1=" + sum);
-
-      // Calculator接口: i32 calculate(1:i32 logid, 2:Work w) throws (1:InvalidOperation ouch),
-      Work work = new Work();
-      work.op = Operation.DIVIDE;
-      work.num1 = 1;
-      work.num2 = 0;
-      try {
-        @SuppressWarnings("unused")
-        int quotient = client.calculate(1, work);
-        System.out.println("Whoa we can divide by 0");
-      } catch (InvalidOperation io) {
-        System.out.println("Invalid operation: " + io.why);
-      }
-
-      work.op = Operation.SUBTRACT;
-      work.num1 = 15;
-      work.num2 = 10;
-      try {
-        int diff = client.calculate(1, work);
-        System.out.println("15-10=" + diff);
-      } catch (InvalidOperation io) {
-        System.out.println("Invalid operation: " + io.why);
-      }
-
-      // SharedService接口: SharedStruct getStruct(1: i32 key)
-      SharedStruct log = client.getStruct(1);
-      System.out.println("Check log: " + log.value);
-    }
+  public static void main(String[] args) {
+    final int port = 8888;
+    final boolean ssl = false;
+    TutorialServer.start(port, ssl);
   }
 
-  // 服务端应用
+  /**
+   * 服务端应用
+   * <p>
+   * REF <a href="https://thrift.apache.org/docs/concepts">Thrift network stack</a>
+   * 
+   * <pre>
+      +-------------------------------------------+
+      | Server                                    |
+      | (single-threaded, event-driven etc)       |
+      +-------------------------------------------+
+      | Processor                                 |
+      | (compiler generated)                      |
+      +-------------------------------------------+
+      | Protocol                                  |
+      | (JSON, compact etc)                       |
+      +-------------------------------------------+
+      | Transport                                 |
+      | (raw TCP, HTTP etc)                       |
+      +-------------------------------------------+
+   * </pre>
+   */
   static class TutorialServer {
     public static void start(final int port, boolean ssl) {
       try {
         final CalculatorHandler serviceHandler = new CalculatorHandler();
+        // Processor
         final Calculator.Processor<CalculatorHandler> processor =
             new Calculator.Processor<CalculatorHandler>(serviceHandler);
-        Thread t = null;
+
+        Runnable runnable = null;
+
         if (!ssl) {
-          t = new Thread(new Runnable() {
+
+          runnable = new Runnable() {
             @Override
             public void run() {
               try {
+                // Transport
                 TServerTransport serverTransport = new TServerSocket(port);
+                // Server
                 TServer server = new TSimpleServer(new Args(serverTransport).processor(processor));
 
                 System.out.println("Start server without SSL...");
@@ -111,21 +72,22 @@ public class ExampleThriftTutorial {
                 e.printStackTrace();
               }
             }
-          });
+          };
 
         } else {
 
-          t = new Thread(new Runnable() {
+          runnable = new Runnable() {
 
             @Override
             public void run() {
               try {
+                // Transport
                 TSSLTransportParameters parameters = new TSSLTransportParameters();
                 String truststorepath = ".truststore";
                 parameters.setTrustStore(truststorepath, "thrift", null, null);
-
                 TServerTransport serverTransport =
                     TSSLTransportFactory.getServerSocket(port, 0, null, parameters);
+                // Server
                 TServer server = new TSimpleServer(new Args(serverTransport).processor(processor));
 
                 System.out.println("Start server with SSL...");
@@ -134,9 +96,10 @@ public class ExampleThriftTutorial {
                 e.printStackTrace();
               }
             }
-          });
+          };
         }
 
+        Thread t = new Thread(runnable);
         t.start();
       } catch (Exception e) {
         e.printStackTrace();
@@ -209,16 +172,4 @@ public class ExampleThriftTutorial {
     }
 
   }
-
-  public static void main(String[] args) throws InterruptedException {
-    final int port = 8888;
-    final boolean ssl = false;
-    TutorialServer.start(port, ssl);
-
-    // wait a few seconds
-    Thread.sleep(2000l);
-
-    TutorialClient.start("localhost", port, ssl);
-  }
-
 }

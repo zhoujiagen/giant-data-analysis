@@ -16,7 +16,9 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<protobuf.version>2.5.0</protobuf.version>
+		<!-- <protobuf.version>2.5.0</protobuf.version> -->
+		<protobuf.version>3.6.1</protobuf.version>
+		<grpc.version>1.17.1</grpc.version>
 		<thrift.version>0.11.0</thrift.version>
 		<avro.version>1.8.2</avro.version>
 	</properties>
@@ -26,11 +28,31 @@
 		<layout>default</layout> </pluginRepository> </pluginRepositories> -->
 
 	<dependencies>
+		<!-- <dependency> <groupId>com.spike.giantdataanalysis</groupId> <artifactId>infrastructure-commons</artifactId> 
+			<version>0.0.1-SNAPSHOT</version> <exclusions> <exclusion> <groupId>com.google.guava</groupId> 
+			<artifactId>guava</artifactId> </exclusion> </exclusions> </dependency> -->
+
 		<dependency>
-			<groupId>com.spike.giantdataanalysis</groupId>
-			<artifactId>infrastructure-commons</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>26.0-android</version><!--$NO-MVN-MAN-VER$ -->
+			<scope>compile</scope>
+			<exclusions>
+				<exclusion>
+					<artifactId>jsr305</artifactId>
+					<groupId>com.google.code.findbugs</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>animal-sniffer-annotations</artifactId>
+					<groupId>org.codehaus.mojo</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>error_prone_annotations</artifactId>
+					<groupId>com.google.errorprone</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
+
 
 		<dependency>
 			<groupId>com.google.protobuf</groupId>
@@ -53,6 +75,21 @@
 					<artifactId>servlet-api</artifactId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>io.grpc</groupId>
+			<artifactId>grpc-netty-shaded</artifactId>
+			<version>${grpc.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.grpc</groupId>
+			<artifactId>grpc-protobuf</artifactId>
+			<version>${grpc.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.grpc</groupId>
+			<artifactId>grpc-stub</artifactId>
+			<version>${grpc.version}</version>
 		</dependency>
 
 		<dependency>
@@ -79,10 +116,23 @@
 			<artifactId>log4j</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+
 	</dependencies>
 
 	<build>
 		<testSourceDirectory>src/test/java</testSourceDirectory>
+		<extensions>
+			<extension>
+				<groupId>kr.motd.maven</groupId>
+				<artifactId>os-maven-plugin</artifactId>
+				<version>1.5.0.Final</version>
+			</extension>
+		</extensions>
 
 		<plugins>
 			<plugin>
@@ -98,14 +148,19 @@
 			<plugin>
 				<groupId>org.xolstice.maven.plugins</groupId>
 				<artifactId>protobuf-maven-plugin</artifactId>
-				<version>0.6.1</version>
+				<!-- <version>0.6.1</version> -->
+				<version>0.5.1</version>
 				<configuration>
-					<protocExecutable>/usr/local/bin/protoc</protocExecutable>
+					<!-- <protocExecutable>/usr/local/bin/protoc</protocExecutable> -->
+					<protocArtifact>com.google.protobuf:protoc:${protobuf.version}:exe:${os.detected.classifier}</protocArtifact>
+					<pluginId>grpc-java</pluginId>
+					<pluginArtifact>io.grpc:protoc-gen-grpc-java:${grpc.version}:exe:${os.detected.classifier}</pluginArtifact>
 				</configuration>
 				<executions>
 					<execution>
 						<goals>
 							<goal>compile</goal>
+							<goal>compile-custom</goal>
 							<goal>test-compile</goal>
 						</goals>
 					</execution>
@@ -158,6 +213,7 @@
 								<source>${basedir}/src/main/thrift</source>
 								<source>${basedir}/src/main/avro</source>
 								<source>${basedir}/target/generated-resources/protobuf/java</source>
+								<source>${basedir}/target/generated-resources/protobuf/grpc-java</source>
 								<source>${basedir}/target/generated-resources/thrift</source>
 								<source>${basedir}/target/generated-resources/avro</source>
 							</sources>
@@ -168,8 +224,8 @@
 		</plugins>
 
 		<!-- WARNING: 本地测试时注释掉, 打包时取消注释. -->
-	<!-- <resources> <resource> <directory>src/main/resources</directory> <excludes> 
-		<exclude>*.properties</exclude> </excludes> </resource> </resources> -->
+		<!-- <resources> <resource> <directory>src/main/resources</directory> <excludes> 
+			<exclude>*.properties</exclude> </excludes> </resource> </resources> -->
 	</build>
 
 	<repositories>
