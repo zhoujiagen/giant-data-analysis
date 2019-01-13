@@ -37,6 +37,8 @@
 		<module>../../data-pipeline/infrastructure-task</module>
 		<module>../../data-pipeline/infrastructure-benchmark</module>
 		<module>../../data-pipeline/infrastructure-blockchain</module>
+		<module>../../data-pipeline/infrastructure-track</module>
+		<module>../../data-pipeline/infrastructure-procedure</module>
 
 		<!-- data-representation -->
 		<!--
