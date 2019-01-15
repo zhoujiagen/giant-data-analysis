@@ -212,8 +212,8 @@
 								<source>${basedir}/src/main/proto</source>
 								<source>${basedir}/src/main/thrift</source>
 								<source>${basedir}/src/main/avro</source>
-								<source>${basedir}/target/generated-resources/protobuf/java</source>
-								<source>${basedir}/target/generated-resources/protobuf/grpc-java</source>
+								<source>${basedir}/target/generated-sources/protobuf/java</source>
+								<source>${basedir}/target/generated-sources/protobuf/grpc-java</source>
 								<source>${basedir}/target/generated-resources/thrift</source>
 								<source>${basedir}/target/generated-resources/avro</source>
 							</sources>
