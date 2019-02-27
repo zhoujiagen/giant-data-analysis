@@ -58,6 +58,15 @@
 			<version>0.9</version>
 		</dependency>
 
+		<!-- JMX 1.2.1 Reference Implementation -->
+		<!-- manually download and install -->
+		<dependency>
+			<groupId>com.sun.jdmk</groupId>
+			<artifactId>jmxtools</artifactId>
+			<version>1.2.1</version>
+			<!-- <scope>system</scope> <systemPath>/lib/jmxtools.jar</systemPath> -->
+		</dependency>
+
 		<!-- Concurrent: Disruptor -->
 		<dependency>
 			<groupId>com.lmax</groupId>
