@@ -34,6 +34,9 @@
 
 [project-commons](project-commons/README.md)
 
+
+
+
 ## 1 数据管理基础设施
 
 [data-management-infrastructure](data-management-infrastructure/README.md)
@@ -54,6 +57,7 @@
 辅助项目:
 
 + infrastructure-commons - 公共依赖项目
++ infrastructure-commons-agent - Java Agent示例项目
 + infrastructure-test - 测试
 + infrastructure-etl - Data ETL
 + infrastructure-python2 - Python2 facilities
