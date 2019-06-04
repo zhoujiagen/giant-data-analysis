@@ -36,7 +36,7 @@ public class IdleStateHandlerInitializer extends ChannelInitializer<Channel> {
     long writerIdleTime = 0; // Specify 0 to disable
     long allIdleTime = 60; // Specify 0 to disable
     pipeline.addLast(//
-        new IdleStateHandler(readerIdleTime, writerIdleTime, allIdleTime, TimeUnit.SECONDS));
+      new IdleStateHandler(readerIdleTime, writerIdleTime, allIdleTime, TimeUnit.SECONDS));
 
     pipeline.addLast(new HeartbeatHandler());
   }
@@ -45,7 +45,7 @@ public class IdleStateHandlerInitializer extends ChannelInitializer<Channel> {
 
   /** 心跳{@link ChannelHandler} */
   public static final class HeartbeatHandler extends ChannelDuplexHandler {
-    private static final ByteBuf HEARTBEAT_MSG = ByteBufs.WRAP_UNRELEASABLE("HEARTBEAT");
+    private static final ByteBuf HEARTBEAT_MSG = ByteBufs.wrapUnreleasable("HEARTBEAT");
 
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {

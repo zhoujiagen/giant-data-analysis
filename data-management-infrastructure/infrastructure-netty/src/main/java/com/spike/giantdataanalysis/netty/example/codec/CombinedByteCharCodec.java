@@ -16,8 +16,8 @@ import com.spike.giantdataanalysis.netty.example.codec.CombinedByteCharCodec.Cha
  * @author zhoujiagen
  * @see CombinedChannelDuplexHandler
  */
-public class CombinedByteCharCodec extends
-    CombinedChannelDuplexHandler<ByteToCharacterDecoder, CharacterToByteEncoder> {
+public class CombinedByteCharCodec
+    extends CombinedChannelDuplexHandler<ByteToCharacterDecoder, CharacterToByteEncoder> {
 
   public CombinedByteCharCodec() {
     super(new ByteToCharacterDecoder(), new CharacterToByteEncoder());
@@ -26,7 +26,8 @@ public class CombinedByteCharCodec extends
   // ======================================== classes
   public static class ByteToCharacterDecoder extends ByteToMessageDecoder {
     @Override
-    protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
+    protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out)
+        throws Exception {
       while (in.readableBytes() >= 2) {
         out.add(in.readChar());
       }

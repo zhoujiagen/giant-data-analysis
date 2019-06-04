@@ -12,6 +12,7 @@ import io.netty.handler.codec.ByteToMessageDecoder;
  * 
  * 1 integer is 4 bytes
  * </pre>
+ * 
  * @author zhoujiagen
  */
 public class ByteToIntegerDecoder extends ByteToMessageDecoder {

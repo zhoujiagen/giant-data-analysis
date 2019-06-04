@@ -2,6 +2,8 @@ package com.spike.giantdataanalysis.netty.support;
 
 import io.netty.util.CharsetUtil;
 
+import java.math.BigInteger;
+
 import com.google.common.base.Preconditions;
 
 /**
@@ -13,7 +15,19 @@ public class Bytes {
 
   // ======================================== methods
 
-  public static byte[] SUBSET(byte[] bytes, int offset, int length) {
+  public static byte[] repeats(byte value, int count) {
+    Preconditions.checkArgument(count > 0);
+
+    byte[] result = new byte[count];
+
+    for (int i = 0; i < count; i++) {
+      result[i] = value;
+    }
+
+    return result;
+  }
+
+  public static byte[] subSet(byte[] bytes, int offset, int length) {
     Preconditions.checkArgument(offset >= 0, "offset must great than or equal to 0");
     Preconditions.checkArgument(length > 0, "length must great than 0");
     Preconditions.checkArgument(offset + length <= bytes.length,
@@ -29,7 +43,7 @@ public class Bytes {
    * @param message
    * @return
    */
-  public static byte[] WRAP(String message) {
+  public static byte[] wrap(String message) {
     return message.getBytes(CharsetUtil.UTF_8);
   }
 
@@ -38,17 +52,40 @@ public class Bytes {
    * @param message
    * @return
    */
-  public static byte WRAP(char c) {
+  public static byte wrap(char c) {
     return ((byte) c);
   }
 
-  public static String STRING(byte[] bytes, int offset, int length) {
-    return new String(SUBSET(bytes, offset, length));
+  public static String string(byte[] bytes, int offset, int length) {
+    return new String(subSet(bytes, offset, length));
   }
 
-  public static String STRING(byte[] bytes) {
+  public static String string(byte[] bytes) {
     // char[] char = new char[bytes.length];
     return new String(bytes);
+  }
+
+  public static byte[] xor(byte[] first, byte[] second) {
+    Preconditions.checkArgument(first.length == second.length);
+
+    // int length = first.length;
+    // byte[] result = new byte[length];
+    // for (int i = 0; i < length; i++) {
+    // result[i] = (byte) (first[i] ^ second[i]);
+    // }
+    //
+    // return result;
+    BigInteger firstBigInteger = new BigInteger(first);
+    BigInteger seconBigInteger = new BigInteger(second);
+    return firstBigInteger.xor(seconBigInteger).toByteArray();
+  }
+
+  public static byte[] lengthEncoded(byte[] payload) {
+    return com.google.common.primitives.Bytes.concat(new byte[] { (byte) payload.length }, payload);
+  }
+
+  public static byte[] nullEndString(String payload) {
+    return com.google.common.primitives.Bytes.concat(payload.getBytes(), new byte[] { 0x00 });
   }
 
 }

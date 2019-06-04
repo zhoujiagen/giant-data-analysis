@@ -18,15 +18,14 @@ import com.spike.giantdataanalysis.netty.support.Nettys;
 public class SpawnBootstrapping {
   public static void main(String[] args) {
     EventLoopGroup elg = EventLoops.nio();
-    ServerBootstrap serverBootstrap =
-        Bootstraps.SERVER(elg, Channels.nioserver(), Nettys.DEFAULT_ADDRESS,
-          ChannelHandlers.SIMPLE(), null);
+    ServerBootstrap serverBootstrap = Bootstraps.SERVER(elg, Channels.nioserver(),
+      Nettys.DEFAULT_ADDRESS, ChannelHandlers.SIMPLE(), null);
 
-    serverBootstrap.childHandler(ChannelHandlers.SPAWN_BOOTSTRAP("www.baidu.com", 80,
-      new NettyCallable<ByteBuf, String>() {
+    serverBootstrap.childHandler(
+      ChannelHandlers.SPAWN_BOOTSTRAP("www.baidu.com", 80, new NettyCallable<ByteBuf, String>() {
         @Override
         public String call(ChannelHandlerContext ctx, ByteBuf msg) {
-          return ByteBufs.INTROSPECT(msg);
+          return ByteBufs.introspect(msg);
         }
       }));
 

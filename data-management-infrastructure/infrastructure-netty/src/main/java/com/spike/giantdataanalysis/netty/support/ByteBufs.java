@@ -50,7 +50,7 @@ public class ByteBufs {
    * @return
    * @see ByteBuf#toString()
    */
-  public static String INTROSPECT(ByteBuf bb) {
+  public static String introspect(ByteBuf bb) {
     StringBuilder sb = new StringBuilder();
 
     sb.append(Strings.repeat("=", 50) + "\n");
@@ -66,8 +66,8 @@ public class ByteBufs {
 
     sb.append("\nhexDump=" + ByteBufUtil.hexDump(bb));
     if (bb.isReadable()) {
-      sb.append("\ncontent="
-          + bb.getCharSequence(bb.readerIndex(), bb.readableBytes(), CharsetUtil.UTF_8));
+      sb.append(
+        "\ncontent=" + bb.getCharSequence(bb.readerIndex(), bb.readableBytes(), CharsetUtil.UTF_8));
     }
     sb.append("\n" + Strings.repeat("=", 50) + "\n");
 
@@ -79,7 +79,7 @@ public class ByteBufs {
    * @param message
    * @return
    */
-  public static ByteBuf WRAP(String message) {
+  public static ByteBuf wrap(String message) {
     if (message == null) return Unpooled.EMPTY_BUFFER;
 
     return Unpooled.copiedBuffer(message, CharsetUtil.UTF_8);
@@ -90,10 +90,10 @@ public class ByteBufs {
    * @param message
    * @return
    */
-  public static ByteBuf WRAP_UNRELEASABLE(String message) {
+  public static ByteBuf wrapUnreleasable(String message) {
     if (message == null) return Unpooled.unreleasableBuffer(Unpooled.EMPTY_BUFFER);
 
-    return Unpooled.unreleasableBuffer(WRAP(message));
+    return Unpooled.unreleasableBuffer(wrap(message));
   }
 
   /**
@@ -101,7 +101,7 @@ public class ByteBufs {
    * @param message
    * @return
    */
-  public static ByteBuffer WRAP_NIO(String message) {
+  public static ByteBuffer wrapNIO(String message) {
     if (message == null) return ByteBuffer.allocate(0);
 
     return ByteBuffer.wrap(message.getBytes(CharsetUtil.UTF_8));
@@ -114,7 +114,7 @@ public class ByteBufs {
    * @param bb
    * @return
    */
-  public static ByteBuffer WRAP_NIO(ByteBuf bb) {
+  public static ByteBuffer wrapNIO(ByteBuf bb) {
     if (bb == null) return null;
 
     return bb.nioBuffer();
@@ -126,7 +126,7 @@ public class ByteBufs {
    * @param charset 默认为CharsetUtil.UTF_8
    * @return
    */
-  public static String STRING(final ByteBuf bb, Charset charset) {
+  public static String string(final ByteBuf bb, Charset charset) {
     if (bb == null) return StringUtil.EMPTY_STRING;
 
     if (charset == null) {
@@ -139,9 +139,9 @@ public class ByteBufs {
    * 获取消息的字符串格式内容
    * @param message
    * @return
-   * @see #STRING(ByteBuf, Charset)
+   * @see #string(ByteBuf, Charset)
    */
-  public static String STRING(final Object message) {
+  public static String string(final Object message) {
     String result = StringUtil.EMPTY_STRING;
     if (message == null) return result;
 

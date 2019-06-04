@@ -18,6 +18,7 @@ import com.spike.giantdataanalysis.netty.support.Nettys;
  * 2 direct
  * 3 composite
  * </pre>
+ * 
  * @author zhoujiagen
  */
 public class UsagePatterns {
@@ -48,7 +49,7 @@ public class UsagePatterns {
     // 可读的字节数量
     int length = bb.readableBytes();
 
-    System.out.println(Bytes.STRING(array, offset, length));
+    System.out.println(Bytes.string(array, offset, length));
   }
 
   static void direct() {
@@ -68,7 +69,7 @@ public class UsagePatterns {
     int readerIndexAfter = bb.readerIndex();
     Preconditions.checkState(readerIndexBefore == readerIndexAfter,
       "get...() should not change readerIndex");
-    System.out.println(Bytes.STRING(array));
+    System.out.println(Bytes.string(array));
     readerIndexAfter = bb.readerIndex();
     Preconditions.checkState(readerIndexBefore == readerIndexAfter,
       "get...() should not change readerIndex");
@@ -109,7 +110,7 @@ public class UsagePatterns {
     readerIndexAfter = cbb.readerIndex();
     Preconditions.checkState(readerIndexBefore == readerIndexAfter,
       "get...() should not change readerIndex");
-    System.out.println(Bytes.STRING(array));
+    System.out.println(Bytes.string(array));
   }
 
   /**

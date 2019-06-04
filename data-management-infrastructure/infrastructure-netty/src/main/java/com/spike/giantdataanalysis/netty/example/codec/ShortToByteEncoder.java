@@ -10,6 +10,7 @@ import io.netty.handler.codec.MessageToByteEncoder;
  * 
  * 1 short is 2 bytes
  * </pre>
+ * 
  * @author zhoujiagen
  */
 public class ShortToByteEncoder extends MessageToByteEncoder<Short> {

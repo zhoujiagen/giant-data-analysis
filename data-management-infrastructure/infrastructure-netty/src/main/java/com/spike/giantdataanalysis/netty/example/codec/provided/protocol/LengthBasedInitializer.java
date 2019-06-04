@@ -23,7 +23,7 @@ public class LengthBasedInitializer extends ChannelInitializer<Channel> {
     int lengthFieldOffset = 0; // 长度字段的偏移量
     int lengthFieldLength = 8; // 长度字段的长度
     pipeline.addLast(//
-        new LengthFieldBasedFrameDecoder(maxFrameLength, lengthFieldOffset, lengthFieldLength));
+      new LengthFieldBasedFrameDecoder(maxFrameLength, lengthFieldOffset, lengthFieldLength));
 
     pipeline.addLast(ChannelHandlers.SIMPLE());
   }

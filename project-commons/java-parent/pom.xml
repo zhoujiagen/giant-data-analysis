@@ -18,9 +18,9 @@
 		<!-- data-management-infrastructure -->
 		<module>../../data-management-infrastructure/infrastructure-test</module>
 		<module>../../data-management-infrastructure/infrastructure-commons</module>
+		<module>../../data-management-infrastructure/infrastructure-netty</module>
 		<!--
 		<module>../../data-management-infrastructure/infrastructure-etl</module>
-		<module>../../data-management-infrastructure/infrastructure-netty</module>
 		<module>../../data-management-infrastructure/infrastructure-jetty</module>
 		<module>../../data-management-infrastructure/infrastructure-apache-zookeeper</module>
 		<module>../../data-management-infrastructure/infrastructure-apache-curator</module>

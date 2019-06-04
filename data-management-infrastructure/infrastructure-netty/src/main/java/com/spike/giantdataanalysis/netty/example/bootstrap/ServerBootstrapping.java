@@ -44,13 +44,12 @@ public class ServerBootstrapping {
 
       @Override
       protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
-        LOG.info("RECEIVE DATA: {}", ByteBufs.INTROSPECT(msg));
+        LOG.info("RECEIVE DATA: {}", ByteBufs.introspect(msg));
       }
     };
 
-    ServerBootstrap serverBootstrap =
-        Bootstraps.SERVER(elg, Channels.nioserver(), Nettys.DEFAULT_ADDRESS, handler,
-          ChannelHandlers.SIMPLE());
+    ServerBootstrap serverBootstrap = Bootstraps.SERVER(elg, Channels.nioserver(),
+      Nettys.DEFAULT_ADDRESS, handler, ChannelHandlers.SIMPLE());
 
     // options
     serverBootstrap.option(ChannelOption.ALLOCATOR, new PooledByteBufAllocator());// the default

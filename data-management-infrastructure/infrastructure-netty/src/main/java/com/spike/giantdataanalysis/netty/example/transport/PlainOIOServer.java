@@ -41,7 +41,7 @@ public class PlainOIOServer implements TransportServer {
           @Override
           public void run() {
             try (OutputStream os = socket.getOutputStream();) {
-              os.write(Bytes.WRAP("Hi!\r\n"));
+              os.write(Bytes.wrap("Hi!\r\n"));
               os.flush();
             } catch (IOException e) {
               LOG.error("write to client socket failed", e);

@@ -26,11 +26,11 @@ public class Bootstraps {
    */
   public static ServerBootstrap SERVER(//
       EventLoopGroup eventLoopGroup, //
-      Class<? extends ServerChannel> channelClass,//
-      SocketAddress localAddress,//
-      ChannelHandler handler,//
+      Class<? extends ServerChannel> channelClass, //
+      SocketAddress localAddress, //
+      ChannelHandler handler, //
       ChannelHandler childHandler//
-      ) {
+  ) {
     ServerBootstrap serverBootstrap = new ServerBootstrap();
 
     serverBootstrap.group(eventLoopGroup);
@@ -47,8 +47,8 @@ public class Bootstraps {
 
   public static Bootstrap CLIENT(//
       EventLoopGroup eventLoopGroup, //
-      Class<? extends Channel> channelClass,//
-      SocketAddress remoteAddress,//
+      Class<? extends Channel> channelClass, //
+      SocketAddress remoteAddress, //
       ChannelHandler handler) {
     Bootstrap serverBootstrap = new Bootstrap();
 

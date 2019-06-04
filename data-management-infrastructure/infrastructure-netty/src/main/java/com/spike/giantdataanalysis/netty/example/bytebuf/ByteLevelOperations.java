@@ -23,16 +23,17 @@ import com.spike.giantdataanalysis.netty.support.Nettys;
  * <li>{@link #DERIVED_BUFFERS(ByteBuf)}             视图
  * <li>{@link #READ_WRITE_OPERATIONS(ByteBuf)}       读写操作
  * </pre>
+ * 
  * @author zhoujiagen
  */
 public class ByteLevelOperations {
 
   private static final String SENTENCE = "Netty rocks!";
-  private static final ByteBuf BYTE_BUF = ByteBufs.WRAP(SENTENCE);
+  private static final ByteBuf BYTE_BUF = ByteBufs.wrap(SENTENCE);
 
   public static void main(String[] args) {
     // before
-    System.out.println(ByteBufs.INTROSPECT(BYTE_BUF));
+    System.out.println(ByteBufs.introspect(BYTE_BUF));
 
     // operations
     // RANDOM_ACCESS_INDEXING(BYTE_BUF);
@@ -46,7 +47,7 @@ public class ByteLevelOperations {
     READ_WRITE_OPERATIONS(BYTE_BUF);
 
     // after
-    System.out.println(ByteBufs.INTROSPECT(BYTE_BUF));
+    System.out.println(ByteBufs.introspect(BYTE_BUF));
   }
 
   static void RANDOM_ACCESS_INDEXING(ByteBuf bb) {
@@ -94,8 +95,8 @@ public class ByteLevelOperations {
     bb.readerIndex(0); // 重置readerIndex
 
     String str = "hello";
-    ByteBuf dst = ByteBufs.WRAP(str);
-    System.out.println("INTROSPECT(dst)=\n" + ByteBufs.INTROSPECT(dst));
+    ByteBuf dst = ByteBufs.wrap(str);
+    System.out.println("INTROSPECT(dst)=\n" + ByteBufs.introspect(dst));
 
     Preconditions.checkState(dst.writerIndex() == str.length());
 
@@ -159,7 +160,7 @@ public class ByteLevelOperations {
       @Override
       public boolean process(byte value) throws Exception {
         // 注意是abort
-        return value != Bytes.WRAP('!');
+        return value != Bytes.wrap('!');
       }
     };
     int index = bb.forEachByte(processor);
@@ -179,6 +180,7 @@ public class ByteLevelOperations {
    * 2 深度拷贝
    * {@link ByteBuf#copy()}
    * </pre>
+   * 
    * @param bb
    */
   static void DERIVED_BUFFERS(ByteBuf bb) {
@@ -188,12 +190,12 @@ public class ByteLevelOperations {
     Preconditions.checkState(sliced.writerIndex() == length);
 
     // 共享内部存储
-    sliced.setByte(0, Bytes.WRAP('n'));// source: 'N'
+    sliced.setByte(0, Bytes.wrap('n'));// source: 'N'
     Preconditions.checkState(bb.getByte(0) == sliced.getByte(0));
 
     // 深度拷贝
     ByteBuf copy = bb.copy();
-    copy.setByte(1, Bytes.WRAP('n'));// source: 'e'
+    copy.setByte(1, Bytes.wrap('n'));// source: 'e'
     Preconditions.checkState(bb.getByte(1) != copy.getByte(1));
   }
 
@@ -203,6 +205,7 @@ public class ByteLevelOperations {
    * 
    * {@link ByteBuf#readByte()},  {@link ByteBuf#writeByte(int)}, {@link ByteBuf#skipBytes(int)}修改读写索引
    * </pre>
+   * 
    * @param bb
    */
   static void READ_WRITE_OPERATIONS(ByteBuf bb) {

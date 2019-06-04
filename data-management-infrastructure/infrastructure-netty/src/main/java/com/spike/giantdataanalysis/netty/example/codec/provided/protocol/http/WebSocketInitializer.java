@@ -22,18 +22,18 @@ public class WebSocketInitializer extends ChannelInitializer<Channel> {
   @Override
   protected void initChannel(Channel ch) throws Exception {
     ch.pipeline().addLast(//
-      new HttpServerCodec(),//
-      new HttpObjectAggregator(ChannelHandlers.CONTENT_LENGTH_64B),//
-      new WebSocketServerProtocolHandler("/websocket"),//
-      new TextWebSocketFrameHandler(),//
-      new BinaryWebSocketFrameHandler(),//
+      new HttpServerCodec(), //
+      new HttpObjectAggregator(ChannelHandlers.CONTENT_LENGTH_64B), //
+      new WebSocketServerProtocolHandler("/websocket"), //
+      new TextWebSocketFrameHandler(), //
+      new BinaryWebSocketFrameHandler(), //
       new ContinuationWebSocketFrameHandler());
   }
 
   // ======================================== classes
   // BinaryWebSocketFrame
-  public static final class BinaryWebSocketFrameHandler extends
-      SimpleChannelInboundHandler<BinaryWebSocketFrame> {
+  public static final class BinaryWebSocketFrameHandler
+      extends SimpleChannelInboundHandler<BinaryWebSocketFrame> {
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, BinaryWebSocketFrame msg)
         throws Exception {
@@ -43,18 +43,19 @@ public class WebSocketInitializer extends ChannelInitializer<Channel> {
   }
 
   // TextWebSocketFrame
-  public static final class TextWebSocketFrameHandler extends
-      SimpleChannelInboundHandler<TextWebSocketFrame> {
+  public static final class TextWebSocketFrameHandler
+      extends SimpleChannelInboundHandler<TextWebSocketFrame> {
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, TextWebSocketFrame msg) throws Exception {
+    protected void channelRead0(ChannelHandlerContext ctx, TextWebSocketFrame msg)
+        throws Exception {
       System.out.println(ChannelHandlers.WebSocketFrameConverters.convert(msg, false));
     }
 
   }
 
   // ContinuationWebSocketFrame
-  public static final class ContinuationWebSocketFrameHandler extends
-      SimpleChannelInboundHandler<ContinuationWebSocketFrame> {
+  public static final class ContinuationWebSocketFrameHandler
+      extends SimpleChannelInboundHandler<ContinuationWebSocketFrame> {
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, ContinuationWebSocketFrame msg)
         throws Exception {
