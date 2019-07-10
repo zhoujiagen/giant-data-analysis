@@ -1,0 +1,23 @@
+package com.spike.giantdataanalysis.model.logic.relational.core;
+
+/**
+ * 逻辑操作符.
+ * 
+ * <pre>
+logicalOperator
+    : AND | '&' '&' | XOR | OR | '|' '|'
+ * </pre>
+ */
+public enum RelationalLogicalOperatorEnum {
+  AND1("AND"), //
+  AND2("&&"), //
+  XOR("XOR"), //
+  OR1("OR"), //
+  OR2("||");
+
+  public final String symbol;
+
+  RelationalLogicalOperatorEnum(String symbol) {
+    this.symbol = symbol;
+  }
+}
