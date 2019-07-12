@@ -2,51 +2,56 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
 
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
+
+import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraExpressionAtom.Constant;
 
 /**
  * 关系代数原始表达式.
  */
-public interface RelationalAlgebraPrimitiveExpression {
-
-  public static class FullColumnName implements RelationalAlgebraPrimitiveExpression {
-    final Uid uid;
-    final List<DottedId> dottedIds;
-
-    FullColumnName(Uid uid, List<DottedId> dottedIds) {
-      this.uid = uid;
-      this.dottedIds = dottedIds;
-    }
-  }
+public interface RelationalAlgebraPrimitiveExpression extends RelationalAlgebraExpression {
 
   // uidList: uid (',' uid)*
   public static class UidList implements RelationalAlgebraPrimitiveExpression {
-    final List<Uid> uids;
+    public final List<Uid> uids;
 
     UidList(List<Uid> uids) {
       Preconditions.checkArgument(uids != null && uids.size() > 0);
 
       this.uids = uids;
     }
+
+    @Override
+    public String toString() {
+      return Joiner.on(", ").join(uids);
+    }
   }
 
   public static class Uid implements RelationalAlgebraPrimitiveExpression {
-    public static enum UidType {
+    public static enum Type {
       SIMPLE_ID, REVERSE_QUOTE_ID, CHARSET_REVERSE_QOUTE_STRING
     }
 
-    final UidType type;
-    final String literal;
+    public final Uid.Type type;
+    public final String literal;
 
-    Uid(UidType type, String literal) {
+    Uid(Uid.Type type, String literal) {
+      Preconditions.checkArgument(type != null);
+      Preconditions.checkArgument(literal != null);
+
       this.type = type;
       this.literal = literal;
+    }
+
+    @Override
+    public String toString() {
+      return literal;
     }
   }
 
   public static class SimpleId implements RelationalAlgebraPrimitiveExpression {
-    public static enum SimpleIdType {
+    public static enum Type {
       ID, //
       CHARSET_NAME_BASE, //
       TRANSACTION_LEVEL_BASE, //
@@ -58,13 +63,25 @@ public interface RelationalAlgebraPrimitiveExpression {
       FUNCTION_NAME_BASE;
     }
 
-    final SimpleIdType type;
-    final String literal;
+    public final SimpleId.Type type;
+    public final String literal;
 
-    SimpleId(SimpleIdType type, String literal) {
+    SimpleId(SimpleId.Type type, String literal) {
       this.type = type;
       this.literal = literal;
     }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append("SimpleId [type=");
+      builder.append(type);
+      builder.append(", literal=");
+      builder.append(literal);
+      builder.append("]");
+      return builder.toString();
+    }
+
   }
 
   public static enum CharsetNameBaseEnum {
@@ -177,74 +194,29 @@ public interface RelationalAlgebraPrimitiveExpression {
     YEARWEEK, Y_FUNCTION, X_FUNCTION;
   }
 
+  // dottedId : DOT_ID | '.' uid
   public static class DottedId implements RelationalAlgebraPrimitiveExpression {
-    final String literal;
+    public final String dotId;
+    public final Uid uid;
 
-    DottedId(String literal) {
-      this.literal = literal;
-    }
-  }
+    DottedId(String dotId, Uid uid) {
+      Preconditions.checkArgument(!(dotId == null && uid == null));
 
-  public static interface FunctionCall extends RelationalAlgebraPrimitiveExpression {
-  }
-
-  // specificFunction #specificFunctionCall
-  public static interface SpecificFunctionCall extends FunctionCall {
-  }
-
-  /// ( CURRENT_DATE | CURRENT_TIME | CURRENT_TIMESTAMP | CURRENT_USER | LOCALTIME)
-  /// #simpleFunctionCall
-  public static class SimpleFunctionCall implements SpecificFunctionCall {
-    public static enum Type {
-      CURRENT_DATE, CURRENT_TIME, CURRENT_TIMESTAMP, CURRENT_USER, LOCALTIME
+      this.dotId = dotId;
+      this.uid = uid;
     }
 
-    final Type type;
-
-    SimpleFunctionCall(Type type) {
-      this.type = type;
-    }
-  }
-
-  /// CONVERT '(' expression separator=',' convertedDataType ')' #dataTypeFunctionCall
-  public static class DataTypeFunctionCall implements SpecificFunctionCall {
-    public static enum Type {
-      // CONVERT '(' expression separator=',' convertedDataType ')' #dataTypeFunctionCall
-      CONVERT_DATATYPE,
-      // CONVERT '(' expression USING charsetName ')' #dataTypeFunctionCall
-      CONVERT_CHARSET,
-      // CAST '(' expression AS convertedDataType ')' #dataTypeFunctionCall
-      CAST
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append("DottedId [dotId=");
+      builder.append(dotId);
+      builder.append(", uid=");
+      builder.append(uid);
+      builder.append("]");
+      return builder.toString();
     }
 
-    final Type type;
-    final RelationalAlgebraConditionalExpression expression;
-    final ConvertedDataType convertedDataType;
-    final CharsetName charsetName;
-
-    DataTypeFunctionCall(Type type, RelationalAlgebraConditionalExpression expression,
-        CharsetName charsetName) {
-      Preconditions.checkArgument(Type.CONVERT_CHARSET.equals(type));
-      Preconditions.checkArgument(expression != null);
-      Preconditions.checkArgument(charsetName != null);
-
-      this.type = type;
-      this.expression = expression;
-      this.convertedDataType = null;
-      this.charsetName = charsetName;
-    }
-
-    DataTypeFunctionCall(Type type, RelationalAlgebraConditionalExpression expression,
-        ConvertedDataType convertedDataType) {
-      Preconditions.checkArgument(Type.CONVERT_DATATYPE.equals(type) || Type.CAST.equals(type));
-      Preconditions.checkArgument(expression != null);
-      Preconditions.checkArgument(convertedDataType != null);
-
-      this.type = type;
-      this.expression = expression;
-      this.convertedDataType = convertedDataType;
-      this.charsetName = null;
-    }
   }
 
   // charsetName: BINARY | charsetNameBase | STRING_LITERAL | CHARSET_REVERSE_QOUTE_STRING
@@ -253,19 +225,41 @@ public interface RelationalAlgebraPrimitiveExpression {
       BINARY, CHARSET_NAME_BASE, STRING_LITERAL, CHARSET_REVERSE_QOUTE_STRING
     }
 
-    final Type type;
-    final String value;
+    public final CharsetName.Type type;
+    public final String value;
 
-    CharsetName(Type type, String value) {
+    CharsetName(CharsetName.Type type, String value) {
       Preconditions.checkArgument(type != null);
       Preconditions.checkArgument(value != null);
 
       this.type = type;
       this.value = value;
     }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append("CharsetName [type=");
+      builder.append(type);
+      builder.append(", value=");
+      builder.append(value);
+      builder.append("]");
+      return builder.toString();
+    }
+
   }
 
-  // convertedDataType
+  /**
+   * <pre>
+  convertedDataType
+    : typeName=(BINARY| NCHAR) lengthOneDimension?
+    | typeName=CHAR lengthOneDimension? (CHARACTER SET charsetName)?
+    | typeName=(DATE | DATETIME | TIME)
+    | typeName=DECIMAL lengthTwoDimension?
+    | (SIGNED | UNSIGNED) INTEGER?
+    ;
+   * </pre>
+   */
   public static class ConvertedDataType implements RelationalAlgebraPrimitiveExpression {
     public static enum Type {
       // typeName=(BINARY| NCHAR) lengthOneDimension?
@@ -280,14 +274,14 @@ public interface RelationalAlgebraPrimitiveExpression {
       INTEGER
     }
 
-    final Type type;
-    final LengthOneDimension lengthOneDimension;
-    final CharsetNameBaseEnum charsetName;
-    final LengthTwoDimension lengthTwoDimension;
-    final Boolean signed;
+    public final ConvertedDataType.Type type;
+    public final LengthOneDimension lengthOneDimension;
+    public final CharsetNameBaseEnum charsetName;
+    public final LengthTwoDimension lengthTwoDimension;
+    public final Boolean signed;
 
     /** Type.BINARY, Type.NCHAR */
-    ConvertedDataType(Type type, LengthOneDimension lengthOneDimension) {
+    ConvertedDataType(ConvertedDataType.Type type, LengthOneDimension lengthOneDimension) {
       Preconditions.checkArgument(Type.BINARY.equals(type) || Type.NCHAR.equals(type));
 
       this.type = type;
@@ -298,7 +292,7 @@ public interface RelationalAlgebraPrimitiveExpression {
     }
 
     /** Type.CHAR */
-    ConvertedDataType(Type type, LengthOneDimension lengthOneDimension,
+    ConvertedDataType(ConvertedDataType.Type type, LengthOneDimension lengthOneDimension,
         CharsetNameBaseEnum charsetName) {
       Preconditions.checkArgument(Type.CHAR.equals(type));
 
@@ -310,7 +304,7 @@ public interface RelationalAlgebraPrimitiveExpression {
     }
 
     /** Type.DATE,Type.DATETIME,Type.TIME */
-    ConvertedDataType(Type type) {
+    ConvertedDataType(ConvertedDataType.Type type) {
       Preconditions.checkArgument(
         Type.DATE.equals(type) || Type.DATETIME.equals(type) || Type.TIME.equals(type));
 
@@ -322,7 +316,7 @@ public interface RelationalAlgebraPrimitiveExpression {
     }
 
     /** Type.DECIMAL */
-    ConvertedDataType(Type type, LengthTwoDimension lengthTwoDimension) {
+    ConvertedDataType(ConvertedDataType.Type type, LengthTwoDimension lengthTwoDimension) {
       Preconditions.checkArgument(Type.DECIMAL.equals(type));
 
       this.type = type;
@@ -333,7 +327,7 @@ public interface RelationalAlgebraPrimitiveExpression {
     }
 
     /** Type.INTEGER */
-    ConvertedDataType(Type type, boolean signed) {
+    ConvertedDataType(ConvertedDataType.Type type, boolean signed) {
       Preconditions.checkArgument(Type.DECIMAL.equals(type));
 
       this.type = type;
@@ -342,40 +336,108 @@ public interface RelationalAlgebraPrimitiveExpression {
       this.lengthTwoDimension = null;
       this.signed = signed;
     }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append("ConvertedDataType [type=");
+      builder.append(type);
+      builder.append(", lengthOneDimension=");
+      builder.append(lengthOneDimension);
+      builder.append(", charsetName=");
+      builder.append(charsetName);
+      builder.append(", lengthTwoDimension=");
+      builder.append(lengthTwoDimension);
+      builder.append(", signed=");
+      builder.append(signed);
+      builder.append("]");
+      return builder.toString();
+    }
+
   }
 
-  // lengthOneDimension
+  // lengthOneDimension : '(' decimalLiteral ')'
   public static class LengthOneDimension implements RelationalAlgebraPrimitiveExpression {
-    final DecimalLiteral decimalLiteral;
+    public final DecimalLiteral decimalLiteral;
 
     LengthOneDimension(DecimalLiteral decimalLiteral) {
+      Preconditions.checkArgument(decimalLiteral != null);
+
       this.decimalLiteral = decimalLiteral;
     }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append("LengthOneDimension [decimalLiteral=");
+      builder.append(decimalLiteral);
+      builder.append("]");
+      return builder.toString();
+    }
+
   }
 
-  // lengthTwoDimension
+  // lengthTwoDimension : '(' decimalLiteral ',' decimalLiteral ')'
   public static class LengthTwoDimension implements RelationalAlgebraPrimitiveExpression {
-    final DecimalLiteral first;
-    final DecimalLiteral second;
+    public final DecimalLiteral first;
+    public final DecimalLiteral second;
 
     public LengthTwoDimension(DecimalLiteral first, DecimalLiteral second) {
+      Preconditions.checkArgument(first != null);
+      Preconditions.checkArgument(second != null);
+
       this.first = first;
       this.second = second;
     }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append("LengthTwoDimension [first=");
+      builder.append(first);
+      builder.append(", second=");
+      builder.append(second);
+      builder.append("]");
+      return builder.toString();
+    }
   }
 
-  // lengthTwoOptionalDimension
+  // lengthTwoOptionalDimension : '(' decimalLiteral (',' decimalLiteral)? ')'
   public static class LengthTwoOptionalDimension implements RelationalAlgebraPrimitiveExpression {
-    final DecimalLiteral first;
-    final DecimalLiteral second; // may be null
+    public final DecimalLiteral first;
+    public final DecimalLiteral second; // may be null
 
     public LengthTwoOptionalDimension(DecimalLiteral first, DecimalLiteral second) {
+      Preconditions.checkArgument(first != null);
+
       this.first = first;
       this.second = second;
     }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append("LengthTwoOptionalDimension [first=");
+      builder.append(first);
+      builder.append(", second=");
+      builder.append(second);
+      builder.append("]");
+      return builder.toString();
+    }
   }
 
-  public static class DecimalLiteral implements RelationalAlgebraPrimitiveExpression {
+  public static abstract class RelationAlgebraLiteral
+      implements RelationalAlgebraPrimitiveExpression {
+    public abstract String literal();
+
+    @Override
+    public String toString() {
+      return literal();
+    }
+  }
+
+  // decimalLiteral : DECIMAL_LITERAL | ZERO_DECIMAL | ONE_DECIMAL | TWO_DECIMAL
+  public static class DecimalLiteral extends RelationAlgebraLiteral {
     public static enum Type {
       DECIMAL_LITERAL, // [0-9]+
       ZERO_DECIMAL, // 0
@@ -383,252 +445,22 @@ public interface RelationalAlgebraPrimitiveExpression {
       TWO_DECIMAL; // 2
     }
 
-    final Type type;
-    final String literal;
+    public final DecimalLiteral.Type type;
+    public final String literal;
 
-    DecimalLiteral(Type type, String literal) {
+    DecimalLiteral(DecimalLiteral.Type type, String literal) {
+      Preconditions.checkArgument(type != null);
+      Preconditions.checkArgument(literal != null);
+
       this.type = type;
       this.literal = literal;
     }
-  }
 
-  /// VALUES '(' fullColumnName ')' #valuesFunctionCall
-  public static class ValuesFunctionCall implements SpecificFunctionCall {
-    final FullColumnName fullColumnName;
-
-    ValuesFunctionCall(FullColumnName fullColumnName) {
-      Preconditions.checkArgument(fullColumnName != null);
-
-      this.fullColumnName = fullColumnName;
-    }
-  }
-
-  /// caseFunctionCall:
-  // CASE expression caseFuncAlternative+ (ELSE elseArg=functionArg)? END
-  // CASE caseFuncAlternative+ (ELSE elseArg=functionArg)? END
-  public static class CaseFunctionCall implements SpecificFunctionCall {
-    RelationalAlgebraConditionalExpression expression;
-    final List<CaseFuncAlternative> caseFuncAlternatives;
-    FunctionArg functionArg;
-
-    CaseFunctionCall(RelationalAlgebraConditionalExpression expression,
-        List<CaseFuncAlternative> caseFuncAlternatives, FunctionArg functionArg) {
-      Preconditions.checkArgument(expression != null);
-      Preconditions.checkArgument(caseFuncAlternatives != null && caseFuncAlternatives.size() > 0);
-
-      this.expression = expression;
-      this.caseFuncAlternatives = caseFuncAlternatives;
-      this.functionArg = functionArg;
+    @Override
+    public String literal() {
+      return literal;
     }
 
-    CaseFunctionCall(List<CaseFuncAlternative> caseFuncAlternatives, FunctionArg functionArg) {
-      Preconditions.checkArgument(caseFuncAlternatives != null && caseFuncAlternatives.size() > 0);
-
-      this.expression = null;
-      this.caseFuncAlternatives = caseFuncAlternatives;
-      this.functionArg = functionArg;
-    }
-  }
-
-  // caseFuncAlternative: WHEN condition=functionArg THEN consequent=functionArg
-  public static class CaseFuncAlternative implements RelationalAlgebraPrimitiveExpression {
-    final FunctionArg condition;
-    final FunctionArg consequent;
-
-    CaseFuncAlternative(FunctionArg condition, FunctionArg consequent) {
-      super();
-      this.condition = condition;
-      this.consequent = consequent;
-    }
-  }
-
-  // functionArg: constant | fullColumnName | functionCall | expression
-  public static class FunctionArg implements RelationalAlgebraPrimitiveExpression {
-    public static enum Type {
-      CONSTANT, FULL_COLUMN_NAME, FUNCTION_CALL, EXPRESSION
-    }
-
-    final Type type;
-    Constant constant;
-    FullColumnName fullColumnName;
-    FunctionCall functionCall;
-    RelationalAlgebraConditionalExpression expression;
-
-    FunctionArg(Type type, Object value) {
-      Preconditions.checkArgument(type != null);
-
-      this.type = type;
-
-      switch (type) {
-      case CONSTANT:
-        constant = (Constant) value;
-        break;
-      case FULL_COLUMN_NAME:
-        fullColumnName = (FullColumnName) value;
-        break;
-      case FUNCTION_CALL:
-        functionCall = (FunctionCall) value;
-        break;
-      case EXPRESSION:
-        expression = (RelationalAlgebraConditionalExpression) value;
-        break;
-      default:
-        throw new UnsupportedOperationException();
-      }
-    }
-
-  }
-
-  /// CHAR '(' functionArgs (USING charsetName)? ')' #charFunctionCall
-  public static class CharFunctionCall implements SpecificFunctionCall {
-    final FunctionArgs functionArgs;
-    final CharsetName charsetName;
-
-    CharFunctionCall(FunctionArgs functionArgs, CharsetName charsetName) {
-      Preconditions.checkArgument(functionArgs != null);
-
-      this.functionArgs = functionArgs;
-      this.charsetName = charsetName;
-    }
-  }
-
-  public static class FunctionArgs implements SpecificFunctionCall {
-    final List<FunctionArg> functionArgs;
-
-    FunctionArgs(List<FunctionArg> functionArgs) {
-      Preconditions.checkArgument(functionArgs != null && functionArgs.size() > 0);
-
-      this.functionArgs = functionArgs;
-    }
-  }
-
-  /**
-   * <pre>
-   POSITION
-      '('
-          (
-            positionString=stringLiteral
-            | positionExpression=expression
-          )
-          IN
-          (
-            inString=stringLiteral
-            | inExpression=expression
-          )
-      ')'                         #positionFunctionCall
-   * </pre>
-   */
-  public static class PositionFunctionCall implements SpecificFunctionCall {
-    final String positionString;
-    final RelationalAlgebraConditionalExpression positionExpression;
-    final String inString;
-    final RelationalAlgebraConditionalExpression inExpression;
-
-    PositionFunctionCall(String positionString,
-        RelationalAlgebraConditionalExpression positionExpression, String inString,
-        RelationalAlgebraConditionalExpression inExpression) {
-      Preconditions.checkArgument(!(positionString == null && positionExpression == null));
-      Preconditions.checkArgument(!(inString == null && inExpression == null));
-
-      this.positionString = positionString;
-      this.positionExpression = positionExpression;
-      this.inString = inString;
-      this.inExpression = inExpression;
-    }
-  }
-
-  /**
-   * <pre>
-   (SUBSTR | SUBSTRING)
-      '('
-        (
-          sourceString=stringLiteral
-          | sourceExpression=expression
-        ) FROM
-        (
-          fromDecimal=decimalLiteral
-          | fromExpression=expression
-        )
-        (
-          FOR
-          (
-            forDecimal=decimalLiteral
-            | forExpression=expression
-          )
-        )?
-      ')'                      #substrFunctionCall
-   * </pre>
-   */
-  public static class SubstrFunctionCall implements SpecificFunctionCall {
-    final String sourceString;
-    final RelationalAlgebraConditionalExpression sourceExpression;
-    final DecimalLiteral fromDecimal;
-    final RelationalAlgebraConditionalExpression fromExpression;
-    final DecimalLiteral forDecimal;
-    final RelationalAlgebraConditionalExpression forExpression;
-
-    SubstrFunctionCall(//
-        String sourceString, RelationalAlgebraConditionalExpression sourceExpression, //
-        DecimalLiteral fromDecimal, RelationalAlgebraConditionalExpression fromExpression, //
-        DecimalLiteral forDecimal, RelationalAlgebraConditionalExpression forExpression//
-    ) {
-      Preconditions.checkArgument(!(sourceString == null && sourceExpression == null));
-      Preconditions.checkArgument(!(fromDecimal == null && fromExpression == null));
-      Preconditions.checkArgument(!(forDecimal == null && forExpression == null));
-
-      this.sourceString = sourceString;
-      this.sourceExpression = sourceExpression;
-      this.fromDecimal = fromDecimal;
-      this.fromExpression = fromExpression;
-      this.forDecimal = forDecimal;
-      this.forExpression = forExpression;
-    }
-
-  }
-
-  /// trimFunctionCall
-  /**
-   * <pre>
-   TRIM
-      '('
-        positioinForm=(BOTH | LEADING | TRAILING)
-        (
-          sourceString=stringLiteral
-          | sourceExpression=expression
-        )?
-        FROM
-        (
-          fromString=stringLiteral
-          | fromExpression=expression
-        )
-      ')'
-   * </pre>
-   */
-  public static class TrimFunctionCall implements SpecificFunctionCall {
-    public static enum PositioinFormType {
-      BOTH, LEADING, TRAILING
-    }
-
-    final PositioinFormType type;
-    final StringLiteral sourceString;
-    final RelationalAlgebraConditionalExpression sourceExpression;
-    final StringLiteral fromString;
-    final RelationalAlgebraConditionalExpression fromExpression;
-
-    TrimFunctionCall(PositioinFormType type, //
-        StringLiteral sourceString, RelationalAlgebraConditionalExpression sourceExpression, //
-        StringLiteral fromString, RelationalAlgebraConditionalExpression fromExpression//
-    ) {
-      Preconditions.checkArgument(type != null);
-      Preconditions.checkArgument(!(sourceString == null && sourceExpression == null));
-      Preconditions.checkArgument(!(fromString == null && fromExpression == null));
-
-      this.type = type;
-      this.sourceString = sourceString;
-      this.sourceExpression = sourceExpression;
-      this.fromString = fromString;
-      this.fromExpression = fromExpression;
-    }
   }
 
   /**
@@ -644,28 +476,44 @@ public interface RelationalAlgebraPrimitiveExpression {
       ) (COLLATE collationName)?
    * </pre>
    */
-  public static class StringLiteral implements RelationalAlgebraPrimitiveExpression {
-    final CharsetNameBaseEnum stringCharsetName;
-    final String stringLiteral;
-    final String startNationalStringLiteral;
-    final List<String> stringLiterals;
-    final CollationName collationName;
+  public static class StringLiteral extends RelationAlgebraLiteral {
+    public final CharsetNameBaseEnum stringCharsetName;
+    public final List<String> stringLiterals;
+    public final String startNationalStringLiteral;
+    public final CollationName collationName;
 
-    StringLiteral(CharsetNameBaseEnum stringCharsetName, String stringLiteral,
-        String startNationalStringLiteral, List<String> stringLiterals,
-        CollationName collationName) {
+    StringLiteral(CharsetNameBaseEnum stringCharsetName, List<String> stringLiterals,
+        String startNationalStringLiteral, CollationName collationName) {
+      Preconditions.checkArgument(!(startNationalStringLiteral == null //
+          && (stringLiterals == null || stringLiterals.size() == 0)));
+
       this.stringCharsetName = stringCharsetName;
-      this.stringLiteral = stringLiteral;
-      this.startNationalStringLiteral = startNationalStringLiteral;
       this.stringLiterals = stringLiterals;
+      this.startNationalStringLiteral = startNationalStringLiteral;
       this.collationName = collationName;
     }
+
+    @Override
+    public String literal() {
+      StringBuilder builder = new StringBuilder();
+      if (startNationalStringLiteral != null) {
+        builder.append(startNationalStringLiteral);
+        builder.append(" ");
+        if (CollectionUtils.isNotEmpty(stringLiterals)) {
+          builder.append(Joiner.on(" ").join(stringLiterals));
+        }
+      } else {
+        builder.append(Joiner.on(" ").join(stringLiterals));
+      }
+      return builder.toString();
+    }
+
   }
 
   // collationName: uid | STRING_LITERAL
   public static class CollationName implements RelationalAlgebraPrimitiveExpression {
-    final Uid uid;
-    final String stringLiteral;
+    public final Uid uid;
+    public final String stringLiteral;
 
     CollationName(Uid uid, String stringLiteral) {
       Preconditions.checkArgument(!(uid == null && stringLiteral == null));
@@ -674,38 +522,74 @@ public interface RelationalAlgebraPrimitiveExpression {
       this.stringLiteral = stringLiteral;
     }
 
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append("CollationName [uid=");
+      builder.append(uid);
+      builder.append(", stringLiteral=");
+      builder.append(stringLiteral);
+      builder.append("]");
+      return builder.toString();
+    }
+
   }
 
-  /**
-   * <pre>
-  WEIGHT_STRING
-      '('
-        (stringLiteral | expression)
-        (AS stringFormat=(CHAR | BINARY)
-        '(' decimalLiteral ')' )?  levelsInWeightString?
-      ')'                           #weightFunctionCall
-   * </pre>
-   */
-  public static class WeightFunctionCall implements SpecificFunctionCall {
-    public static enum StringFormatType {
-      CHAR, BINARY
-    };
+  // hexadecimalLiteral: STRING_CHARSET_NAME? HEXADECIMAL_LITERAL;
+  public static class HexadecimalLiteral extends RelationAlgebraLiteral {
+    public final CharsetNameBaseEnum stringCharsetName;
+    public final String literal;
 
-    final StringLiteral stringLiteral;
-    final RelationalAlgebraConditionalExpression expression;
-    final StringFormatType type;
-    final DecimalLiteral decimalLiteral;
-    final LevelsInWeightString levelsInWeightString;
+    HexadecimalLiteral(CharsetNameBaseEnum stringCharsetName, String literal) {
+      Preconditions.checkArgument(literal != null);
 
-    WeightFunctionCall(StringLiteral stringLiteral,
-        RelationalAlgebraConditionalExpression expression, StringFormatType type,
-        DecimalLiteral decimalLiteral, LevelsInWeightString levelsInWeightString) {
-      this.stringLiteral = stringLiteral;
-      this.expression = expression;
-      this.type = type;
-      this.decimalLiteral = decimalLiteral;
-      this.levelsInWeightString = levelsInWeightString;
+      this.stringCharsetName = stringCharsetName;
+      this.literal = literal;
     }
+
+    @Override
+    public String literal() {
+      return literal;
+    }
+
+    @Override
+    public String toString() {
+      return literal();
+    }
+  }
+
+  // booleanLiteral: TRUE | FALSE;
+  public static class BooleanLiteral extends RelationAlgebraLiteral {
+    public final Boolean literal;
+
+    BooleanLiteral(Boolean literal) {
+      Preconditions.checkArgument(literal != null);
+
+      this.literal = literal;
+    }
+
+    @Override
+    public String literal() {
+      return literal.toString();
+    }
+
+  }
+
+  // nullLiteral=(NULL_LITERAL | NULL_SPEC_LITERAL)
+  public static class NullLiteral extends RelationAlgebraLiteral {
+    public final String literal;
+
+    NullLiteral(String literal) {
+      Preconditions.checkArgument(literal != null);
+
+      this.literal = literal;
+    }
+
+    @Override
+    public String literal() {
+      return literal;
+    }
+
   }
 
   // levelsInWeightString
@@ -714,19 +598,29 @@ public interface RelationalAlgebraPrimitiveExpression {
 
   // LEVEL levelInWeightListElement (',' levelInWeightListElement)* #levelWeightList
   public static class LevelWeightList implements LevelsInWeightString {
-    final List<LevelInWeightListElement> levelInWeightListElements;
+    public final List<LevelInWeightListElement> levelInWeightListElements;
 
     LevelWeightList(List<LevelInWeightListElement> levelInWeightListElements) {
       Preconditions.checkArgument(levelInWeightListElements != null //
           && levelInWeightListElements.size() > 0);
       this.levelInWeightListElements = levelInWeightListElements;
     }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append("LevelWeightList [levelInWeightListElements=");
+      builder.append(levelInWeightListElements);
+      builder.append("]");
+      return builder.toString();
+    }
+
   }
 
   // LEVEL firstLevel=decimalLiteral '-' lastLevel=decimalLiteral #levelWeightRange
   public static class LevelWeightRange implements LevelsInWeightString {
-    final DecimalLiteral firstLevel;
-    final DecimalLiteral lastLevel;
+    public final DecimalLiteral firstLevel;
+    public final DecimalLiteral lastLevel;
 
     LevelWeightRange(DecimalLiteral firstLevel, DecimalLiteral lastLevel) {
       Preconditions.checkArgument(firstLevel != null);
@@ -734,6 +628,17 @@ public interface RelationalAlgebraPrimitiveExpression {
 
       this.firstLevel = firstLevel;
       this.lastLevel = lastLevel;
+    }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append("LevelWeightRange [firstLevel=");
+      builder.append(firstLevel);
+      builder.append(", lastLevel=");
+      builder.append(lastLevel);
+      builder.append("]");
+      return builder.toString();
     }
   }
 
@@ -743,43 +648,26 @@ public interface RelationalAlgebraPrimitiveExpression {
       ASC, DESC, REVERSE
     }
 
-    final DecimalLiteral decimalLiteral;
-    final OrderType orderType;
+    public final DecimalLiteral decimalLiteral;
+    public final LevelInWeightListElement.OrderType orderType;
 
-    LevelInWeightListElement(DecimalLiteral decimalLiteral, OrderType orderType) {
+    LevelInWeightListElement(DecimalLiteral decimalLiteral,
+        LevelInWeightListElement.OrderType orderType) {
       Preconditions.checkArgument(decimalLiteral != null);
 
       this.decimalLiteral = decimalLiteral;
       this.orderType = orderType;
     }
-  }
 
-  /**
-   * <pre>
-   EXTRACT
-      '('
-        intervalType
-        FROM
-        (
-          sourceString=stringLiteral
-          | sourceExpression=expression
-        )
-      ')'                    #extractFunctionCall
-   * </pre>
-   */
-  public static class ExtractFunctionCall implements SpecificFunctionCall {
-    final IntervalType intervalType;
-    final StringLiteral sourceString;
-    final RelationalAlgebraConditionalExpression sourceExpression;
-
-    ExtractFunctionCall(IntervalType intervalType, StringLiteral sourceString,
-        RelationalAlgebraConditionalExpression sourceExpression) {
-      Preconditions.checkArgument(intervalType != null);
-      Preconditions.checkArgument(!(sourceString == null && sourceExpression == null));
-
-      this.intervalType = intervalType;
-      this.sourceString = sourceString;
-      this.sourceExpression = sourceExpression;
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append("LevelInWeightListElement [decimalLiteral=");
+      builder.append(decimalLiteral);
+      builder.append(", orderType=");
+      builder.append(orderType);
+      builder.append("]");
+      return builder.toString();
     }
 
   }
@@ -802,10 +690,10 @@ public interface RelationalAlgebraPrimitiveExpression {
       DAY_MICROSECOND
     }
 
-    final Type type;
-    final IntervalTypeBaseEnum intervalTypeBase;
+    public final IntervalType.Type type;
+    public final IntervalTypeBaseEnum intervalTypeBase;
 
-    IntervalType(Type type, IntervalTypeBaseEnum intervalTypeBase) {
+    IntervalType(IntervalType.Type type, IntervalTypeBaseEnum intervalTypeBase) {
       this.type = type;
       if (Type.INTERVAL_TYPE_BASE.equals(type)) {
         Preconditions.checkArgument(intervalTypeBase != null);
@@ -814,107 +702,16 @@ public interface RelationalAlgebraPrimitiveExpression {
         this.intervalTypeBase = null;
       }
     }
-  }
 
-  /**
-   * <pre>
-  GET_FORMAT
-      '('
-        datetimeFormat=(DATE | TIME | DATETIME)
-        ',' stringLiteral
-      ')'      #getFormatFunctionCall
-   * </pre>
-   */
-  public static class GetFormatFunctionCall implements SpecificFunctionCall {
-    public static enum DatetimeFormatType {
-      DATE, TIME, DATETIME
-    }
-
-    final DatetimeFormatType type;
-    final StringLiteral stringLiteral;
-
-    GetFormatFunctionCall(DatetimeFormatType type, StringLiteral stringLiteral) {
-      Preconditions.checkArgument(type != null);
-      Preconditions.checkArgument(stringLiteral != null);
-
-      this.type = type;
-      this.stringLiteral = stringLiteral;
-    }
-  }
-
-  /**
-   * <pre>
-  aggregateWindowedFunction
-    : (AVG | MAX | MIN | SUM)
-      '(' aggregator=(ALL | DISTINCT)? functionArg ')'
-    | COUNT '(' (starArg='*' | aggregator=ALL? functionArg) ')'
-    | COUNT '(' aggregator=DISTINCT functionArgs ')'
-    | (
-        BIT_AND | BIT_OR | BIT_XOR | STD | STDDEV | STDDEV_POP
-        | STDDEV_SAMP | VAR_POP | VAR_SAMP | VARIANCE
-      ) '(' aggregator=ALL? functionArg ')'
-    | GROUP_CONCAT '('
-        aggregator=DISTINCT? functionArgs
-        (ORDER BY
-          orderByExpression (',' orderByExpression)*
-        )? (SEPARATOR separator=STRING_LITERAL)?
-      ')'
-    ;
-   * </pre>
-   */
-  public static class AggregateWindowedFunction implements FunctionCall {
-    public static enum Type {
-      AVG, MAX, MIN, SUM, //
-      COUNT, COUNT_DISTINCT, //
-      BIT_AND, BIT_OR, BIT_XOR, STD, STDDEV, STDDEV_POP, STDDEV_SAMP, VAR_POP, VAR_SAMP, VARIANCE, //
-      GROUP_CONCAT;
-    }
-
-    final Type type;
-    final AggregatorEnum aggregator;
-    final FunctionArg functionArg;
-    final FunctionArgs functionArgs;
-    final List<OrderByExpression> orderByExpression;
-    final String separator;
-
-    AggregateWindowedFunction(Type type, AggregatorEnum aggregator, FunctionArg functionArg,
-        FunctionArgs functionArgs, List<OrderByExpression> orderByExpression, String separator) {
-      Preconditions.checkArgument(type != null);
-      this.type = type;
-      switch (type) {
-      case AVG:
-      case MAX:
-      case MIN:
-      case SUM:
-        Preconditions.checkArgument(functionArg != null);
-        break;
-      case COUNT:
-        Preconditions.checkArgument(functionArg != null);
-        break;
-      case COUNT_DISTINCT:
-        Preconditions.checkArgument(functionArgs != null);
-        break;
-      case BIT_AND:
-      case BIT_OR:
-      case BIT_XOR:
-      case STD:
-      case STDDEV:
-      case STDDEV_POP:
-      case STDDEV_SAMP:
-      case VAR_POP:
-        Preconditions.checkArgument(functionArg != null);
-        break;
-      case GROUP_CONCAT:
-        Preconditions.checkArgument(functionArgs != null);
-      default:
-        throw new UnsupportedOperationException();
-      }
-
-      this.aggregator = aggregator;
-      this.functionArg = functionArg;
-      this.functionArgs = functionArgs;
-      this.orderByExpression = orderByExpression;
-      this.separator = separator;
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append("IntervalType [type=");
+      builder.append(type);
+      builder.append(", intervalTypeBase=");
+      builder.append(intervalTypeBase);
+      builder.append("]");
+      return builder.toString();
     }
 
   }
@@ -925,84 +722,56 @@ public interface RelationalAlgebraPrimitiveExpression {
       ASC, DESC
     }
 
-    final RelationalAlgebraConditionalExpression expression;
-    final OrderType order;
+    public final RelationalAlgebraConditionalExpression expression;
+    public final OrderByExpression.OrderType order;
 
-    OrderByExpression(RelationalAlgebraConditionalExpression expression, OrderType order) {
+    OrderByExpression(RelationalAlgebraConditionalExpression expression,
+        OrderByExpression.OrderType order) {
       Preconditions.checkArgument(expression != null);
 
       this.expression = expression;
       this.order = order;
     }
-  }
 
-  public static enum AggregatorEnum {
-    ALL, DISTINCT
-  }
-
-  // scalarFunctionName '(' functionArgs? ')' #scalarFunctionCall
-  public static class ScalarFunctionCall implements FunctionCall {
-    public static enum Type {
-      FUNCTION_NAME_BASE, //
-      ASCII, CURDATE, CURRENT_DATE, CURRENT_TIME, CURRENT_TIMESTAMP, CURTIME, DATE_ADD, DATE_SUB,
-      IF, INSERT, LOCALTIME, LOCALTIMESTAMP, MID, NOW, REPLACE, SUBSTR, SUBSTRING, SYSDATE, TRIM,
-      UTC_DATE, UTC_TIME, UTC_TIMESTAMP
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append("OrderByExpression [expression=");
+      builder.append(expression);
+      builder.append(", order=");
+      builder.append(order);
+      builder.append("]");
+      return builder.toString();
     }
 
-    final Type type;
-    final FunctionNameBaseEnum functionNameBase;
-    final FunctionArgs functionArgs;
-
-    ScalarFunctionCall(Type type, FunctionNameBaseEnum functionNameBase,
-        FunctionArgs functionArgs) {
-      Preconditions.checkArgument(type != null);
-      this.type = type;
-
-      if (Type.FUNCTION_NAME_BASE.equals(type)) {
-        Preconditions.checkArgument(functionNameBase != null);
-        this.functionNameBase = functionNameBase;
-      } else {
-        this.functionNameBase = null;
-      }
-      this.functionArgs = functionArgs;
-    }
   }
 
-  // fullId '(' functionArgs? ')' #udfFunctionCall
-  public static class UdfFunctionCall implements FunctionCall {
-    final FullId fullId;
-    final FunctionArgs functionArgs;
-
-    UdfFunctionCall(FullId fullId, FunctionArgs functionArgs) {
-      this.fullId = fullId;
-      this.functionArgs = functionArgs;
-    }
-  }
-
+  // fullId: uid (DOT_ID | '.' uid)?
   public static class FullId implements RelationalAlgebraPrimitiveExpression {
-    final Uid uid;
-    final String dotId;
-    final Uid secondUid;
+    public final List<Uid> uids;
+    public final String dotId;
 
-    FullId(Uid uid, String dotId, Uid secondUid) {
-      this.uid = uid;
+    FullId(List<Uid> uids, String dotId) {
+      Preconditions.checkArgument(uids != null && uids.size() > 0);
+
+      this.uids = uids;
       this.dotId = dotId;
-      this.secondUid = secondUid;
     }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append(uids.get(0));
+      if (dotId != null) {
+        builder.append(dotId);
+      }
+      if (uids.size() > 1) {
+        builder.append(".");
+        builder.append(uids.get(1));
+      }
+      return builder.toString();
+    }
+
   }
 
-  // passwordFunctionClause : functionName=(PASSWORD | OLD_PASSWORD) '(' functionArg ')'
-  public static class PasswordFunctionCall implements FunctionCall {
-    public static enum Type {
-      PASSWORD, OLD_PASSWORD
-    }
-
-    final Type type;
-    final FunctionArg functionArg;
-
-    PasswordFunctionCall(Type type, FunctionArg functionArg) {
-      this.type = type;
-      this.functionArg = functionArg;
-    }
-  }
 }

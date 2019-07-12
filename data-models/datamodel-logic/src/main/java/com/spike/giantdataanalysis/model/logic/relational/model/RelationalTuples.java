@@ -64,10 +64,10 @@ public abstract class RelationalTuples {
   @Override
   public String toString() {
     StringBuilder builder = new StringBuilder();
-    builder.append(Joiner.on(", ").join(attributes()).toString());
+    builder.append(Joiner.on(", ").join(attributes()));
     builder.append(System.lineSeparator());
     for (List<Object> value : values()) {
-      builder.append(Joiner.on(" | ").join(value).toString());
+      builder.append(Joiner.on(" | ").join(value));
       builder.append(System.lineSeparator());
     }
     return builder.toString();

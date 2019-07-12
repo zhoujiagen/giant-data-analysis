@@ -2,7 +2,13 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
 
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+
+import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
+import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraExpressionAtom.FullColumnName;
+import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraExpressionAtom.FunctionCall;
 import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraExpressionAtom.MysqlVariable;
 
 /**
@@ -17,6 +23,33 @@ sqlStatement
  * </pre>
  */
 public interface RelationalAlgebraStatementExpression {
+  /**
+   * <pre>
+  sqlStatements
+    : (sqlStatement MINUSMINUS? SEMI? | emptyStatement)*
+    (sqlStatement (MINUSMINUS? SEMI)? | emptyStatement)
+    ;
+   * </pre>
+   */
+  public static class RelationalAlgebraStatementsExpression {
+    public final List<RelationalAlgebraStatementExpression> sqlStatements;
+
+    RelationalAlgebraStatementsExpression(
+        List<RelationalAlgebraStatementExpression> sqlStatements) {
+      this.sqlStatements = sqlStatements;
+    }
+
+    @Override
+    public String toString() {
+      if (CollectionUtils.isNotEmpty(sqlStatements)) {
+        return Joiner.on(System.lineSeparator()).join(sqlStatements);
+      } else {
+        return StringUtils.EMPTY;
+      }
+    }
+
+  }
+
   /**
    * <pre>
   dmlStatement
@@ -54,8 +87,8 @@ public interface RelationalAlgebraStatementExpression {
   }
 
   public static class SimpleSelect implements SelectStatement {
-    final QuerySpecification querySpecification;
-    final LockClauseEnum lockClause;
+    public final QuerySpecification querySpecification;
+    public final LockClauseEnum lockClause;
 
     SimpleSelect(QuerySpecification querySpecification, LockClauseEnum lockClause) {
       Preconditions.checkArgument(querySpecification != null);
@@ -63,11 +96,21 @@ public interface RelationalAlgebraStatementExpression {
       this.querySpecification = querySpecification;
       this.lockClause = lockClause;
     }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append(querySpecification);
+      if (lockClause != null) {
+        builder.append(" ").append(lockClause);
+      }
+      return builder.toString();
+    }
   }
 
   public static class ParenthesisSelect implements SelectStatement {
-    final QueryExpression queryExpression;
-    final LockClauseEnum lockClause;
+    public final QueryExpression queryExpression;
+    public final LockClauseEnum lockClause;
 
     ParenthesisSelect(QueryExpression queryExpression, LockClauseEnum lockClause) {
       Preconditions.checkArgument(queryExpression != null);
@@ -75,17 +118,29 @@ public interface RelationalAlgebraStatementExpression {
       this.queryExpression = queryExpression;
       this.lockClause = lockClause;
     }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append("ParenthesisSelect [queryExpression=");
+      builder.append(queryExpression);
+      builder.append(", lockClause=");
+      builder.append(lockClause);
+      builder.append("]");
+      return builder.toString();
+    }
+
   }
 
   public static class UnionSelect implements SelectStatement {
-    final QuerySpecificationNointo querySpecificationNointo;
-    final List<UnionStatement> unionStatements;
-    final UnionTypeEnum unionType;
-    final QuerySpecification querySpecification;
-    final QueryExpression queryExpression;
-    final OrderByClause orderByClause;
-    final LimitClause limitClause;
-    final LockClauseEnum lockClause;
+    public final QuerySpecificationNointo querySpecificationNointo;
+    public final List<UnionStatement> unionStatements;
+    public final UnionTypeEnum unionType;
+    public final QuerySpecification querySpecification;
+    public final QueryExpression queryExpression;
+    public final OrderByClause orderByClause;
+    public final LimitClause limitClause;
+    public final LockClauseEnum lockClause;
 
     UnionSelect(QuerySpecificationNointo querySpecificationNointo,
         List<UnionStatement> unionStatements, UnionTypeEnum unionType,
@@ -104,16 +159,39 @@ public interface RelationalAlgebraStatementExpression {
       this.lockClause = lockClause;
     }
 
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append("UnionSelect [querySpecificationNointo=");
+      builder.append(querySpecificationNointo);
+      builder.append(", unionStatements=");
+      builder.append(unionStatements);
+      builder.append(", unionType=");
+      builder.append(unionType);
+      builder.append(", querySpecification=");
+      builder.append(querySpecification);
+      builder.append(", queryExpression=");
+      builder.append(queryExpression);
+      builder.append(", orderByClause=");
+      builder.append(orderByClause);
+      builder.append(", limitClause=");
+      builder.append(limitClause);
+      builder.append(", lockClause=");
+      builder.append(lockClause);
+      builder.append("]");
+      return builder.toString();
+    }
+
   }
 
   public static class UnionParenthesisSelect implements SelectStatement {
-    final QueryExpressionNointo queryExpressionNointo;
-    final List<UnionParenthesis> unionParenthesisList;
-    final UnionTypeEnum unionType;
-    final QueryExpression queryExpression;
-    final OrderByClause orderByClause;
-    final LimitClause limitClause;
-    final LockClauseEnum lockClause;
+    public final QueryExpressionNointo queryExpressionNointo;
+    public final List<UnionParenthesis> unionParenthesisList;
+    public final UnionTypeEnum unionType;
+    public final QueryExpression queryExpression;
+    public final OrderByClause orderByClause;
+    public final LimitClause limitClause;
+    public final LockClauseEnum lockClause;
 
     UnionParenthesisSelect(QueryExpressionNointo queryExpressionNointo,
         List<UnionParenthesis> unionParenthesisList, UnionTypeEnum unionType,
@@ -130,6 +208,28 @@ public interface RelationalAlgebraStatementExpression {
       this.limitClause = limitClause;
       this.lockClause = lockClause;
     }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append("UnionParenthesisSelect [queryExpressionNointo=");
+      builder.append(queryExpressionNointo);
+      builder.append(", unionParenthesisList=");
+      builder.append(unionParenthesisList);
+      builder.append(", unionType=");
+      builder.append(unionType);
+      builder.append(", queryExpression=");
+      builder.append(queryExpression);
+      builder.append(", orderByClause=");
+      builder.append(orderByClause);
+      builder.append(", limitClause=");
+      builder.append(limitClause);
+      builder.append(", lockClause=");
+      builder.append(lockClause);
+      builder.append("]");
+      return builder.toString();
+    }
+
   }
 
   // ---------------------------------------------------------------------------
@@ -142,9 +242,9 @@ public interface RelationalAlgebraStatementExpression {
   // unionStatement: UNION unionType=(ALL | DISTINCT)?
   // (querySpecificationNointo | queryExpressionNointo)
   public static class UnionStatement implements RelationalAlgebraPrimitiveExpression {
-    final UnionTypeEnum unionType;
-    final QuerySpecificationNointo querySpecificationNointo;
-    final QueryExpressionNointo queryExpressionNointo;
+    public final UnionTypeEnum unionType;
+    public final QuerySpecificationNointo querySpecificationNointo;
+    public final QueryExpressionNointo queryExpressionNointo;
 
     UnionStatement(UnionTypeEnum unionType, QuerySpecificationNointo querySpecificationNointo,
         QueryExpressionNointo queryExpressionNointo) {
@@ -156,12 +256,26 @@ public interface RelationalAlgebraStatementExpression {
       this.querySpecificationNointo = querySpecificationNointo;
       this.queryExpressionNointo = queryExpressionNointo;
     }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append("UnionStatement [unionType=");
+      builder.append(unionType);
+      builder.append(", querySpecificationNointo=");
+      builder.append(querySpecificationNointo);
+      builder.append(", queryExpressionNointo=");
+      builder.append(queryExpressionNointo);
+      builder.append("]");
+      return builder.toString();
+    }
+
   }
 
   // unionParenthesis: UNION unionType=(ALL | DISTINCT)? queryExpressionNointo
   public static class UnionParenthesis implements RelationalAlgebraPrimitiveExpression {
-    final UnionTypeEnum unionType;
-    final QueryExpressionNointo queryExpressionNointo;
+    public final UnionTypeEnum unionType;
+    public final QueryExpressionNointo queryExpressionNointo;
 
     UnionParenthesis(UnionTypeEnum unionType, QueryExpressionNointo queryExpressionNointo) {
       Preconditions.checkArgument(queryExpressionNointo != null);
@@ -169,16 +283,28 @@ public interface RelationalAlgebraStatementExpression {
       this.unionType = unionType;
       this.queryExpressionNointo = queryExpressionNointo;
     }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append("UnionParenthesis [unionType=");
+      builder.append(unionType);
+      builder.append(", queryExpressionNointo=");
+      builder.append(queryExpressionNointo);
+      builder.append("]");
+      return builder.toString();
+    }
+
   }
 
   // querySpecificationNointo: SELECT selectSpec* selectElements
   // fromClause? orderByClause? limitClause?
   public static class QuerySpecificationNointo implements RelationalAlgebraPrimitiveExpression {
-    final List<SelectSpecEnum> selectSpecs;
-    final SelectElements selectElements;
-    final FromClause fromClause;
-    final OrderByClause orderByClause;
-    final LimitClause limitClause;
+    public final List<SelectSpecEnum> selectSpecs;
+    public final SelectElements selectElements;
+    public final FromClause fromClause;
+    public final OrderByClause orderByClause;
+    public final LimitClause limitClause;
 
     QuerySpecificationNointo(List<SelectSpecEnum> selectSpecs, SelectElements selectElements,
         FromClause fromClause, OrderByClause orderByClause, LimitClause limitClause) {
@@ -190,6 +316,24 @@ public interface RelationalAlgebraStatementExpression {
       this.orderByClause = orderByClause;
       this.limitClause = limitClause;
     }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append("QuerySpecificationNointo [selectSpecs=");
+      builder.append(selectSpecs);
+      builder.append(", selectElements=");
+      builder.append(selectElements);
+      builder.append(", fromClause=");
+      builder.append(fromClause);
+      builder.append(", orderByClause=");
+      builder.append(orderByClause);
+      builder.append(", limitClause=");
+      builder.append(limitClause);
+      builder.append("]");
+      return builder.toString();
+    }
+
   }
 
   /**
@@ -203,39 +347,79 @@ public interface RelationalAlgebraStatementExpression {
    * </pre>
    */
   public static class QuerySpecification implements RelationalAlgebraPrimitiveExpression {
-    final SelectSpecEnum selectSpec;
-    final SelectElements selectElements;
-    final SelectIntoExpression selectIntoExpression;
-    final Boolean selectIntoExpressionBeforeFrom; // selectIntoExpression的位置, 可能需要区分
-    final FromClause fromClause;
-    final OrderByClause orderByClause;
-    final LimitClause limitClause;
+    public final List<SelectSpecEnum> selectSpecs;
+    public final SelectElements selectElements;
+    public final SelectIntoExpression selectIntoExpression;
+    public final FromClause fromClause;
+    public final OrderByClause orderByClause;
+    public final LimitClause limitClause;
 
-    QuerySpecification(SelectSpecEnum selectSpec, SelectElements selectElements,
+    QuerySpecification(List<SelectSpecEnum> selectSpecs, SelectElements selectElements,
         SelectIntoExpression selectIntoExpression, //
-        Boolean selectIntoExpressionBeforeFrom, //
         FromClause fromClause, OrderByClause orderByClause, LimitClause limitClause) {
       Preconditions.checkArgument(selectElements != null);
 
-      this.selectSpec = selectSpec;
+      this.selectSpecs = selectSpecs;
       this.selectElements = selectElements;
       this.selectIntoExpression = selectIntoExpression;
-      this.selectIntoExpressionBeforeFrom = selectIntoExpressionBeforeFrom;
       this.fromClause = fromClause;
       this.orderByClause = orderByClause;
       this.limitClause = limitClause;
     }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append("SELECT").append(" ");
+      if (CollectionUtils.isNotEmpty(selectSpecs)) {
+        builder.append(Joiner.on(" ").join(selectSpecs));
+      }
+
+      builder.append(selectElements);
+
+      if (selectIntoExpression != null) {
+        builder.append(System.lineSeparator());
+        builder.append(selectIntoExpression);
+      }
+
+      if (fromClause != null) {
+        builder.append(System.lineSeparator());
+        builder.append(fromClause);
+      }
+
+      if (orderByClause != null) {
+        builder.append(System.lineSeparator());
+        builder.append(orderByClause);
+      }
+
+      if (limitClause != null) {
+        builder.append(System.lineSeparator());
+        builder.append(limitClause);
+      }
+      return builder.toString();
+    }
+
   }
 
   // queryExpressionNointo : '(' querySpecificationNointo ')'| '(' queryExpressionNointo ')'
   public static class QueryExpressionNointo implements RelationalAlgebraPrimitiveExpression {
-    final QuerySpecificationNointo querySpecificationNointo;
+    public final QuerySpecificationNointo querySpecificationNointo;
 
     public QueryExpressionNointo(QuerySpecificationNointo querySpecificationNointo) {
       Preconditions.checkArgument(querySpecificationNointo != null);
 
       this.querySpecificationNointo = querySpecificationNointo;
     }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append("QueryExpressionNointo [querySpecificationNointo=");
+      builder.append(querySpecificationNointo);
+      builder.append("]");
+      return builder.toString();
+    }
+
   }
 
   public static enum SelectSpecEnum {
@@ -260,22 +444,47 @@ public interface RelationalAlgebraStatementExpression {
    * </pre>
    */
   public static class FromClause implements RelationalAlgebraPrimitiveExpression {
-    final TableSources tableSources;
-    final RelationalAlgebraConditionalExpression whereExpr;
-    final List<GroupByItem> groupByItem;
-    final Boolean withRollup;
-    final RelationalAlgebraConditionalExpression havingExpr;
+    public final TableSources tableSources;
+    public final RelationalAlgebraConditionalExpression whereExpr;
+    public final List<GroupByItem> groupByItems;
+    public final Boolean withRollup;
+    public final RelationalAlgebraConditionalExpression havingExpr;
 
     FromClause(TableSources tableSources, RelationalAlgebraConditionalExpression whereExpr,
-        List<GroupByItem> groupByItem, Boolean withRollup,
+        List<GroupByItem> groupByItems, Boolean withRollup,
         RelationalAlgebraConditionalExpression havingExpr) {
       Preconditions.checkArgument(tableSources != null);
 
       this.tableSources = tableSources;
       this.whereExpr = whereExpr;
-      this.groupByItem = groupByItem;
+      this.groupByItems = groupByItems;
       this.withRollup = withRollup;
       this.havingExpr = havingExpr;
+    }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append("FROM ");
+      builder.append(tableSources);
+      if (whereExpr != null) {
+        builder.append(System.lineSeparator());
+        builder.append("WHERE ").append(whereExpr);
+      }
+      if (CollectionUtils.isNotEmpty(groupByItems)) {
+        builder.append(System.lineSeparator());
+        builder.append("GROUP BY ");
+        builder.append(Joiner.on(", ").join(groupByItems));
+      }
+      if (Boolean.TRUE.equals(withRollup)) {
+        builder.append(System.lineSeparator());
+        builder.append(" WITH ROLLUP ");
+      }
+      if (havingExpr != null) {
+        builder.append(System.lineSeparator());
+        builder.append(havingExpr);
+      }
+      return builder.toString();
     }
   }
 
@@ -285,8 +494,8 @@ public interface RelationalAlgebraStatementExpression {
       ASC, DESC
     }
 
-    final RelationalAlgebraConditionalExpression expression;
-    final OrderType order;
+    public final RelationalAlgebraConditionalExpression expression;
+    public final OrderType order;
 
     GroupByItem(RelationalAlgebraConditionalExpression expression, OrderType order) {
       Preconditions.checkArgument(expression != null);
@@ -294,17 +503,39 @@ public interface RelationalAlgebraStatementExpression {
       this.expression = expression;
       this.order = order;
     }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append("GroupByItem [expression=");
+      builder.append(expression);
+      builder.append(", order=");
+      builder.append(order);
+      builder.append("]");
+      return builder.toString();
+    }
+
   }
 
   // orderByClause: ORDER BY orderByExpression (',' orderByExpression)*
   public static class OrderByClause implements RelationalAlgebraPrimitiveExpression {
-    final List<OrderByExpression> orderByExpressions;
+    public final List<OrderByExpression> orderByExpressions;
 
     OrderByClause(List<OrderByExpression> orderByExpressions) {
       Preconditions.checkArgument(orderByExpressions != null && orderByExpressions.size() > 0);
 
       this.orderByExpressions = orderByExpressions;
     }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append("OrderByClause [orderByExpressions=");
+      builder.append(orderByExpressions);
+      builder.append("]");
+      return builder.toString();
+    }
+
   }
 
   /**
@@ -319,8 +550,8 @@ public interface RelationalAlgebraStatementExpression {
    * </pre>
    */
   public static class LimitClause implements RelationalAlgebraPrimitiveExpression {
-    final LimitClauseAtom limit;
-    final LimitClauseAtom offset;
+    public final LimitClauseAtom limit;
+    public final LimitClauseAtom offset;
 
     LimitClause(LimitClauseAtom limit, LimitClauseAtom offset) {
       Preconditions.checkArgument(limit != null);
@@ -328,11 +559,23 @@ public interface RelationalAlgebraStatementExpression {
       this.limit = limit;
       this.offset = offset;
     }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append("LimitClause [limit=");
+      builder.append(limit);
+      builder.append(", offset=");
+      builder.append(offset);
+      builder.append("]");
+      return builder.toString();
+    }
+
   }
 
   public static class LimitClauseAtom implements RelationalAlgebraPrimitiveExpression {
-    final DecimalLiteral decimalLiteral;
-    final MysqlVariable mysqlVariable;
+    public final DecimalLiteral decimalLiteral;
+    public final MysqlVariable mysqlVariable;
 
     LimitClauseAtom(DecimalLiteral decimalLiteral, MysqlVariable mysqlVariable) {
       Preconditions.checkArgument(!(decimalLiteral == null && mysqlVariable == null));
@@ -340,17 +583,37 @@ public interface RelationalAlgebraStatementExpression {
       this.decimalLiteral = decimalLiteral;
       this.mysqlVariable = mysqlVariable;
     }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append("LimitClauseAtom [decimalLiteral=");
+      builder.append(decimalLiteral);
+      builder.append(", mysqlVariable=");
+      builder.append(mysqlVariable);
+      builder.append("]");
+      return builder.toString();
+    }
+
   }
 
   // tableSources: tableSource (',' tableSource)*
   public static class TableSources implements RelationalAlgebraPrimitiveExpression {
-    final List<TableSource> tableSources;
+    public final List<TableSource> tableSources;
 
     TableSources(List<TableSource> tableSources) {
       Preconditions.checkArgument(tableSources != null && tableSources.size() > 0);
 
       this.tableSources = tableSources;
     }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append(Joiner.on(", ").join(tableSources));
+      return builder.toString();
+    }
+
   }
 
   /**
@@ -365,27 +628,52 @@ public interface RelationalAlgebraStatementExpression {
   }
 
   public static class TableSourceBase implements TableSource {
-    final TableSourceItem tableSourceItem;
-    final List<JoinPart> joinPart;
+    public final TableSourceItem tableSourceItem;
+    public final List<JoinPart> joinParts;
 
-    TableSourceBase(TableSourceItem tableSourceItem, List<JoinPart> joinPart) {
+    TableSourceBase(TableSourceItem tableSourceItem, List<JoinPart> joinParts) {
       Preconditions.checkArgument(tableSourceItem != null);
 
       this.tableSourceItem = tableSourceItem;
-      this.joinPart = joinPart;
+      this.joinParts = joinParts;
+    }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append(tableSourceItem);
+      if (CollectionUtils.isNotEmpty(joinParts)) {
+        builder.append(" ");
+        builder.append(Joiner.on(" ").join(joinParts));
+      }
+      return builder.toString();
     }
   }
 
   public static class TableSourceNested implements TableSource {
-    final TableSourceItem tableSourceItem;
-    final List<JoinPart> joinPart;
+    public final TableSourceItem tableSourceItem;
+    public final List<JoinPart> joinParts;
 
-    TableSourceNested(TableSourceItem tableSourceItem, List<JoinPart> joinPart) {
+    TableSourceNested(TableSourceItem tableSourceItem, List<JoinPart> joinParts) {
       Preconditions.checkArgument(tableSourceItem != null);
 
       this.tableSourceItem = tableSourceItem;
-      this.joinPart = joinPart;
+      this.joinParts = joinParts;
     }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append("TableSourceNested [(");
+      builder.append(tableSourceItem);
+      if (CollectionUtils.isNotEmpty(joinParts)) {
+        builder.append(" ");
+        builder.append(Joiner.on(" ").join(joinParts));
+      }
+      builder.append(")]");
+      return builder.toString();
+    }
+
   }
 
   /**
@@ -407,24 +695,41 @@ public interface RelationalAlgebraStatementExpression {
   }
 
   public static class AtomTableItem implements TableSourceItem {
-    final TableName tableName;
-    final UidList uidList;
-    final Uid alias;
-    final List<IndexHint> indexHint;
+    public final TableName tableName;
+    public final UidList uidList;
+    public final Uid alias;
+    public final List<IndexHint> indexHints;
 
-    AtomTableItem(TableName tableName, UidList uidList, Uid alias, List<IndexHint> indexHint) {
+    AtomTableItem(TableName tableName, UidList uidList, Uid alias, List<IndexHint> indexHints) {
       Preconditions.checkArgument(tableName != null);
 
       this.tableName = tableName;
       this.uidList = uidList;
       this.alias = alias;
-      this.indexHint = indexHint;
+      this.indexHints = indexHints;
     }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append(tableName);
+      if (uidList != null) {
+        builder.append("PARTITION (" + uidList + ")");
+      }
+      if (alias != null) {
+        builder.append(alias);
+      }
+      if (CollectionUtils.isNotEmpty(indexHints)) {
+        builder.append(Joiner.on(", ").join(indexHints));
+      }
+      return builder.toString();
+    }
+
   }
 
   public static class SubqueryTableItem implements TableSourceItem {
-    final SelectStatement selectStatement;
-    final SelectStatement parenthesisSubquery;
+    public final SelectStatement selectStatement;
+    public final SelectStatement parenthesisSubquery;
 
     SubqueryTableItem(SelectStatement selectStatement, SelectStatement parenthesisSubquery) {
       Preconditions.checkArgument(selectStatement != null);
@@ -433,16 +738,38 @@ public interface RelationalAlgebraStatementExpression {
       this.selectStatement = selectStatement;
       this.parenthesisSubquery = parenthesisSubquery;
     }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append("SubqueryTableItem [selectStatement=");
+      builder.append(selectStatement);
+      builder.append(", parenthesisSubquery=");
+      builder.append(parenthesisSubquery);
+      builder.append("]");
+      return builder.toString();
+    }
+
   }
 
   public static class TableSourcesItem implements TableSourceItem {
-    final TableSources tableSources;
+    public final TableSources tableSources;
 
     TableSourcesItem(TableSources tableSources) {
       Preconditions.checkArgument(tableSources != null);
 
       this.tableSources = tableSources;
     }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append("TableSourcesItem [tableSources=");
+      builder.append(tableSources);
+      builder.append("]");
+      return builder.toString();
+    }
+
   }
 
   /**
@@ -463,10 +790,10 @@ public interface RelationalAlgebraStatementExpression {
       INDEX, KEY;
     }
 
-    final IndexHintAction indexHintAction;
-    final KeyFormat keyFormat;
-    final IndexHintType indexHintType;
-    final UidList uidList;
+    public final IndexHintAction indexHintAction;
+    public final KeyFormat keyFormat;
+    public final IndexHintType indexHintType;
+    public final UidList uidList;
 
     IndexHint(IndexHintAction indexHintAction, KeyFormat keyFormat, IndexHintType indexHintType,
         UidList uidList) {
@@ -480,20 +807,42 @@ public interface RelationalAlgebraStatementExpression {
       this.uidList = uidList;
     }
 
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append("IndexHint [indexHintAction=");
+      builder.append(indexHintAction);
+      builder.append(", keyFormat=");
+      builder.append(keyFormat);
+      builder.append(", indexHintType=");
+      builder.append(indexHintType);
+      builder.append(", uidList=");
+      builder.append(uidList);
+      builder.append("]");
+      return builder.toString();
+    }
+
   }
 
   public static enum IndexHintType {
     JOIN, ORDER_BY, GROUP_BY;
   }
 
+  // tableName : fullId
   public static class TableName implements RelationalAlgebraPrimitiveExpression {
-    final FullId fullId;
+    public final FullId fullId;
 
     TableName(FullId fullId) {
       Preconditions.checkArgument(fullId != null);
 
       this.fullId = fullId;
     }
+
+    @Override
+    public String toString() {
+      return fullId.toString();
+    }
+
   }
 
   /**
@@ -518,9 +867,9 @@ public interface RelationalAlgebraStatementExpression {
   }
 
   public static class InnerJoin implements JoinPart {
-    final TableSourceItem tableSourceItem;
-    final RelationalAlgebraConditionalExpression expression;
-    final UidList uidList;
+    public final TableSourceItem tableSourceItem;
+    public final RelationalAlgebraConditionalExpression expression;
+    public final UidList uidList;
 
     InnerJoin(TableSourceItem tableSourceItem, RelationalAlgebraConditionalExpression expression,
         UidList uidList) {
@@ -531,11 +880,24 @@ public interface RelationalAlgebraStatementExpression {
       this.uidList = uidList;
     }
 
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append("InnerJoin [tableSourceItem=");
+      builder.append(tableSourceItem);
+      builder.append(", expression=");
+      builder.append(expression);
+      builder.append(", uidList=");
+      builder.append(uidList);
+      builder.append("]");
+      return builder.toString();
+    }
+
   }
 
   public static class StraightJoin implements JoinPart {
-    final TableSourceItem tableSourceItem;
-    final RelationalAlgebraConditionalExpression expression;
+    public final TableSourceItem tableSourceItem;
+    public final RelationalAlgebraConditionalExpression expression;
 
     StraightJoin(TableSourceItem tableSourceItem,
         RelationalAlgebraConditionalExpression expression) {
@@ -544,13 +906,24 @@ public interface RelationalAlgebraStatementExpression {
       this.tableSourceItem = tableSourceItem;
       this.expression = expression;
     }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append("StraightJoin [tableSourceItem=");
+      builder.append(tableSourceItem);
+      builder.append(", expression=");
+      builder.append(expression);
+      builder.append("]");
+      return builder.toString();
+    }
   }
 
   public static class OuterJoin implements JoinPart {
-    final OuterJoinType type;
-    final TableSourceItem tableSourceItem;
-    final RelationalAlgebraConditionalExpression expression;
-    final UidList uidList;
+    public final OuterJoinType type;
+    public final TableSourceItem tableSourceItem;
+    public final RelationalAlgebraConditionalExpression expression;
+    public final UidList uidList;
 
     OuterJoin(OuterJoinType type, TableSourceItem tableSourceItem,
         RelationalAlgebraConditionalExpression expression, UidList uidList) {
@@ -563,6 +936,22 @@ public interface RelationalAlgebraStatementExpression {
       this.expression = expression;
       this.uidList = uidList;
     }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append("OuterJoin [type=");
+      builder.append(type);
+      builder.append(", tableSourceItem=");
+      builder.append(tableSourceItem);
+      builder.append(", expression=");
+      builder.append(expression);
+      builder.append(", uidList=");
+      builder.append(uidList);
+      builder.append("]");
+      return builder.toString();
+    }
+
   }
 
   public static enum OuterJoinType {
@@ -570,8 +959,8 @@ public interface RelationalAlgebraStatementExpression {
   }
 
   public static class NaturalJoin implements JoinPart {
-    final OuterJoinType outerJoinType;
-    final TableSourceItem tableSourceItem;
+    public final OuterJoinType outerJoinType;
+    public final TableSourceItem tableSourceItem;
 
     NaturalJoin(OuterJoinType outerJoinType, TableSourceItem tableSourceItem) {
       Preconditions.checkArgument(tableSourceItem != null);
@@ -579,20 +968,45 @@ public interface RelationalAlgebraStatementExpression {
       this.outerJoinType = outerJoinType;
       this.tableSourceItem = tableSourceItem;
     }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append("NaturalJoin [outerJoinType=");
+      builder.append(outerJoinType);
+      builder.append(", tableSourceItem=");
+      builder.append(tableSourceItem);
+      builder.append("]");
+      return builder.toString();
+    }
+
   }
 
   // selectElements: (star='*' | selectElement ) (',' selectElement)*
   public static class SelectElements implements RelationalAlgebraPrimitiveExpression {
-    final Boolean star;
-    final SelectElement first;
-    final List<SelectElement> left;
+    public final Boolean star;
+    public final List<SelectElement> selectElements;
 
-    public SelectElements(Boolean star, SelectElement first, List<SelectElement> left) {
-      Preconditions.checkArgument(!(star == null && first == null));
+    public SelectElements(Boolean star, List<SelectElement> selectElements) {
       this.star = star;
-      this.first = first;
-      this.left = left;
+      this.selectElements = selectElements;
     }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      if (Boolean.TRUE.equals(star)) {
+        builder.append("*");
+      }
+      if (CollectionUtils.isNotEmpty(selectElements)) {
+        if (Boolean.TRUE.equals(star)) {
+          builder.append(", ");
+        }
+        builder.append(Joiner.on(", ").join(selectElements));
+      }
+      return builder.toString();
+    }
+
   }
 
   /**
@@ -608,17 +1022,26 @@ public interface RelationalAlgebraStatementExpression {
   }
 
   public static class SelectStarElement implements SelectElement {
-    final FullId fullId;
+    public final FullId fullId;
 
     SelectStarElement(FullId fullId) {
       Preconditions.checkArgument(fullId != null);
       this.fullId = fullId;
     }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append("SelectStarElement [fullId=");
+      builder.append(fullId);
+      builder.append("]");
+      return builder.toString();
+    }
   }
 
   public static class SelectColumnElement implements SelectElement {
-    final FullColumnName fullColumnName;
-    final Uid uid;
+    public final FullColumnName fullColumnName;
+    public final Uid uid;
 
     SelectColumnElement(FullColumnName fullColumnName, Uid uid) {
       Preconditions.checkArgument(fullColumnName != null);
@@ -626,11 +1049,22 @@ public interface RelationalAlgebraStatementExpression {
       this.fullColumnName = fullColumnName;
       this.uid = uid;
     }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append(fullColumnName);
+      if (uid != null) {
+        builder.append(", uid=");
+      }
+      return builder.toString();
+    }
+
   }
 
   public static class SelectFunctionElement implements SelectElement {
-    final FunctionCall functionCall;
-    final Uid uid;
+    public final FunctionCall functionCall;
+    public final Uid uid;
 
     SelectFunctionElement(FunctionCall functionCall, Uid uid) {
       Preconditions.checkArgument(functionCall != null);
@@ -638,12 +1072,24 @@ public interface RelationalAlgebraStatementExpression {
       this.functionCall = functionCall;
       this.uid = uid;
     }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append("SelectFunctionElement [functionCall=");
+      builder.append(functionCall);
+      builder.append(", uid=");
+      builder.append(uid);
+      builder.append("]");
+      return builder.toString();
+    }
+
   }
 
   public static class SelectExpressionElement implements SelectElement {
-    final String localId;
-    final RelationalAlgebraConditionalExpression expression;
-    final Uid uid;
+    public final String localId;
+    public final RelationalAlgebraConditionalExpression expression;
+    public final Uid uid;
 
     SelectExpressionElement(String localId, RelationalAlgebraConditionalExpression expression,
         Uid uid) {
@@ -653,6 +1099,20 @@ public interface RelationalAlgebraStatementExpression {
       this.expression = expression;
       this.uid = uid;
     }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append("SelectExpressionElement [localId=");
+      builder.append(localId);
+      builder.append(", expression=");
+      builder.append(expression);
+      builder.append(", uid=");
+      builder.append(uid);
+      builder.append("]");
+      return builder.toString();
+    }
+
   }
 
   public static enum LockClauseEnum {
@@ -661,6 +1121,26 @@ public interface RelationalAlgebraStatementExpression {
 
   // queryExpression: '(' querySpecification ')' | '(' queryExpression ')'
   public static class QueryExpression implements RelationalAlgebraPrimitiveExpression {
+    public final QuerySpecification querySpecification;
+    public final QueryExpression queryExpression;
+
+    QueryExpression(QuerySpecification querySpecification, QueryExpression queryExpression) {
+      Preconditions.checkArgument(!(querySpecification == null && queryExpression == null));
+
+      this.querySpecification = querySpecification;
+      this.queryExpression = queryExpression;
+    }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append("QueryExpression [querySpecification=");
+      builder.append(querySpecification);
+      builder.append(", queryExpression=");
+      builder.append(queryExpression);
+      builder.append("]");
+      return builder.toString();
+    }
 
   }
 
@@ -687,34 +1167,66 @@ public interface RelationalAlgebraStatementExpression {
   }
 
   public static class SelectIntoVariables implements SelectIntoExpression {
-    final List<AssignmentField> assignmentFields;
+    public final List<AssignmentField> assignmentFields;
 
     SelectIntoVariables(List<AssignmentField> assignmentFields) {
       Preconditions.checkArgument(assignmentFields != null && assignmentFields.size() > 0);
 
       this.assignmentFields = assignmentFields;
     }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append("SelectIntoVariables [assignmentFields=");
+      builder.append(assignmentFields);
+      builder.append("]");
+      return builder.toString();
+    }
+
   }
 
   public static class AssignmentField implements RelationalAlgebraPrimitiveExpression {
-    final Uid uid;
-    final String localId;
+    public final Uid uid;
+    public final String localId;
 
     AssignmentField(Uid uid, String localId) {
       Preconditions.checkArgument(!(uid == null && localId == null));
       this.uid = uid;
       this.localId = localId;
     }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append("AssignmentField [uid=");
+      builder.append(uid);
+      builder.append(", localId=");
+      builder.append(localId);
+      builder.append("]");
+      return builder.toString();
+    }
+
   }
 
   public static class SelectIntoDumpFile implements SelectIntoExpression {
-    final String stringLiteral;
+    public final String stringLiteral;
 
     SelectIntoDumpFile(String stringLiteral) {
       Preconditions.checkArgument(stringLiteral != null);
 
       this.stringLiteral = stringLiteral;
     }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append("SelectIntoDumpFile [stringLiteral=");
+      builder.append(stringLiteral);
+      builder.append("]");
+      return builder.toString();
+    }
+
   }
 
   public static class SelectIntoTextFile implements SelectIntoExpression {
@@ -722,11 +1234,11 @@ public interface RelationalAlgebraStatementExpression {
       FIELDS, COLUMNS
     }
 
-    final String filename;
-    final CharsetName charsetName;
-    final TieldsFormatType fieldsFormat;
-    final List<SelectFieldsInto> selectFieldsIntos;
-    final List<SelectLinesInto> selectLinesInto;
+    public final String filename;
+    public final CharsetName charsetName;
+    public final TieldsFormatType fieldsFormat;
+    public final List<SelectFieldsInto> selectFieldsIntos;
+    public final List<SelectLinesInto> selectLinesInto;
 
     SelectIntoTextFile(String filename, //
         CharsetName charsetName, //
@@ -741,6 +1253,24 @@ public interface RelationalAlgebraStatementExpression {
       this.selectFieldsIntos = selectFieldsIntos;
       this.selectLinesInto = selectLinesInto;
     }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append("SelectIntoTextFile [filename=");
+      builder.append(filename);
+      builder.append(", charsetName=");
+      builder.append(charsetName);
+      builder.append(", fieldsFormat=");
+      builder.append(fieldsFormat);
+      builder.append(", selectFieldsIntos=");
+      builder.append(selectFieldsIntos);
+      builder.append(", selectLinesInto=");
+      builder.append(selectLinesInto);
+      builder.append("]");
+      return builder.toString();
+    }
+
   }
 
   /**
@@ -757,11 +1287,11 @@ public interface RelationalAlgebraStatementExpression {
       TERMINATED_BY, ENCLOSED_BY, ESCAPED_BY
     }
 
-    final Type type;
-    final Boolean optionally;
-    final String stringLiteral;
+    public final SelectFieldsInto.Type type;
+    public final Boolean optionally;
+    public final String stringLiteral;
 
-    SelectFieldsInto(Type type, Boolean optionally, String stringLiteral) {
+    SelectFieldsInto(SelectFieldsInto.Type type, Boolean optionally, String stringLiteral) {
       Preconditions.checkArgument(type != null);
       Preconditions.checkArgument(stringLiteral != null);
 
@@ -769,6 +1299,20 @@ public interface RelationalAlgebraStatementExpression {
       this.optionally = optionally;
       this.stringLiteral = stringLiteral;
     }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append("SelectFieldsInto [type=");
+      builder.append(type);
+      builder.append(", optionally=");
+      builder.append(optionally);
+      builder.append(", stringLiteral=");
+      builder.append(stringLiteral);
+      builder.append("]");
+      return builder.toString();
+    }
+
   }
 
   /**
@@ -784,16 +1328,28 @@ public interface RelationalAlgebraStatementExpression {
       STARTING_BY, TERMINATED_BY
     }
 
-    final Type type;
-    final String stringLiteral;
+    public final SelectLinesInto.Type type;
+    public final String stringLiteral;
 
-    SelectLinesInto(Type type, String stringLiteral) {
+    SelectLinesInto(SelectLinesInto.Type type, String stringLiteral) {
       Preconditions.checkArgument(type != null);
       Preconditions.checkArgument(stringLiteral != null);
 
       this.type = type;
       this.stringLiteral = stringLiteral;
     }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append("SelectLinesInto [type=");
+      builder.append(type);
+      builder.append(", stringLiteral=");
+      builder.append(stringLiteral);
+      builder.append("]");
+      return builder.toString();
+    }
+
   }
 
 }

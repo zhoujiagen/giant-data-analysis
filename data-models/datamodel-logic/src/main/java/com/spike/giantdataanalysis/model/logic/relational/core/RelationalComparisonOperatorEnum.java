@@ -24,4 +24,18 @@ public enum RelationalComparisonOperatorEnum {
   RelationalComparisonOperatorEnum(String symbol) {
     this.symbol = symbol;
   }
+
+  public static RelationalComparisonOperatorEnum of(String symbol) {
+    if (symbol == null) {
+      return null;
+    }
+
+    for (RelationalComparisonOperatorEnum e : RelationalComparisonOperatorEnum.values()) {
+      if (e.symbol.equals(symbol)) {
+        return e;
+      }
+    }
+
+    return null;
+  }
 }

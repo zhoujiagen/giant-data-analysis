@@ -18,10 +18,11 @@ expression
     | predicate                                                     #predicateExpression
  * </pre>
  */
-public interface RelationalAlgebraConditionalExpression {
+public interface RelationalAlgebraConditionalExpression extends RelationalAlgebraExpression {
 
   // expressions : expression (',' expression)*
-  public static class RelationalAlgebraConditionalExpressions {
+  public static class RelationalAlgebraConditionalExpressions
+      implements RelationalAlgebraExpression {
     final List<RelationalAlgebraConditionalExpression> expressions;
 
     RelationalAlgebraConditionalExpressions(
@@ -33,24 +34,30 @@ public interface RelationalAlgebraConditionalExpression {
   }
 
   // notOperator=(NOT | '!') expression #notExpression
-  public static class RelationalAlgebraNotConditionalExpression
-      implements RelationalAlgebraExpression {
+  public static class RelationalAlgebraNotExpression
+      implements RelationalAlgebraConditionalExpression {
     final RelationalAlgebraConditionalExpression expression;
 
-    RelationalAlgebraNotConditionalExpression(RelationalAlgebraConditionalExpression expression) {
+    RelationalAlgebraNotExpression(RelationalAlgebraConditionalExpression expression) {
+      Preconditions.checkArgument(expression != null);
+
       this.expression = expression;
     }
   }
 
   // expression logicalOperator expression #logicalExpression
-  public static class RelationalAlgebraLogicalConditionalExpression
+  public static class RelationalAlgebraLogicalExpression
       implements RelationalAlgebraConditionalExpression {
     final RelationalAlgebraConditionalExpression first;
     final RelationalLogicalOperatorEnum operator;
     final RelationalAlgebraConditionalExpression second;
 
-    RelationalAlgebraLogicalConditionalExpression(RelationalAlgebraConditionalExpression first,
+    RelationalAlgebraLogicalExpression(RelationalAlgebraConditionalExpression first,
         RelationalLogicalOperatorEnum operator, RelationalAlgebraConditionalExpression second) {
+      Preconditions.checkArgument(first != null);
+      Preconditions.checkArgument(operator != null);
+      Preconditions.checkArgument(second != null);
+
       this.first = first;
       this.operator = operator;
       this.second = second;
@@ -58,25 +65,27 @@ public interface RelationalAlgebraConditionalExpression {
   }
 
   // predicate IS NOT? testValue=(TRUE | FALSE | UNKNOWN) #isExpression
-  public static class RelationalAlgebraIsExpressionConditionalExpression
+  public static class RelationalAlgebraIsExpression
       implements RelationalAlgebraConditionalExpression {
     public enum TestValue {
       TRUE, FALSE, UNKNOWN
     }
 
-    final RelationalAlgebraPredicate predicate;
+    final RelationalAlgebraPredicateExpression predicate;
     final Boolean not;
-    final TestValue testValue;
+    final RelationalAlgebraIsExpression.TestValue testValue;
 
-    RelationalAlgebraIsExpressionConditionalExpression(RelationalAlgebraPredicate predicate,
-        Boolean not, TestValue testValue) {
+    RelationalAlgebraIsExpression(RelationalAlgebraPredicateExpression predicate, Boolean not,
+        RelationalAlgebraIsExpression.TestValue testValue) {
+      Preconditions.checkArgument(predicate != null);
+      Preconditions.checkArgument(testValue != null);
+
       this.predicate = predicate;
       this.not = not;
       this.testValue = testValue;
     }
   }
 
-  // TODO(zhoujiagen) restart here!!!
   /**
    * 谓词条件表达式.
    * 
@@ -95,18 +104,18 @@ public interface RelationalAlgebraConditionalExpression {
     ;
    * </pre>
    */
-  public static interface RelationalAlgebraPredicate
+  public static interface RelationalAlgebraPredicateExpression
       extends RelationalAlgebraConditionalExpression {
   }
 
   // predicate NOT? IN '(' (selectStatement | expressions) ')' #inPredicate
-  public static class RelationalAlgebraInPredicate implements RelationalAlgebraPredicate {
-    final RelationalAlgebraPredicate predicate;
+  public static class RelationalAlgebraInPredicate implements RelationalAlgebraPredicateExpression {
+    final RelationalAlgebraPredicateExpression predicate;
     final Boolean not;
     final SelectStatement selectStatement;
     final RelationalAlgebraConditionalExpressions expressions;
 
-    RelationalAlgebraInPredicate(RelationalAlgebraPredicate predicate, Boolean not,
+    RelationalAlgebraInPredicate(RelationalAlgebraPredicateExpression predicate, Boolean not,
         SelectStatement selectStatement, RelationalAlgebraConditionalExpressions expressions) {
       Preconditions.checkArgument(predicate != null);
       Preconditions.checkArgument(!(selectStatement == null && expressions == null));
@@ -119,11 +128,13 @@ public interface RelationalAlgebraConditionalExpression {
   }
 
   // predicate IS nullNotnull #isNullPredicate
-  public static class RelationalAlgebraIsNullPredicate implements RelationalAlgebraPredicate {
-    final RelationalAlgebraPredicate predicate;
+  public static class RelationalAlgebraIsNullPredicate
+      implements RelationalAlgebraPredicateExpression {
+    final RelationalAlgebraPredicateExpression predicate;
     final Boolean notNull;
 
-    RelationalAlgebraIsNullPredicate(RelationalAlgebraPredicate predicate, Boolean notNull) {
+    RelationalAlgebraIsNullPredicate(RelationalAlgebraPredicateExpression predicate,
+        Boolean notNull) {
       Preconditions.checkArgument(predicate != null);
 
       this.predicate = predicate;
@@ -133,13 +144,14 @@ public interface RelationalAlgebraConditionalExpression {
 
   // left=predicate comparisonOperator right=predicate #binaryComparasionPredicate
   public static class RelationalAlgebraBinaryComparasionPredicate
-      implements RelationalAlgebraPredicate {
-    final RelationalAlgebraPredicate left;
+      implements RelationalAlgebraPredicateExpression {
+    final RelationalAlgebraPredicateExpression left;
     final RelationalComparisonOperatorEnum comparisonOperator;
-    final RelationalAlgebraPredicate right;
+    final RelationalAlgebraPredicateExpression right;
 
-    RelationalAlgebraBinaryComparasionPredicate(RelationalAlgebraPredicate left,
-        RelationalComparisonOperatorEnum comparisonOperator, RelationalAlgebraPredicate right) {
+    RelationalAlgebraBinaryComparasionPredicate(RelationalAlgebraPredicateExpression left,
+        RelationalComparisonOperatorEnum comparisonOperator,
+        RelationalAlgebraPredicateExpression right) {
       Preconditions.checkArgument(left != null);
       Preconditions.checkArgument(comparisonOperator != null);
       Preconditions.checkArgument(right != null);
@@ -148,23 +160,34 @@ public interface RelationalAlgebraConditionalExpression {
       this.comparisonOperator = comparisonOperator;
       this.right = right;
     }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append(left);
+      builder.append(" ").append(comparisonOperator.symbol);
+      builder.append(" ").append(right);
+      return builder.toString();
+    }
+
   }
 
   // predicate comparisonOperator quantifier=(ALL | ANY | SOME) '(' selectStatement ')'
   // #subqueryComparasionPredicate
-  public static class RelationalAlgebraSubqueryComparasionPredicatePredicate
-      implements RelationalAlgebraPredicate {
+  public static class RelationalAlgebraSubqueryComparasionPredicate
+      implements RelationalAlgebraPredicateExpression {
     public static enum QuantifierEnum {
       ALL, ANY, SOME
     }
 
-    final RelationalAlgebraPredicate predicate;
+    final RelationalAlgebraPredicateExpression predicate;
     final RelationalComparisonOperatorEnum comparisonOperator;
-    final QuantifierEnum quantifier;
+    final RelationalAlgebraSubqueryComparasionPredicate.QuantifierEnum quantifier;
     final SelectStatement selectStatement;
 
-    RelationalAlgebraSubqueryComparasionPredicatePredicate(RelationalAlgebraPredicate predicate,
-        RelationalComparisonOperatorEnum comparisonOperator, QuantifierEnum quantifier,
+    RelationalAlgebraSubqueryComparasionPredicate(RelationalAlgebraPredicateExpression predicate,
+        RelationalComparisonOperatorEnum comparisonOperator,
+        RelationalAlgebraSubqueryComparasionPredicate.QuantifierEnum quantifier,
         SelectStatement selectStatement) {
       Preconditions.checkArgument(predicate != null);
       Preconditions.checkArgument(comparisonOperator != null);
@@ -179,14 +202,15 @@ public interface RelationalAlgebraConditionalExpression {
   }
 
   // predicate NOT? BETWEEN predicate AND predicate #betweenPredicate
-  public static class RelationalAlgebraBetweenPredicate implements RelationalAlgebraPredicate {
-    final RelationalAlgebraPredicate first;
+  public static class RelationalAlgebraBetweenPredicate
+      implements RelationalAlgebraPredicateExpression {
+    final RelationalAlgebraPredicateExpression first;
     final Boolean not;
-    final RelationalAlgebraPredicate second;
-    final RelationalAlgebraPredicate third;
+    final RelationalAlgebraPredicateExpression second;
+    final RelationalAlgebraPredicateExpression third;
 
-    RelationalAlgebraBetweenPredicate(RelationalAlgebraPredicate first, Boolean not,
-        RelationalAlgebraPredicate second, RelationalAlgebraPredicate third) {
+    RelationalAlgebraBetweenPredicate(RelationalAlgebraPredicateExpression first, Boolean not,
+        RelationalAlgebraPredicateExpression second, RelationalAlgebraPredicateExpression third) {
       Preconditions.checkArgument(first != null);
       Preconditions.checkArgument(second != null);
       Preconditions.checkArgument(third != null);
@@ -199,14 +223,14 @@ public interface RelationalAlgebraConditionalExpression {
   }
 
   // predicate SOUNDS LIKE predicate #soundsLikePredicate
-  public static class RelationalAlgebraSoundsLikePredicatePredicate
-      implements RelationalAlgebraPredicate {
+  public static class RelationalAlgebraSoundsLikePredicate
+      implements RelationalAlgebraPredicateExpression {
 
-    final RelationalAlgebraPredicate first;
-    final RelationalAlgebraPredicate second;
+    final RelationalAlgebraPredicateExpression first;
+    final RelationalAlgebraPredicateExpression second;
 
-    RelationalAlgebraSoundsLikePredicatePredicate(RelationalAlgebraPredicate first,
-        RelationalAlgebraPredicate second) {
+    RelationalAlgebraSoundsLikePredicate(RelationalAlgebraPredicateExpression first,
+        RelationalAlgebraPredicateExpression second) {
       Preconditions.checkArgument(first != null);
       Preconditions.checkArgument(second != null);
 
@@ -216,14 +240,15 @@ public interface RelationalAlgebraConditionalExpression {
   }
 
   // predicate NOT? LIKE predicate (ESCAPE STRING_LITERAL)? #likePredicate
-  public static class RelationalAlgebraLikePredicate implements RelationalAlgebraPredicate {
-    final RelationalAlgebraPredicate first;
+  public static class RelationalAlgebraLikePredicate
+      implements RelationalAlgebraPredicateExpression {
+    final RelationalAlgebraPredicateExpression first;
     final Boolean not;
-    final RelationalAlgebraPredicate second;
+    final RelationalAlgebraPredicateExpression second;
     final String stringLiteral;
 
-    RelationalAlgebraLikePredicate(RelationalAlgebraPredicate first, Boolean not,
-        RelationalAlgebraPredicate second, String stringLiteral) {
+    RelationalAlgebraLikePredicate(RelationalAlgebraPredicateExpression first, Boolean not,
+        RelationalAlgebraPredicateExpression second, String stringLiteral) {
       Preconditions.checkArgument(first != null);
       Preconditions.checkArgument(second != null);
 
@@ -232,21 +257,40 @@ public interface RelationalAlgebraConditionalExpression {
       this.second = second;
       this.stringLiteral = stringLiteral;
     }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append(first).append(" ");
+
+      if (Boolean.TRUE.equals(not)) {
+        builder.append("NOT ");
+      }
+      builder.append("LIKE ");
+      builder.append(second).append(" ");
+      if (stringLiteral != null) {
+        builder.append("ESCAPE ").append(stringLiteral);
+      }
+      return builder.toString();
+    }
+
   }
 
   // predicate NOT? regex=(REGEXP | RLIKE) predicate #regexpPredicate
-  public static class RelationalAlgebraRegexpPredicate implements RelationalAlgebraPredicate {
+  public static class RelationalAlgebraRegexpPredicate
+      implements RelationalAlgebraPredicateExpression {
     public static enum RegexType {
       REGEXP, RLIKE
     }
 
-    final RelationalAlgebraPredicate first;
+    final RelationalAlgebraPredicateExpression first;
     final Boolean not;
-    final RegexType regex;
-    final RelationalAlgebraPredicate second;
+    final RelationalAlgebraRegexpPredicate.RegexType regex;
+    final RelationalAlgebraPredicateExpression second;
 
-    RelationalAlgebraRegexpPredicate(RelationalAlgebraPredicate first, Boolean not, RegexType regex,
-        RelationalAlgebraPredicate second) {
+    RelationalAlgebraRegexpPredicate(RelationalAlgebraPredicateExpression first, Boolean not,
+        RelationalAlgebraRegexpPredicate.RegexType regex,
+        RelationalAlgebraPredicateExpression second) {
       Preconditions.checkArgument(first != null);
       Preconditions.checkArgument(regex != null);
       Preconditions.checkArgument(second != null);
@@ -260,7 +304,7 @@ public interface RelationalAlgebraConditionalExpression {
 
   // (LOCAL_ID VAR_ASSIGN)? expressionAtom #expressionAtomPredicate
   public static class RelationalAlgebraExpressionAtomPredicate
-      implements RelationalAlgebraPredicate {
+      implements RelationalAlgebraPredicateExpression {
     final String localId;
     final RelationalAlgebraExpressionAtom expressionAtom;
 
@@ -271,5 +315,16 @@ public interface RelationalAlgebraConditionalExpression {
       this.localId = localId;
       this.expressionAtom = expressionAtom;
     }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      if (localId != null) {
+        builder.append(localId).append(" := ");
+      }
+      builder.append(expressionAtom);
+      return builder.toString();
+    }
+
   }
 }

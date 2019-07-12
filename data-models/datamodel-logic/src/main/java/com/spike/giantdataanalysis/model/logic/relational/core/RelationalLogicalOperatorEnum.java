@@ -20,4 +20,18 @@ public enum RelationalLogicalOperatorEnum {
   RelationalLogicalOperatorEnum(String symbol) {
     this.symbol = symbol;
   }
+
+  public static RelationalLogicalOperatorEnum of(String symbol) {
+    if (symbol == null) {
+      return null;
+    }
+
+    for (RelationalLogicalOperatorEnum e : RelationalLogicalOperatorEnum.values()) {
+      if (e.symbol.equals(symbol)) {
+        return e;
+      }
+    }
+
+    return null;
+  }
 }

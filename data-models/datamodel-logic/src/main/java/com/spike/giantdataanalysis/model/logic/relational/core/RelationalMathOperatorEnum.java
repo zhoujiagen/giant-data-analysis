@@ -23,4 +23,18 @@ public enum RelationalMathOperatorEnum {
   RelationalMathOperatorEnum(String symbol) {
     this.symbol = symbol;
   }
+
+  public static RelationalMathOperatorEnum of(String symbol) {
+    if (symbol == null) {
+      return null;
+    }
+
+    for (RelationalMathOperatorEnum e : RelationalMathOperatorEnum.values()) {
+      if (e.symbol.equals(symbol)) {
+        return e;
+      }
+    }
+
+    return null;
+  }
 }

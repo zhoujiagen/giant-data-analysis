@@ -20,4 +20,18 @@ public enum RelationalBitOperatorEnum {
   RelationalBitOperatorEnum(String symbol) {
     this.symbol = symbol;
   }
+  
+  public static RelationalBitOperatorEnum of(String symbol) {
+    if (symbol == null) {
+      return null;
+    }
+
+    for (RelationalBitOperatorEnum e : RelationalBitOperatorEnum.values()) {
+      if (e.symbol.equals(symbol)) {
+        return e;
+      }
+    }
+
+    return null;
+  }
 }

@@ -20,4 +20,18 @@ public enum RelationalUnaryOperatorEnum {
     this.symbol = symbol;
   }
 
+  public static RelationalUnaryOperatorEnum of(String symbol) {
+    if (symbol == null) {
+      return null;
+    }
+
+    for (RelationalUnaryOperatorEnum e : RelationalUnaryOperatorEnum.values()) {
+      if (e.symbol.equals(symbol)) {
+        return e;
+      }
+    }
+
+    return null;
+  }
+
 }
