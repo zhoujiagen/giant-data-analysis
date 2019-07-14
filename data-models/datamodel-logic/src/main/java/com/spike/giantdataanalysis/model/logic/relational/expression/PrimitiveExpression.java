@@ -10,10 +10,10 @@ import com.google.common.base.Preconditions;
 /**
  * 关系代数原始表达式.
  */
-public interface RelationalAlgebraPrimitiveExpression extends RelationalAlgebraExpression {
+public interface PrimitiveExpression extends RelationalAlgebraExpression {
 
   // uidList: uid (',' uid)*
-  public static class UidList implements RelationalAlgebraPrimitiveExpression {
+  public static class UidList implements PrimitiveExpression {
     public final List<Uid> uids;
 
     UidList(List<Uid> uids) {
@@ -28,7 +28,7 @@ public interface RelationalAlgebraPrimitiveExpression extends RelationalAlgebraE
     }
   }
 
-  public static class Uid implements RelationalAlgebraPrimitiveExpression {
+  public static class Uid implements PrimitiveExpression {
     public static enum Type {
       SIMPLE_ID, REVERSE_QUOTE_ID, CHARSET_REVERSE_QOUTE_STRING
     }
@@ -50,7 +50,7 @@ public interface RelationalAlgebraPrimitiveExpression extends RelationalAlgebraE
     }
   }
 
-  public static class SimpleId implements RelationalAlgebraPrimitiveExpression {
+  public static class SimpleId implements PrimitiveExpression {
     public static enum Type {
       ID, //
       CHARSET_NAME_BASE, //
@@ -195,7 +195,7 @@ public interface RelationalAlgebraPrimitiveExpression extends RelationalAlgebraE
   }
 
   // dottedId : DOT_ID | '.' uid
-  public static class DottedId implements RelationalAlgebraPrimitiveExpression {
+  public static class DottedId implements PrimitiveExpression {
     public final String dotId;
     public final Uid uid;
 
@@ -220,7 +220,7 @@ public interface RelationalAlgebraPrimitiveExpression extends RelationalAlgebraE
   }
 
   // charsetName: BINARY | charsetNameBase | STRING_LITERAL | CHARSET_REVERSE_QOUTE_STRING
-  public static class CharsetName implements RelationalAlgebraPrimitiveExpression {
+  public static class CharsetName implements PrimitiveExpression {
     public static enum Type {
       BINARY, CHARSET_NAME_BASE, STRING_LITERAL, CHARSET_REVERSE_QOUTE_STRING
     }
@@ -260,7 +260,7 @@ public interface RelationalAlgebraPrimitiveExpression extends RelationalAlgebraE
     ;
    * </pre>
    */
-  public static class ConvertedDataType implements RelationalAlgebraPrimitiveExpression {
+  public static class ConvertedDataType implements PrimitiveExpression {
     public static enum Type {
       // typeName=(BINARY| NCHAR) lengthOneDimension?
       BINARY, NCHAR, //
@@ -357,7 +357,7 @@ public interface RelationalAlgebraPrimitiveExpression extends RelationalAlgebraE
   }
 
   // lengthOneDimension : '(' decimalLiteral ')'
-  public static class LengthOneDimension implements RelationalAlgebraPrimitiveExpression {
+  public static class LengthOneDimension implements PrimitiveExpression {
     public final DecimalLiteral decimalLiteral;
 
     LengthOneDimension(DecimalLiteral decimalLiteral) {
@@ -378,7 +378,7 @@ public interface RelationalAlgebraPrimitiveExpression extends RelationalAlgebraE
   }
 
   // lengthTwoDimension : '(' decimalLiteral ',' decimalLiteral ')'
-  public static class LengthTwoDimension implements RelationalAlgebraPrimitiveExpression {
+  public static class LengthTwoDimension implements PrimitiveExpression {
     public final DecimalLiteral first;
     public final DecimalLiteral second;
 
@@ -403,7 +403,7 @@ public interface RelationalAlgebraPrimitiveExpression extends RelationalAlgebraE
   }
 
   // lengthTwoOptionalDimension : '(' decimalLiteral (',' decimalLiteral)? ')'
-  public static class LengthTwoOptionalDimension implements RelationalAlgebraPrimitiveExpression {
+  public static class LengthTwoOptionalDimension implements PrimitiveExpression {
     public final DecimalLiteral first;
     public final DecimalLiteral second; // may be null
 
@@ -426,8 +426,7 @@ public interface RelationalAlgebraPrimitiveExpression extends RelationalAlgebraE
     }
   }
 
-  public static abstract class RelationAlgebraLiteral
-      implements RelationalAlgebraPrimitiveExpression {
+  public static abstract class RelationAlgebraLiteral implements PrimitiveExpression {
     public abstract String literal();
 
     @Override
@@ -511,7 +510,7 @@ public interface RelationalAlgebraPrimitiveExpression extends RelationalAlgebraE
   }
 
   // collationName: uid | STRING_LITERAL
-  public static class CollationName implements RelationalAlgebraPrimitiveExpression {
+  public static class CollationName implements PrimitiveExpression {
     public final Uid uid;
     public final String stringLiteral;
 
@@ -593,7 +592,7 @@ public interface RelationalAlgebraPrimitiveExpression extends RelationalAlgebraE
   }
 
   // levelsInWeightString
-  public static interface LevelsInWeightString extends RelationalAlgebraPrimitiveExpression {
+  public static interface LevelsInWeightString extends PrimitiveExpression {
   }
 
   // LEVEL levelInWeightListElement (',' levelInWeightListElement)* #levelWeightList
@@ -643,7 +642,7 @@ public interface RelationalAlgebraPrimitiveExpression extends RelationalAlgebraE
   }
 
   // levelInWeightListElement: decimalLiteral orderType=(ASC | DESC | REVERSE)?
-  public static class LevelInWeightListElement implements RelationalAlgebraPrimitiveExpression {
+  public static class LevelInWeightListElement implements PrimitiveExpression {
     public static enum OrderType {
       ASC, DESC, REVERSE
     }
@@ -683,7 +682,7 @@ public interface RelationalAlgebraPrimitiveExpression extends RelationalAlgebraE
     ;
    * </pre>
    */
-  public static class IntervalType implements RelationalAlgebraPrimitiveExpression {
+  public static class IntervalType implements PrimitiveExpression {
     public static enum Type {
       INTERVAL_TYPE_BASE, YEAR, YEAR_MONTH, DAY_HOUR, DAY_MINUTE, DAY_SECOND, HOUR_MINUTE,
       HOUR_SECOND, MINUTE_SECOND, SECOND_MICROSECOND, MINUTE_MICROSECOND, HOUR_MICROSECOND,
@@ -717,16 +716,15 @@ public interface RelationalAlgebraPrimitiveExpression extends RelationalAlgebraE
   }
 
   // orderByExpression : expression order=(ASC | DESC)?
-  public static class OrderByExpression implements RelationalAlgebraPrimitiveExpression {
+  public static class OrderByExpression implements PrimitiveExpression {
     public static enum OrderType {
       ASC, DESC
     }
 
-    public final RelationalAlgebraConditionalExpression expression;
+    public final Expression expression;
     public final OrderByExpression.OrderType order;
 
-    OrderByExpression(RelationalAlgebraConditionalExpression expression,
-        OrderByExpression.OrderType order) {
+    OrderByExpression(Expression expression, OrderByExpression.OrderType order) {
       Preconditions.checkArgument(expression != null);
 
       this.expression = expression;
@@ -747,7 +745,7 @@ public interface RelationalAlgebraPrimitiveExpression extends RelationalAlgebraE
   }
 
   // fullId: uid (DOT_ID | '.' uid)?
-  public static class FullId implements RelationalAlgebraPrimitiveExpression {
+  public static class FullId implements PrimitiveExpression {
     public final List<Uid> uids;
     public final String dotId;
 

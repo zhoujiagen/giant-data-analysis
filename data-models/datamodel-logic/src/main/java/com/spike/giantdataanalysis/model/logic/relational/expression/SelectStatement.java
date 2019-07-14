@@ -3,88 +3,34 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
 import java.util.List;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraExpressionAtom.FullColumnName;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraExpressionAtom.FunctionCall;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraExpressionAtom.MysqlVariable;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ExpressionAtom.FullColumnName;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ExpressionAtom.FunctionCall;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ExpressionAtom.MysqlVariable;
 
 /**
- * 关系代数语句表达式:
- * 
  * <pre>
-sqlStatement
-    : ddlStatement | dmlStatement | transactionStatement
-    | replicationStatement | preparedStatement
-    | administrationStatement | utilityStatement
-    ;
+selectStatement
+  : querySpecification lockClause?                #simpleSelect
+  | queryExpression lockClause?                   #parenthesisSelect
+  | querySpecificationNointo unionStatement+
+      (
+        UNION unionType=(ALL | DISTINCT)?
+        (querySpecification | queryExpression)
+      )?
+      orderByClause? limitClause? lockClause?     #unionSelect
+  | queryExpressionNointo unionParenthesis+
+      (
+        UNION unionType=(ALL | DISTINCT)?
+        queryExpression
+      )?
+      orderByClause? limitClause? lockClause?    #unionParenthesisSelect
+  ;
  * </pre>
  */
-public interface RelationalAlgebraStatementExpression {
-  /**
-   * <pre>
-  sqlStatements
-    : (sqlStatement MINUSMINUS? SEMI? | emptyStatement)*
-    (sqlStatement (MINUSMINUS? SEMI)? | emptyStatement)
-    ;
-   * </pre>
-   */
-  public static class RelationalAlgebraStatementsExpression {
-    public final List<RelationalAlgebraStatementExpression> sqlStatements;
-
-    RelationalAlgebraStatementsExpression(
-        List<RelationalAlgebraStatementExpression> sqlStatements) {
-      this.sqlStatements = sqlStatements;
-    }
-
-    @Override
-    public String toString() {
-      if (CollectionUtils.isNotEmpty(sqlStatements)) {
-        return Joiner.on(System.lineSeparator()).join(sqlStatements);
-      } else {
-        return StringUtils.EMPTY;
-      }
-    }
-
-  }
-
-  /**
-   * <pre>
-  dmlStatement
-    : selectStatement | insertStatement | updateStatement
-    | deleteStatement | replaceStatement | callStatement
-    | loadDataStatement | loadXmlStatement | doStatement
-    | handlerStatement
-    ;
-   * </pre>
-   */
-  public static interface DmlStatement extends RelationalAlgebraStatementExpression {
-  }
-
-  /**
-   * <pre>
-  selectStatement
-    : querySpecification lockClause?                #simpleSelect
-    | queryExpression lockClause?                   #parenthesisSelect
-    | querySpecificationNointo unionStatement+
-        (
-          UNION unionType=(ALL | DISTINCT)?
-          (querySpecification | queryExpression)
-        )?
-        orderByClause? limitClause? lockClause?     #unionSelect
-    | queryExpressionNointo unionParenthesis+
-        (
-          UNION unionType=(ALL | DISTINCT)?
-          queryExpression
-        )?
-        orderByClause? limitClause? lockClause?    #unionParenthesisSelect
-    ;
-   * </pre>
-   */
-  public static interface SelectStatement extends DmlStatement {
-  }
+public interface SelectStatement extends DmlStatement {
 
   public static class SimpleSelect implements SelectStatement {
     public final QuerySpecification querySpecification;
@@ -241,7 +187,7 @@ public interface RelationalAlgebraStatementExpression {
 
   // unionStatement: UNION unionType=(ALL | DISTINCT)?
   // (querySpecificationNointo | queryExpressionNointo)
-  public static class UnionStatement implements RelationalAlgebraPrimitiveExpression {
+  public static class UnionStatement implements PrimitiveExpression {
     public final UnionTypeEnum unionType;
     public final QuerySpecificationNointo querySpecificationNointo;
     public final QueryExpressionNointo queryExpressionNointo;
@@ -273,7 +219,7 @@ public interface RelationalAlgebraStatementExpression {
   }
 
   // unionParenthesis: UNION unionType=(ALL | DISTINCT)? queryExpressionNointo
-  public static class UnionParenthesis implements RelationalAlgebraPrimitiveExpression {
+  public static class UnionParenthesis implements PrimitiveExpression {
     public final UnionTypeEnum unionType;
     public final QueryExpressionNointo queryExpressionNointo;
 
@@ -299,7 +245,7 @@ public interface RelationalAlgebraStatementExpression {
 
   // querySpecificationNointo: SELECT selectSpec* selectElements
   // fromClause? orderByClause? limitClause?
-  public static class QuerySpecificationNointo implements RelationalAlgebraPrimitiveExpression {
+  public static class QuerySpecificationNointo implements PrimitiveExpression {
     public final List<SelectSpecEnum> selectSpecs;
     public final SelectElements selectElements;
     public final FromClause fromClause;
@@ -346,7 +292,7 @@ public interface RelationalAlgebraStatementExpression {
       ;
    * </pre>
    */
-  public static class QuerySpecification implements RelationalAlgebraPrimitiveExpression {
+  public static class QuerySpecification implements PrimitiveExpression {
     public final List<SelectSpecEnum> selectSpecs;
     public final SelectElements selectElements;
     public final SelectIntoExpression selectIntoExpression;
@@ -402,7 +348,7 @@ public interface RelationalAlgebraStatementExpression {
   }
 
   // queryExpressionNointo : '(' querySpecificationNointo ')'| '(' queryExpressionNointo ')'
-  public static class QueryExpressionNointo implements RelationalAlgebraPrimitiveExpression {
+  public static class QueryExpressionNointo implements PrimitiveExpression {
     public final QuerySpecificationNointo querySpecificationNointo;
 
     public QueryExpressionNointo(QuerySpecificationNointo querySpecificationNointo) {
@@ -443,16 +389,15 @@ public interface RelationalAlgebraStatementExpression {
     ;
    * </pre>
    */
-  public static class FromClause implements RelationalAlgebraPrimitiveExpression {
+  public static class FromClause implements PrimitiveExpression {
     public final TableSources tableSources;
-    public final RelationalAlgebraConditionalExpression whereExpr;
+    public final Expression whereExpr;
     public final List<GroupByItem> groupByItems;
     public final Boolean withRollup;
-    public final RelationalAlgebraConditionalExpression havingExpr;
+    public final Expression havingExpr;
 
-    FromClause(TableSources tableSources, RelationalAlgebraConditionalExpression whereExpr,
-        List<GroupByItem> groupByItems, Boolean withRollup,
-        RelationalAlgebraConditionalExpression havingExpr) {
+    FromClause(TableSources tableSources, Expression whereExpr, List<GroupByItem> groupByItems,
+        Boolean withRollup, Expression havingExpr) {
       Preconditions.checkArgument(tableSources != null);
 
       this.tableSources = tableSources;
@@ -489,15 +434,15 @@ public interface RelationalAlgebraStatementExpression {
   }
 
   // groupByItem : expression order=(ASC | DESC)?
-  public static class GroupByItem implements RelationalAlgebraPrimitiveExpression {
+  public static class GroupByItem implements PrimitiveExpression {
     public static enum OrderType {
       ASC, DESC
     }
 
-    public final RelationalAlgebraConditionalExpression expression;
+    public final Expression expression;
     public final OrderType order;
 
-    GroupByItem(RelationalAlgebraConditionalExpression expression, OrderType order) {
+    GroupByItem(Expression expression, OrderType order) {
       Preconditions.checkArgument(expression != null);
 
       this.expression = expression;
@@ -518,7 +463,7 @@ public interface RelationalAlgebraStatementExpression {
   }
 
   // orderByClause: ORDER BY orderByExpression (',' orderByExpression)*
-  public static class OrderByClause implements RelationalAlgebraPrimitiveExpression {
+  public static class OrderByClause implements PrimitiveExpression {
     public final List<OrderByExpression> orderByExpressions;
 
     OrderByClause(List<OrderByExpression> orderByExpressions) {
@@ -549,7 +494,7 @@ public interface RelationalAlgebraStatementExpression {
     ;
    * </pre>
    */
-  public static class LimitClause implements RelationalAlgebraPrimitiveExpression {
+  public static class LimitClause implements PrimitiveExpression {
     public final LimitClauseAtom limit;
     public final LimitClauseAtom offset;
 
@@ -573,7 +518,7 @@ public interface RelationalAlgebraStatementExpression {
 
   }
 
-  public static class LimitClauseAtom implements RelationalAlgebraPrimitiveExpression {
+  public static class LimitClauseAtom implements PrimitiveExpression {
     public final DecimalLiteral decimalLiteral;
     public final MysqlVariable mysqlVariable;
 
@@ -598,7 +543,7 @@ public interface RelationalAlgebraStatementExpression {
   }
 
   // tableSources: tableSource (',' tableSource)*
-  public static class TableSources implements RelationalAlgebraPrimitiveExpression {
+  public static class TableSources implements PrimitiveExpression {
     public final List<TableSource> tableSources;
 
     TableSources(List<TableSource> tableSources) {
@@ -624,7 +569,7 @@ public interface RelationalAlgebraStatementExpression {
     ;
    * </pre>
    */
-  public static interface TableSource extends RelationalAlgebraPrimitiveExpression {
+  public static interface TableSource extends PrimitiveExpression {
   }
 
   public static class TableSourceBase implements TableSource {
@@ -691,7 +636,7 @@ public interface RelationalAlgebraStatementExpression {
     ;
    * </pre>
    */
-  public static interface TableSourceItem extends RelationalAlgebraPrimitiveExpression {
+  public static interface TableSourceItem extends PrimitiveExpression {
   }
 
   public static class AtomTableItem implements TableSourceItem {
@@ -781,7 +726,7 @@ public interface RelationalAlgebraStatementExpression {
     ;
    * </pre>
    */
-  public static class IndexHint implements RelationalAlgebraPrimitiveExpression {
+  public static class IndexHint implements PrimitiveExpression {
     public static enum IndexHintAction {
       USE, IGNORE, FORCE;
     }
@@ -829,7 +774,7 @@ public interface RelationalAlgebraStatementExpression {
   }
 
   // tableName : fullId
-  public static class TableName implements RelationalAlgebraPrimitiveExpression {
+  public static class TableName implements PrimitiveExpression {
     public final FullId fullId;
 
     TableName(FullId fullId) {
@@ -863,16 +808,15 @@ public interface RelationalAlgebraStatementExpression {
     ;
    * </pre>
    */
-  public static interface JoinPart extends RelationalAlgebraPrimitiveExpression {
+  public static interface JoinPart extends PrimitiveExpression {
   }
 
   public static class InnerJoin implements JoinPart {
     public final TableSourceItem tableSourceItem;
-    public final RelationalAlgebraConditionalExpression expression;
+    public final Expression expression;
     public final UidList uidList;
 
-    InnerJoin(TableSourceItem tableSourceItem, RelationalAlgebraConditionalExpression expression,
-        UidList uidList) {
+    InnerJoin(TableSourceItem tableSourceItem, Expression expression, UidList uidList) {
       Preconditions.checkArgument(tableSourceItem != null);
 
       this.tableSourceItem = tableSourceItem;
@@ -897,10 +841,9 @@ public interface RelationalAlgebraStatementExpression {
 
   public static class StraightJoin implements JoinPart {
     public final TableSourceItem tableSourceItem;
-    public final RelationalAlgebraConditionalExpression expression;
+    public final Expression expression;
 
-    StraightJoin(TableSourceItem tableSourceItem,
-        RelationalAlgebraConditionalExpression expression) {
+    StraightJoin(TableSourceItem tableSourceItem, Expression expression) {
       Preconditions.checkArgument(tableSourceItem != null);
 
       this.tableSourceItem = tableSourceItem;
@@ -922,11 +865,11 @@ public interface RelationalAlgebraStatementExpression {
   public static class OuterJoin implements JoinPart {
     public final OuterJoinType type;
     public final TableSourceItem tableSourceItem;
-    public final RelationalAlgebraConditionalExpression expression;
+    public final Expression expression;
     public final UidList uidList;
 
-    OuterJoin(OuterJoinType type, TableSourceItem tableSourceItem,
-        RelationalAlgebraConditionalExpression expression, UidList uidList) {
+    OuterJoin(OuterJoinType type, TableSourceItem tableSourceItem, Expression expression,
+        UidList uidList) {
       Preconditions.checkArgument(type != null);
       Preconditions.checkArgument(tableSourceItem != null);
       Preconditions.checkArgument(!(expression == null && uidList == null));
@@ -983,7 +926,7 @@ public interface RelationalAlgebraStatementExpression {
   }
 
   // selectElements: (star='*' | selectElement ) (',' selectElement)*
-  public static class SelectElements implements RelationalAlgebraPrimitiveExpression {
+  public static class SelectElements implements PrimitiveExpression {
     public final Boolean star;
     public final List<SelectElement> selectElements;
 
@@ -1018,7 +961,7 @@ public interface RelationalAlgebraStatementExpression {
     | (LOCAL_ID VAR_ASSIGN)? expression (AS? uid)?   #selectExpressionElement
    * </pre>
    */
-  public static interface SelectElement extends RelationalAlgebraPrimitiveExpression {
+  public static interface SelectElement extends PrimitiveExpression {
   }
 
   public static class SelectStarElement implements SelectElement {
@@ -1088,11 +1031,10 @@ public interface RelationalAlgebraStatementExpression {
 
   public static class SelectExpressionElement implements SelectElement {
     public final String localId;
-    public final RelationalAlgebraConditionalExpression expression;
+    public final Expression expression;
     public final Uid uid;
 
-    SelectExpressionElement(String localId, RelationalAlgebraConditionalExpression expression,
-        Uid uid) {
+    SelectExpressionElement(String localId, Expression expression, Uid uid) {
       Preconditions.checkArgument(expression != null);
 
       this.localId = localId;
@@ -1120,7 +1062,7 @@ public interface RelationalAlgebraStatementExpression {
   }
 
   // queryExpression: '(' querySpecification ')' | '(' queryExpression ')'
-  public static class QueryExpression implements RelationalAlgebraPrimitiveExpression {
+  public static class QueryExpression implements PrimitiveExpression {
     public final QuerySpecification querySpecification;
     public final QueryExpression queryExpression;
 
@@ -1163,7 +1105,7 @@ public interface RelationalAlgebraStatementExpression {
     ;
    * </pre>
    */
-  public static interface SelectIntoExpression extends RelationalAlgebraPrimitiveExpression {
+  public static interface SelectIntoExpression extends PrimitiveExpression {
   }
 
   public static class SelectIntoVariables implements SelectIntoExpression {
@@ -1186,7 +1128,7 @@ public interface RelationalAlgebraStatementExpression {
 
   }
 
-  public static class AssignmentField implements RelationalAlgebraPrimitiveExpression {
+  public static class AssignmentField implements PrimitiveExpression {
     public final Uid uid;
     public final String localId;
 
@@ -1282,7 +1224,7 @@ public interface RelationalAlgebraStatementExpression {
     ;
    * </pre>
    */
-  public static class SelectFieldsInto implements RelationalAlgebraPrimitiveExpression {
+  public static class SelectFieldsInto implements PrimitiveExpression {
     public static enum Type {
       TERMINATED_BY, ENCLOSED_BY, ESCAPED_BY
     }
@@ -1323,7 +1265,7 @@ public interface RelationalAlgebraStatementExpression {
     ;
    * </pre>
    */
-  public static class SelectLinesInto implements RelationalAlgebraPrimitiveExpression {
+  public static class SelectLinesInto implements PrimitiveExpression {
     public static enum Type {
       STARTING_BY, TERMINATED_BY
     }
@@ -1349,7 +1291,5 @@ public interface RelationalAlgebraStatementExpression {
       builder.append("]");
       return builder.toString();
     }
-
   }
-
 }

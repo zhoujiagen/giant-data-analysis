@@ -1,11 +1,8 @@
 package com.spike.giantdataanalysis.model.logic.relational.expression;
 
-import java.util.List;
-
 import com.google.common.base.Preconditions;
 import com.spike.giantdataanalysis.model.logic.relational.core.RelationalComparisonOperatorEnum;
 import com.spike.giantdataanalysis.model.logic.relational.core.RelationalLogicalOperatorEnum;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraStatementExpression.SelectStatement;
 
 /**
  * 条件表达式:
@@ -18,27 +15,13 @@ expression
     | predicate                                                     #predicateExpression
  * </pre>
  */
-public interface RelationalAlgebraConditionalExpression extends RelationalAlgebraExpression {
-
-  // expressions : expression (',' expression)*
-  public static class RelationalAlgebraConditionalExpressions
-      implements RelationalAlgebraExpression {
-    final List<RelationalAlgebraConditionalExpression> expressions;
-
-    RelationalAlgebraConditionalExpressions(
-        List<RelationalAlgebraConditionalExpression> expressions) {
-      Preconditions.checkArgument(expressions != null && expressions.size() > 0);
-
-      this.expressions = expressions;
-    }
-  }
+public interface Expression extends RelationalAlgebraExpression {
 
   // notOperator=(NOT | '!') expression #notExpression
-  public static class RelationalAlgebraNotExpression
-      implements RelationalAlgebraConditionalExpression {
-    final RelationalAlgebraConditionalExpression expression;
+  public static class RelationalAlgebraNotExpression implements Expression {
+    final Expression expression;
 
-    RelationalAlgebraNotExpression(RelationalAlgebraConditionalExpression expression) {
+    RelationalAlgebraNotExpression(Expression expression) {
       Preconditions.checkArgument(expression != null);
 
       this.expression = expression;
@@ -46,14 +29,13 @@ public interface RelationalAlgebraConditionalExpression extends RelationalAlgebr
   }
 
   // expression logicalOperator expression #logicalExpression
-  public static class RelationalAlgebraLogicalExpression
-      implements RelationalAlgebraConditionalExpression {
-    final RelationalAlgebraConditionalExpression first;
+  public static class RelationalAlgebraLogicalExpression implements Expression {
+    final Expression first;
     final RelationalLogicalOperatorEnum operator;
-    final RelationalAlgebraConditionalExpression second;
+    final Expression second;
 
-    RelationalAlgebraLogicalExpression(RelationalAlgebraConditionalExpression first,
-        RelationalLogicalOperatorEnum operator, RelationalAlgebraConditionalExpression second) {
+    RelationalAlgebraLogicalExpression(Expression first, RelationalLogicalOperatorEnum operator,
+        Expression second) {
       Preconditions.checkArgument(first != null);
       Preconditions.checkArgument(operator != null);
       Preconditions.checkArgument(second != null);
@@ -65,8 +47,7 @@ public interface RelationalAlgebraConditionalExpression extends RelationalAlgebr
   }
 
   // predicate IS NOT? testValue=(TRUE | FALSE | UNKNOWN) #isExpression
-  public static class RelationalAlgebraIsExpression
-      implements RelationalAlgebraConditionalExpression {
+  public static class RelationalAlgebraIsExpression implements Expression {
     public enum TestValue {
       TRUE, FALSE, UNKNOWN
     }
@@ -104,8 +85,7 @@ public interface RelationalAlgebraConditionalExpression extends RelationalAlgebr
     ;
    * </pre>
    */
-  public static interface RelationalAlgebraPredicateExpression
-      extends RelationalAlgebraConditionalExpression {
+  public static interface RelationalAlgebraPredicateExpression extends Expression {
   }
 
   // predicate NOT? IN '(' (selectStatement | expressions) ')' #inPredicate
@@ -113,10 +93,10 @@ public interface RelationalAlgebraConditionalExpression extends RelationalAlgebr
     final RelationalAlgebraPredicateExpression predicate;
     final Boolean not;
     final SelectStatement selectStatement;
-    final RelationalAlgebraConditionalExpressions expressions;
+    final Expressions expressions;
 
     RelationalAlgebraInPredicate(RelationalAlgebraPredicateExpression predicate, Boolean not,
-        SelectStatement selectStatement, RelationalAlgebraConditionalExpressions expressions) {
+        SelectStatement selectStatement, Expressions expressions) {
       Preconditions.checkArgument(predicate != null);
       Preconditions.checkArgument(!(selectStatement == null && expressions == null));
 
@@ -306,10 +286,9 @@ public interface RelationalAlgebraConditionalExpression extends RelationalAlgebr
   public static class RelationalAlgebraExpressionAtomPredicate
       implements RelationalAlgebraPredicateExpression {
     final String localId;
-    final RelationalAlgebraExpressionAtom expressionAtom;
+    final ExpressionAtom expressionAtom;
 
-    RelationalAlgebraExpressionAtomPredicate(String localId,
-        RelationalAlgebraExpressionAtom expressionAtom) {
+    RelationalAlgebraExpressionAtomPredicate(String localId, ExpressionAtom expressionAtom) {
       Preconditions.checkArgument(expressionAtom != null);
 
       this.localId = localId;

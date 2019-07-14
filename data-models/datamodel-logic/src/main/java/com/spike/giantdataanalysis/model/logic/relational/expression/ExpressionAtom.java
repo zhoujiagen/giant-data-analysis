@@ -9,20 +9,19 @@ import com.google.common.base.Preconditions;
 import com.spike.giantdataanalysis.model.logic.relational.core.RelationalBitOperatorEnum;
 import com.spike.giantdataanalysis.model.logic.relational.core.RelationalMathOperatorEnum;
 import com.spike.giantdataanalysis.model.logic.relational.core.RelationalUnaryOperatorEnum;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraConditionalExpression.RelationalAlgebraPredicateExpression;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraPrimitiveExpression.CharsetName;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraPrimitiveExpression.CollationName;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraPrimitiveExpression.ConvertedDataType;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraPrimitiveExpression.DecimalLiteral;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraPrimitiveExpression.DottedId;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraPrimitiveExpression.FullId;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraPrimitiveExpression.FunctionNameBaseEnum;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraPrimitiveExpression.IntervalType;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraPrimitiveExpression.LevelsInWeightString;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraPrimitiveExpression.OrderByExpression;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraPrimitiveExpression.StringLiteral;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraPrimitiveExpression.Uid;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraStatementExpression.SelectStatement;
+import com.spike.giantdataanalysis.model.logic.relational.expression.Expression.RelationalAlgebraPredicateExpression;
+import com.spike.giantdataanalysis.model.logic.relational.expression.PrimitiveExpression.CharsetName;
+import com.spike.giantdataanalysis.model.logic.relational.expression.PrimitiveExpression.CollationName;
+import com.spike.giantdataanalysis.model.logic.relational.expression.PrimitiveExpression.ConvertedDataType;
+import com.spike.giantdataanalysis.model.logic.relational.expression.PrimitiveExpression.DecimalLiteral;
+import com.spike.giantdataanalysis.model.logic.relational.expression.PrimitiveExpression.DottedId;
+import com.spike.giantdataanalysis.model.logic.relational.expression.PrimitiveExpression.FullId;
+import com.spike.giantdataanalysis.model.logic.relational.expression.PrimitiveExpression.FunctionNameBaseEnum;
+import com.spike.giantdataanalysis.model.logic.relational.expression.PrimitiveExpression.IntervalType;
+import com.spike.giantdataanalysis.model.logic.relational.expression.PrimitiveExpression.LevelsInWeightString;
+import com.spike.giantdataanalysis.model.logic.relational.expression.PrimitiveExpression.OrderByExpression;
+import com.spike.giantdataanalysis.model.logic.relational.expression.PrimitiveExpression.StringLiteral;
+import com.spike.giantdataanalysis.model.logic.relational.expression.PrimitiveExpression.Uid;
 
 /**
  * 原子表达式:
@@ -46,7 +45,7 @@ expressionAtom
     ;
  * </pre>
  */
-public interface RelationalAlgebraExpressionAtom extends RelationalAlgebraPredicateExpression {
+public interface ExpressionAtom extends RelationalAlgebraPredicateExpression {
 
   /**
    * <pre>
@@ -59,7 +58,7 @@ public interface RelationalAlgebraExpressionAtom extends RelationalAlgebraPredic
     ;
    * </pre>
    */
-  public static class Constant implements RelationalAlgebraExpressionAtom {
+  public static class Constant implements ExpressionAtom {
 
     public static enum Type {
       STRING_LITERAL, //
@@ -99,7 +98,7 @@ public interface RelationalAlgebraExpressionAtom extends RelationalAlgebraPredic
   }
 
   // fullColumnName: uid (dottedId dottedId? )?
-  public static class FullColumnName implements RelationalAlgebraExpressionAtom {
+  public static class FullColumnName implements ExpressionAtom {
     public final Uid uid;
     public final List<DottedId> dottedIds;
 
@@ -133,7 +132,7 @@ public interface RelationalAlgebraExpressionAtom extends RelationalAlgebraPredic
     ;
    * </pre>
    */
-  public static interface FunctionCall extends RelationalAlgebraExpressionAtom {
+  public static interface FunctionCall extends ExpressionAtom {
   }
 
   /**
@@ -269,12 +268,12 @@ public interface RelationalAlgebraExpressionAtom extends RelationalAlgebraPredic
     }
 
     public final DataTypeFunctionCall.Type type;
-    public final RelationalAlgebraConditionalExpression expression;
+    public final Expression expression;
     public final ConvertedDataType convertedDataType;
     public final CharsetName charsetName;
 
-    DataTypeFunctionCall(DataTypeFunctionCall.Type type,
-        RelationalAlgebraConditionalExpression expression, CharsetName charsetName) {
+    DataTypeFunctionCall(DataTypeFunctionCall.Type type, Expression expression,
+        CharsetName charsetName) {
       Preconditions.checkArgument(Type.CONVERT_CHARSET.equals(type));
       Preconditions.checkArgument(expression != null);
       Preconditions.checkArgument(charsetName != null);
@@ -285,8 +284,8 @@ public interface RelationalAlgebraExpressionAtom extends RelationalAlgebraPredic
       this.charsetName = charsetName;
     }
 
-    DataTypeFunctionCall(DataTypeFunctionCall.Type type,
-        RelationalAlgebraConditionalExpression expression, ConvertedDataType convertedDataType) {
+    DataTypeFunctionCall(DataTypeFunctionCall.Type type, Expression expression,
+        ConvertedDataType convertedDataType) {
       Preconditions.checkArgument(Type.CONVERT_DATATYPE.equals(type) || Type.CAST.equals(type));
       Preconditions.checkArgument(expression != null);
       Preconditions.checkArgument(convertedDataType != null);
@@ -339,12 +338,12 @@ public interface RelationalAlgebraExpressionAtom extends RelationalAlgebraPredic
   // CASE expression caseFuncAlternative+ (ELSE elseArg=functionArg)? END
   // CASE caseFuncAlternative+ (ELSE elseArg=functionArg)? END
   public static class CaseFunctionCall implements SpecificFunction {
-    RelationalAlgebraConditionalExpression expression;
+    Expression expression;
     public final List<CaseFuncAlternative> caseFuncAlternatives;
     FunctionArg functionArg;
 
-    CaseFunctionCall(RelationalAlgebraConditionalExpression expression,
-        List<CaseFuncAlternative> caseFuncAlternatives, FunctionArg functionArg) {
+    CaseFunctionCall(Expression expression, List<CaseFuncAlternative> caseFuncAlternatives,
+        FunctionArg functionArg) {
       Preconditions.checkArgument(expression != null);
       Preconditions.checkArgument(caseFuncAlternatives != null && caseFuncAlternatives.size() > 0);
 
@@ -414,13 +413,12 @@ public interface RelationalAlgebraExpressionAtom extends RelationalAlgebraPredic
    */
   public static class PositionFunctionCall implements SpecificFunction {
     public final String positionString;
-    public final RelationalAlgebraConditionalExpression positionExpression;
+    public final Expression positionExpression;
     public final String inString;
-    public final RelationalAlgebraConditionalExpression inExpression;
+    public final Expression inExpression;
 
-    PositionFunctionCall(String positionString,
-        RelationalAlgebraConditionalExpression positionExpression, String inString,
-        RelationalAlgebraConditionalExpression inExpression) {
+    PositionFunctionCall(String positionString, Expression positionExpression, String inString,
+        Expression inExpression) {
       Preconditions.checkArgument(!(positionString == null && positionExpression == null));
       Preconditions.checkArgument(!(inString == null && inExpression == null));
 
@@ -471,16 +469,16 @@ public interface RelationalAlgebraExpressionAtom extends RelationalAlgebraPredic
    */
   public static class SubstrFunctionCall implements SpecificFunction {
     public final String sourceString;
-    public final RelationalAlgebraConditionalExpression sourceExpression;
+    public final Expression sourceExpression;
     public final DecimalLiteral fromDecimal;
-    public final RelationalAlgebraConditionalExpression fromExpression;
+    public final Expression fromExpression;
     public final DecimalLiteral forDecimal;
-    public final RelationalAlgebraConditionalExpression forExpression;
+    public final Expression forExpression;
 
     SubstrFunctionCall(//
-        String sourceString, RelationalAlgebraConditionalExpression sourceExpression, //
-        DecimalLiteral fromDecimal, RelationalAlgebraConditionalExpression fromExpression, //
-        DecimalLiteral forDecimal, RelationalAlgebraConditionalExpression forExpression//
+        String sourceString, Expression sourceExpression, //
+        DecimalLiteral fromDecimal, Expression fromExpression, //
+        DecimalLiteral forDecimal, Expression forExpression//
     ) {
       Preconditions.checkArgument(!(sourceString == null && sourceExpression == null));
       Preconditions.checkArgument(!(fromDecimal == null && fromExpression == null));
@@ -540,13 +538,13 @@ public interface RelationalAlgebraExpressionAtom extends RelationalAlgebraPredic
 
     public final TrimFunctionCall.PositioinFormType type;
     public final StringLiteral sourceString;
-    public final RelationalAlgebraConditionalExpression sourceExpression;
+    public final Expression sourceExpression;
     public final StringLiteral fromString;
-    public final RelationalAlgebraConditionalExpression fromExpression;
+    public final Expression fromExpression;
 
     TrimFunctionCall(TrimFunctionCall.PositioinFormType type, //
-        StringLiteral sourceString, RelationalAlgebraConditionalExpression sourceExpression, //
-        StringLiteral fromString, RelationalAlgebraConditionalExpression fromExpression//
+        StringLiteral sourceString, Expression sourceExpression, //
+        StringLiteral fromString, Expression fromExpression//
     ) {
       Preconditions.checkArgument(type != null);
       Preconditions.checkArgument(!(sourceString == null && sourceExpression == null));
@@ -619,10 +617,10 @@ public interface RelationalAlgebraExpressionAtom extends RelationalAlgebraPredic
   public static class ExtractFunctionCall implements SpecificFunction {
     public final IntervalType intervalType;
     public final StringLiteral sourceString;
-    public final RelationalAlgebraConditionalExpression sourceExpression;
+    public final Expression sourceExpression;
 
     ExtractFunctionCall(IntervalType intervalType, StringLiteral sourceString,
-        RelationalAlgebraConditionalExpression sourceExpression) {
+        Expression sourceExpression) {
       Preconditions.checkArgument(intervalType != null);
       Preconditions.checkArgument(!(sourceString == null && sourceExpression == null));
 
@@ -899,14 +897,14 @@ public interface RelationalAlgebraExpressionAtom extends RelationalAlgebraPredic
     };
 
     public final StringLiteral stringLiteral;
-    public final RelationalAlgebraConditionalExpression expression;
+    public final Expression expression;
     public final WeightFunctionCall.StringFormatType type;
     public final DecimalLiteral decimalLiteral;
     public final LevelsInWeightString levelsInWeightString;
 
-    WeightFunctionCall(StringLiteral stringLiteral,
-        RelationalAlgebraConditionalExpression expression, WeightFunctionCall.StringFormatType type,
-        DecimalLiteral decimalLiteral, LevelsInWeightString levelsInWeightString) {
+    WeightFunctionCall(StringLiteral stringLiteral, Expression expression,
+        WeightFunctionCall.StringFormatType type, DecimalLiteral decimalLiteral,
+        LevelsInWeightString levelsInWeightString) {
       this.stringLiteral = stringLiteral;
       this.expression = expression;
       this.type = type;
@@ -934,7 +932,7 @@ public interface RelationalAlgebraExpressionAtom extends RelationalAlgebraPredic
   }
 
   // caseFuncAlternative: WHEN condition=functionArg THEN consequent=functionArg
-  public static class CaseFuncAlternative implements RelationalAlgebraPrimitiveExpression {
+  public static class CaseFuncAlternative implements PrimitiveExpression {
     public final FunctionArg condition;
     public final FunctionArg consequent;
 
@@ -960,7 +958,7 @@ public interface RelationalAlgebraExpressionAtom extends RelationalAlgebraPredic
   }
 
   // functionArg: constant | fullColumnName | functionCall | expression
-  public static class FunctionArg implements RelationalAlgebraPrimitiveExpression {
+  public static class FunctionArg implements PrimitiveExpression {
     public static enum Type {
       CONSTANT, FULL_COLUMN_NAME, FUNCTION_CALL, EXPRESSION
     }
@@ -969,7 +967,7 @@ public interface RelationalAlgebraExpressionAtom extends RelationalAlgebraPredic
     Constant constant;
     FullColumnName fullColumnName;
     FunctionCall functionCall;
-    RelationalAlgebraConditionalExpression expression;
+    Expression expression;
 
     FunctionArg(FunctionArg.Type type, Object value) {
       Preconditions.checkArgument(type != null);
@@ -987,7 +985,7 @@ public interface RelationalAlgebraExpressionAtom extends RelationalAlgebraPredic
         functionCall = (FunctionCall) value;
         break;
       case EXPRESSION:
-        expression = (RelationalAlgebraConditionalExpression) value;
+        expression = (Expression) value;
         break;
       default:
         throw new UnsupportedOperationException();
@@ -1014,11 +1012,11 @@ public interface RelationalAlgebraExpressionAtom extends RelationalAlgebraPredic
   }
 
   // expressionAtom COLLATE collationName #collateExpressionAtom
-  public static class Collate implements RelationalAlgebraExpressionAtom {
-    public final RelationalAlgebraExpressionAtom expressionAtom;
+  public static class Collate implements ExpressionAtom {
+    public final ExpressionAtom expressionAtom;
     public final CollationName collationName;
 
-    Collate(RelationalAlgebraExpressionAtom expressionAtom, CollationName collationName) {
+    Collate(ExpressionAtom expressionAtom, CollationName collationName) {
       Preconditions.checkArgument(expressionAtom != null);
       Preconditions.checkArgument(collationName != null);
 
@@ -1040,7 +1038,7 @@ public interface RelationalAlgebraExpressionAtom extends RelationalAlgebraPredic
   }
 
   // mysqlVariable: LOCAL_ID | GLOBAL_ID
-  public static class MysqlVariable implements RelationalAlgebraExpressionAtom {
+  public static class MysqlVariable implements ExpressionAtom {
     public final String localId;
     public final String globalId;
 
@@ -1065,12 +1063,11 @@ public interface RelationalAlgebraExpressionAtom extends RelationalAlgebraPredic
   }
 
   // unaryOperator expressionAtom #unaryExpressionAtom
-  public static class UnaryExpressionAtom implements RelationalAlgebraExpressionAtom {
+  public static class UnaryExpressionAtom implements ExpressionAtom {
     public final RelationalUnaryOperatorEnum unaryOperator;
-    public final RelationalAlgebraExpressionAtom expressionAtom;
+    public final ExpressionAtom expressionAtom;
 
-    UnaryExpressionAtom(RelationalUnaryOperatorEnum unaryOperator,
-        RelationalAlgebraExpressionAtom expressionAtom) {
+    UnaryExpressionAtom(RelationalUnaryOperatorEnum unaryOperator, ExpressionAtom expressionAtom) {
       Preconditions.checkArgument(unaryOperator != null);
       Preconditions.checkArgument(expressionAtom != null);
 
@@ -1092,10 +1089,10 @@ public interface RelationalAlgebraExpressionAtom extends RelationalAlgebraPredic
   }
 
   // BINARY expressionAtom #binaryExpressionAtom
-  public static class BinaryExpressionAtom implements RelationalAlgebraExpressionAtom {
-    public final RelationalAlgebraExpressionAtom expressionAtom;
+  public static class BinaryExpressionAtom implements ExpressionAtom {
+    public final ExpressionAtom expressionAtom;
 
-    BinaryExpressionAtom(RelationalAlgebraExpressionAtom expressionAtom) {
+    BinaryExpressionAtom(ExpressionAtom expressionAtom) {
       Preconditions.checkArgument(expressionAtom != null);
 
       this.expressionAtom = expressionAtom;
@@ -1113,10 +1110,10 @@ public interface RelationalAlgebraExpressionAtom extends RelationalAlgebraPredic
   }
 
   // '(' expression (',' expression)* ')' #nestedExpressionAtom
-  public static class NestedExpressionAtom implements RelationalAlgebraExpressionAtom {
-    public final List<RelationalAlgebraConditionalExpression> expressions;
+  public static class NestedExpressionAtom implements ExpressionAtom {
+    public final List<Expression> expressions;
 
-    NestedExpressionAtom(List<RelationalAlgebraConditionalExpression> expressions) {
+    NestedExpressionAtom(List<Expression> expressions) {
       Preconditions.checkArgument(expressions != null && expressions.size() > 0);
 
       this.expressions = expressions;
@@ -1134,10 +1131,10 @@ public interface RelationalAlgebraExpressionAtom extends RelationalAlgebraPredic
   }
 
   // ROW '(' expression (',' expression)+ ')' #nestedRowExpressionAtom
-  public static class NestedRowExpressionAtom implements RelationalAlgebraExpressionAtom {
-    public final List<RelationalAlgebraConditionalExpression> expressions;
+  public static class NestedRowExpressionAtom implements ExpressionAtom {
+    public final List<Expression> expressions;
 
-    NestedRowExpressionAtom(List<RelationalAlgebraConditionalExpression> expressions) {
+    NestedRowExpressionAtom(List<Expression> expressions) {
       Preconditions.checkArgument(expressions != null && expressions.size() > 0);
 
       this.expressions = expressions;
@@ -1155,7 +1152,7 @@ public interface RelationalAlgebraExpressionAtom extends RelationalAlgebraPredic
   }
 
   // EXISTS '(' selectStatement ')' #existsExpessionAtom
-  public static class ExistsExpessionAtom implements RelationalAlgebraExpressionAtom {
+  public static class ExistsExpessionAtom implements ExpressionAtom {
     public final SelectStatement selectStatement;
 
     ExistsExpessionAtom(SelectStatement selectStatement) {
@@ -1176,7 +1173,7 @@ public interface RelationalAlgebraExpressionAtom extends RelationalAlgebraPredic
   }
 
   // '(' selectStatement ')' #subqueryExpessionAtom
-  public static class SubqueryExpessionAtom implements RelationalAlgebraExpressionAtom {
+  public static class SubqueryExpessionAtom implements ExpressionAtom {
     public final SelectStatement selectStatement;
 
     SubqueryExpessionAtom(SelectStatement selectStatement) {
@@ -1197,12 +1194,11 @@ public interface RelationalAlgebraExpressionAtom extends RelationalAlgebraPredic
   }
 
   // INTERVAL expression intervalType #intervalExpressionAtom
-  public static class IntervalExpressionAtom implements RelationalAlgebraExpressionAtom {
-    public final RelationalAlgebraConditionalExpression expression;
+  public static class IntervalExpressionAtom implements ExpressionAtom {
+    public final Expression expression;
     public final IntervalType intervalType;
 
-    IntervalExpressionAtom(RelationalAlgebraConditionalExpression expression,
-        IntervalType intervalType) {
+    IntervalExpressionAtom(Expression expression, IntervalType intervalType) {
       Preconditions.checkArgument(expression != null);
       Preconditions.checkArgument(intervalType != null);
 
@@ -1224,13 +1220,13 @@ public interface RelationalAlgebraExpressionAtom extends RelationalAlgebraPredic
   }
 
   // left=expressionAtom bitOperator right=expressionAtom #bitExpressionAtom
-  public static class BitExpressionAtom implements RelationalAlgebraExpressionAtom {
-    public final RelationalAlgebraExpressionAtom left;
+  public static class BitExpressionAtom implements ExpressionAtom {
+    public final ExpressionAtom left;
     public final RelationalBitOperatorEnum bitOperator;
-    public final RelationalAlgebraExpressionAtom right;
+    public final ExpressionAtom right;
 
-    BitExpressionAtom(RelationalAlgebraExpressionAtom left, RelationalBitOperatorEnum bitOperator,
-        RelationalAlgebraExpressionAtom right) {
+    BitExpressionAtom(ExpressionAtom left, RelationalBitOperatorEnum bitOperator,
+        ExpressionAtom right) {
       Preconditions.checkArgument(left != null);
       Preconditions.checkArgument(bitOperator != null);
       Preconditions.checkArgument(right != null);
@@ -1256,13 +1252,13 @@ public interface RelationalAlgebraExpressionAtom extends RelationalAlgebraPredic
   }
 
   // left=expressionAtom mathOperator right=expressionAtom #mathExpressionAtom
-  public static class MathExpressionAtom implements RelationalAlgebraExpressionAtom {
-    public final RelationalAlgebraExpressionAtom left;
+  public static class MathExpressionAtom implements ExpressionAtom {
+    public final ExpressionAtom left;
     public final RelationalMathOperatorEnum mathOperator;
-    public final RelationalAlgebraExpressionAtom right;
+    public final ExpressionAtom right;
 
-    MathExpressionAtom(RelationalAlgebraExpressionAtom left,
-        RelationalMathOperatorEnum mathOperator, RelationalAlgebraExpressionAtom right) {
+    MathExpressionAtom(ExpressionAtom left, RelationalMathOperatorEnum mathOperator,
+        ExpressionAtom right) {
       Preconditions.checkArgument(left != null);
       Preconditions.checkArgument(mathOperator != null);
       Preconditions.checkArgument(right != null);

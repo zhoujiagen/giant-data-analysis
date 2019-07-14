@@ -10,130 +10,127 @@ import com.spike.giantdataanalysis.model.logic.relational.core.RelationalCompari
 import com.spike.giantdataanalysis.model.logic.relational.core.RelationalLogicalOperatorEnum;
 import com.spike.giantdataanalysis.model.logic.relational.core.RelationalMathOperatorEnum;
 import com.spike.giantdataanalysis.model.logic.relational.core.RelationalUnaryOperatorEnum;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraConditionalExpression.RelationalAlgebraBetweenPredicate;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraConditionalExpression.RelationalAlgebraBinaryComparasionPredicate;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraConditionalExpression.RelationalAlgebraConditionalExpressions;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraConditionalExpression.RelationalAlgebraExpressionAtomPredicate;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraConditionalExpression.RelationalAlgebraInPredicate;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraConditionalExpression.RelationalAlgebraIsExpression;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraConditionalExpression.RelationalAlgebraIsNullPredicate;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraConditionalExpression.RelationalAlgebraLikePredicate;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraConditionalExpression.RelationalAlgebraLogicalExpression;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraConditionalExpression.RelationalAlgebraNotExpression;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraConditionalExpression.RelationalAlgebraPredicateExpression;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraConditionalExpression.RelationalAlgebraRegexpPredicate;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraConditionalExpression.RelationalAlgebraSoundsLikePredicate;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraConditionalExpression.RelationalAlgebraSubqueryComparasionPredicate;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraExpressionAtom.AggregateWindowedFunction;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraExpressionAtom.AggregatorEnum;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraExpressionAtom.BinaryExpressionAtom;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraExpressionAtom.BitExpressionAtom;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraExpressionAtom.CaseFuncAlternative;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraExpressionAtom.CaseFunctionCall;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraExpressionAtom.CharFunctionCall;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraExpressionAtom.Collate;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraExpressionAtom.Constant;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraExpressionAtom.DataTypeFunctionCall;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraExpressionAtom.ExistsExpessionAtom;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraExpressionAtom.ExtractFunctionCall;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraExpressionAtom.FullColumnName;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraExpressionAtom.FunctionArg;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraExpressionAtom.FunctionArgs;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraExpressionAtom.FunctionCall;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraExpressionAtom.GetFormatFunctionCall;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraExpressionAtom.IntervalExpressionAtom;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraExpressionAtom.MathExpressionAtom;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraExpressionAtom.MysqlVariable;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraExpressionAtom.NestedExpressionAtom;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraExpressionAtom.NestedRowExpressionAtom;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraExpressionAtom.PasswordFunctionCall;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraExpressionAtom.PositionFunctionCall;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraExpressionAtom.ScalarFunctionCall;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraExpressionAtom.SimpleFunctionCall;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraExpressionAtom.SubqueryExpessionAtom;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraExpressionAtom.SubstrFunctionCall;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraExpressionAtom.TrimFunctionCall;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraExpressionAtom.UdfFunctionCall;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraExpressionAtom.UnaryExpressionAtom;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraExpressionAtom.ValuesFunctionCall;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraExpressionAtom.WeightFunctionCall;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraPrimitiveExpression.BooleanLiteral;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraPrimitiveExpression.CharsetName;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraPrimitiveExpression.CharsetNameBaseEnum;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraPrimitiveExpression.CollationName;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraPrimitiveExpression.ConvertedDataType;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraPrimitiveExpression.DecimalLiteral;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraPrimitiveExpression.DottedId;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraPrimitiveExpression.FullId;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraPrimitiveExpression.FunctionNameBaseEnum;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraPrimitiveExpression.HexadecimalLiteral;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraPrimitiveExpression.IntervalType;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraPrimitiveExpression.IntervalTypeBaseEnum;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraPrimitiveExpression.LengthOneDimension;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraPrimitiveExpression.LengthTwoDimension;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraPrimitiveExpression.LengthTwoOptionalDimension;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraPrimitiveExpression.LevelInWeightListElement;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraPrimitiveExpression.LevelWeightList;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraPrimitiveExpression.LevelWeightRange;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraPrimitiveExpression.LevelsInWeightString;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraPrimitiveExpression.NullLiteral;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraPrimitiveExpression.OrderByExpression;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraPrimitiveExpression.SimpleId;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraPrimitiveExpression.StringLiteral;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraPrimitiveExpression.Uid;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraPrimitiveExpression.UidList;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraStatementExpression.AssignmentField;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraStatementExpression.AtomTableItem;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraStatementExpression.FromClause;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraStatementExpression.GroupByItem;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraStatementExpression.IndexHint;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraStatementExpression.IndexHint.IndexHintAction;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraStatementExpression.IndexHintType;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraStatementExpression.InnerJoin;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraStatementExpression.JoinPart;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraStatementExpression.LimitClause;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraStatementExpression.LimitClauseAtom;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraStatementExpression.LockClauseEnum;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraStatementExpression.NaturalJoin;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraStatementExpression.OrderByClause;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraStatementExpression.OuterJoin;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraStatementExpression.OuterJoinType;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraStatementExpression.ParenthesisSelect;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraStatementExpression.QueryExpression;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraStatementExpression.QueryExpressionNointo;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraStatementExpression.QuerySpecification;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraStatementExpression.QuerySpecificationNointo;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraStatementExpression.RelationalAlgebraStatementsExpression;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraStatementExpression.SelectColumnElement;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraStatementExpression.SelectElement;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraStatementExpression.SelectElements;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraStatementExpression.SelectExpressionElement;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraStatementExpression.SelectFieldsInto;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraStatementExpression.SelectFunctionElement;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraStatementExpression.SelectIntoDumpFile;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraStatementExpression.SelectIntoExpression;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraStatementExpression.SelectIntoTextFile;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraStatementExpression.SelectIntoTextFile.TieldsFormatType;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraStatementExpression.SelectIntoVariables;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraStatementExpression.SelectLinesInto;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraStatementExpression.SelectSpecEnum;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraStatementExpression.SelectStarElement;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraStatementExpression.SelectStatement;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraStatementExpression.SimpleSelect;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraStatementExpression.StraightJoin;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraStatementExpression.SubqueryTableItem;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraStatementExpression.TableName;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraStatementExpression.TableSource;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraStatementExpression.TableSourceBase;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraStatementExpression.TableSourceItem;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraStatementExpression.TableSourceNested;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraStatementExpression.TableSources;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraStatementExpression.TableSourcesItem;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraStatementExpression.UnionParenthesis;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraStatementExpression.UnionParenthesisSelect;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraStatementExpression.UnionSelect;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraStatementExpression.UnionStatement;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraStatementExpression.UnionTypeEnum;
+import com.spike.giantdataanalysis.model.logic.relational.expression.Expression.RelationalAlgebraBetweenPredicate;
+import com.spike.giantdataanalysis.model.logic.relational.expression.Expression.RelationalAlgebraBinaryComparasionPredicate;
+import com.spike.giantdataanalysis.model.logic.relational.expression.Expression.RelationalAlgebraExpressionAtomPredicate;
+import com.spike.giantdataanalysis.model.logic.relational.expression.Expression.RelationalAlgebraInPredicate;
+import com.spike.giantdataanalysis.model.logic.relational.expression.Expression.RelationalAlgebraIsExpression;
+import com.spike.giantdataanalysis.model.logic.relational.expression.Expression.RelationalAlgebraIsNullPredicate;
+import com.spike.giantdataanalysis.model.logic.relational.expression.Expression.RelationalAlgebraLikePredicate;
+import com.spike.giantdataanalysis.model.logic.relational.expression.Expression.RelationalAlgebraLogicalExpression;
+import com.spike.giantdataanalysis.model.logic.relational.expression.Expression.RelationalAlgebraNotExpression;
+import com.spike.giantdataanalysis.model.logic.relational.expression.Expression.RelationalAlgebraPredicateExpression;
+import com.spike.giantdataanalysis.model.logic.relational.expression.Expression.RelationalAlgebraRegexpPredicate;
+import com.spike.giantdataanalysis.model.logic.relational.expression.Expression.RelationalAlgebraSoundsLikePredicate;
+import com.spike.giantdataanalysis.model.logic.relational.expression.Expression.RelationalAlgebraSubqueryComparasionPredicate;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ExpressionAtom.AggregateWindowedFunction;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ExpressionAtom.AggregatorEnum;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ExpressionAtom.BinaryExpressionAtom;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ExpressionAtom.BitExpressionAtom;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ExpressionAtom.CaseFuncAlternative;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ExpressionAtom.CaseFunctionCall;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ExpressionAtom.CharFunctionCall;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ExpressionAtom.Collate;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ExpressionAtom.Constant;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ExpressionAtom.DataTypeFunctionCall;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ExpressionAtom.ExistsExpessionAtom;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ExpressionAtom.ExtractFunctionCall;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ExpressionAtom.FullColumnName;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ExpressionAtom.FunctionArg;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ExpressionAtom.FunctionArgs;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ExpressionAtom.FunctionCall;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ExpressionAtom.GetFormatFunctionCall;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ExpressionAtom.IntervalExpressionAtom;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ExpressionAtom.MathExpressionAtom;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ExpressionAtom.MysqlVariable;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ExpressionAtom.NestedExpressionAtom;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ExpressionAtom.NestedRowExpressionAtom;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ExpressionAtom.PasswordFunctionCall;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ExpressionAtom.PositionFunctionCall;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ExpressionAtom.ScalarFunctionCall;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ExpressionAtom.SimpleFunctionCall;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ExpressionAtom.SubqueryExpessionAtom;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ExpressionAtom.SubstrFunctionCall;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ExpressionAtom.TrimFunctionCall;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ExpressionAtom.UdfFunctionCall;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ExpressionAtom.UnaryExpressionAtom;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ExpressionAtom.ValuesFunctionCall;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ExpressionAtom.WeightFunctionCall;
+import com.spike.giantdataanalysis.model.logic.relational.expression.PrimitiveExpression.BooleanLiteral;
+import com.spike.giantdataanalysis.model.logic.relational.expression.PrimitiveExpression.CharsetName;
+import com.spike.giantdataanalysis.model.logic.relational.expression.PrimitiveExpression.CharsetNameBaseEnum;
+import com.spike.giantdataanalysis.model.logic.relational.expression.PrimitiveExpression.CollationName;
+import com.spike.giantdataanalysis.model.logic.relational.expression.PrimitiveExpression.ConvertedDataType;
+import com.spike.giantdataanalysis.model.logic.relational.expression.PrimitiveExpression.DecimalLiteral;
+import com.spike.giantdataanalysis.model.logic.relational.expression.PrimitiveExpression.DottedId;
+import com.spike.giantdataanalysis.model.logic.relational.expression.PrimitiveExpression.FullId;
+import com.spike.giantdataanalysis.model.logic.relational.expression.PrimitiveExpression.FunctionNameBaseEnum;
+import com.spike.giantdataanalysis.model.logic.relational.expression.PrimitiveExpression.HexadecimalLiteral;
+import com.spike.giantdataanalysis.model.logic.relational.expression.PrimitiveExpression.IntervalType;
+import com.spike.giantdataanalysis.model.logic.relational.expression.PrimitiveExpression.IntervalTypeBaseEnum;
+import com.spike.giantdataanalysis.model.logic.relational.expression.PrimitiveExpression.LengthOneDimension;
+import com.spike.giantdataanalysis.model.logic.relational.expression.PrimitiveExpression.LengthTwoDimension;
+import com.spike.giantdataanalysis.model.logic.relational.expression.PrimitiveExpression.LengthTwoOptionalDimension;
+import com.spike.giantdataanalysis.model.logic.relational.expression.PrimitiveExpression.LevelInWeightListElement;
+import com.spike.giantdataanalysis.model.logic.relational.expression.PrimitiveExpression.LevelWeightList;
+import com.spike.giantdataanalysis.model.logic.relational.expression.PrimitiveExpression.LevelWeightRange;
+import com.spike.giantdataanalysis.model.logic.relational.expression.PrimitiveExpression.LevelsInWeightString;
+import com.spike.giantdataanalysis.model.logic.relational.expression.PrimitiveExpression.NullLiteral;
+import com.spike.giantdataanalysis.model.logic.relational.expression.PrimitiveExpression.OrderByExpression;
+import com.spike.giantdataanalysis.model.logic.relational.expression.PrimitiveExpression.SimpleId;
+import com.spike.giantdataanalysis.model.logic.relational.expression.PrimitiveExpression.StringLiteral;
+import com.spike.giantdataanalysis.model.logic.relational.expression.PrimitiveExpression.Uid;
+import com.spike.giantdataanalysis.model.logic.relational.expression.PrimitiveExpression.UidList;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.AssignmentField;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.AtomTableItem;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.FromClause;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.GroupByItem;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.IndexHint;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.IndexHint.IndexHintAction;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.IndexHintType;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.InnerJoin;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.JoinPart;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.LimitClause;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.LimitClauseAtom;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.LockClauseEnum;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.NaturalJoin;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.OrderByClause;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.OuterJoin;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.OuterJoinType;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.ParenthesisSelect;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.QueryExpression;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.QueryExpressionNointo;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.QuerySpecification;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.QuerySpecificationNointo;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.SelectColumnElement;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.SelectElement;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.SelectElements;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.SelectExpressionElement;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.SelectFieldsInto;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.SelectFunctionElement;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.SelectIntoDumpFile;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.SelectIntoExpression;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.SelectIntoTextFile;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.SelectIntoTextFile.TieldsFormatType;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.SelectIntoVariables;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.SelectLinesInto;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.SelectSpecEnum;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.SelectStarElement;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.SimpleSelect;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.StraightJoin;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.SubqueryTableItem;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.TableName;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.TableSource;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.TableSourceBase;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.TableSourceItem;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.TableSourceNested;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.TableSources;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.TableSourcesItem;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.UnionParenthesis;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.UnionParenthesisSelect;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.UnionSelect;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.UnionStatement;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.UnionTypeEnum;
 import com.spike.giantdataanalysis.model.logic.relational.model.RelationalAttribute;
 import com.spike.giantdataanalysis.model.logic.relational.model.RelationalTuples;
 
@@ -186,7 +183,7 @@ public abstract class RelationalAlgebraExpressionFactory {
   }
 
   // ---------------------------------------------------------------------------
-  // RelationalAlgebraPrimitiveExpression
+  // PrimitiveExpression
   // ---------------------------------------------------------------------------
   public static UidList makeUidList(List<Uid> uids) {
     return new UidList(uids);
@@ -209,12 +206,12 @@ public abstract class RelationalAlgebraExpressionFactory {
   }
 
   public static DataTypeFunctionCall makeDataTypeFunctionCall(DataTypeFunctionCall.Type type,
-      RelationalAlgebraConditionalExpression expression, CharsetName charsetName) {
+      Expression expression, CharsetName charsetName) {
     return new DataTypeFunctionCall(type, expression, charsetName);
   }
 
   public static DataTypeFunctionCall makeDataTypeFunctionCall(DataTypeFunctionCall.Type type,
-      RelationalAlgebraConditionalExpression expression, ConvertedDataType convertedDataType) {
+      Expression expression, ConvertedDataType convertedDataType) {
     return new DataTypeFunctionCall(type, expression, convertedDataType);
   }
 
@@ -268,8 +265,7 @@ public abstract class RelationalAlgebraExpressionFactory {
     return new ValuesFunctionCall(fullColumnName);
   }
 
-  public static CaseFunctionCall makeCaseFunctionCall(
-      RelationalAlgebraConditionalExpression expression,
+  public static CaseFunctionCall makeCaseFunctionCall(Expression expression,
       List<CaseFuncAlternative> caseFuncAlternatives, FunctionArg functionArg) {
     return new CaseFunctionCall(expression, caseFuncAlternatives, functionArg);
   }
@@ -298,23 +294,22 @@ public abstract class RelationalAlgebraExpressionFactory {
   }
 
   public static PositionFunctionCall makePositionFunctionCall(String positionString,
-      RelationalAlgebraConditionalExpression positionExpression, String inString,
-      RelationalAlgebraConditionalExpression inExpression) {
+      Expression positionExpression, String inString, Expression inExpression) {
     return new PositionFunctionCall(positionString, positionExpression, inString, inExpression);
   }
 
   public static SubstrFunctionCall makeSubstrFunctionCall(String sourceString,
-      RelationalAlgebraConditionalExpression sourceExpression, //
-      DecimalLiteral fromDecimal, RelationalAlgebraConditionalExpression fromExpression, //
-      DecimalLiteral forDecimal, RelationalAlgebraConditionalExpression forExpression//
+      Expression sourceExpression, //
+      DecimalLiteral fromDecimal, Expression fromExpression, //
+      DecimalLiteral forDecimal, Expression forExpression//
   ) {
     return new SubstrFunctionCall(sourceString, sourceExpression, fromDecimal, fromExpression,
         forDecimal, forExpression);
   }
 
   public static TrimFunctionCall makeTrimFunctionCall(TrimFunctionCall.PositioinFormType type, //
-      StringLiteral sourceString, RelationalAlgebraConditionalExpression sourceExpression, //
-      StringLiteral fromString, RelationalAlgebraConditionalExpression fromExpression//
+      StringLiteral sourceString, Expression sourceExpression, //
+      StringLiteral fromString, Expression fromExpression//
   ) {
     return new TrimFunctionCall(type, sourceString, sourceExpression, fromString, fromExpression);
   }
@@ -343,7 +338,7 @@ public abstract class RelationalAlgebraExpressionFactory {
   }
 
   public static WeightFunctionCall makeWeightFunctionCall(StringLiteral stringLiteral,
-      RelationalAlgebraConditionalExpression expression, WeightFunctionCall.StringFormatType type,
+      Expression expression, WeightFunctionCall.StringFormatType type,
       DecimalLiteral decimalLiteral, LevelsInWeightString levelsInWeightString) {
     return new WeightFunctionCall(stringLiteral, expression, type, decimalLiteral,
         levelsInWeightString);
@@ -365,7 +360,7 @@ public abstract class RelationalAlgebraExpressionFactory {
   }
 
   public static ExtractFunctionCall makeExtractFunctionCall(IntervalType intervalType,
-      StringLiteral sourceString, RelationalAlgebraConditionalExpression sourceExpression) {
+      StringLiteral sourceString, Expression sourceExpression) {
     return new ExtractFunctionCall(intervalType, sourceString, sourceExpression);
   }
 
@@ -386,8 +381,8 @@ public abstract class RelationalAlgebraExpressionFactory {
         orderByExpression, separator);
   }
 
-  public static OrderByExpression makeOrderByExpression(
-      RelationalAlgebraConditionalExpression expression, OrderByExpression.OrderType order) {
+  public static OrderByExpression makeOrderByExpression(Expression expression,
+      OrderByExpression.OrderType order) {
     return new OrderByExpression(expression, order);
   }
 
@@ -410,21 +405,18 @@ public abstract class RelationalAlgebraExpressionFactory {
   }
 
   // ---------------------------------------------------------------------------
-  // RelationalAlgebraConditionalExpression
+  // Expression
   // ---------------------------------------------------------------------------
-  public static RelationalAlgebraConditionalExpressions
-      makeExpressions(List<RelationalAlgebraConditionalExpression> expressions) {
-    return new RelationalAlgebraConditionalExpressions(expressions);
+  public static Expressions makeExpressions(List<Expression> expressions) {
+    return new Expressions(expressions);
   }
 
-  public static RelationalAlgebraNotExpression
-      makeNotExpression(RelationalAlgebraConditionalExpression expression) {
+  public static RelationalAlgebraNotExpression makeNotExpression(Expression expression) {
     return new RelationalAlgebraNotExpression(expression);
   }
 
-  public static RelationalAlgebraLogicalExpression makeLogicalExpression(
-      RelationalAlgebraConditionalExpression first, RelationalLogicalOperatorEnum operator,
-      RelationalAlgebraConditionalExpression second) {
+  public static RelationalAlgebraLogicalExpression makeLogicalExpression(Expression first,
+      RelationalLogicalOperatorEnum operator, Expression second) {
     return new RelationalAlgebraLogicalExpression(first, operator, second);
   }
 
@@ -436,7 +428,7 @@ public abstract class RelationalAlgebraExpressionFactory {
 
   public static RelationalAlgebraInPredicate makeInPredicate(
       RelationalAlgebraPredicateExpression predicate, Boolean not, SelectStatement selectStatement,
-      RelationalAlgebraConditionalExpressions expressions) {
+      Expressions expressions) {
     return new RelationalAlgebraInPredicate(predicate, not, selectStatement, expressions);
   }
 
@@ -486,12 +478,12 @@ public abstract class RelationalAlgebraExpressionFactory {
   }
 
   public static RelationalAlgebraExpressionAtomPredicate makeExpressionAtomPredicate(String localId,
-      RelationalAlgebraExpressionAtom expressionAtom) {
+      ExpressionAtom expressionAtom) {
     return new RelationalAlgebraExpressionAtomPredicate(localId, expressionAtom);
   }
 
   // ---------------------------------------------------------------------------
-  // RelationalAlgebraExpressionAtom
+  // ExpressionAtom
   // ---------------------------------------------------------------------------
 
   public static Constant makeConstant(Constant.Type type, String literal, Boolean not) {
@@ -502,7 +494,7 @@ public abstract class RelationalAlgebraExpressionFactory {
     return new FullColumnName(uid, dottedIds);
   }
 
-  public static Collate makeCollateExpressionAtom(RelationalAlgebraExpressionAtom expressionAtom,
+  public static Collate makeCollateExpressionAtom(ExpressionAtom expressionAtom,
       CollationName collationName) {
     return new Collate(expressionAtom, collationName);
   }
@@ -512,22 +504,19 @@ public abstract class RelationalAlgebraExpressionFactory {
   }
 
   public static UnaryExpressionAtom makeUnaryExpressionAtom(
-      RelationalUnaryOperatorEnum unaryOperator, RelationalAlgebraExpressionAtom expressionAtom) {
+      RelationalUnaryOperatorEnum unaryOperator, ExpressionAtom expressionAtom) {
     return new UnaryExpressionAtom(unaryOperator, expressionAtom);
   }
 
-  public static BinaryExpressionAtom
-      makeBinaryExpressionAtom(RelationalAlgebraExpressionAtom expressionAtom) {
+  public static BinaryExpressionAtom makeBinaryExpressionAtom(ExpressionAtom expressionAtom) {
     return new BinaryExpressionAtom(expressionAtom);
   }
 
-  public static NestedExpressionAtom
-      makeNestedExpressionAtom(List<RelationalAlgebraConditionalExpression> expressions) {
+  public static NestedExpressionAtom makeNestedExpressionAtom(List<Expression> expressions) {
     return new NestedExpressionAtom(expressions);
   }
 
-  public static NestedRowExpressionAtom
-      makeNestedRowExpressionAtom(List<RelationalAlgebraConditionalExpression> expressions) {
+  public static NestedRowExpressionAtom makeNestedRowExpressionAtom(List<Expression> expressions) {
     return new NestedRowExpressionAtom(expressions);
   }
 
@@ -539,33 +528,32 @@ public abstract class RelationalAlgebraExpressionFactory {
     return new SubqueryExpessionAtom(selectStatement);
   }
 
-  public static IntervalExpressionAtom makeIntervalExpressionAtom(
-      RelationalAlgebraConditionalExpression expression, IntervalType intervalType) {
+  public static IntervalExpressionAtom makeIntervalExpressionAtom(Expression expression,
+      IntervalType intervalType) {
     return new IntervalExpressionAtom(expression, intervalType);
   }
 
-  public static BitExpressionAtom makeBitExpressionAtom(RelationalAlgebraExpressionAtom left,
-      RelationalBitOperatorEnum bitOperator, RelationalAlgebraExpressionAtom right) {
+  public static BitExpressionAtom makeBitExpressionAtom(ExpressionAtom left,
+      RelationalBitOperatorEnum bitOperator, ExpressionAtom right) {
     return new BitExpressionAtom(left, bitOperator, right);
   }
 
-  public static MathExpressionAtom makeMathExpressionAtom(RelationalAlgebraExpressionAtom left,
-      RelationalMathOperatorEnum mathOperator, RelationalAlgebraExpressionAtom right) {
+  public static MathExpressionAtom makeMathExpressionAtom(ExpressionAtom left,
+      RelationalMathOperatorEnum mathOperator, ExpressionAtom right) {
     return new MathExpressionAtom(left, mathOperator, right);
   }
 
   // ---------------------------------------------------------------------------
-  // RelationalAlgebraStatementExpression
+  // SQLStatement
   // ---------------------------------------------------------------------------
-  public static RelationalAlgebraStatementsExpression
-      makeSqlStatements(List<RelationalAlgebraStatementExpression> sqlStatements) {
+  public static SqlStatements makeSqlStatements(List<SqlStatement> sqlStatements) {
     if (CollectionUtils.isNotEmpty(sqlStatements)) {
-      for (RelationalAlgebraStatementExpression item : sqlStatements) {
+      for (SqlStatement item : sqlStatements) {
         Preconditions.checkArgument(item != null);
       }
     }
 
-    return new RelationalAlgebraStatementsExpression(sqlStatements);
+    return new SqlStatements(sqlStatements);
   }
 
   public static SimpleSelect makeSimpleSelect(QuerySpecification querySpecification,
@@ -624,14 +612,12 @@ public abstract class RelationalAlgebraExpressionFactory {
     return new QueryExpressionNointo(querySpecificationNointo);
   }
 
-  public static FromClause makeFromClause(TableSources tableSources,
-      RelationalAlgebraConditionalExpression whereExpr, List<GroupByItem> groupByItems,
-      Boolean withRollup, RelationalAlgebraConditionalExpression havingExpr) {
+  public static FromClause makeFromClause(TableSources tableSources, Expression whereExpr,
+      List<GroupByItem> groupByItems, Boolean withRollup, Expression havingExpr) {
     return new FromClause(tableSources, whereExpr, groupByItems, withRollup, havingExpr);
   }
 
-  public static GroupByItem makeGroupByItem(RelationalAlgebraConditionalExpression expression,
-      GroupByItem.OrderType order) {
+  public static GroupByItem makeGroupByItem(Expression expression, GroupByItem.OrderType order) {
     return new GroupByItem(expression, order);
   }
 
@@ -685,18 +671,18 @@ public abstract class RelationalAlgebraExpressionFactory {
     return new TableName(fullId);
   }
 
-  public static InnerJoin makeInnerJoin(TableSourceItem tableSourceItem,
-      RelationalAlgebraConditionalExpression expression, UidList uidList) {
+  public static InnerJoin makeInnerJoin(TableSourceItem tableSourceItem, Expression expression,
+      UidList uidList) {
     return new InnerJoin(tableSourceItem, expression, uidList);
   }
 
   public static StraightJoin makeStraightJoin(TableSourceItem tableSourceItem,
-      RelationalAlgebraConditionalExpression expression) {
+      Expression expression) {
     return new StraightJoin(tableSourceItem, expression);
   }
 
   public static OuterJoin makeOuterJoin(OuterJoinType type, TableSourceItem tableSourceItem,
-      RelationalAlgebraConditionalExpression expression, UidList uidList) {
+      Expression expression, UidList uidList) {
     return new OuterJoin(type, tableSourceItem, expression, uidList);
   }
 
@@ -725,7 +711,7 @@ public abstract class RelationalAlgebraExpressionFactory {
   }
 
   public static SelectExpressionElement makeSelectExpressionElement(String localId,
-      RelationalAlgebraConditionalExpression expression, Uid uid) {
+      Expression expression, Uid uid) {
     return new SelectExpressionElement(localId, expression, uid);
   }
 
