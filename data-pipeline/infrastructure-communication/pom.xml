@@ -19,17 +19,17 @@
 		<!-- <protobuf.version>2.5.0</protobuf.version> -->
 		<protobuf.version>3.6.1</protobuf.version>
 		<grpc.version>1.17.1</grpc.version>
-		<thrift.version>0.11.0</thrift.version>
+		<thrift.version>0.12.0</thrift.version>
 		<avro.version>1.8.2</avro.version>
 	</properties>
 
-	<!-- <pluginRepositories> <pluginRepository> <id>dtrotts</id> <name>Repository 
-		for maven thrift plugin</name> <url>http://maven.davidtrott.com/repository</url> 
+	<!-- <pluginRepositories> <pluginRepository> <id>dtrotts</id> <name>Repository
+		for maven thrift plugin</name> <url>http://maven.davidtrott.com/repository</url>
 		<layout>default</layout> </pluginRepository> </pluginRepositories> -->
 
 	<dependencies>
-		<!-- <dependency> <groupId>com.spike.giantdataanalysis</groupId> <artifactId>infrastructure-commons</artifactId> 
-			<version>0.0.1-SNAPSHOT</version> <exclusions> <exclusion> <groupId>com.google.guava</groupId> 
+		<!-- <dependency> <groupId>com.spike.giantdataanalysis</groupId> <artifactId>infrastructure-commons</artifactId>
+			<version>0.0.1-SNAPSHOT</version> <exclusions> <exclusion> <groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId> </exclusion> </exclusions> </dependency> -->
 
 		<dependency>
@@ -168,11 +168,11 @@
 			</plugin>
 
 			<!-- FUCK the version: see https://github.com/pauldeschacht/impala-java-client/issues/6. -->
-			<!-- <plugin> <groupId>org.apache.thrift.tools</groupId> <artifactId>maven-thrift-plugin</artifactId> 
-				<version>0.1.11</version> <configuration> <thriftExecutable>/usr/local/bin/thrift</thriftExecutable> 
-				</configuration> <executions> <execution> <id>thrift-sources</id> <phase>generate-sources</phase> 
-				<goals> <goal>compile</goal> </goals> </execution> <execution> <id>thrift-test-sources</id> 
-				<phase>generate-test-sources</phase> <goals> <goal>testCompile</goal> </goals> 
+			<!-- <plugin> <groupId>org.apache.thrift.tools</groupId> <artifactId>maven-thrift-plugin</artifactId>
+				<version>0.1.11</version> <configuration> <thriftExecutable>/usr/local/bin/thrift</thriftExecutable>
+				</configuration> <executions> <execution> <id>thrift-sources</id> <phase>generate-sources</phase>
+				<goals> <goal>compile</goal> </goals> </execution> <execution> <id>thrift-test-sources</id>
+				<phase>generate-test-sources</phase> <goals> <goal>testCompile</goal> </goals>
 				</execution> </executions> </plugin> -->
 
 			<plugin>
@@ -224,7 +224,7 @@
 		</plugins>
 
 		<!-- WARNING: 本地测试时注释掉, 打包时取消注释. -->
-		<!-- <resources> <resource> <directory>src/main/resources</directory> <excludes> 
+		<!-- <resources> <resource> <directory>src/main/resources</directory> <excludes>
 			<exclude>*.properties</exclude> </excludes> </resource> </resources> -->
 	</build>
 

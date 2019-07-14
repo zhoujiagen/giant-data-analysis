@@ -20,12 +20,12 @@
 		<module>../../data-management-infrastructure/infrastructure-test</module>
 		<module>../../data-management-infrastructure/infrastructure-commons</module>
 		<module>../../data-management-infrastructure/infrastructure-netty</module>
-		<!-- <module>../../data-management-infrastructure/infrastructure-etl</module> 
-			<module>../../data-management-infrastructure/infrastructure-jetty</module> 
-			<module>../../data-management-infrastructure/infrastructure-apache-zookeeper</module> 
-			<module>../../data-management-infrastructure/infrastructure-apache-curator</module> 
-			<module>../../data-management-infrastructure/infrastructure-apache-hadoop</module> 
-			<module>../../data-management-infrastructure/infrastructure-apache-hbase</module> 
+		<!-- <module>../../data-management-infrastructure/infrastructure-etl</module>
+			<module>../../data-management-infrastructure/infrastructure-jetty</module>
+			<module>../../data-management-infrastructure/infrastructure-apache-zookeeper</module>
+			<module>../../data-management-infrastructure/infrastructure-apache-curator</module>
+			<module>../../data-management-infrastructure/infrastructure-apache-hadoop</module>
+			<module>../../data-management-infrastructure/infrastructure-apache-hbase</module>
 			<module>../../data-management-infrastructure/infrastructure-opentsdb</module> -->
 		<module>../../data-management-infrastructure/infrastructure-apache-cassandra</module>
 
@@ -40,8 +40,8 @@
 		<module>../../data-pipeline/infrastructure-procedure</module>
 
 		<!-- data-representation -->
-		<!-- <module>../../data-representation/representation-titan</module> <module>../../data-representation/representation-apache-tinkerpop</module> 
-			<module>../../data-representation/representation-apache-jena</module> <module>../../data-representation/representation-apache-giraph</module> 
+		<!-- <module>../../data-representation/representation-titan</module> <module>../../data-representation/representation-apache-tinkerpop</module>
+			<module>../../data-representation/representation-apache-jena</module> <module>../../data-representation/representation-apache-giraph</module>
 			<module>../../data-representation/representation-neo4j</module> -->
 		<module>../../data-representation/representation-text</module>
 
@@ -193,7 +193,7 @@
 			<dependency>
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-compress</artifactId>
-				<version>1.11</version>
+				<version>1.16</version>
 			</dependency>
 			<!-- CLI -->
 			<dependency>
