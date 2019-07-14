@@ -18,6 +18,7 @@ import io.netty.handler.codec.serialization.ObjectEncoder;
  * 
  * ObjectOutputStream, ObjectInputStream
  * </pre>
+ * 
  * @author zhoujiagen
  * @see CompatibleObjectDecoder
  * @see CompatibleObjectEncoder

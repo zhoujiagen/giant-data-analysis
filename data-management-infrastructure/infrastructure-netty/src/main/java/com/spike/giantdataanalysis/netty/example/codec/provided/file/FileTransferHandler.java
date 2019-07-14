@@ -16,6 +16,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
  * 
  * a region of a file that is sent via a Channel that supports zero-copy file transfer
  * </pre>
+ * 
  * @author zhoujiagen
  * @see io.netty.channel.FileRegion
  */

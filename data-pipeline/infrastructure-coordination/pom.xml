@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
@@ -105,7 +106,7 @@
 			<artifactId>slf4j-api</artifactId>
 			<scope>compile</scope>
 		</dependency>
-		<!-- <dependency>
+		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
 			<scope>test</scope>
@@ -116,7 +117,7 @@
 			<artifactId>log4j</artifactId>
 			<scope>test</scope>
 			<optional>true</optional>
-		</dependency> -->
+		</dependency>
 
 	</dependencies>
 
@@ -133,14 +134,8 @@
 		</plugins>
 
 		<!-- WARNING: 本地测试时注释掉, 打包时取消注释. -->
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<excludes>
-					<exclude>*.properties</exclude>
-				</excludes>
-			</resource>
-		</resources>
+		<!-- <resources> <resource> <directory>src/main/resources</directory> <excludes> 
+			<exclude>*.properties</exclude> </excludes> </resource> </resources> -->
 	</build>
 
 </project>

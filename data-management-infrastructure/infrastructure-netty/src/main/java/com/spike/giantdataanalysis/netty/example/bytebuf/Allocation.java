@@ -35,33 +35,33 @@ public class Allocation {
     // heap or direct
     ByteBuf buf = allocator.buffer();
     Preconditions.checkNotNull(buf);
-    System.out.println(ByteBufs.INTROSPECT(buf));
+    System.out.println(ByteBufs.introspect(buf));
 
     // heap
     ByteBuf heapBuf = allocator.heapBuffer();
     Preconditions.checkNotNull(heapBuf);
-    System.out.println(ByteBufs.INTROSPECT(heapBuf));
+    System.out.println(ByteBufs.introspect(heapBuf));
     // 比较两个ByteBuf是否相等
     System.out.println(ByteBufUtil.equals(buf, heapBuf));
 
     // direct
     ByteBuf directBuf = allocator.directBuffer();
     Preconditions.checkNotNull(directBuf);
-    System.out.println(ByteBufs.INTROSPECT(directBuf));
+    System.out.println(ByteBufs.introspect(directBuf));
 
     // io
     ByteBuf ioBuf = allocator.ioBuffer();
     Preconditions.checkNotNull(ioBuf);
-    System.out.println(ByteBufs.INTROSPECT(ioBuf));
+    System.out.println(ByteBufs.introspect(ioBuf));
 
     // composite
     CompositeByteBuf compositeByteBuf = allocator.compositeBuffer();
     Preconditions.checkNotNull(compositeByteBuf);
-    System.out.println(ByteBufs.INTROSPECT(compositeByteBuf));
+    System.out.println(ByteBufs.introspect(compositeByteBuf));
 
     // 使用Unpooled
-    System.out.println(ByteBufs.INTROSPECT(Unpooled.buffer()));
-    System.out.println(ByteBufs.INTROSPECT(Unpooled.directBuffer()));
-    System.out.println(ByteBufs.INTROSPECT(Unpooled.compositeBuffer()));
+    System.out.println(ByteBufs.introspect(Unpooled.buffer()));
+    System.out.println(ByteBufs.introspect(Unpooled.directBuffer()));
+    System.out.println(ByteBufs.introspect(Unpooled.compositeBuffer()));
   }
 }

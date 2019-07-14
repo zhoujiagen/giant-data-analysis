@@ -34,8 +34,8 @@
  *     │   ├── ProtoBufInitializer
  *     └── timeout                                    - 超时
  *         ├── IdleStateHandlerInitializer
- * 
  * </pre>
+ * 
  * @author zhoujiagen
  */
 package com.spike.giantdataanalysis.netty.example.codec;

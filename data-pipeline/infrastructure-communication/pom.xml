@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
@@ -15,23 +16,54 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<!-- <protobuf.version>2.5.0</protobuf.version> -->
+		<protobuf.version>3.6.1</protobuf.version>
+		<grpc.version>1.17.1</grpc.version>
+		<thrift.version>0.12.0</thrift.version>
+		<avro.version>1.8.2</avro.version>
 	</properties>
 
-	<!-- <pluginRepositories> <pluginRepository> <id>dtrotts</id> <name>Repository 
-		for maven thrift plugin</name> <url>http://maven.davidtrott.com/repository</url> 
+	<!-- <pluginRepositories> <pluginRepository> <id>dtrotts</id> <name>Repository
+		for maven thrift plugin</name> <url>http://maven.davidtrott.com/repository</url>
 		<layout>default</layout> </pluginRepository> </pluginRepositories> -->
 
 	<dependencies>
+		<!-- <dependency> <groupId>com.spike.giantdataanalysis</groupId> <artifactId>infrastructure-commons</artifactId>
+			<version>0.0.1-SNAPSHOT</version> <exclusions> <exclusion> <groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId> </exclusion> </exclusions> </dependency> -->
+
 		<dependency>
-			<groupId>com.spike.giantdataanalysis</groupId>
-			<artifactId>infrastructure-commons</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>26.0-android</version><!--$NO-MVN-MAN-VER$ -->
+			<scope>compile</scope>
+			<exclusions>
+				<exclusion>
+					<artifactId>jsr305</artifactId>
+					<groupId>com.google.code.findbugs</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>animal-sniffer-annotations</artifactId>
+					<groupId>org.codehaus.mojo</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>error_prone_annotations</artifactId>
+					<groupId>com.google.errorprone</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+
+		<dependency>
+			<groupId>com.google.protobuf</groupId>
+			<artifactId>protobuf-java</artifactId>
+			<version>${protobuf.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.thrift</groupId>
 			<artifactId>libthrift</artifactId>
-			<version>0.10.0</version>
+			<version>${thrift.version}</version>
 			<scope>compile</scope>
 			<exclusions>
 				<exclusion>
@@ -44,7 +76,37 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		<dependency>
+			<groupId>io.grpc</groupId>
+			<artifactId>grpc-netty-shaded</artifactId>
+			<version>${grpc.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.grpc</groupId>
+			<artifactId>grpc-protobuf</artifactId>
+			<version>${grpc.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.grpc</groupId>
+			<artifactId>grpc-stub</artifactId>
+			<version>${grpc.version}</version>
+		</dependency>
 
+		<dependency>
+			<groupId>org.apache.avro</groupId>
+			<artifactId>avro</artifactId>
+			<version>${avro.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.avro</groupId>
+			<artifactId>avro-ipc</artifactId>
+			<version>${avro.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
@@ -54,9 +116,24 @@
 			<artifactId>log4j</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+
 	</dependencies>
 
 	<build>
+		<testSourceDirectory>src/test/java</testSourceDirectory>
+		<extensions>
+			<extension>
+				<groupId>kr.motd.maven</groupId>
+				<artifactId>os-maven-plugin</artifactId>
+				<version>1.5.0.Final</version>
+			</extension>
+		</extensions>
+
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -67,13 +144,57 @@
 				</configuration>
 			</plugin>
 
+			<!-- Maven Protocol Buffers Plugin: https://www.xolstice.org/protobuf-maven-plugin/usage.html -->
+			<plugin>
+				<groupId>org.xolstice.maven.plugins</groupId>
+				<artifactId>protobuf-maven-plugin</artifactId>
+				<!-- <version>0.6.1</version> -->
+				<version>0.5.1</version>
+				<configuration>
+					<!-- <protocExecutable>/usr/local/bin/protoc</protocExecutable> -->
+					<protocArtifact>com.google.protobuf:protoc:${protobuf.version}:exe:${os.detected.classifier}</protocArtifact>
+					<pluginId>grpc-java</pluginId>
+					<pluginArtifact>io.grpc:protoc-gen-grpc-java:${grpc.version}:exe:${os.detected.classifier}</pluginArtifact>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>compile</goal>
+							<goal>compile-custom</goal>
+							<goal>test-compile</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
 			<!-- FUCK the version: see https://github.com/pauldeschacht/impala-java-client/issues/6. -->
-			<!-- <plugin> <groupId>org.apache.thrift.tools</groupId> <artifactId>maven-thrift-plugin</artifactId> 
-				<version>0.1.11</version> <configuration> <thriftExecutable>/usr/local/bin/thrift</thriftExecutable> 
-				</configuration> <executions> <execution> <id>thrift-sources</id> <phase>generate-sources</phase> 
-				<goals> <goal>compile</goal> </goals> </execution> <execution> <id>thrift-test-sources</id> 
-				<phase>generate-test-sources</phase> <goals> <goal>testCompile</goal> </goals> 
+			<!-- <plugin> <groupId>org.apache.thrift.tools</groupId> <artifactId>maven-thrift-plugin</artifactId>
+				<version>0.1.11</version> <configuration> <thriftExecutable>/usr/local/bin/thrift</thriftExecutable>
+				</configuration> <executions> <execution> <id>thrift-sources</id> <phase>generate-sources</phase>
+				<goals> <goal>compile</goal> </goals> </execution> <execution> <id>thrift-test-sources</id>
+				<phase>generate-test-sources</phase> <goals> <goal>testCompile</goal> </goals>
 				</execution> </executions> </plugin> -->
+
+			<plugin>
+				<groupId>org.apache.avro</groupId>
+				<artifactId>avro-maven-plugin</artifactId>
+				<version>1.8.1</version>
+				<executions>
+					<execution>
+						<id>schemas</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>schema</goal>
+							<goal>protocol</goal>
+							<goal>idl-protocol</goal>
+						</goals>
+						<configuration>
+							<sourceDirectory>${basedir}/src/main/avro/</sourceDirectory>
+							<outputDirectory>${basedir}/target/generated-resources/avro/</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
@@ -88,7 +209,13 @@
 						</goals>
 						<configuration>
 							<sources>
-								<source>${basedir}/src/main/thrift/generated-resources</source>
+								<source>${basedir}/src/main/proto</source>
+								<source>${basedir}/src/main/thrift</source>
+								<source>${basedir}/src/main/avro</source>
+								<source>${basedir}/target/generated-sources/protobuf/java</source>
+								<source>${basedir}/target/generated-sources/protobuf/grpc-java</source>
+								<source>${basedir}/target/generated-resources/thrift</source>
+								<source>${basedir}/target/generated-resources/avro</source>
 							</sources>
 						</configuration>
 					</execution>
@@ -97,14 +224,15 @@
 		</plugins>
 
 		<!-- WARNING: 本地测试时注释掉, 打包时取消注释. -->
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<excludes>
-					<exclude>*.properties</exclude>
-				</excludes>
-			</resource>
-		</resources>
+		<!-- <resources> <resource> <directory>src/main/resources</directory> <excludes>
+			<exclude>*.properties</exclude> </excludes> </resource> </resources> -->
 	</build>
 
+	<repositories>
+		<repository>
+			<id>Maven Central Repository</id>
+			<name>Maven Central Repository</name>
+			<url>http://central.maven.org/maven2/</url>
+		</repository>
+	</repositories>
 </project>

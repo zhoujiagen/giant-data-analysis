@@ -15,10 +15,11 @@ import com.spike.giantdataanalysis.netty.support.ChannelHandlers.WebSocketFrameC
  * 
  * 注意: 在encoded/decoded消息时, {@link MessageToMessageCodec}会调用<code>ReferenceCounted.release()</code>.
  * </pre>
+ * 
  * @author zhoujiagen
  */
-public class WebSocketFrameCodec extends
-    MessageToMessageCodec<WebSocketFrame, SimpleWebSocketFrame> {
+public class WebSocketFrameCodec
+    extends MessageToMessageCodec<WebSocketFrame, SimpleWebSocketFrame> {
 
   @Override
   protected void encode(ChannelHandlerContext ctx, SimpleWebSocketFrame msg, List<Object> out)

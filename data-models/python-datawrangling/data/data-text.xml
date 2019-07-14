@@ -1,0 +1,30 @@
+<GHO>
+    <Data>
+        <Observation FactID="4543040" Published="true"
+                     Dataset="CYCU" EffectiveDate="2014-03-27" EndDate="2900-12-31">
+            <Dim Category="COUNTRY" Code="SOM"/>
+            <Dim Category="REGION" Code="EMR"/>
+            <Dim Category="WORLDBANKINCOMEGROUP" Code="WB_LI"/>
+            <Dim Category="GHO" Code="WHOSIS_000002"/>
+            <Dim Category="YEAR" Code="2012"/>
+            <Dim Category="SEX" Code="FMLE"/>
+            <Dim Category="PUBLISHSTATE" Code="PUBLISHED"/>
+            <Value Numeric="46.00000">
+                <Display>46</Display>
+            </Value>
+        </Observation>
+        <Observation FactID="4209598" Published="true"
+                     Dataset="CYCU" EffectiveDate="2014-03-25" EndDate="2900-12-31">
+            <Dim Category="WORLDBANKINCOMEGROUP" Code="WB_HI"/>
+            <Dim Category="YEAR" Code="2000"/>
+            <Dim Category="SEX" Code="BTSX"/>
+            <Dim Category="COUNTRY" Code="AND"/>
+            <Dim Category="REGION" Code="EUR"/>
+            <Dim Category="GHO" Code="WHOSIS_000001"/>
+            <Dim Category="PUBLISHSTATE" Code="PUBLISHED"/>
+            <Value Numeric="80.00000">
+                <Display>80</Display>
+            </Value>
+        </Observation>
+    </Data>
+</GHO>

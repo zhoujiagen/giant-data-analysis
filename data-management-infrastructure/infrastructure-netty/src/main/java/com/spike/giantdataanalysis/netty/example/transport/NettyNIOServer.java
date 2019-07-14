@@ -39,7 +39,7 @@ public class NettyNIOServer implements TransportServer {
     EventLoopGroup eventLoopGroup = new NioEventLoopGroup();
 
     try {
-      final ByteBuf bb = ByteBufs.WRAP_UNRELEASABLE("Hi!\r\n");
+      final ByteBuf bb = ByteBufs.wrapUnreleasable("Hi!\r\n");
 
       serverBootstrap.group(eventLoopGroup);
       serverBootstrap.channel(NioServerSocketChannel.class);

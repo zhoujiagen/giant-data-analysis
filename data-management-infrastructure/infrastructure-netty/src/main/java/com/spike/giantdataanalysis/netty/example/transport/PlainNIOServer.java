@@ -39,7 +39,7 @@ public class PlainNIOServer implements TransportServer {
       try (Selector selector = Selector.open();) {
         serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
 
-        final ByteBuffer msg = ByteBufs.WRAP_NIO("Hi!\r\n");
+        final ByteBuffer msg = ByteBufs.wrapNIO("Hi!\r\n");
 
         while (true) {
           try {

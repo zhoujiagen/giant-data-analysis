@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.spike.giantdataanalysis</groupId>
@@ -18,33 +19,30 @@
 		<!-- data-management-infrastructure -->
 		<module>../../data-management-infrastructure/infrastructure-test</module>
 		<module>../../data-management-infrastructure/infrastructure-commons</module>
-		<!--
-		<module>../../data-management-infrastructure/infrastructure-etl</module>
 		<module>../../data-management-infrastructure/infrastructure-netty</module>
-		<module>../../data-management-infrastructure/infrastructure-jetty</module>
-		<module>../../data-management-infrastructure/infrastructure-apache-zookeeper</module>
-		<module>../../data-management-infrastructure/infrastructure-apache-curator</module>
-		<module>../../data-management-infrastructure/infrastructure-apache-hadoop</module>
-		<module>../../data-management-infrastructure/infrastructure-apache-hbase</module>
-		<module>../../data-management-infrastructure/infrastructure-opentsdb</module>
-		-->
+		<!-- <module>../../data-management-infrastructure/infrastructure-etl</module>
+			<module>../../data-management-infrastructure/infrastructure-jetty</module>
+			<module>../../data-management-infrastructure/infrastructure-apache-zookeeper</module>
+			<module>../../data-management-infrastructure/infrastructure-apache-curator</module>
+			<module>../../data-management-infrastructure/infrastructure-apache-hadoop</module>
+			<module>../../data-management-infrastructure/infrastructure-apache-hbase</module>
+			<module>../../data-management-infrastructure/infrastructure-opentsdb</module> -->
 		<module>../../data-management-infrastructure/infrastructure-apache-cassandra</module>
 
 		<!-- data-pipeline -->
 		<module>../../data-pipeline/infrastructure-pipeline</module>
-		<!--<module>../../data-pipeline/infrastructure-communication</module>-->
+		<module>../../data-pipeline/infrastructure-communication</module>
 		<module>../../data-pipeline/infrastructure-coordination</module>
 		<module>../../data-pipeline/infrastructure-task</module>
 		<module>../../data-pipeline/infrastructure-benchmark</module>
+		<module>../../data-pipeline/infrastructure-blockchain</module>
+		<module>../../data-pipeline/infrastructure-track</module>
+		<module>../../data-pipeline/infrastructure-procedure</module>
 
 		<!-- data-representation -->
-		<!--
-		<module>../../data-representation/representation-titan</module>
-		<module>../../data-representation/representation-apache-tinkerpop</module>
-		<module>../../data-representation/representation-apache-jena</module>
-		<module>../../data-representation/representation-apache-giraph</module>
-		<module>../../data-representation/representation-neo4j</module>
-		-->
+		<!-- <module>../../data-representation/representation-titan</module> <module>../../data-representation/representation-apache-tinkerpop</module>
+			<module>../../data-representation/representation-apache-jena</module> <module>../../data-representation/representation-apache-giraph</module>
+			<module>../../data-representation/representation-neo4j</module> -->
 		<module>../../data-representation/representation-text</module>
 
 		<!-- temporal-data-and-realtime-algorithm -->
@@ -53,11 +51,8 @@
 		<module>../../temporal-data-and-realtime-algorithm/temporal-apache-flink</module>
 
 		<!-- data-models -->
-		<!--
-		<module>../../data-models/datamodel-graph</module>
-		<module>../../data-models/datamodel-algorithms</module>
-		-->
-
+		<!-- <module>../../data-models/datamodel-graph</module> <module>../../data-models/datamodel-algorithms</module> -->
+		<module>../../data-models/datamodel-logic</module>
 	</modules>
 
 	<licenses>
@@ -198,7 +193,7 @@
 			<dependency>
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-compress</artifactId>
-				<version>1.11</version>
+				<version>1.16</version>
 			</dependency>
 			<!-- CLI -->
 			<dependency>
@@ -245,6 +240,19 @@
 	<build>
 		<pluginManagement>
 			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-source-plugin</artifactId>
+					<executions>
+						<execution>
+							<id>attach-sources</id>
+							<goals>
+								<goal>jar</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>

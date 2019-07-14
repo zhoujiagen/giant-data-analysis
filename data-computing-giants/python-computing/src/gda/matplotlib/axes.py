@@ -1,16 +1,17 @@
 # -*- coding: utf-8 -*-
-#!/usr/bin/env python
 
-'''
+"""
 坐标: linear, logarithmic and logit scales.
 WARN: 使用Python3执行
-'''
+"""
 
 import numpy as np
 import matplotlib.pyplot as plt
 
 # 用于logit范围
 from matplotlib.ticker import NullFormatter
+
+
 
 np.random.seed(19680801)
 y = np.random.normal(loc=0.5, scale=0.4, size=1000)

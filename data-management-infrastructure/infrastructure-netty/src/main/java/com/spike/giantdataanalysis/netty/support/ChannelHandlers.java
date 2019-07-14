@@ -71,7 +71,7 @@ public class ChannelHandlers {
     return new SimpleChannelInboundHandler<ByteBuf>() {
       @Override
       protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
-        LOG.info("RECEIVE DATA: " + ByteBufs.INTROSPECT(msg));
+        LOG.info("RECEIVE DATA: " + ByteBufs.introspect(msg));
       }
     };
   }
@@ -105,8 +105,8 @@ public class ChannelHandlers {
    * @see DiscardChannelInboundHandler
    */
   @Sharable
-  public static class AlternativeDiscardChannelInboundHandler extends
-      SimpleChannelInboundHandler<Object> {
+  public static class AlternativeDiscardChannelInboundHandler
+      extends SimpleChannelInboundHandler<Object> {
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
       // DO NOTHING
@@ -211,9 +211,8 @@ public class ChannelHandlers {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
       // SPAWN BOOTSTRAP IN A CHANNEL
-      Bootstrap bootstrap =
-          Bootstraps.CLIENT(ctx.channel().eventLoop(), Channels.nio(), remoteAddress,
-            ChannelHandlers.SIMPLE());
+      Bootstrap bootstrap = Bootstraps.CLIENT(ctx.channel().eventLoop(), Channels.nio(),
+        remoteAddress, ChannelHandlers.SIMPLE());
       channelFuture = bootstrap.connect();
       // FOR DEBUG
       channelFuture.addListener(ChannelFutures.DEFAULT_CHANNEL_FUTURE_LISTENER());
@@ -242,7 +241,8 @@ public class ChannelHandlers {
    * @author zhoujiagen
    */
   public static final class WebSocketFrameConverters {
-    public static WebSocketFrame convert(SimpleWebSocketFrame simpleWebSocketFrame, boolean retain) {
+    public static WebSocketFrame convert(SimpleWebSocketFrame simpleWebSocketFrame,
+        boolean retain) {
       if (simpleWebSocketFrame == null) return null;
 
       WebSocketFrame result = null;
@@ -330,7 +330,7 @@ public class ChannelHandlers {
 
     @Override
     public String toString() {
-      return "SimpleWebSocketFrame [frameType=" + frameType + ", data=" + ByteBufs.STRING(data)
+      return "SimpleWebSocketFrame [frameType=" + frameType + ", data=" + ByteBufs.string(data)
           + "]";
     }
   }

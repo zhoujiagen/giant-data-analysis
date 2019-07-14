@@ -32,7 +32,7 @@ public class LineBasedHandlerInitializer extends ChannelInitializer<Channel> {
   public static final class LineFrameHandler extends SimpleChannelInboundHandler<ByteBuf> {
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
-      System.out.println(ByteBufs.STRING(msg));
+      System.out.println(ByteBufs.string(msg));
     }
   }
 }
