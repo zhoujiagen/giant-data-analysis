@@ -8,7 +8,7 @@ mathOperator
     : '*' | '/' | '%' | DIV | MOD | '+' | '-' | '--'
  * </pre>
  */
-public enum RelationalMathOperatorEnum {
+public enum RelationalMathOperatorEnum implements RelationalAlgebraEnum {
   MULTIPLE("*"), //
   DIVIDE("/"), //
   MOD1("%"), //

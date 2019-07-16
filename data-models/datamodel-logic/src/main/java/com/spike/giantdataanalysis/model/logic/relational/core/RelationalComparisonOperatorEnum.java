@@ -9,7 +9,7 @@ comparisonOperator
     | '<' '>' | '!' '=' | '<' '=' '>'
  * </pre>
  */
-public enum RelationalComparisonOperatorEnum {
+public enum RelationalComparisonOperatorEnum implements RelationalAlgebraEnum {
   EQ("="), //
   GT(">"), //
   LT("<"), //

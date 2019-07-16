@@ -15,7 +15,7 @@ sqlStatements
   ;
  * </pre>
  */
-public class SqlStatements {
+public class SqlStatements implements RelationalAlgebraExpression {
   public final List<SqlStatement> sqlStatements;
 
   SqlStatements(List<SqlStatement> sqlStatements) {

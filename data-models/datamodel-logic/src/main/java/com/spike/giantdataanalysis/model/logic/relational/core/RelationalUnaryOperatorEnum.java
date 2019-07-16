@@ -8,7 +8,7 @@ unaryOperator
     : '!' | '~' | '+' | '-' | NOT
  * </pre>
  */
-public enum RelationalUnaryOperatorEnum {
+public enum RelationalUnaryOperatorEnum implements RelationalAlgebraEnum {
   NOT1("!"), //
   NOT2("~"), //
   NOT3("NOT"), //

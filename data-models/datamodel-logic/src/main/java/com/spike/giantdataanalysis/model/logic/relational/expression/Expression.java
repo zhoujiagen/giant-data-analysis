@@ -1,11 +1,20 @@
 package com.spike.giantdataanalysis.model.logic.relational.expression;
 
+import java.util.List;
+
 import com.google.common.base.Preconditions;
+import com.spike.giantdataanalysis.model.logic.relational.core.RelationalAlgebraEnum;
+import com.spike.giantdataanalysis.model.logic.relational.core.RelationalBitOperatorEnum;
 import com.spike.giantdataanalysis.model.logic.relational.core.RelationalComparisonOperatorEnum;
 import com.spike.giantdataanalysis.model.logic.relational.core.RelationalLogicalOperatorEnum;
+import com.spike.giantdataanalysis.model.logic.relational.core.RelationalMathOperatorEnum;
+import com.spike.giantdataanalysis.model.logic.relational.core.RelationalUnaryOperatorEnum;
+import com.spike.giantdataanalysis.model.logic.relational.expression.CommonLists.Expressions;
+import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.CollationName;
+import com.spike.giantdataanalysis.model.logic.relational.expression.DdlStatement.IntervalType;
 
 /**
- * 条件表达式:
+ * Expressions, predicates
  * 
  * <pre>
 expression
@@ -29,13 +38,12 @@ public interface Expression extends RelationalAlgebraExpression {
   }
 
   // expression logicalOperator expression #logicalExpression
-  public static class RelationalAlgebraLogicalExpression implements Expression {
+  public static class LogicalExpression implements Expression {
     final Expression first;
     final RelationalLogicalOperatorEnum operator;
     final Expression second;
 
-    RelationalAlgebraLogicalExpression(Expression first, RelationalLogicalOperatorEnum operator,
-        Expression second) {
+    LogicalExpression(Expression first, RelationalLogicalOperatorEnum operator, Expression second) {
       Preconditions.checkArgument(first != null);
       Preconditions.checkArgument(operator != null);
       Preconditions.checkArgument(second != null);
@@ -47,17 +55,16 @@ public interface Expression extends RelationalAlgebraExpression {
   }
 
   // predicate IS NOT? testValue=(TRUE | FALSE | UNKNOWN) #isExpression
-  public static class RelationalAlgebraIsExpression implements Expression {
-    public enum TestValue {
+  public static class IsExpression implements Expression {
+    public static enum TestValue implements RelationalAlgebraEnum {
       TRUE, FALSE, UNKNOWN
     }
 
-    final RelationalAlgebraPredicateExpression predicate;
+    final PredicateExpression predicate;
     final Boolean not;
-    final RelationalAlgebraIsExpression.TestValue testValue;
+    final IsExpression.TestValue testValue;
 
-    RelationalAlgebraIsExpression(RelationalAlgebraPredicateExpression predicate, Boolean not,
-        RelationalAlgebraIsExpression.TestValue testValue) {
+    IsExpression(PredicateExpression predicate, Boolean not, IsExpression.TestValue testValue) {
       Preconditions.checkArgument(predicate != null);
       Preconditions.checkArgument(testValue != null);
 
@@ -85,18 +92,18 @@ public interface Expression extends RelationalAlgebraExpression {
     ;
    * </pre>
    */
-  public static interface RelationalAlgebraPredicateExpression extends Expression {
+  public static interface PredicateExpression extends Expression {
   }
 
   // predicate NOT? IN '(' (selectStatement | expressions) ')' #inPredicate
-  public static class RelationalAlgebraInPredicate implements RelationalAlgebraPredicateExpression {
-    final RelationalAlgebraPredicateExpression predicate;
+  public static class InPredicate implements PredicateExpression {
+    final PredicateExpression predicate;
     final Boolean not;
     final SelectStatement selectStatement;
     final Expressions expressions;
 
-    RelationalAlgebraInPredicate(RelationalAlgebraPredicateExpression predicate, Boolean not,
-        SelectStatement selectStatement, Expressions expressions) {
+    InPredicate(PredicateExpression predicate, Boolean not, SelectStatement selectStatement,
+        Expressions expressions) {
       Preconditions.checkArgument(predicate != null);
       Preconditions.checkArgument(!(selectStatement == null && expressions == null));
 
@@ -108,13 +115,11 @@ public interface Expression extends RelationalAlgebraExpression {
   }
 
   // predicate IS nullNotnull #isNullPredicate
-  public static class RelationalAlgebraIsNullPredicate
-      implements RelationalAlgebraPredicateExpression {
-    final RelationalAlgebraPredicateExpression predicate;
+  public static class IsNullPredicate implements PredicateExpression {
+    final PredicateExpression predicate;
     final Boolean notNull;
 
-    RelationalAlgebraIsNullPredicate(RelationalAlgebraPredicateExpression predicate,
-        Boolean notNull) {
+    IsNullPredicate(PredicateExpression predicate, Boolean notNull) {
       Preconditions.checkArgument(predicate != null);
 
       this.predicate = predicate;
@@ -123,15 +128,13 @@ public interface Expression extends RelationalAlgebraExpression {
   }
 
   // left=predicate comparisonOperator right=predicate #binaryComparasionPredicate
-  public static class RelationalAlgebraBinaryComparasionPredicate
-      implements RelationalAlgebraPredicateExpression {
-    final RelationalAlgebraPredicateExpression left;
+  public static class BinaryComparasionPredicate implements PredicateExpression {
+    final PredicateExpression left;
     final RelationalComparisonOperatorEnum comparisonOperator;
-    final RelationalAlgebraPredicateExpression right;
+    final PredicateExpression right;
 
-    RelationalAlgebraBinaryComparasionPredicate(RelationalAlgebraPredicateExpression left,
-        RelationalComparisonOperatorEnum comparisonOperator,
-        RelationalAlgebraPredicateExpression right) {
+    BinaryComparasionPredicate(PredicateExpression left,
+        RelationalComparisonOperatorEnum comparisonOperator, PredicateExpression right) {
       Preconditions.checkArgument(left != null);
       Preconditions.checkArgument(comparisonOperator != null);
       Preconditions.checkArgument(right != null);
@@ -154,21 +157,19 @@ public interface Expression extends RelationalAlgebraExpression {
 
   // predicate comparisonOperator quantifier=(ALL | ANY | SOME) '(' selectStatement ')'
   // #subqueryComparasionPredicate
-  public static class RelationalAlgebraSubqueryComparasionPredicate
-      implements RelationalAlgebraPredicateExpression {
-    public static enum QuantifierEnum {
+  public static class SubqueryComparasionPredicate implements PredicateExpression {
+    public static enum QuantifierEnum implements RelationalAlgebraEnum {
       ALL, ANY, SOME
     }
 
-    final RelationalAlgebraPredicateExpression predicate;
+    final PredicateExpression predicate;
     final RelationalComparisonOperatorEnum comparisonOperator;
-    final RelationalAlgebraSubqueryComparasionPredicate.QuantifierEnum quantifier;
+    final SubqueryComparasionPredicate.QuantifierEnum quantifier;
     final SelectStatement selectStatement;
 
-    RelationalAlgebraSubqueryComparasionPredicate(RelationalAlgebraPredicateExpression predicate,
+    SubqueryComparasionPredicate(PredicateExpression predicate,
         RelationalComparisonOperatorEnum comparisonOperator,
-        RelationalAlgebraSubqueryComparasionPredicate.QuantifierEnum quantifier,
-        SelectStatement selectStatement) {
+        SubqueryComparasionPredicate.QuantifierEnum quantifier, SelectStatement selectStatement) {
       Preconditions.checkArgument(predicate != null);
       Preconditions.checkArgument(comparisonOperator != null);
       Preconditions.checkArgument(quantifier != null);
@@ -182,15 +183,14 @@ public interface Expression extends RelationalAlgebraExpression {
   }
 
   // predicate NOT? BETWEEN predicate AND predicate #betweenPredicate
-  public static class RelationalAlgebraBetweenPredicate
-      implements RelationalAlgebraPredicateExpression {
-    final RelationalAlgebraPredicateExpression first;
+  public static class BetweenPredicate implements PredicateExpression {
+    final PredicateExpression first;
     final Boolean not;
-    final RelationalAlgebraPredicateExpression second;
-    final RelationalAlgebraPredicateExpression third;
+    final PredicateExpression second;
+    final PredicateExpression third;
 
-    RelationalAlgebraBetweenPredicate(RelationalAlgebraPredicateExpression first, Boolean not,
-        RelationalAlgebraPredicateExpression second, RelationalAlgebraPredicateExpression third) {
+    BetweenPredicate(PredicateExpression first, Boolean not, PredicateExpression second,
+        PredicateExpression third) {
       Preconditions.checkArgument(first != null);
       Preconditions.checkArgument(second != null);
       Preconditions.checkArgument(third != null);
@@ -203,14 +203,12 @@ public interface Expression extends RelationalAlgebraExpression {
   }
 
   // predicate SOUNDS LIKE predicate #soundsLikePredicate
-  public static class RelationalAlgebraSoundsLikePredicate
-      implements RelationalAlgebraPredicateExpression {
+  public static class SoundsLikePredicate implements PredicateExpression {
 
-    final RelationalAlgebraPredicateExpression first;
-    final RelationalAlgebraPredicateExpression second;
+    final PredicateExpression first;
+    final PredicateExpression second;
 
-    RelationalAlgebraSoundsLikePredicate(RelationalAlgebraPredicateExpression first,
-        RelationalAlgebraPredicateExpression second) {
+    SoundsLikePredicate(PredicateExpression first, PredicateExpression second) {
       Preconditions.checkArgument(first != null);
       Preconditions.checkArgument(second != null);
 
@@ -220,15 +218,14 @@ public interface Expression extends RelationalAlgebraExpression {
   }
 
   // predicate NOT? LIKE predicate (ESCAPE STRING_LITERAL)? #likePredicate
-  public static class RelationalAlgebraLikePredicate
-      implements RelationalAlgebraPredicateExpression {
-    final RelationalAlgebraPredicateExpression first;
+  public static class LikePredicate implements PredicateExpression {
+    final PredicateExpression first;
     final Boolean not;
-    final RelationalAlgebraPredicateExpression second;
+    final PredicateExpression second;
     final String stringLiteral;
 
-    RelationalAlgebraLikePredicate(RelationalAlgebraPredicateExpression first, Boolean not,
-        RelationalAlgebraPredicateExpression second, String stringLiteral) {
+    LikePredicate(PredicateExpression first, Boolean not, PredicateExpression second,
+        String stringLiteral) {
       Preconditions.checkArgument(first != null);
       Preconditions.checkArgument(second != null);
 
@@ -257,20 +254,18 @@ public interface Expression extends RelationalAlgebraExpression {
   }
 
   // predicate NOT? regex=(REGEXP | RLIKE) predicate #regexpPredicate
-  public static class RelationalAlgebraRegexpPredicate
-      implements RelationalAlgebraPredicateExpression {
-    public static enum RegexType {
+  public static class RegexpPredicate implements PredicateExpression {
+    public static enum RegexType implements RelationalAlgebraEnum {
       REGEXP, RLIKE
     }
 
-    final RelationalAlgebraPredicateExpression first;
+    final PredicateExpression first;
     final Boolean not;
-    final RelationalAlgebraRegexpPredicate.RegexType regex;
-    final RelationalAlgebraPredicateExpression second;
+    final RegexpPredicate.RegexType regex;
+    final PredicateExpression second;
 
-    RelationalAlgebraRegexpPredicate(RelationalAlgebraPredicateExpression first, Boolean not,
-        RelationalAlgebraRegexpPredicate.RegexType regex,
-        RelationalAlgebraPredicateExpression second) {
+    RegexpPredicate(PredicateExpression first, Boolean not, RegexpPredicate.RegexType regex,
+        PredicateExpression second) {
       Preconditions.checkArgument(first != null);
       Preconditions.checkArgument(regex != null);
       Preconditions.checkArgument(second != null);
@@ -283,12 +278,11 @@ public interface Expression extends RelationalAlgebraExpression {
   }
 
   // (LOCAL_ID VAR_ASSIGN)? expressionAtom #expressionAtomPredicate
-  public static class RelationalAlgebraExpressionAtomPredicate
-      implements RelationalAlgebraPredicateExpression {
+  public static class ExpressionAtomPredicate implements PredicateExpression {
     final String localId;
     final ExpressionAtom expressionAtom;
 
-    RelationalAlgebraExpressionAtomPredicate(String localId, ExpressionAtom expressionAtom) {
+    ExpressionAtomPredicate(String localId, ExpressionAtom expressionAtom) {
       Preconditions.checkArgument(expressionAtom != null);
 
       this.localId = localId;
@@ -303,6 +297,280 @@ public interface Expression extends RelationalAlgebraExpression {
       }
       builder.append(expressionAtom);
       return builder.toString();
+    }
+
+  }
+
+  /**
+   * 原子表达式:
+   * 
+   * <pre>
+  expressionAtom
+      : constant                                                      #constantExpressionAtom
+      | fullColumnName                                                #fullColumnNameExpressionAtom
+      | functionCall                                                  #functionCallExpressionAtom
+      | expressionAtom COLLATE collationName                          #collateExpressionAtom
+      | mysqlVariable                                                 #mysqlVariableExpressionAtom
+      | unaryOperator expressionAtom                                  #unaryExpressionAtom
+      | BINARY expressionAtom                                         #binaryExpressionAtom
+      | '(' expression (',' expression)* ')'                          #nestedExpressionAtom
+      | ROW '(' expression (',' expression)+ ')'                      #nestedRowExpressionAtom
+      | EXISTS '(' selectStatement ')'                                #existsExpessionAtom
+      | '(' selectStatement ')'                                       #subqueryExpessionAtom
+      | INTERVAL expression intervalType                              #intervalExpressionAtom
+      | left=expressionAtom bitOperator right=expressionAtom          #bitExpressionAtom
+      | left=expressionAtom mathOperator right=expressionAtom         #mathExpressionAtom
+      ;
+   * </pre>
+   */
+  public interface ExpressionAtom extends Expression {
+
+    // expressionAtom COLLATE collationName #collateExpressionAtom
+    public static class Collate implements ExpressionAtom {
+      public final ExpressionAtom expressionAtom;
+      public final CollationName collationName;
+
+      Collate(ExpressionAtom expressionAtom, CollationName collationName) {
+        Preconditions.checkArgument(expressionAtom != null);
+        Preconditions.checkArgument(collationName != null);
+
+        this.expressionAtom = expressionAtom;
+        this.collationName = collationName;
+      }
+
+      @Override
+      public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("CollateExpressionAtom [expressionAtom=");
+        builder.append(expressionAtom);
+        builder.append(", collationName=");
+        builder.append(collationName);
+        builder.append("]");
+        return builder.toString();
+      }
+
+    }
+
+    // unaryOperator expressionAtom #unaryExpressionAtom
+    public static class UnaryExpressionAtom implements ExpressionAtom {
+      public final RelationalUnaryOperatorEnum unaryOperator;
+      public final ExpressionAtom expressionAtom;
+
+      UnaryExpressionAtom(RelationalUnaryOperatorEnum unaryOperator,
+          ExpressionAtom expressionAtom) {
+        Preconditions.checkArgument(unaryOperator != null);
+        Preconditions.checkArgument(expressionAtom != null);
+
+        this.unaryOperator = unaryOperator;
+        this.expressionAtom = expressionAtom;
+      }
+
+      @Override
+      public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("UnaryExpressionAtom [unaryOperator=");
+        builder.append(unaryOperator);
+        builder.append(", expressionAtom=");
+        builder.append(expressionAtom);
+        builder.append("]");
+        return builder.toString();
+      }
+
+    }
+
+    // BINARY expressionAtom #binaryExpressionAtom
+    public static class BinaryExpressionAtom implements ExpressionAtom {
+      public final ExpressionAtom expressionAtom;
+
+      BinaryExpressionAtom(ExpressionAtom expressionAtom) {
+        Preconditions.checkArgument(expressionAtom != null);
+
+        this.expressionAtom = expressionAtom;
+      }
+
+      @Override
+      public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("RelationalAlgebraBinaryExpressionAtom [expressionAtom=");
+        builder.append(expressionAtom);
+        builder.append("]");
+        return builder.toString();
+      }
+
+    }
+
+    // '(' expression (',' expression)* ')' #nestedExpressionAtom
+    public static class NestedExpressionAtom implements ExpressionAtom {
+      public final List<Expression> expressions;
+
+      NestedExpressionAtom(List<Expression> expressions) {
+        Preconditions.checkArgument(expressions != null && expressions.size() > 0);
+
+        this.expressions = expressions;
+      }
+
+      @Override
+      public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("NestedExpressionAtom [expressions=");
+        builder.append(expressions);
+        builder.append("]");
+        return builder.toString();
+      }
+
+    }
+
+    // ROW '(' expression (',' expression)+ ')' #nestedRowExpressionAtom
+    public static class NestedRowExpressionAtom implements ExpressionAtom {
+      public final List<Expression> expressions;
+
+      NestedRowExpressionAtom(List<Expression> expressions) {
+        Preconditions.checkArgument(expressions != null && expressions.size() > 0);
+
+        this.expressions = expressions;
+      }
+
+      @Override
+      public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("NestedRowExpressionAtom [expressions=");
+        builder.append(expressions);
+        builder.append("]");
+        return builder.toString();
+      }
+
+    }
+
+    // EXISTS '(' selectStatement ')' #existsExpessionAtom
+    public static class ExistsExpessionAtom implements ExpressionAtom {
+      public final SelectStatement selectStatement;
+
+      ExistsExpessionAtom(SelectStatement selectStatement) {
+        Preconditions.checkArgument(selectStatement != null);
+
+        this.selectStatement = selectStatement;
+      }
+
+      @Override
+      public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("ExistsExpessionAtom [selectStatement=");
+        builder.append(selectStatement);
+        builder.append("]");
+        return builder.toString();
+      }
+
+    }
+
+    // '(' selectStatement ')' #subqueryExpessionAtom
+    public static class SubqueryExpessionAtom implements ExpressionAtom {
+      public final SelectStatement selectStatement;
+
+      SubqueryExpessionAtom(SelectStatement selectStatement) {
+        Preconditions.checkArgument(selectStatement != null);
+
+        this.selectStatement = selectStatement;
+      }
+
+      @Override
+      public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("SubqueryExpessionAtom [selectStatement=");
+        builder.append(selectStatement);
+        builder.append("]");
+        return builder.toString();
+      }
+
+    }
+
+    // INTERVAL expression intervalType #intervalExpressionAtom
+    public static class IntervalExpressionAtom implements ExpressionAtom {
+      public final Expression expression;
+      public final IntervalType intervalType;
+
+      IntervalExpressionAtom(Expression expression, IntervalType intervalType) {
+        Preconditions.checkArgument(expression != null);
+        Preconditions.checkArgument(intervalType != null);
+
+        this.expression = expression;
+        this.intervalType = intervalType;
+      }
+
+      @Override
+      public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("IntervalExpressionAtom [expression=");
+        builder.append(expression);
+        builder.append(", intervalType=");
+        builder.append(intervalType);
+        builder.append("]");
+        return builder.toString();
+      }
+
+    }
+
+    // left=expressionAtom bitOperator right=expressionAtom #bitExpressionAtom
+    public static class BitExpressionAtom implements ExpressionAtom {
+      public final ExpressionAtom left;
+      public final RelationalBitOperatorEnum bitOperator;
+      public final ExpressionAtom right;
+
+      BitExpressionAtom(ExpressionAtom left, RelationalBitOperatorEnum bitOperator,
+          ExpressionAtom right) {
+        Preconditions.checkArgument(left != null);
+        Preconditions.checkArgument(bitOperator != null);
+        Preconditions.checkArgument(right != null);
+
+        this.left = left;
+        this.bitOperator = bitOperator;
+        this.right = right;
+      }
+
+      @Override
+      public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("BitExpressionAtom [left=");
+        builder.append(left);
+        builder.append(", bitOperator=");
+        builder.append(bitOperator);
+        builder.append(", right=");
+        builder.append(right);
+        builder.append("]");
+        return builder.toString();
+      }
+
+    }
+
+    // left=expressionAtom mathOperator right=expressionAtom #mathExpressionAtom
+    public static class MathExpressionAtom implements ExpressionAtom {
+      public final ExpressionAtom left;
+      public final RelationalMathOperatorEnum mathOperator;
+      public final ExpressionAtom right;
+
+      MathExpressionAtom(ExpressionAtom left, RelationalMathOperatorEnum mathOperator,
+          ExpressionAtom right) {
+        Preconditions.checkArgument(left != null);
+        Preconditions.checkArgument(mathOperator != null);
+        Preconditions.checkArgument(right != null);
+
+        this.left = left;
+        this.mathOperator = mathOperator;
+        this.right = right;
+      }
+
+      @Override
+      public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("MathExpressionAtom [left=");
+        builder.append(left);
+        builder.append(", mathOperator=");
+        builder.append(mathOperator);
+        builder.append(", right=");
+        builder.append(right);
+        builder.append("]");
+        return builder.toString();
+      }
+
     }
 
   }

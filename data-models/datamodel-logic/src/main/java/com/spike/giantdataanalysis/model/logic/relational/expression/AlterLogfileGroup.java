@@ -1,4 +1,39 @@
 package com.spike.giantdataanalysis.model.logic.relational.expression;
 
+import com.google.common.base.Preconditions;
+import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.EngineName;
+import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.Uid;
+import com.spike.giantdataanalysis.model.logic.relational.expression.Literals.FileSizeLiteral;
+
+/**
+ * <pre>
+ alterLogfileGroup
+    : ALTER LOGFILE GROUP uid
+      ADD UNDOFILE STRING_LITERAL
+      (INITIAL_SIZE '='? fileSizeLiteral)?
+      WAIT? ENGINE '='? engineName
+    ;
+ * </pre>
+ */
 public class AlterLogfileGroup implements DdlStatement {
+
+  public final Uid uid;
+  public final String undoFile;
+  public final FileSizeLiteral fileSizeLiteral;
+  public final Boolean wait;
+  public final EngineName engineName;
+
+  AlterLogfileGroup(Uid uid, String undoFile, FileSizeLiteral fileSizeLiteral, Boolean wait,
+      EngineName engineName) {
+    Preconditions.checkArgument(uid != null);
+    Preconditions.checkArgument(undoFile != null);
+    Preconditions.checkArgument(engineName != null);
+
+    this.uid = uid;
+    this.undoFile = undoFile;
+    this.fileSizeLiteral = fileSizeLiteral;
+    this.wait = wait;
+    this.engineName = engineName;
+  }
+
 }

@@ -6,9 +6,14 @@ import org.apache.commons.collections4.CollectionUtils;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
-import com.spike.giantdataanalysis.model.logic.relational.expression.ExpressionAtom.FullColumnName;
-import com.spike.giantdataanalysis.model.logic.relational.expression.ExpressionAtom.FunctionCall;
-import com.spike.giantdataanalysis.model.logic.relational.expression.ExpressionAtom.MysqlVariable;
+import com.spike.giantdataanalysis.model.logic.relational.core.RelationalAlgebraEnum;
+import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.CharsetName;
+import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.FullColumnName;
+import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.FullId;
+import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.MysqlVariable;
+import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.Uid;
+import com.spike.giantdataanalysis.model.logic.relational.expression.Functions.FunctionCall;
+import com.spike.giantdataanalysis.model.logic.relational.expression.Literals.DecimalLiteral;
 
 /**
  * <pre>
@@ -178,104 +183,68 @@ public interface SelectStatement extends DmlStatement {
 
   }
 
-  // ---------------------------------------------------------------------------
-  // Helper Classes
-  // ---------------------------------------------------------------------------
-  public static enum UnionTypeEnum {
+  public static enum UnionTypeEnum implements RelationalAlgebraEnum {
     ALL, DISTINCT
   }
 
-  // unionStatement: UNION unionType=(ALL | DISTINCT)?
-  // (querySpecificationNointo | queryExpressionNointo)
-  public static class UnionStatement implements PrimitiveExpression {
-    public final UnionTypeEnum unionType;
+  // ---------------------------------------------------------------------------
+  // Select Statement's Details
+  // ---------------------------------------------------------------------------
+
+  /**
+   * <pre>
+   queryExpression
+    : '(' querySpecification ')'
+    | '(' queryExpression ')'
+    ;
+   * </pre>
+   */
+  public static class QueryExpression implements PrimitiveExpression {
+    public final QuerySpecification querySpecification;
+    public final QueryExpression queryExpression;
+
+    QueryExpression(QuerySpecification querySpecification, QueryExpression queryExpression) {
+      Preconditions.checkArgument(!(querySpecification == null && queryExpression == null));
+
+      this.querySpecification = querySpecification;
+      this.queryExpression = queryExpression;
+    }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append("QueryExpression [querySpecification=");
+      builder.append(querySpecification);
+      builder.append(", queryExpression=");
+      builder.append(queryExpression);
+      builder.append("]");
+      return builder.toString();
+    }
+
+  }
+
+  /**
+   * <pre>
+   queryExpressionNointo
+    : '(' querySpecificationNointo ')'
+    | '(' queryExpressionNointo ')'
+    ;
+   * </pre>
+   */
+  public static class QueryExpressionNointo implements PrimitiveExpression {
     public final QuerySpecificationNointo querySpecificationNointo;
-    public final QueryExpressionNointo queryExpressionNointo;
 
-    UnionStatement(UnionTypeEnum unionType, QuerySpecificationNointo querySpecificationNointo,
-        QueryExpressionNointo queryExpressionNointo) {
-      Preconditions.checkArgument(unionType != null);
-      Preconditions.checkArgument(!(querySpecificationNointo == null//
-          && queryExpressionNointo == null));
+    public QueryExpressionNointo(QuerySpecificationNointo querySpecificationNointo) {
+      Preconditions.checkArgument(querySpecificationNointo != null);
 
-      this.unionType = unionType;
       this.querySpecificationNointo = querySpecificationNointo;
-      this.queryExpressionNointo = queryExpressionNointo;
     }
 
     @Override
     public String toString() {
       StringBuilder builder = new StringBuilder();
-      builder.append("UnionStatement [unionType=");
-      builder.append(unionType);
-      builder.append(", querySpecificationNointo=");
+      builder.append("QueryExpressionNointo [querySpecificationNointo=");
       builder.append(querySpecificationNointo);
-      builder.append(", queryExpressionNointo=");
-      builder.append(queryExpressionNointo);
-      builder.append("]");
-      return builder.toString();
-    }
-
-  }
-
-  // unionParenthesis: UNION unionType=(ALL | DISTINCT)? queryExpressionNointo
-  public static class UnionParenthesis implements PrimitiveExpression {
-    public final UnionTypeEnum unionType;
-    public final QueryExpressionNointo queryExpressionNointo;
-
-    UnionParenthesis(UnionTypeEnum unionType, QueryExpressionNointo queryExpressionNointo) {
-      Preconditions.checkArgument(queryExpressionNointo != null);
-
-      this.unionType = unionType;
-      this.queryExpressionNointo = queryExpressionNointo;
-    }
-
-    @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("UnionParenthesis [unionType=");
-      builder.append(unionType);
-      builder.append(", queryExpressionNointo=");
-      builder.append(queryExpressionNointo);
-      builder.append("]");
-      return builder.toString();
-    }
-
-  }
-
-  // querySpecificationNointo: SELECT selectSpec* selectElements
-  // fromClause? orderByClause? limitClause?
-  public static class QuerySpecificationNointo implements PrimitiveExpression {
-    public final List<SelectSpecEnum> selectSpecs;
-    public final SelectElements selectElements;
-    public final FromClause fromClause;
-    public final OrderByClause orderByClause;
-    public final LimitClause limitClause;
-
-    QuerySpecificationNointo(List<SelectSpecEnum> selectSpecs, SelectElements selectElements,
-        FromClause fromClause, OrderByClause orderByClause, LimitClause limitClause) {
-      Preconditions.checkArgument(selectElements != null);
-
-      this.selectSpecs = selectSpecs;
-      this.selectElements = selectElements;
-      this.fromClause = fromClause;
-      this.orderByClause = orderByClause;
-      this.limitClause = limitClause;
-    }
-
-    @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("QuerySpecificationNointo [selectSpecs=");
-      builder.append(selectSpecs);
-      builder.append(", selectElements=");
-      builder.append(selectElements);
-      builder.append(", fromClause=");
-      builder.append(fromClause);
-      builder.append(", orderByClause=");
-      builder.append(orderByClause);
-      builder.append(", limitClause=");
-      builder.append(limitClause);
       builder.append("]");
       return builder.toString();
     }
@@ -347,28 +316,133 @@ public interface SelectStatement extends DmlStatement {
 
   }
 
-  // queryExpressionNointo : '(' querySpecificationNointo ')'| '(' queryExpressionNointo ')'
-  public static class QueryExpressionNointo implements PrimitiveExpression {
-    public final QuerySpecificationNointo querySpecificationNointo;
+  /**
+   * <pre>
+   querySpecificationNointo
+    : SELECT selectSpec* selectElements
+      fromClause? orderByClause? limitClause?
+    ;
+   * </pre>
+   */
+  public static class QuerySpecificationNointo implements PrimitiveExpression {
+    public final List<SelectSpecEnum> selectSpecs;
+    public final SelectElements selectElements;
+    public final FromClause fromClause;
+    public final OrderByClause orderByClause;
+    public final LimitClause limitClause;
 
-    public QueryExpressionNointo(QuerySpecificationNointo querySpecificationNointo) {
-      Preconditions.checkArgument(querySpecificationNointo != null);
+    QuerySpecificationNointo(List<SelectSpecEnum> selectSpecs, SelectElements selectElements,
+        FromClause fromClause, OrderByClause orderByClause, LimitClause limitClause) {
+      Preconditions.checkArgument(selectElements != null);
 
-      this.querySpecificationNointo = querySpecificationNointo;
+      this.selectSpecs = selectSpecs;
+      this.selectElements = selectElements;
+      this.fromClause = fromClause;
+      this.orderByClause = orderByClause;
+      this.limitClause = limitClause;
     }
 
     @Override
     public String toString() {
       StringBuilder builder = new StringBuilder();
-      builder.append("QueryExpressionNointo [querySpecificationNointo=");
-      builder.append(querySpecificationNointo);
+      builder.append("QuerySpecificationNointo [selectSpecs=");
+      builder.append(selectSpecs);
+      builder.append(", selectElements=");
+      builder.append(selectElements);
+      builder.append(", fromClause=");
+      builder.append(fromClause);
+      builder.append(", orderByClause=");
+      builder.append(orderByClause);
+      builder.append(", limitClause=");
+      builder.append(limitClause);
       builder.append("]");
       return builder.toString();
     }
 
   }
 
-  public static enum SelectSpecEnum {
+  /**
+   * <pre>
+   unionParenthesis
+    : UNION unionType=(ALL | DISTINCT)? queryExpressionNointo
+    ;
+   * </pre>
+   */
+  public static class UnionParenthesis implements PrimitiveExpression {
+    public final UnionTypeEnum unionType;
+    public final QueryExpressionNointo queryExpressionNointo;
+
+    UnionParenthesis(UnionTypeEnum unionType, QueryExpressionNointo queryExpressionNointo) {
+      Preconditions.checkArgument(queryExpressionNointo != null);
+
+      this.unionType = unionType;
+      this.queryExpressionNointo = queryExpressionNointo;
+    }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append("UnionParenthesis [unionType=");
+      builder.append(unionType);
+      builder.append(", queryExpressionNointo=");
+      builder.append(queryExpressionNointo);
+      builder.append("]");
+      return builder.toString();
+    }
+
+  }
+
+  /**
+   * <pre>
+   unionStatement
+    : UNION unionType=(ALL | DISTINCT)?
+      (querySpecificationNointo | queryExpressionNointo)
+    ;
+   * </pre>
+   */
+  public static class UnionStatement implements PrimitiveExpression {
+    public final UnionTypeEnum unionType;
+    public final QuerySpecificationNointo querySpecificationNointo;
+    public final QueryExpressionNointo queryExpressionNointo;
+
+    UnionStatement(UnionTypeEnum unionType, QuerySpecificationNointo querySpecificationNointo,
+        QueryExpressionNointo queryExpressionNointo) {
+      Preconditions.checkArgument(unionType != null);
+      Preconditions.checkArgument(!(querySpecificationNointo == null//
+          && queryExpressionNointo == null));
+
+      this.unionType = unionType;
+      this.querySpecificationNointo = querySpecificationNointo;
+      this.queryExpressionNointo = queryExpressionNointo;
+    }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append("UnionStatement [unionType=");
+      builder.append(unionType);
+      builder.append(", querySpecificationNointo=");
+      builder.append(querySpecificationNointo);
+      builder.append(", queryExpressionNointo=");
+      builder.append(queryExpressionNointo);
+      builder.append("]");
+      return builder.toString();
+    }
+
+  }
+
+  /**
+   * <pre>
+   selectSpec
+    : (ALL | DISTINCT | DISTINCTROW)
+    | HIGH_PRIORITY | STRAIGHT_JOIN | SQL_SMALL_RESULT
+    | SQL_BIG_RESULT | SQL_BUFFER_RESULT
+    | (SQL_CACHE | SQL_NO_CACHE)
+    | SQL_CALC_FOUND_ROWS
+    ;
+   * </pre>
+   */
+  public static enum SelectSpecEnum implements RelationalAlgebraEnum {
     ALL, DISTINCT, DISTINCTROW, // only one
     HIGH_PRIORITY, STRAIGHT_JOIN, SQL_SMALL_RESULT, SQL_BIG_RESULT, SQL_BUFFER_RESULT, //
     SQL_CACHE, SQL_NO_CACHE, // only one
@@ -377,555 +451,11 @@ public interface SelectStatement extends DmlStatement {
 
   /**
    * <pre>
-  fromClause
-    : FROM tableSources
-      (WHERE whereExpr=expression)?
-      (
-        GROUP BY
-        groupByItem (',' groupByItem)*
-        (WITH ROLLUP)?
-      )?
-      (HAVING havingExpr=expression)?
+   selectElements
+    : (star='*' | selectElement ) (',' selectElement)*
     ;
    * </pre>
    */
-  public static class FromClause implements PrimitiveExpression {
-    public final TableSources tableSources;
-    public final Expression whereExpr;
-    public final List<GroupByItem> groupByItems;
-    public final Boolean withRollup;
-    public final Expression havingExpr;
-
-    FromClause(TableSources tableSources, Expression whereExpr, List<GroupByItem> groupByItems,
-        Boolean withRollup, Expression havingExpr) {
-      Preconditions.checkArgument(tableSources != null);
-
-      this.tableSources = tableSources;
-      this.whereExpr = whereExpr;
-      this.groupByItems = groupByItems;
-      this.withRollup = withRollup;
-      this.havingExpr = havingExpr;
-    }
-
-    @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("FROM ");
-      builder.append(tableSources);
-      if (whereExpr != null) {
-        builder.append(System.lineSeparator());
-        builder.append("WHERE ").append(whereExpr);
-      }
-      if (CollectionUtils.isNotEmpty(groupByItems)) {
-        builder.append(System.lineSeparator());
-        builder.append("GROUP BY ");
-        builder.append(Joiner.on(", ").join(groupByItems));
-      }
-      if (Boolean.TRUE.equals(withRollup)) {
-        builder.append(System.lineSeparator());
-        builder.append(" WITH ROLLUP ");
-      }
-      if (havingExpr != null) {
-        builder.append(System.lineSeparator());
-        builder.append(havingExpr);
-      }
-      return builder.toString();
-    }
-  }
-
-  // groupByItem : expression order=(ASC | DESC)?
-  public static class GroupByItem implements PrimitiveExpression {
-    public static enum OrderType {
-      ASC, DESC
-    }
-
-    public final Expression expression;
-    public final OrderType order;
-
-    GroupByItem(Expression expression, OrderType order) {
-      Preconditions.checkArgument(expression != null);
-
-      this.expression = expression;
-      this.order = order;
-    }
-
-    @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("GroupByItem [expression=");
-      builder.append(expression);
-      builder.append(", order=");
-      builder.append(order);
-      builder.append("]");
-      return builder.toString();
-    }
-
-  }
-
-  // orderByClause: ORDER BY orderByExpression (',' orderByExpression)*
-  public static class OrderByClause implements PrimitiveExpression {
-    public final List<OrderByExpression> orderByExpressions;
-
-    OrderByClause(List<OrderByExpression> orderByExpressions) {
-      Preconditions.checkArgument(orderByExpressions != null && orderByExpressions.size() > 0);
-
-      this.orderByExpressions = orderByExpressions;
-    }
-
-    @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("OrderByClause [orderByExpressions=");
-      builder.append(orderByExpressions);
-      builder.append("]");
-      return builder.toString();
-    }
-
-  }
-
-  /**
-   * <pre>
-   limitClause
-    : LIMIT
-    (
-      (offset=limitClauseAtom ',')? limit=limitClauseAtom
-      | limit=limitClauseAtom OFFSET offset=limitClauseAtom
-    )
-    ;
-   * </pre>
-   */
-  public static class LimitClause implements PrimitiveExpression {
-    public final LimitClauseAtom limit;
-    public final LimitClauseAtom offset;
-
-    LimitClause(LimitClauseAtom limit, LimitClauseAtom offset) {
-      Preconditions.checkArgument(limit != null);
-
-      this.limit = limit;
-      this.offset = offset;
-    }
-
-    @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("LimitClause [limit=");
-      builder.append(limit);
-      builder.append(", offset=");
-      builder.append(offset);
-      builder.append("]");
-      return builder.toString();
-    }
-
-  }
-
-  public static class LimitClauseAtom implements PrimitiveExpression {
-    public final DecimalLiteral decimalLiteral;
-    public final MysqlVariable mysqlVariable;
-
-    LimitClauseAtom(DecimalLiteral decimalLiteral, MysqlVariable mysqlVariable) {
-      Preconditions.checkArgument(!(decimalLiteral == null && mysqlVariable == null));
-
-      this.decimalLiteral = decimalLiteral;
-      this.mysqlVariable = mysqlVariable;
-    }
-
-    @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("LimitClauseAtom [decimalLiteral=");
-      builder.append(decimalLiteral);
-      builder.append(", mysqlVariable=");
-      builder.append(mysqlVariable);
-      builder.append("]");
-      return builder.toString();
-    }
-
-  }
-
-  // tableSources: tableSource (',' tableSource)*
-  public static class TableSources implements PrimitiveExpression {
-    public final List<TableSource> tableSources;
-
-    TableSources(List<TableSource> tableSources) {
-      Preconditions.checkArgument(tableSources != null && tableSources.size() > 0);
-
-      this.tableSources = tableSources;
-    }
-
-    @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append(Joiner.on(", ").join(tableSources));
-      return builder.toString();
-    }
-
-  }
-
-  /**
-   * <pre>
-   tableSource
-    : tableSourceItem joinPart*           #tableSourceBase
-    | '(' tableSourceItem joinPart* ')'   #tableSourceNested
-    ;
-   * </pre>
-   */
-  public static interface TableSource extends PrimitiveExpression {
-  }
-
-  public static class TableSourceBase implements TableSource {
-    public final TableSourceItem tableSourceItem;
-    public final List<JoinPart> joinParts;
-
-    TableSourceBase(TableSourceItem tableSourceItem, List<JoinPart> joinParts) {
-      Preconditions.checkArgument(tableSourceItem != null);
-
-      this.tableSourceItem = tableSourceItem;
-      this.joinParts = joinParts;
-    }
-
-    @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append(tableSourceItem);
-      if (CollectionUtils.isNotEmpty(joinParts)) {
-        builder.append(" ");
-        builder.append(Joiner.on(" ").join(joinParts));
-      }
-      return builder.toString();
-    }
-  }
-
-  public static class TableSourceNested implements TableSource {
-    public final TableSourceItem tableSourceItem;
-    public final List<JoinPart> joinParts;
-
-    TableSourceNested(TableSourceItem tableSourceItem, List<JoinPart> joinParts) {
-      Preconditions.checkArgument(tableSourceItem != null);
-
-      this.tableSourceItem = tableSourceItem;
-      this.joinParts = joinParts;
-    }
-
-    @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("TableSourceNested [(");
-      builder.append(tableSourceItem);
-      if (CollectionUtils.isNotEmpty(joinParts)) {
-        builder.append(" ");
-        builder.append(Joiner.on(" ").join(joinParts));
-      }
-      builder.append(")]");
-      return builder.toString();
-    }
-
-  }
-
-  /**
-   * <pre>
-   tableSourceItem
-    : tableName
-      (PARTITION '(' uidList ')' )? (AS? alias=uid)?
-      (indexHint (',' indexHint)* )?                #atomTableItem
-    | (
-      selectStatement
-      | '(' parenthesisSubquery=selectStatement ')'
-      )
-      AS? alias=uid                                #subqueryTableItem
-    | '(' tableSources ')'                         #tableSourcesItem
-    ;
-   * </pre>
-   */
-  public static interface TableSourceItem extends PrimitiveExpression {
-  }
-
-  public static class AtomTableItem implements TableSourceItem {
-    public final TableName tableName;
-    public final UidList uidList;
-    public final Uid alias;
-    public final List<IndexHint> indexHints;
-
-    AtomTableItem(TableName tableName, UidList uidList, Uid alias, List<IndexHint> indexHints) {
-      Preconditions.checkArgument(tableName != null);
-
-      this.tableName = tableName;
-      this.uidList = uidList;
-      this.alias = alias;
-      this.indexHints = indexHints;
-    }
-
-    @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append(tableName);
-      if (uidList != null) {
-        builder.append("PARTITION (" + uidList + ")");
-      }
-      if (alias != null) {
-        builder.append(alias);
-      }
-      if (CollectionUtils.isNotEmpty(indexHints)) {
-        builder.append(Joiner.on(", ").join(indexHints));
-      }
-      return builder.toString();
-    }
-
-  }
-
-  public static class SubqueryTableItem implements TableSourceItem {
-    public final SelectStatement selectStatement;
-    public final SelectStatement parenthesisSubquery;
-
-    SubqueryTableItem(SelectStatement selectStatement, SelectStatement parenthesisSubquery) {
-      Preconditions.checkArgument(selectStatement != null);
-      Preconditions.checkArgument(parenthesisSubquery != null);
-
-      this.selectStatement = selectStatement;
-      this.parenthesisSubquery = parenthesisSubquery;
-    }
-
-    @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("SubqueryTableItem [selectStatement=");
-      builder.append(selectStatement);
-      builder.append(", parenthesisSubquery=");
-      builder.append(parenthesisSubquery);
-      builder.append("]");
-      return builder.toString();
-    }
-
-  }
-
-  public static class TableSourcesItem implements TableSourceItem {
-    public final TableSources tableSources;
-
-    TableSourcesItem(TableSources tableSources) {
-      Preconditions.checkArgument(tableSources != null);
-
-      this.tableSources = tableSources;
-    }
-
-    @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("TableSourcesItem [tableSources=");
-      builder.append(tableSources);
-      builder.append("]");
-      return builder.toString();
-    }
-
-  }
-
-  /**
-   * <pre>
-  indexHint
-    : indexHintAction=(USE | IGNORE | FORCE)
-      keyFormat=(INDEX|KEY) ( FOR indexHintType)?
-      '(' uidList ')'
-    ;
-   * </pre>
-   */
-  public static class IndexHint implements PrimitiveExpression {
-    public static enum IndexHintAction {
-      USE, IGNORE, FORCE;
-    }
-
-    public static enum KeyFormat {
-      INDEX, KEY;
-    }
-
-    public final IndexHintAction indexHintAction;
-    public final KeyFormat keyFormat;
-    public final IndexHintType indexHintType;
-    public final UidList uidList;
-
-    IndexHint(IndexHintAction indexHintAction, KeyFormat keyFormat, IndexHintType indexHintType,
-        UidList uidList) {
-      Preconditions.checkArgument(indexHintAction != null);
-      Preconditions.checkArgument(keyFormat != null);
-      Preconditions.checkArgument(uidList != null);
-
-      this.indexHintAction = indexHintAction;
-      this.keyFormat = keyFormat;
-      this.indexHintType = indexHintType;
-      this.uidList = uidList;
-    }
-
-    @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("IndexHint [indexHintAction=");
-      builder.append(indexHintAction);
-      builder.append(", keyFormat=");
-      builder.append(keyFormat);
-      builder.append(", indexHintType=");
-      builder.append(indexHintType);
-      builder.append(", uidList=");
-      builder.append(uidList);
-      builder.append("]");
-      return builder.toString();
-    }
-
-  }
-
-  public static enum IndexHintType {
-    JOIN, ORDER_BY, GROUP_BY;
-  }
-
-  // tableName : fullId
-  public static class TableName implements PrimitiveExpression {
-    public final FullId fullId;
-
-    TableName(FullId fullId) {
-      Preconditions.checkArgument(fullId != null);
-
-      this.fullId = fullId;
-    }
-
-    @Override
-    public String toString() {
-      return fullId.toString();
-    }
-
-  }
-
-  /**
-   * <pre>
-   joinPart
-    : (INNER | CROSS)? JOIN tableSourceItem
-      (
-        ON expression
-        | USING '(' uidList ')'
-      )?                                                     #innerJoin
-    | STRAIGHT_JOIN tableSourceItem (ON expression)?         #straightJoin
-    | (LEFT | RIGHT) OUTER? JOIN tableSourceItem
-        (
-          ON expression
-          | USING '(' uidList ')'
-        )                                                    #outerJoin
-    | NATURAL ((LEFT | RIGHT) OUTER?)? JOIN tableSourceItem  #naturalJoin
-    ;
-   * </pre>
-   */
-  public static interface JoinPart extends PrimitiveExpression {
-  }
-
-  public static class InnerJoin implements JoinPart {
-    public final TableSourceItem tableSourceItem;
-    public final Expression expression;
-    public final UidList uidList;
-
-    InnerJoin(TableSourceItem tableSourceItem, Expression expression, UidList uidList) {
-      Preconditions.checkArgument(tableSourceItem != null);
-
-      this.tableSourceItem = tableSourceItem;
-      this.expression = expression;
-      this.uidList = uidList;
-    }
-
-    @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("InnerJoin [tableSourceItem=");
-      builder.append(tableSourceItem);
-      builder.append(", expression=");
-      builder.append(expression);
-      builder.append(", uidList=");
-      builder.append(uidList);
-      builder.append("]");
-      return builder.toString();
-    }
-
-  }
-
-  public static class StraightJoin implements JoinPart {
-    public final TableSourceItem tableSourceItem;
-    public final Expression expression;
-
-    StraightJoin(TableSourceItem tableSourceItem, Expression expression) {
-      Preconditions.checkArgument(tableSourceItem != null);
-
-      this.tableSourceItem = tableSourceItem;
-      this.expression = expression;
-    }
-
-    @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("StraightJoin [tableSourceItem=");
-      builder.append(tableSourceItem);
-      builder.append(", expression=");
-      builder.append(expression);
-      builder.append("]");
-      return builder.toString();
-    }
-  }
-
-  public static class OuterJoin implements JoinPart {
-    public final OuterJoinType type;
-    public final TableSourceItem tableSourceItem;
-    public final Expression expression;
-    public final UidList uidList;
-
-    OuterJoin(OuterJoinType type, TableSourceItem tableSourceItem, Expression expression,
-        UidList uidList) {
-      Preconditions.checkArgument(type != null);
-      Preconditions.checkArgument(tableSourceItem != null);
-      Preconditions.checkArgument(!(expression == null && uidList == null));
-
-      this.type = type;
-      this.tableSourceItem = tableSourceItem;
-      this.expression = expression;
-      this.uidList = uidList;
-    }
-
-    @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("OuterJoin [type=");
-      builder.append(type);
-      builder.append(", tableSourceItem=");
-      builder.append(tableSourceItem);
-      builder.append(", expression=");
-      builder.append(expression);
-      builder.append(", uidList=");
-      builder.append(uidList);
-      builder.append("]");
-      return builder.toString();
-    }
-
-  }
-
-  public static enum OuterJoinType {
-    LEFT, RIGHT
-  }
-
-  public static class NaturalJoin implements JoinPart {
-    public final OuterJoinType outerJoinType;
-    public final TableSourceItem tableSourceItem;
-
-    NaturalJoin(OuterJoinType outerJoinType, TableSourceItem tableSourceItem) {
-      Preconditions.checkArgument(tableSourceItem != null);
-
-      this.outerJoinType = outerJoinType;
-      this.tableSourceItem = tableSourceItem;
-    }
-
-    @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("NaturalJoin [outerJoinType=");
-      builder.append(outerJoinType);
-      builder.append(", tableSourceItem=");
-      builder.append(tableSourceItem);
-      builder.append("]");
-      return builder.toString();
-    }
-
-  }
-
-  // selectElements: (star='*' | selectElement ) (',' selectElement)*
   public static class SelectElements implements PrimitiveExpression {
     public final Boolean star;
     public final List<SelectElement> selectElements;
@@ -1057,35 +587,6 @@ public interface SelectStatement extends DmlStatement {
 
   }
 
-  public static enum LockClauseEnum {
-    FOR_UPDATE, LOCK_IN_SHARE_MODE
-  }
-
-  // queryExpression: '(' querySpecification ')' | '(' queryExpression ')'
-  public static class QueryExpression implements PrimitiveExpression {
-    public final QuerySpecification querySpecification;
-    public final QueryExpression queryExpression;
-
-    QueryExpression(QuerySpecification querySpecification, QueryExpression queryExpression) {
-      Preconditions.checkArgument(!(querySpecification == null && queryExpression == null));
-
-      this.querySpecification = querySpecification;
-      this.queryExpression = queryExpression;
-    }
-
-    @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("QueryExpression [querySpecification=");
-      builder.append(querySpecification);
-      builder.append(", queryExpression=");
-      builder.append(queryExpression);
-      builder.append("]");
-      return builder.toString();
-    }
-
-  }
-
   /**
    * <pre>
    selectIntoExpression
@@ -1128,29 +629,6 @@ public interface SelectStatement extends DmlStatement {
 
   }
 
-  public static class AssignmentField implements PrimitiveExpression {
-    public final Uid uid;
-    public final String localId;
-
-    AssignmentField(Uid uid, String localId) {
-      Preconditions.checkArgument(!(uid == null && localId == null));
-      this.uid = uid;
-      this.localId = localId;
-    }
-
-    @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("AssignmentField [uid=");
-      builder.append(uid);
-      builder.append(", localId=");
-      builder.append(localId);
-      builder.append("]");
-      return builder.toString();
-    }
-
-  }
-
   public static class SelectIntoDumpFile implements SelectIntoExpression {
     public final String stringLiteral;
 
@@ -1172,7 +650,7 @@ public interface SelectStatement extends DmlStatement {
   }
 
   public static class SelectIntoTextFile implements SelectIntoExpression {
-    public static enum TieldsFormatType {
+    public static enum TieldsFormatType implements RelationalAlgebraEnum {
       FIELDS, COLUMNS
     }
 
@@ -1225,7 +703,7 @@ public interface SelectStatement extends DmlStatement {
    * </pre>
    */
   public static class SelectFieldsInto implements PrimitiveExpression {
-    public static enum Type {
+    public static enum Type implements RelationalAlgebraEnum {
       TERMINATED_BY, ENCLOSED_BY, ESCAPED_BY
     }
 
@@ -1266,7 +744,7 @@ public interface SelectStatement extends DmlStatement {
    * </pre>
    */
   public static class SelectLinesInto implements PrimitiveExpression {
-    public static enum Type {
+    public static enum Type implements RelationalAlgebraEnum {
       STARTING_BY, TERMINATED_BY
     }
 
@@ -1291,5 +769,164 @@ public interface SelectStatement extends DmlStatement {
       builder.append("]");
       return builder.toString();
     }
+  }
+
+  /**
+   * <pre>
+  fromClause
+    : FROM tableSources
+      (WHERE whereExpr=expression)?
+      (
+        GROUP BY
+        groupByItem (',' groupByItem)*
+        (WITH ROLLUP)?
+      )?
+      (HAVING havingExpr=expression)?
+    ;
+   * </pre>
+   */
+  public static class FromClause implements PrimitiveExpression {
+    public final TableSources tableSources;
+    public final Expression whereExpr;
+    public final List<GroupByItem> groupByItems;
+    public final Boolean withRollup;
+    public final Expression havingExpr;
+
+    FromClause(TableSources tableSources, Expression whereExpr, List<GroupByItem> groupByItems,
+        Boolean withRollup, Expression havingExpr) {
+      Preconditions.checkArgument(tableSources != null);
+
+      this.tableSources = tableSources;
+      this.whereExpr = whereExpr;
+      this.groupByItems = groupByItems;
+      this.withRollup = withRollup;
+      this.havingExpr = havingExpr;
+    }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append("FROM ");
+      builder.append(tableSources);
+      if (whereExpr != null) {
+        builder.append(System.lineSeparator());
+        builder.append("WHERE ").append(whereExpr);
+      }
+      if (CollectionUtils.isNotEmpty(groupByItems)) {
+        builder.append(System.lineSeparator());
+        builder.append("GROUP BY ");
+        builder.append(Joiner.on(", ").join(groupByItems));
+      }
+      if (Boolean.TRUE.equals(withRollup)) {
+        builder.append(System.lineSeparator());
+        builder.append(" WITH ROLLUP ");
+      }
+      if (havingExpr != null) {
+        builder.append(System.lineSeparator());
+        builder.append(havingExpr);
+      }
+      return builder.toString();
+    }
+  }
+
+  /**
+   * <pre>
+   groupByItem
+    : expression order=(ASC | DESC)?
+    ;
+   * </pre>
+   */
+  public static class GroupByItem implements PrimitiveExpression {
+    public static enum OrderType implements RelationalAlgebraEnum {
+      ASC, DESC
+    }
+
+    public final Expression expression;
+    public final OrderType order;
+
+    GroupByItem(Expression expression, OrderType order) {
+      Preconditions.checkArgument(expression != null);
+
+      this.expression = expression;
+      this.order = order;
+    }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append("GroupByItem [expression=");
+      builder.append(expression);
+      builder.append(", order=");
+      builder.append(order);
+      builder.append("]");
+      return builder.toString();
+    }
+
+  }
+
+  /**
+   * <pre>
+   limitClause
+    : LIMIT
+    (
+      (offset=limitClauseAtom ',')? limit=limitClauseAtom
+      | limit=limitClauseAtom OFFSET offset=limitClauseAtom
+    )
+    ;
+   * </pre>
+   */
+  public static class LimitClause implements PrimitiveExpression {
+    public final LimitClauseAtom limit;
+    public final LimitClauseAtom offset;
+
+    LimitClause(LimitClauseAtom limit, LimitClauseAtom offset) {
+      Preconditions.checkArgument(limit != null);
+
+      this.limit = limit;
+      this.offset = offset;
+    }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append("LimitClause [limit=");
+      builder.append(limit);
+      builder.append(", offset=");
+      builder.append(offset);
+      builder.append("]");
+      return builder.toString();
+    }
+
+  }
+
+  /**
+   * <pre>
+   limitClauseAtom
+  : decimalLiteral | mysqlVariable
+  ;
+   * </pre>
+   */
+  public static class LimitClauseAtom implements PrimitiveExpression {
+    public final DecimalLiteral decimalLiteral;
+    public final MysqlVariable mysqlVariable;
+
+    LimitClauseAtom(DecimalLiteral decimalLiteral, MysqlVariable mysqlVariable) {
+      Preconditions.checkArgument(!(decimalLiteral == null && mysqlVariable == null));
+
+      this.decimalLiteral = decimalLiteral;
+      this.mysqlVariable = mysqlVariable;
+    }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append("LimitClauseAtom [decimalLiteral=");
+      builder.append(decimalLiteral);
+      builder.append(", mysqlVariable=");
+      builder.append(mysqlVariable);
+      builder.append("]");
+      return builder.toString();
+    }
+
   }
 }

@@ -3,7 +3,7 @@ package com.spike.giantdataanalysis.model.logic.relational.core;
 /**
  * 
  */
-public enum RelationalAlgebraJoinTypeEnum {
+public enum RelationalAlgebraJoinTypeEnum implements RelationalAlgebraEnum {
   /** 自然连接 */
   NATURAL_JOIN,
   /** 左外连接 */

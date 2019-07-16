@@ -1,11 +1,11 @@
 package com.spike.giantdataanalysis.model.logic.relational;
 
+import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraBasicExpression;
+import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraDifferenceExpression;
 import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraExpression;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraExpressionFactory.RelationalAlgebraBasicExpression;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraExpressionFactory.RelationalAlgebraDifferenceExpression;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraExpressionFactory.RelationalAlgebraIntersectionExpression;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraExpressionFactory.RelationalAlgebraProjectExpression;
-import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraExpressionFactory.RelationalAlgebraUnionExpression;
+import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraIntersectionExpression;
+import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraProjectExpression;
+import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraUnionExpression;
 import com.spike.giantdataanalysis.model.logic.relational.model.RelationalTuples;
 
 /**
