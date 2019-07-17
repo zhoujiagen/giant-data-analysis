@@ -6,6 +6,7 @@ import org.relaxng.datatype.Datatype;
 
 import com.google.common.base.Preconditions;
 import com.spike.giantdataanalysis.model.logic.relational.core.RelationalAlgebraEnum;
+import com.spike.giantdataanalysis.model.logic.relational.expression.CommonExpressons.CurrentTimestamp;
 import com.spike.giantdataanalysis.model.logic.relational.expression.CommonExpressons.DefaultValue;
 import com.spike.giantdataanalysis.model.logic.relational.expression.CommonLists.IndexColumnNames;
 import com.spike.giantdataanalysis.model.logic.relational.expression.CommonLists.Tables;
@@ -20,6 +21,7 @@ import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.U
 import com.spike.giantdataanalysis.model.logic.relational.expression.Literals.Constant;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Literals.DecimalLiteral;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Literals.FileSizeLiteral;
+import com.spike.giantdataanalysis.model.logic.relational.expression.Literals.NullNotnull;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Literals.StringLiteral;
 import com.spike.giantdataanalysis.model.logic.relational.expression.SimpleIdSets.IntervalTypeBaseEnum;
 
@@ -50,8 +52,30 @@ public interface DdlStatement extends SqlStatement {
     ONLINE, OFFLINE
   }
 
+  public static enum IndexAlgTypeEnum implements RelationalAlgebraEnum {
+    DEFAULT, INPLACE, COPY
+  }
+
+  public static enum LockTypeEnum implements RelationalAlgebraEnum {
+    DEFAULT, NONE, SHARED, EXCLUSIVE
+  }
+
   public static enum IndexCategoryEnum implements RelationalAlgebraEnum {
     UNIQUE, FULLTEXT, SPATIAL
+  }
+
+  public static class IndexAlgorithmOrLock {
+    public final IndexAlgTypeEnum algType;
+    public final LockTypeEnum lockType;
+
+    IndexAlgorithmOrLock(IndexAlgTypeEnum algType, LockTypeEnum lockType) {
+      this.algType = algType;
+      this.lockType = lockType;
+    }
+  }
+
+  public static enum DropTypeEnum implements RelationalAlgebraEnum {
+    RESTRICT, CASCADE
   }
 
   // ---------------------------------------------------------------------------
@@ -595,7 +619,149 @@ public interface DdlStatement extends SqlStatement {
     ;
    * </pre>
    */
-  public static class ColumnConstraint implements PrimitiveExpression {
+  public static interface ColumnConstraint extends PrimitiveExpression {
+  }
+
+  public static class NullColumnConstraint implements ColumnConstraint {
+    public final NullNotnull nullNotnull;
+
+    NullColumnConstraint(NullNotnull nullNotnull) {
+      Preconditions.checkArgument(nullNotnull != null);
+
+      this.nullNotnull = nullNotnull;
+    }
+
+  }
+
+  public static class DefaultColumnConstraint implements ColumnConstraint {
+    public final DefaultValue defaultValue;
+
+    DefaultColumnConstraint(DefaultValue defaultValue) {
+      Preconditions.checkArgument(defaultValue != null);
+
+      this.defaultValue = defaultValue;
+    }
+
+  }
+
+  public static class AutoIncrementColumnConstraint implements ColumnConstraint {
+    public static enum Type implements RelationalAlgebraEnum {
+      AUTO_INCREMENT, ON_UPDATE
+    }
+
+    public final Type type;
+    public final CurrentTimestamp currentTimestamp;
+
+    AutoIncrementColumnConstraint(Type type, CurrentTimestamp currentTimestamp) {
+      Preconditions.checkArgument(type != null);
+      if (Type.ON_UPDATE.equals(type)) {
+        Preconditions.checkArgument(currentTimestamp != null);
+      }
+
+      this.type = type;
+      this.currentTimestamp = currentTimestamp;
+    }
+
+  }
+
+  public static class PrimaryKeyColumnConstraint implements ColumnConstraint {
+    public final Boolean primary;
+
+    PrimaryKeyColumnConstraint(Boolean primary) {
+      this.primary = primary;
+    }
+
+  }
+
+  public static class UniqueKeyColumnConstraint implements ColumnConstraint {
+    public final Boolean key;
+
+    UniqueKeyColumnConstraint(Boolean key) {
+      this.key = key;
+    }
+  }
+
+  public static class CommentColumnConstraint implements ColumnConstraint {
+    public final String comment;
+
+    CommentColumnConstraint(String comment) {
+      Preconditions.checkArgument(comment != null);
+
+      this.comment = comment;
+    }
+
+  }
+
+  public static class FormatColumnConstraint implements ColumnConstraint {
+    public static enum ColformatEnum implements RelationalAlgebraEnum {
+      FIXED, DYNAMIC, DEFAULT
+    }
+
+    public final ColformatEnum colformatEnum;
+
+    FormatColumnConstraint(ColformatEnum colformatEnum) {
+      Preconditions.checkArgument(colformatEnum != null);
+
+      this.colformatEnum = colformatEnum;
+    }
+  }
+
+  public static class StorageColumnConstraint implements ColumnConstraint {
+    public static enum StoragevalEnum implements RelationalAlgebraEnum {
+      DISK, MEMORY, DEFAULT
+    }
+
+    public final StoragevalEnum storageval;
+
+    StorageColumnConstraint(StoragevalEnum storageval) {
+      Preconditions.checkArgument(storageval != null);
+
+      this.storageval = storageval;
+    }
+
+  }
+
+  public static class ReferenceColumnConstraint implements ColumnConstraint {
+    public final ReferenceDefinition referenceDefinition;
+
+    ReferenceColumnConstraint(ReferenceDefinition referenceDefinition) {
+      Preconditions.checkArgument(referenceDefinition != null);
+
+      this.referenceDefinition = referenceDefinition;
+    }
+
+  }
+
+  public static class CollateColumnConstraint implements ColumnConstraint {
+    public final CollationName collationName;
+
+    CollateColumnConstraint(CollationName collationName) {
+      Preconditions.checkArgument(collationName != null);
+      this.collationName = collationName;
+    }
+
+  }
+
+  public static class GeneratedColumnConstraint implements ColumnConstraint {
+    public static enum Type implements RelationalAlgebraEnum {
+      VIRTUAL, STORED
+    }
+
+    public final Boolean always;
+    public final Expression expression;
+    public final Type type;
+
+    GeneratedColumnConstraint(Boolean always, Expression expression, Type type) {
+      Preconditions.checkArgument(expression != null);
+
+      this.always = always;
+      this.expression = expression;
+      this.type = type;
+    }
+
+  }
+
+  public static class SerialDefaultColumnConstraint implements ColumnConstraint {
   }
 
   /**
@@ -1334,7 +1500,6 @@ public interface DdlStatement extends SqlStatement {
    * </pre>
    */
   public static interface SubpartitionFunctionDefinition extends PrimitiveExpression {
-
   }
 
   public static class SubPartitionFunctionHash implements SubpartitionFunctionDefinition {

@@ -8,4 +8,10 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
  * </pre>
  */
 public class BeginWork implements TransactionStatement {
+  public final Boolean work;
+
+  BeginWork(Boolean work) {
+    this.work = work;
+  }
+
 }

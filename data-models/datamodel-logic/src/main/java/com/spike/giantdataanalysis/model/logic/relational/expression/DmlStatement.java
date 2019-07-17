@@ -7,7 +7,9 @@ import org.apache.commons.collections4.CollectionUtils;
 import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import com.spike.giantdataanalysis.model.logic.relational.core.RelationalAlgebraEnum;
+import com.spike.giantdataanalysis.model.logic.relational.expression.CommonLists.ExpressionsWithDefaults;
 import com.spike.giantdataanalysis.model.logic.relational.expression.CommonLists.UidList;
+import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.FullColumnName;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.TableName;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.Uid;
 
@@ -23,6 +25,22 @@ dmlStatement
  */
 public interface DmlStatement extends SqlStatement {
 
+  public static enum PriorityEnum implements RelationalAlgebraEnum {
+    LOW_PRIORITY, CONCURRENT
+  }
+
+  public static enum ViolationEnum implements RelationalAlgebraEnum {
+    REPLACE, IGNORE
+  }
+
+  public static enum FieldsFormatEnum implements RelationalAlgebraEnum {
+    FIELDS, COLUMNS
+  }
+
+  public static enum LinesFormatEnum implements RelationalAlgebraEnum {
+    LINES, ROWS
+  }
+
   /**
    * <pre>
    insertStatementValue
@@ -34,6 +52,17 @@ public interface DmlStatement extends SqlStatement {
    * </pre>
    */
   public static class InsertStatementValue implements PrimitiveExpression {
+    public final SelectStatement selectStatement;
+    public final List<ExpressionsWithDefaults> expressionsWithDefaults;
+
+    InsertStatementValue(SelectStatement selectStatement,
+        List<ExpressionsWithDefaults> expressionsWithDefaults) {
+      Preconditions.checkArgument(!(selectStatement == null
+          && (expressionsWithDefaults == null || expressionsWithDefaults.size() == 0)));
+
+      this.selectStatement = selectStatement;
+      this.expressionsWithDefaults = expressionsWithDefaults;
+    }
 
   }
 
@@ -45,6 +74,15 @@ public interface DmlStatement extends SqlStatement {
    * </pre>
    */
   public static class UpdatedElement implements PrimitiveExpression {
+    public final FullColumnName fullColumnName;
+    public final Expression expression;
+
+    UpdatedElement(FullColumnName fullColumnName, Expression expression) {
+      Preconditions.checkArgument(fullColumnName != null);
+
+      this.fullColumnName = fullColumnName;
+      this.expression = expression;
+    }
 
   }
 

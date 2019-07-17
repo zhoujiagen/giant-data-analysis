@@ -1,5 +1,7 @@
 package com.spike.giantdataanalysis.model.logic.relational.expression;
 
+import java.util.List;
+
 /**
  * <pre>
  startTransaction
@@ -8,4 +10,11 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
  * </pre>
  */
 public class StartTransaction implements TransactionStatement {
+
+  public final List<TransactionModeEnum> transactionModes;
+
+  StartTransaction(List<TransactionModeEnum> transactionModes) {
+    this.transactionModes = transactionModes;
+  }
+
 }

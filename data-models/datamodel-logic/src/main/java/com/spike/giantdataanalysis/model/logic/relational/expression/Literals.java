@@ -22,7 +22,13 @@ public abstract class Literals implements PrimitiveExpression {
     return literal();
   }
 
-  // decimalLiteral : DECIMAL_LITERAL | ZERO_DECIMAL | ONE_DECIMAL | TWO_DECIMAL
+  /**
+   * <pre>
+   decimalLiteral
+    : DECIMAL_LITERAL | ZERO_DECIMAL | ONE_DECIMAL | TWO_DECIMAL
+    ;
+   * </pre>
+   */
   public static class DecimalLiteral extends Literals {
     public static enum Type implements RelationalAlgebraEnum {
       DECIMAL_LITERAL, // [0-9]+
@@ -127,7 +133,12 @@ public abstract class Literals implements PrimitiveExpression {
     }
   }
 
-  // booleanLiteral: TRUE | FALSE;
+  /**
+   * <pre>
+   booleanLiteral
+    : TRUE | FALSE;
+   * </pre>
+   */
   public static class BooleanLiteral extends Literals {
     public final Boolean literal;
 
@@ -206,10 +217,13 @@ public abstract class Literals implements PrimitiveExpression {
   /**
    * <pre>
    constant
-    : stringLiteral | decimalLiteral
+    : stringLiteral 
+    | decimalLiteral
     | '-' decimalLiteral
-    | hexadecimalLiteral | booleanLiteral
-    | REAL_LITERAL | BIT_STRING
+    | hexadecimalLiteral 
+    | booleanLiteral
+    | REAL_LITERAL 
+    | BIT_STRING
     | NOT? nullLiteral=(NULL_LITERAL | NULL_SPEC_LITERAL)
     ;
    * </pre>
@@ -251,21 +265,5 @@ public abstract class Literals implements PrimitiveExpression {
       return builder.toString();
     }
 
-  }
-
-  // nullLiteral=(NULL_LITERAL | NULL_SPEC_LITERAL)
-  public static class NullLiteral extends Literals {
-    public final String literal;
-
-    NullLiteral(String literal) {
-      Preconditions.checkArgument(literal != null);
-
-      this.literal = literal;
-    }
-
-    @Override
-    public String literal() {
-      return literal;
-    }
   }
 }

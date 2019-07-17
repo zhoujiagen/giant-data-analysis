@@ -1,5 +1,9 @@
 package com.spike.giantdataanalysis.model.logic.relational.expression;
 
+import com.google.common.base.Preconditions;
+import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.EngineName;
+import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.Uid;
+
 /**
  * <pre>
  dropTablespace
@@ -8,4 +12,14 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
  * </pre>
  */
 public class DropTablespace implements DdlStatement {
+  public final Uid uid;
+  public final EngineName engineName;
+
+  DropTablespace(Uid uid, EngineName engineName) {
+    Preconditions.checkArgument(uid != null);
+
+    this.uid = uid;
+    this.engineName = engineName;
+  }
+
 }

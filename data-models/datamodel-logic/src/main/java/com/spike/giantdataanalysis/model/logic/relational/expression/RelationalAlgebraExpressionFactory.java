@@ -98,7 +98,6 @@ import com.spike.giantdataanalysis.model.logic.relational.expression.Literals.Bo
 import com.spike.giantdataanalysis.model.logic.relational.expression.Literals.Constant;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Literals.DecimalLiteral;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Literals.HexadecimalLiteral;
-import com.spike.giantdataanalysis.model.logic.relational.expression.Literals.NullLiteral;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Literals.StringLiteral;
 import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.FromClause;
 import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.GroupByItem;
@@ -245,10 +244,6 @@ public abstract class RelationalAlgebraExpressionFactory {
 
   public static Constant makeConstant(Constant.Type type, String literal, Boolean not) {
     return new Constant(type, literal, not);
-  }
-
-  public static NullLiteral makeNullLiterall(String literal) {
-    return new NullLiteral(literal);
   }
 
   // ---------------------------------------------------------------------------

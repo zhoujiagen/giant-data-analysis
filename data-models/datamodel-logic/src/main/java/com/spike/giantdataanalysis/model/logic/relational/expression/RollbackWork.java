@@ -10,4 +10,11 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
  * </pre>
  */
 public class RollbackWork implements TransactionStatement {
+  public final Boolean chain;
+  public final Boolean release;
+
+  RollbackWork(Boolean chain, Boolean release) {
+    this.chain = chain;
+    this.release = release;
+  }
 }

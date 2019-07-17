@@ -1,5 +1,9 @@
 package com.spike.giantdataanalysis.model.logic.relational.expression;
 
+import com.google.common.base.Preconditions;
+import com.spike.giantdataanalysis.model.logic.relational.expression.CommonExpressons.IfExists;
+import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.FullId;
+
 /**
  * <pre>
  dropFunction
@@ -8,4 +12,13 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
  * </pre>
  */
 public class DropFunction implements DdlStatement {
+  public final IfExists ifExists;
+  public final FullId fullId;
+
+  DropFunction(IfExists ifExists, FullId fullId) {
+    Preconditions.checkArgument(fullId != null);
+
+    this.ifExists = ifExists;
+    this.fullId = fullId;
+  }
 }

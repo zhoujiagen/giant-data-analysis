@@ -1,5 +1,8 @@
 package com.spike.giantdataanalysis.model.logic.relational.expression;
 
+import com.google.common.base.Preconditions;
+import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.Uid;
+
 /**
  * <pre>
  iterateStatement
@@ -8,4 +11,11 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
  * </pre>
  */
 public class IterateStatement implements CompoundStatement {
+  public final Uid uid;
+
+  IterateStatement(Uid uid) {
+    Preconditions.checkArgument(uid != null);
+
+    this.uid = uid;
+  }
 }

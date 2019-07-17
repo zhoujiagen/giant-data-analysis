@@ -8,4 +8,13 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
  * </pre>
  */
 public class ResetSlave implements ReplicationStatement {
+
+  public final Boolean all;
+  public final ChannelOption channelOption;
+
+  ResetSlave(Boolean all, ChannelOption channelOption) {
+    this.all = all;
+    this.channelOption = channelOption;
+  }
+
 }

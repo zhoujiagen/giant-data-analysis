@@ -1,5 +1,9 @@
 package com.spike.giantdataanalysis.model.logic.relational.expression;
 
+import com.google.common.base.Preconditions;
+import com.spike.giantdataanalysis.model.logic.relational.expression.CommonLists.UidList;
+import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.Uid;
+
 /**
  * <pre>
  cursorStatement
@@ -9,5 +13,42 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
     ;
  * </pre>
  */
-public class CursorStatement implements CompoundStatement {
+public interface CursorStatement extends CompoundStatement {
+
+  public static class CloseCursor implements CursorStatement {
+    public final Uid uid;
+
+    CloseCursor(Uid uid) {
+      Preconditions.checkArgument(uid != null);
+
+      this.uid = uid;
+    }
+
+  }
+
+  public static class FetchCursor implements CursorStatement {
+    public final Boolean isNext;
+    public final Uid uid;
+    public final UidList uidList;
+
+    FetchCursor(Boolean isNext, Uid uid, UidList uidList) {
+      Preconditions.checkArgument(uid != null);
+      Preconditions.checkArgument(uidList != null);
+
+      this.isNext = isNext;
+      this.uid = uid;
+      this.uidList = uidList;
+    }
+
+  }
+
+  public static class OpenCursor implements CursorStatement {
+    public final Uid uid;
+
+    OpenCursor(Uid uid) {
+      Preconditions.checkArgument(uid != null);
+
+      this.uid = uid;
+    }
+  }
 }

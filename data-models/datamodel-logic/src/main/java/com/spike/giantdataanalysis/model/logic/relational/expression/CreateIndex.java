@@ -3,7 +3,6 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
 import java.util.List;
 
 import com.google.common.base.Preconditions;
-import com.spike.giantdataanalysis.model.logic.relational.core.RelationalAlgebraEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.CommonLists.IndexColumnNames;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.TableName;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.Uid;
@@ -26,23 +25,6 @@ import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.U
  * </pre>
  */
 public class CreateIndex implements DdlStatement {
-  public static enum AlgTypeEnum implements RelationalAlgebraEnum {
-    DEFAULT, INPLACE, COPY
-  }
-
-  public static enum LockTypeEnum implements RelationalAlgebraEnum {
-    DEFAULT, NONE, SHARED, EXCLUSIVE
-  }
-
-  public static class AlgorithmOrLock {
-    public final CreateIndex.AlgTypeEnum algType;
-    public final CreateIndex.LockTypeEnum lockType;
-
-    AlgorithmOrLock(AlgTypeEnum algType, LockTypeEnum lockType) {
-      this.algType = algType;
-      this.lockType = lockType;
-    }
-  }
 
   public final IntimeActionEnum intimeAction;
   public final IndexCategoryEnum indexCategory;
@@ -51,15 +33,15 @@ public class CreateIndex implements DdlStatement {
   public final TableName tableName;
   public final IndexColumnNames indexColumnNames;
   public final List<IndexOption> indexOptions;
-  public final List<AlgorithmOrLock> algorithmOrLocks;
+  public final List<IndexAlgorithmOrLock> algorithmOrLocks;
 
   CreateIndex(IntimeActionEnum intimeAction, IndexCategoryEnum indexCategory, Uid uid,
       IndexTypeEnum indexType, TableName tableName, IndexColumnNames indexColumnNames,
-      List<IndexOption> indexOptions, List<AlgorithmOrLock> algorithmOrLocks) {
+      List<IndexOption> indexOptions, List<IndexAlgorithmOrLock> algorithmOrLocks) {
     Preconditions.checkArgument(uid != null);
     Preconditions.checkArgument(tableName != null);
     Preconditions.checkArgument(indexColumnNames != null);
-    
+
     this.intimeAction = intimeAction;
     this.indexCategory = indexCategory;
     this.uid = uid;
