@@ -39,4 +39,9 @@ public class PurgeBinaryLogs implements ReplicationStatement {
     this.typeValue = typeValue;
   }
 
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    return sb.toString();
+  }
 }

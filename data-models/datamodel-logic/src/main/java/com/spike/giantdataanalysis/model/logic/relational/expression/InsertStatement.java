@@ -63,4 +63,10 @@ public class InsertStatement implements DmlStatement {
     this.duplicatedList = duplicatedList;
   }
 
+  @Override
+  public String literal() {
+    // TODO Implement RelationalAlgebraExpression.literal
+    return null;
+  }
+
 }

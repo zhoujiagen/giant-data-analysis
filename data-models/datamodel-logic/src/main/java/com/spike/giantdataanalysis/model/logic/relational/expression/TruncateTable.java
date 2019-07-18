@@ -19,4 +19,10 @@ public class TruncateTable implements DdlStatement {
     this.tableName = tableName;
   }
 
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("TRUNCATE TABLE ").append(tableName.literal());
+    return sb.toString();
+  }
 }

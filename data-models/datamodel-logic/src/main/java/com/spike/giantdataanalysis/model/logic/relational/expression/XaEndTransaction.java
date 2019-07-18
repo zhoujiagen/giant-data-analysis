@@ -23,4 +23,9 @@ public class XaEndTransaction implements ReplicationStatement {
     this.forMigrate = forMigrate;
   }
 
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    return sb.toString();
+  }
 }

@@ -1,5 +1,8 @@
 package com.spike.giantdataanalysis.model.logic.relational.expression;
 
+import com.google.common.base.Preconditions;
+import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.Uid;
+
 /**
  * <pre>
  useStatement
@@ -8,4 +11,17 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
  * </pre>
  */
 public class UseStatement implements UtilityStatement {
+  public final Uid uid;
+
+  UseStatement(Uid uid) {
+    Preconditions.checkArgument(uid != null);
+
+    this.uid = uid;
+  }
+
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    return sb.toString();
+  }
 }

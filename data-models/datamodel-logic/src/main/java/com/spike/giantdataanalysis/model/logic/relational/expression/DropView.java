@@ -1,11 +1,12 @@
 package com.spike.giantdataanalysis.model.logic.relational.expression;
 
-import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.FullId;
-
 import java.util.List;
 
+import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.spike.giantdataanalysis.model.logic.relational.expression.CommonExpressons.IfExists;
+import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.FullId;
 
 /**
  * <pre>
@@ -28,4 +29,21 @@ public class DropView implements DdlStatement {
     this.dropType = dropType;
   }
 
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("DROP VIEW ");
+    if (ifExists != null) {
+      sb.append(ifExists.literal()).append(" ");
+    }
+    List<String> literals = Lists.newArrayList();
+    for (FullId fullId : fullIds) {
+      literals.add(fullId.literal());
+    }
+    sb.append(Joiner.on(", ").join(literals)).append(" ");
+    if (dropType != null) {
+      sb.append(dropType.name());
+    }
+    return sb.toString();
+  }
 }

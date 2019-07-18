@@ -23,4 +23,9 @@ public class ChangeMaster implements ReplicationStatement {
     this.channelOption = channelOption;
   }
 
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    return sb.toString();
+  }
 }

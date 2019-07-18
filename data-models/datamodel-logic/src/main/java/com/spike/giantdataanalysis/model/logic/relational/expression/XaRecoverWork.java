@@ -15,4 +15,10 @@ public class XaRecoverWork implements ReplicationStatement {
   XaRecoverWork(Xid xid) {
     this.xid = xid;
   }
+
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    return sb.toString();
+  }
 }

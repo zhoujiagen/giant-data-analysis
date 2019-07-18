@@ -33,4 +33,9 @@ public class WhileStatement implements CompoundStatement {
     this.endWhileUid = endWhileUid;
   }
 
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    return sb.toString();
+  }
 }

@@ -2,7 +2,11 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
 
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
+
+import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.spike.giantdataanalysis.model.logic.relational.expression.CommonExpressons.IfNotExists;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.Uid;
 
@@ -30,6 +34,24 @@ public class CreateDatabase implements DdlStatement {
     this.ifNotExists = ifNotExists;
     this.uid = uid;
     this.createDatabaseOptions = createDatabaseOptions;
+  }
+
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("CREATE ").append(dbFormat.name()).append(" ");
+    if (ifNotExists != null) {
+      sb.append(ifNotExists.literal()).append(" ");
+    }
+    sb.append(uid.literal());
+    if (CollectionUtils.isNotEmpty(createDatabaseOptions)) {
+      List<String> literals = Lists.newArrayList();
+      for (CreateDatabaseOption createDatabaseOption : createDatabaseOptions) {
+        literals.add(createDatabaseOption.literal());
+      }
+      sb.append(Joiner.on(" ").join(literals));
+    }
+    return sb.toString();
   }
 
 }

@@ -14,4 +14,9 @@ public class BeginWork implements TransactionStatement {
     this.work = work;
   }
 
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    return sb.toString();
+  }
 }

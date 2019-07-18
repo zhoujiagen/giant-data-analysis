@@ -17,4 +17,9 @@ public class StartTransaction implements TransactionStatement {
     this.transactionModes = transactionModes;
   }
 
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    return sb.toString();
+  }
 }

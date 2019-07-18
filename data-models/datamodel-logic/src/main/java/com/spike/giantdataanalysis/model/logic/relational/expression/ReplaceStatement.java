@@ -46,4 +46,9 @@ public class ReplaceStatement implements DmlStatement {
     this.setList = setList;
   }
 
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    return sb.toString();
+  }
 }

@@ -56,4 +56,9 @@ public class LoadXmlStatement implements DmlStatement {
     this.updatedElements = updatedElements;
   }
 
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    return sb.toString();
+  }
 }

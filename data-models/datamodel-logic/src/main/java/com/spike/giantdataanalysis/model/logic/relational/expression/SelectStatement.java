@@ -57,6 +57,12 @@ public interface SelectStatement extends DmlStatement {
       }
       return builder.toString();
     }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
   }
 
   public static class ParenthesisSelect implements SelectStatement {
@@ -79,6 +85,12 @@ public interface SelectStatement extends DmlStatement {
       builder.append(lockClause);
       builder.append("]");
       return builder.toString();
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -133,6 +145,12 @@ public interface SelectStatement extends DmlStatement {
       return builder.toString();
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class UnionParenthesisSelect implements SelectStatement {
@@ -181,6 +199,12 @@ public interface SelectStatement extends DmlStatement {
       return builder.toString();
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static enum UnionTypeEnum implements RelationalAlgebraEnum {
@@ -221,6 +245,12 @@ public interface SelectStatement extends DmlStatement {
       return builder.toString();
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   /**
@@ -247,6 +277,12 @@ public interface SelectStatement extends DmlStatement {
       builder.append(querySpecificationNointo);
       builder.append("]");
       return builder.toString();
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -314,6 +350,12 @@ public interface SelectStatement extends DmlStatement {
       return builder.toString();
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   /**
@@ -359,6 +401,12 @@ public interface SelectStatement extends DmlStatement {
       return builder.toString();
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   /**
@@ -388,6 +436,12 @@ public interface SelectStatement extends DmlStatement {
       builder.append(queryExpressionNointo);
       builder.append("]");
       return builder.toString();
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -427,6 +481,12 @@ public interface SelectStatement extends DmlStatement {
       builder.append(queryExpressionNointo);
       builder.append("]");
       return builder.toString();
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -480,6 +540,12 @@ public interface SelectStatement extends DmlStatement {
       return builder.toString();
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   /**
@@ -510,6 +576,12 @@ public interface SelectStatement extends DmlStatement {
       builder.append("]");
       return builder.toString();
     }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
   }
 
   public static class SelectColumnElement implements SelectElement {
@@ -531,6 +603,12 @@ public interface SelectStatement extends DmlStatement {
         builder.append(", uid=");
       }
       return builder.toString();
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -555,6 +633,12 @@ public interface SelectStatement extends DmlStatement {
       builder.append(uid);
       builder.append("]");
       return builder.toString();
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -583,6 +667,12 @@ public interface SelectStatement extends DmlStatement {
       builder.append(uid);
       builder.append("]");
       return builder.toString();
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -627,6 +717,12 @@ public interface SelectStatement extends DmlStatement {
       return builder.toString();
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class SelectIntoDumpFile implements SelectIntoExpression {
@@ -645,6 +741,12 @@ public interface SelectStatement extends DmlStatement {
       builder.append(stringLiteral);
       builder.append("]");
       return builder.toString();
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -691,6 +793,12 @@ public interface SelectStatement extends DmlStatement {
       return builder.toString();
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   /**
@@ -733,6 +841,12 @@ public interface SelectStatement extends DmlStatement {
       return builder.toString();
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   /**
@@ -768,6 +882,12 @@ public interface SelectStatement extends DmlStatement {
       builder.append(stringLiteral);
       builder.append("]");
       return builder.toString();
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
   }
 
@@ -827,6 +947,12 @@ public interface SelectStatement extends DmlStatement {
       }
       return builder.toString();
     }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
   }
 
   /**
@@ -860,6 +986,12 @@ public interface SelectStatement extends DmlStatement {
       builder.append(order);
       builder.append("]");
       return builder.toString();
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -897,6 +1029,12 @@ public interface SelectStatement extends DmlStatement {
       return builder.toString();
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   /**
@@ -926,6 +1064,12 @@ public interface SelectStatement extends DmlStatement {
       builder.append(mysqlVariable);
       builder.append("]");
       return builder.toString();
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }

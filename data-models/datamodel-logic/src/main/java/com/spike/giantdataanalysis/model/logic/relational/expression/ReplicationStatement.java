@@ -51,6 +51,12 @@ public interface ReplicationStatement extends SqlStatement {
       this.value = value;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class MasterDecimalOption implements MasterOption {
@@ -63,6 +69,12 @@ public interface ReplicationStatement extends SqlStatement {
 
       this.decimalMasterOption = decimalMasterOption;
       this.value = value;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -78,6 +90,12 @@ public interface ReplicationStatement extends SqlStatement {
       this.value = value;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class MasterRealOption implements MasterOption {
@@ -89,6 +107,12 @@ public interface ReplicationStatement extends SqlStatement {
       this.realLiteral = realLiteral;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class MasterUidListOption implements MasterOption {
@@ -98,6 +122,12 @@ public interface ReplicationStatement extends SqlStatement {
       Preconditions.checkArgument(uids != null && uids.size() > 0);
 
       this.uids = uids;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -160,6 +190,12 @@ public interface ReplicationStatement extends SqlStatement {
       this.channel = channel;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   /**
@@ -188,6 +224,12 @@ public interface ReplicationStatement extends SqlStatement {
 
       this.uidList = uidList;
     }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
   }
 
   public static class IgnoreDbReplication implements ReplicationFilter {
@@ -197,6 +239,12 @@ public interface ReplicationStatement extends SqlStatement {
       Preconditions.checkArgument(uidList != null);
 
       this.uidList = uidList;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -209,6 +257,12 @@ public interface ReplicationStatement extends SqlStatement {
 
       this.tables = tables;
     }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
   }
 
   public static class IgnoreTableReplication implements ReplicationFilter {
@@ -219,6 +273,12 @@ public interface ReplicationStatement extends SqlStatement {
 
       this.tables = tables;
     }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
   }
 
   public static class WildDoTableReplication implements ReplicationFilter {
@@ -228,6 +288,12 @@ public interface ReplicationStatement extends SqlStatement {
       Preconditions.checkArgument(simpleStrings != null);
 
       this.simpleStrings = simpleStrings;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -241,6 +307,12 @@ public interface ReplicationStatement extends SqlStatement {
       this.simpleStrings = simpleStrings;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class RewriteDbReplication implements ReplicationFilter {
@@ -250,6 +322,12 @@ public interface ReplicationStatement extends SqlStatement {
       Preconditions.checkArgument(tablePairs != null && tablePairs.size() > 0);
 
       this.tablePairs = tablePairs;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -271,6 +349,12 @@ public interface ReplicationStatement extends SqlStatement {
 
       this.firstTable = firstTable;
       this.secondTable = secondTable;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -303,7 +387,7 @@ public interface ReplicationStatement extends SqlStatement {
   }
 
   public static class GtidsUntilOption implements UntilOption {
-    public static enum Type {
+    public static enum Type implements RelationalAlgebraEnum {
       SQL_BEFORE_GTIDS, SQL_AFTER_GTIDS
     }
 
@@ -316,6 +400,12 @@ public interface ReplicationStatement extends SqlStatement {
 
       this.type = type;
       this.gtuidSet = gtuidSet;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -332,6 +422,12 @@ public interface ReplicationStatement extends SqlStatement {
       this.pos = pos;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class RelayLogUntilOption implements UntilOption {
@@ -345,9 +441,21 @@ public interface ReplicationStatement extends SqlStatement {
       this.logFile = logFile;
       this.pos = pos;
     }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
   }
 
   public static class SqlGapsUntilOption implements UntilOption {
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
   }
 
   /**
@@ -376,6 +484,12 @@ public interface ReplicationStatement extends SqlStatement {
       this.stringLiteral = stringLiteral;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   /**
@@ -396,6 +510,12 @@ public interface ReplicationStatement extends SqlStatement {
 
       this.uuidSets = uuidSets;
       this.stringLiteral = stringLiteral;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }

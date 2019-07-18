@@ -22,4 +22,14 @@ public class DropEvent implements DdlStatement {
     this.fullId = fullId;
   }
 
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("DROP EVENT ");
+    if (ifExists != null) {
+      sb.append(ifExists.literal()).append(" ");
+    }
+    sb.append(fullId.literal());
+    return sb.toString();
+  }
 }

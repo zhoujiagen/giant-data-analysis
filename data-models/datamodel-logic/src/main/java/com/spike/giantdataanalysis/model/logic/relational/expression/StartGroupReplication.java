@@ -8,4 +8,9 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
  * </pre>
  */
 public class StartGroupReplication implements ReplicationStatement {
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    return sb.toString();
+  }
 }

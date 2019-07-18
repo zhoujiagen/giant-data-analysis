@@ -23,13 +23,19 @@ public class RepeatStatement implements CompoundStatement {
 
   RepeatStatement(Uid uid, List<ProcedureSqlStatement> procedureSqlStatements,
       Expression untilExpression, Uid endRepeatUid) {
-    Preconditions.checkArgument(procedureSqlStatements != null && procedureSqlStatements.size() > 0);
+    Preconditions
+        .checkArgument(procedureSqlStatements != null && procedureSqlStatements.size() > 0);
     Preconditions.checkArgument(untilExpression != null);
-    
+
     this.uid = uid;
     this.procedureSqlStatements = procedureSqlStatements;
     this.untilExpression = untilExpression;
     this.endRepeatUid = endRepeatUid;
   }
 
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    return sb.toString();
+  }
 }

@@ -5,7 +5,7 @@ import com.spike.giantdataanalysis.model.logic.relational.core.RelationalAlgebra
 /**
  * Simple id sets(that keyword, which can be id)
  */
-public class SimpleIdSets implements PrimitiveExpression {
+public interface SimpleIdSets extends PrimitiveExpression {
 
   /**
    * <pre>
@@ -306,4 +306,5 @@ public class SimpleIdSets implements PrimitiveExpression {
     WAIT_UNTIL_SQL_THREAD_AFTER_GTIDS, WEEK, WEEKDAY, WEEKOFYEAR, WEIGHT_STRING, WITHIN, YEAR,
     YEARWEEK, Y_FUNCTION, X_FUNCTION;
   }
+
 }

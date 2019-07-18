@@ -14,4 +14,10 @@ public class RelationalAlgebraSelectExpression implements RelationalAlgebraExpre
     this.first = first;
     this.attributes = attributes;
   }
+
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    return sb.toString();
+  }
 }

@@ -8,4 +8,8 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
  * </pre>
  */
 public class AlterInstance implements DdlStatement {
+  @Override
+  public String literal() {
+    return "ALTER INSTANCE ROTATE INNODB MASTER KEY";
+  }
 }

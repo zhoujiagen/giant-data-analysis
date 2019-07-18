@@ -2,7 +2,9 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
 
 import java.util.List;
 
+import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.Uid;
 
 /**
@@ -30,4 +32,19 @@ public class CreateServer implements DdlStatement {
     this.serverOptions = serverOptions;
   }
 
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("CREATE SERVER ").append(uid.literal()).append(" ");
+    sb.append("FOREIGN DATA WRAPPER ").append(wrapperName).append(" ");
+    sb.append("OPTIONS ");
+    sb.append("(");
+    List<String> literals = Lists.newArrayList();
+    for (ServerOption serverOption : serverOptions) {
+      literals.add(serverOption.literal());
+    }
+    sb.append(Joiner.on(", ").join(literals));
+    sb.append(")");
+    return sb.toString();
+  }
 }

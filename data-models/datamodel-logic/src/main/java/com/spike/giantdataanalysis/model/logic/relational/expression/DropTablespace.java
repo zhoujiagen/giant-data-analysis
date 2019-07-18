@@ -22,4 +22,13 @@ public class DropTablespace implements DdlStatement {
     this.engineName = engineName;
   }
 
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("DROP TABLESPACE ").append(uid.literal()).append(" ");
+    if (engineName != null) {
+      sb.append("ENGINE = ").append(engineName.literal());
+    }
+    return sb.toString();
+  }
 }

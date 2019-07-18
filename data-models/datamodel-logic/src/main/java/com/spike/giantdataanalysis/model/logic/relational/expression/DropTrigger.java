@@ -17,9 +17,19 @@ public class DropTrigger implements DdlStatement {
 
   DropTrigger(IfExists ifExists, FullId fullId) {
     Preconditions.checkArgument(fullId != null);
-    
+
     this.ifExists = ifExists;
     this.fullId = fullId;
   }
 
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("DROP TRIGGER ");
+    if (ifExists != null) {
+      sb.append(ifExists.literal()).append(" ");
+    }
+    sb.append(fullId.literal());
+    return sb.toString();
+  }
 }

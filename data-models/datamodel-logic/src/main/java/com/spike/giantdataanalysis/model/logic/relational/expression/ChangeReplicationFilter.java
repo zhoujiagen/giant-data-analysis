@@ -22,4 +22,9 @@ public class ChangeReplicationFilter implements ReplicationStatement {
     this.replicationFilters = replicationFilters;
   }
 
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    return sb.toString();
+  }
 }

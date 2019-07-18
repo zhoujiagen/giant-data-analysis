@@ -19,4 +19,9 @@ public class LeaveStatement implements CompoundStatement {
     this.uid = uid;
   }
 
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    return sb.toString();
+  }
 }

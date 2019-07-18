@@ -38,6 +38,12 @@ public interface HandlerStatement extends DmlStatement {
       this.uid = uid;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   /**
@@ -83,6 +89,12 @@ public interface HandlerStatement extends DmlStatement {
       this.limit = limit;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   /**
@@ -114,6 +126,12 @@ public interface HandlerStatement extends DmlStatement {
       this.limit = limit;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   /**
@@ -130,6 +148,12 @@ public interface HandlerStatement extends DmlStatement {
       Preconditions.checkArgument(tableName != null);
 
       this.tableName = tableName;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }

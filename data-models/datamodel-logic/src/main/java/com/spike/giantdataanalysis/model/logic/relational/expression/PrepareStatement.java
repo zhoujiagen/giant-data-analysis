@@ -31,4 +31,9 @@ public class PrepareStatement implements PreparedStatement {
     this.typeValue = typeValue;
   }
 
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    return sb.toString();
+  }
 }

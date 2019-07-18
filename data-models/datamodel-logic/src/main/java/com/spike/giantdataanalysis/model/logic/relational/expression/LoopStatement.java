@@ -28,4 +28,9 @@ public class LoopStatement implements CompoundStatement {
     this.endLoopUid = endLoopUid;
   }
 
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    return sb.toString();
+  }
 }

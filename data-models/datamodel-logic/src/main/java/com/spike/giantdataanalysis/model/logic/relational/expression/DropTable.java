@@ -28,4 +28,21 @@ public class DropTable implements DdlStatement {
     this.dropType = dropType;
   }
 
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("DROP ");
+    if (Boolean.TRUE.equals(temporary)) {
+      sb.append("TEMPORARY ");
+    }
+    sb.append("TABLE ");
+    if (ifExists != null) {
+      sb.append(ifExists.literal()).append(" ");
+    }
+    sb.append(tables.literal()).append(" ");
+    if (dropType != null) {
+      sb.append(dropType.name());
+    }
+    return sb.toString();
+  }
 }

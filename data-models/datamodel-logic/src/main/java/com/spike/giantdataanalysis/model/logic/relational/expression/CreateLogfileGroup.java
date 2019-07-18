@@ -27,12 +27,13 @@ public class CreateLogfileGroup implements DdlStatement {
   public final FileSizeLiteral undoSize;
   public final FileSizeLiteral redoSize;
   public final Uid nodeGroupUid;
+  public final Boolean wait;
   public final String comment;
   public final EngineName engineName;
 
   CreateLogfileGroup(Uid logFileGroupUid, String undoFile, FileSizeLiteral initSize,
-      FileSizeLiteral undoSize, FileSizeLiteral redoSize, Uid nodeGroupUid, String comment,
-      EngineName engineName) {
+      FileSizeLiteral undoSize, FileSizeLiteral redoSize, Uid nodeGroupUid, Boolean wait,
+      String comment, EngineName engineName) {
     Preconditions.checkArgument(logFileGroupUid != null);
     Preconditions.checkArgument(undoFile != null);
     Preconditions.checkArgument(engineName != null);
@@ -43,8 +44,35 @@ public class CreateLogfileGroup implements DdlStatement {
     this.undoSize = undoSize;
     this.redoSize = redoSize;
     this.nodeGroupUid = nodeGroupUid;
+    this.wait = wait;
     this.comment = comment;
     this.engineName = engineName;
   }
 
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("CREATE LOGFILE GROUP ").append(logFileGroupUid.literal()).append(" ");
+    sb.append("ADD UNDOFILE ").append(undoFile).append(" ");
+    if (initSize != null) {
+      sb.append("INITIAL_SIZE = ").append(initSize.literal()).append(" ");
+    }
+    if (undoSize != null) {
+      sb.append("UNDO_BUFFER_SIZE = ").append(undoSize.literal()).append(" ");
+    }
+    if (redoSize != null) {
+      sb.append("REDO_BUFFER_SIZE = ").append(redoSize.literal()).append(" ");
+    }
+    if (nodeGroupUid != null) {
+      sb.append("NODEGROUP = ").append(nodeGroupUid.literal()).append(" ");
+    }
+    if (Boolean.TRUE.equals(wait)) {
+      sb.append("WAIT ");
+    }
+    if (comment != null) {
+      sb.append("COMMENT = ").append(comment).append(" ");
+    }
+    sb.append("ENGINE = ").append(engineName.literal());
+    return sb.toString();
+  }
 }

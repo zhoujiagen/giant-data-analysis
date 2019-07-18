@@ -6,6 +6,7 @@ import org.apache.commons.collections4.CollectionUtils;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.spike.giantdataanalysis.model.logic.relational.core.RelationalAlgebraEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Expression.ExpressionAtom;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Literals.DecimalLiteral;
@@ -32,17 +33,17 @@ public interface DBObjects extends PrimitiveExpression {
     }
 
     @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append(uids.get(0));
+    public String literal() {
+      StringBuilder sb = new StringBuilder();
+      sb.append(uids.get(0)).append(" ");
       if (dotId != null) {
-        builder.append(dotId);
+        sb.append(dotId);
       }
       if (uids.size() > 1) {
-        builder.append(".");
-        builder.append(uids.get(1));
+        sb.append(".");
+        sb.append(uids.get(1));
       }
-      return builder.toString();
+      return sb.toString();
     }
 
   }
@@ -62,8 +63,8 @@ public interface DBObjects extends PrimitiveExpression {
     }
 
     @Override
-    public String toString() {
-      return fullId.toString();
+    public String literal() {
+      return fullId.literal();
     }
   }
 
@@ -84,13 +85,17 @@ public interface DBObjects extends PrimitiveExpression {
     }
 
     @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append(uid);
+    public String literal() {
+      StringBuilder sb = new StringBuilder();
+      sb.append(uid).append(" ");
       if (CollectionUtils.isNotEmpty(dottedIds)) {
-        builder.append(Joiner.on(" ").join(dottedIds).toString());
+        List<String> literals = Lists.newArrayList();
+        for (DottedId dottedId : dottedIds) {
+          literals.add(dottedId.literal());
+        }
+        sb.append(Joiner.on(" ").join(literals));
       }
-      return builder.toString();
+      return sb.toString();
     }
   }
 
@@ -110,13 +115,32 @@ public interface DBObjects extends PrimitiveExpression {
     public final IndexColumnName.SortType sortType;
 
     IndexColumnName(Uid uid, String stringLiteral, DecimalLiteral decimalLiteral,
-        SortType sortType) {
+        IndexColumnName.SortType sortType) {
       Preconditions.checkArgument(!(uid == null && stringLiteral == null));
 
       this.uid = uid;
       this.stringLiteral = stringLiteral;
       this.decimalLiteral = decimalLiteral;
       this.sortType = sortType;
+    }
+
+    @Override
+    public String literal() {
+      StringBuilder sb = new StringBuilder();
+      if (uid != null) {
+        sb.append(uid.literal()).append(" ");
+      } else {
+        sb.append(stringLiteral).append(" ");
+      }
+
+      if (decimalLiteral != null) {
+        sb.append("(").append(decimalLiteral.literal()).append(") ");
+      }
+      if (sortType != null) {
+        sb.append(sortType.name());
+      }
+
+      return sb.toString();
     }
 
   }
@@ -134,12 +158,17 @@ public interface DBObjects extends PrimitiveExpression {
     public final UserName.Type type;
     public final String literal;
 
-    UserName(Type type, String literal) {
+    UserName(UserName.Type type, String literal) {
       Preconditions.checkArgument(type != null);
       Preconditions.checkArgument(literal != null);
 
       this.type = type;
       this.literal = literal;
+    }
+
+    @Override
+    public String literal() {
+      return literal;
     }
 
   }
@@ -163,7 +192,7 @@ public interface DBObjects extends PrimitiveExpression {
     public final EngineName.Type type;
     public final String literal;
 
-    EngineName(Type type, String literal) {
+    EngineName(EngineName.Type type, String literal) {
       Preconditions.checkArgument(type != null);
       if (EngineName.Type.STRING_LITERAL.equals(type)
           || EngineName.Type.REVERSE_QUOTE_ID.equals(type)) {
@@ -172,6 +201,11 @@ public interface DBObjects extends PrimitiveExpression {
 
       this.type = type;
       this.literal = literal;
+    }
+
+    @Override
+    public String literal() {
+      return literal;
     }
 
   }
@@ -194,6 +228,32 @@ public interface DBObjects extends PrimitiveExpression {
       Preconditions.checkArgument(leftSize > 0 && leftSize % 2 == 0);
 
       this.decimalLiterals = decimalLiterals;
+    }
+
+    @Override
+    public String literal() {
+      StringBuilder sb = new StringBuilder();
+      sb.append(decimalLiterals.get(0).literal());
+      sb.append("-");
+      sb.append(decimalLiterals.get(1).literal());
+      sb.append("-");
+      sb.append(decimalLiterals.get(2).literal());
+      sb.append("-");
+      sb.append(decimalLiterals.get(3).literal());
+      sb.append("-");
+      sb.append(decimalLiterals.get(4).literal());
+      int startIndex = 5;
+      int leftPair = (decimalLiterals.size() - 5) / 2;
+      for (int i = 0; i < leftPair; i++) {
+        int first = startIndex;
+        int second = first + 1;
+        sb.append(":").append(decimalLiterals.get(first).literal());
+        sb.append("-").append(decimalLiterals.get(second).literal());
+
+        startIndex += 2;
+      }
+
+      return sb.toString();
     }
 
   }
@@ -222,6 +282,19 @@ public interface DBObjects extends PrimitiveExpression {
       this.idFormat = idFormat;
     }
 
+    @Override
+    public String literal() {
+      StringBuilder sb = new StringBuilder();
+      sb.append(globalTableUid.literal()).append(" ");
+      if (qualifier != null) {
+        sb.append(", ").append(qualifier.literal()).append(" ");
+        if (idFormat != null) {
+          sb.append(", ").append(idFormat.literal());
+        }
+      }
+      return sb.toString();
+    }
+
   }
 
   /**
@@ -241,7 +314,7 @@ public interface DBObjects extends PrimitiveExpression {
     public final XuidStringId.Type type;
     public final List<String> literals;
 
-    XuidStringId(Type type, List<String> literals) {
+    XuidStringId(XuidStringId.Type type, List<String> literals) {
       Preconditions.checkArgument(type != null);
       switch (type) {
       case STRING_LITERAL:
@@ -260,6 +333,11 @@ public interface DBObjects extends PrimitiveExpression {
 
       this.type = type;
       this.literals = literals;
+    }
+
+    @Override
+    public String literal() {
+      return Joiner.on(", ").join(literals);
     }
 
   }
@@ -282,6 +360,15 @@ public interface DBObjects extends PrimitiveExpression {
       this.stringLiteral = stringLiteral;
     }
 
+    @Override
+    public String literal() {
+      if (uid != null) {
+        return uid.literal();
+      } else {
+        return stringLiteral;
+      }
+    }
+
   }
 
   /**
@@ -301,14 +388,12 @@ public interface DBObjects extends PrimitiveExpression {
     }
 
     @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("MysqlVariable [localId=");
-      builder.append(localId);
-      builder.append(", globalId=");
-      builder.append(globalId);
-      builder.append("]");
-      return builder.toString();
+    public String literal() {
+      if (localId != null) {
+        return localId;
+      } else {
+        return globalId;
+      }
     }
   }
 
@@ -334,14 +419,8 @@ public interface DBObjects extends PrimitiveExpression {
     }
 
     @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("CharsetName [type=");
-      builder.append(type);
-      builder.append(", value=");
-      builder.append(literal);
-      builder.append("]");
-      return builder.toString();
+    public String literal() {
+      return literal;
     }
 
   }
@@ -363,7 +442,7 @@ public interface DBObjects extends PrimitiveExpression {
     }
 
     @Override
-    public String toString() {
+    public String literal() {
       if (uid != null) {
         return uid.toString();
       } else {
@@ -400,7 +479,7 @@ public interface DBObjects extends PrimitiveExpression {
     }
 
     @Override
-    public String toString() {
+    public String literal() {
       return literal;
     }
   }
@@ -437,19 +516,16 @@ public interface DBObjects extends PrimitiveExpression {
     public final String literal;
 
     SimpleId(SimpleId.Type type, String literal) {
+      Preconditions.checkArgument(type != null);
+      Preconditions.checkArgument(literal != null);
+
       this.type = type;
       this.literal = literal;
     }
 
     @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("SimpleId [type=");
-      builder.append(type);
-      builder.append(", literal=");
-      builder.append(literal);
-      builder.append("]");
-      return builder.toString();
+    public String literal() {
+      return literal;
     }
 
   }
@@ -471,14 +547,12 @@ public interface DBObjects extends PrimitiveExpression {
     }
 
     @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("DottedId [dotId=");
-      builder.append(dotId);
-      builder.append(", uid=");
-      builder.append(uid);
-      builder.append("]");
-      return builder.toString();
+    public String literal() {
+      if (dotId != null) {
+        return dotId;
+      } else {
+        return "." + uid.literal();
+      }
     }
 
   }

@@ -17,4 +17,10 @@ public class RollbackWork implements TransactionStatement {
     this.chain = chain;
     this.release = release;
   }
+
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    return sb.toString();
+  }
 }

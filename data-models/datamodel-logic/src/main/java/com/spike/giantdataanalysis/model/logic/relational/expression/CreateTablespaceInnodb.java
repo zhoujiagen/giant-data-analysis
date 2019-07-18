@@ -32,4 +32,17 @@ public class CreateTablespaceInnodb implements DdlStatement {
     this.engineName = engineName;
   }
 
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("CREATE TABLESPACE ").append(uid.literal()).append(" ");
+    sb.append("ADD DATAFILE ").append(datafile).append(" ");
+    if (fileBlockSize != null) {
+      sb.append("FILE_BLOCK_SIZE = ").append(fileBlockSize.literal()).append(" ");
+    }
+    if (engineName != null) {
+      sb.append("ENGINE = ").append(engineName.literal());
+    }
+    return sb.toString();
+  }
 }

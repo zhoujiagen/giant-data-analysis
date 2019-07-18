@@ -26,6 +26,8 @@ import com.spike.giantdataanalysis.model.logic.relational.expression.Literals.St
 import com.spike.giantdataanalysis.model.logic.relational.expression.SimpleIdSets.IntervalTypeBaseEnum;
 
 /**
+ * TODO(zhoujiagen) restart here!!!
+ * 
  * <pre>
 ddlStatement
   : createDatabase | createEvent | createIndex
@@ -64,13 +66,30 @@ public interface DdlStatement extends SqlStatement {
     UNIQUE, FULLTEXT, SPATIAL
   }
 
-  public static class IndexAlgorithmOrLock {
+  /**
+   * <pre>
+        ALGORITHM '='? algType=(DEFAULT | INPLACE | COPY)
+        | LOCK '='? lockType=(DEFAULT | NONE | SHARED | EXCLUSIVE)
+   * </pre>
+   */
+  public static class IndexAlgorithmOrLock implements PrimitiveExpression {
     public final IndexAlgTypeEnum algType;
     public final LockTypeEnum lockType;
 
     IndexAlgorithmOrLock(IndexAlgTypeEnum algType, LockTypeEnum lockType) {
       this.algType = algType;
       this.lockType = lockType;
+    }
+
+    @Override
+    public String literal() {
+      StringBuilder sb = new StringBuilder();
+      if (algType != null) {
+        sb.append("ALGORITHM = ").append(algType.name());
+      } else {
+        sb.append("LOCK = ").append(lockType.name());
+      }
+      return sb.toString();
     }
   }
 
@@ -106,6 +125,12 @@ public interface DdlStatement extends SqlStatement {
       this.collationName = collationName;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   /**
@@ -125,6 +150,12 @@ public interface DdlStatement extends SqlStatement {
 
       this.userName = userName;
       this.currentUser = currentUser;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -159,6 +190,12 @@ public interface DdlStatement extends SqlStatement {
       this.intervalExprs = intervalExprs;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class IntervalSchedule implements ScheduleExpression {
@@ -185,6 +222,12 @@ public interface DdlStatement extends SqlStatement {
       this.startIntervals = startIntervals;
       this.end = end;
       this.endIntervals = endIntervals;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -236,6 +279,12 @@ public interface DdlStatement extends SqlStatement {
       this.expression = expression;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   /**
@@ -257,6 +306,12 @@ public interface DdlStatement extends SqlStatement {
       this.decimalLiteral = decimalLiteral;
       this.expression = expression;
       this.intervalType = intervalType;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -301,6 +356,12 @@ public interface DdlStatement extends SqlStatement {
       } else {
         return type.name();
       }
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -375,6 +436,12 @@ public interface DdlStatement extends SqlStatement {
       this.stringLiteral = stringLiteral;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   /**
@@ -402,6 +469,12 @@ public interface DdlStatement extends SqlStatement {
       this.dataType = dataType;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   /**
@@ -421,6 +494,12 @@ public interface DdlStatement extends SqlStatement {
 
       this.uid = uid;
       this.dataType = dataType;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -450,9 +529,21 @@ public interface DdlStatement extends SqlStatement {
 
       this.stringLiteral = stringLiteral;
     }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
   }
 
   public static class RoutineLanguage implements RoutineOption {
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
   }
 
   public static class RoutineBehavior implements RoutineOption {
@@ -460,6 +551,12 @@ public interface DdlStatement extends SqlStatement {
 
     RoutineBehavior(Boolean not) {
       this.not = not;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
   }
 
@@ -475,6 +572,12 @@ public interface DdlStatement extends SqlStatement {
 
       this.type = type;
     }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
   }
 
   public static class RoutineSecurity implements RoutineOption {
@@ -484,10 +587,16 @@ public interface DdlStatement extends SqlStatement {
 
     public final RoutineSecurity.ContextType type;
 
-    RoutineSecurity(ContextType type) {
+    RoutineSecurity(RoutineSecurity.ContextType type) {
       Preconditions.checkArgument(type != null);
 
       this.type = type;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
   }
 
@@ -513,7 +622,7 @@ public interface DdlStatement extends SqlStatement {
     public final String stringLiteral;
     public final DecimalLiteral decimalLiteral;
 
-    ServerOption(Type type, String stringLiteral, DecimalLiteral decimalLiteral) {
+    ServerOption(ServerOption.Type type, String stringLiteral, DecimalLiteral decimalLiteral) {
       Preconditions.checkArgument(type != null);
       switch (type) {
       case HOST:
@@ -535,6 +644,12 @@ public interface DdlStatement extends SqlStatement {
       this.stringLiteral = stringLiteral;
       this.decimalLiteral = decimalLiteral;
     }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
   }
 
   /**
@@ -551,6 +666,12 @@ public interface DdlStatement extends SqlStatement {
       Preconditions.checkArgument(createDefinitions != null && createDefinitions.size() > 0);
 
       this.createDefinitions = createDefinitions;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -579,6 +700,12 @@ public interface DdlStatement extends SqlStatement {
       this.columnDefinition = columnDefinition;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   /**
@@ -597,6 +724,12 @@ public interface DdlStatement extends SqlStatement {
 
       this.datatype = datatype;
       this.columnConstraints = columnConstraints;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -631,6 +764,12 @@ public interface DdlStatement extends SqlStatement {
       this.nullNotnull = nullNotnull;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class DefaultColumnConstraint implements ColumnConstraint {
@@ -642,6 +781,12 @@ public interface DdlStatement extends SqlStatement {
       this.defaultValue = defaultValue;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class AutoIncrementColumnConstraint implements ColumnConstraint {
@@ -649,10 +794,11 @@ public interface DdlStatement extends SqlStatement {
       AUTO_INCREMENT, ON_UPDATE
     }
 
-    public final Type type;
+    public final AutoIncrementColumnConstraint.Type type;
     public final CurrentTimestamp currentTimestamp;
 
-    AutoIncrementColumnConstraint(Type type, CurrentTimestamp currentTimestamp) {
+    AutoIncrementColumnConstraint(AutoIncrementColumnConstraint.Type type,
+        CurrentTimestamp currentTimestamp) {
       Preconditions.checkArgument(type != null);
       if (Type.ON_UPDATE.equals(type)) {
         Preconditions.checkArgument(currentTimestamp != null);
@@ -660,6 +806,12 @@ public interface DdlStatement extends SqlStatement {
 
       this.type = type;
       this.currentTimestamp = currentTimestamp;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -671,6 +823,12 @@ public interface DdlStatement extends SqlStatement {
       this.primary = primary;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class UniqueKeyColumnConstraint implements ColumnConstraint {
@@ -678,6 +836,12 @@ public interface DdlStatement extends SqlStatement {
 
     UniqueKeyColumnConstraint(Boolean key) {
       this.key = key;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
   }
 
@@ -690,6 +854,12 @@ public interface DdlStatement extends SqlStatement {
       this.comment = comment;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class FormatColumnConstraint implements ColumnConstraint {
@@ -697,12 +867,18 @@ public interface DdlStatement extends SqlStatement {
       FIXED, DYNAMIC, DEFAULT
     }
 
-    public final ColformatEnum colformatEnum;
+    public final FormatColumnConstraint.ColformatEnum colformatEnum;
 
-    FormatColumnConstraint(ColformatEnum colformatEnum) {
+    FormatColumnConstraint(FormatColumnConstraint.ColformatEnum colformatEnum) {
       Preconditions.checkArgument(colformatEnum != null);
 
       this.colformatEnum = colformatEnum;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
   }
 
@@ -719,6 +895,12 @@ public interface DdlStatement extends SqlStatement {
       this.storageval = storageval;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class ReferenceColumnConstraint implements ColumnConstraint {
@@ -730,6 +912,12 @@ public interface DdlStatement extends SqlStatement {
       this.referenceDefinition = referenceDefinition;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class CollateColumnConstraint implements ColumnConstraint {
@@ -738,6 +926,12 @@ public interface DdlStatement extends SqlStatement {
     CollateColumnConstraint(CollationName collationName) {
       Preconditions.checkArgument(collationName != null);
       this.collationName = collationName;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -759,9 +953,21 @@ public interface DdlStatement extends SqlStatement {
       this.type = type;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class SerialDefaultColumnConstraint implements ColumnConstraint {
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
   }
 
   /**
@@ -801,6 +1007,12 @@ public interface DdlStatement extends SqlStatement {
       this.indexColumnNames = indexColumnNames;
       this.indexOption = indexOption;
     }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
   }
 
   public static enum IndexFormatEnum implements RelationalAlgebraEnum {
@@ -829,6 +1041,12 @@ public interface DdlStatement extends SqlStatement {
       this.indexOptions = indexOptions;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class ForeignKeyTableConstraint implements TableConstraint {
@@ -848,6 +1066,12 @@ public interface DdlStatement extends SqlStatement {
       this.referenceDefinition = referenceDefinition;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class CheckTableConstraint implements TableConstraint {
@@ -859,6 +1083,12 @@ public interface DdlStatement extends SqlStatement {
 
       this.name = name;
       this.expression = expression;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
   }
 
@@ -882,13 +1112,19 @@ public interface DdlStatement extends SqlStatement {
     public final ReferenceAction referenceAction;
 
     ReferenceDefinition(TableName tableName, IndexColumnNames indexColumnNames,
-        MatchTypeEnum matchType, ReferenceAction referenceAction) {
+        ReferenceDefinition.MatchTypeEnum matchType, ReferenceAction referenceAction) {
       Preconditions.checkArgument(tableName != null);
 
       this.tableName = tableName;
       this.indexColumnNames = indexColumnNames;
       this.matchType = matchType;
       this.referenceAction = referenceAction;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -916,6 +1152,12 @@ public interface DdlStatement extends SqlStatement {
 
       this.onDelete = onDelete;
       this.onUpdate = onUpdate;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
   }
 
@@ -963,6 +1205,12 @@ public interface DdlStatement extends SqlStatement {
       this.indexOptions = indexOptions;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class SpecialIndexDeclaration implements IndexColumnDefinition {
@@ -986,6 +1234,12 @@ public interface DdlStatement extends SqlStatement {
       this.uid = uid;
       this.indexColumnNames = indexColumnNames;
       this.indexOptions = indexOptions;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
   }
 
@@ -1038,6 +1292,12 @@ public interface DdlStatement extends SqlStatement {
       this.equal = equal;
       this.engineName = engineName;
     }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
   }
 
   public static class TableOptionAutoIncrement implements TableOption {
@@ -1050,6 +1310,12 @@ public interface DdlStatement extends SqlStatement {
       this.equal = equal;
       this.decimalLiteral = decimalLiteral;
     }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
   }
 
   public static class TableOptionAverage implements TableOption {
@@ -1061,6 +1327,12 @@ public interface DdlStatement extends SqlStatement {
 
       this.equal = equal;
       this.decimalLiteral = decimalLiteral;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
   }
 
@@ -1075,6 +1347,12 @@ public interface DdlStatement extends SqlStatement {
       this.isDefault = isDefault;
       this.equal = equal;
       this.charsetName = charsetName;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
   }
 
@@ -1101,13 +1379,19 @@ public interface DdlStatement extends SqlStatement {
     public final Boolean equal;
     public final BoolValueEnum boolValue;
 
-    TableOptionChecksum(Type type, Boolean equal, BoolValueEnum boolValue) {
+    TableOptionChecksum(TableOptionChecksum.Type type, Boolean equal, BoolValueEnum boolValue) {
       Preconditions.checkArgument(type != null);
       Preconditions.checkArgument(boolValue != null);
 
       this.type = type;
       this.equal = equal;
       this.boolValue = boolValue;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -1125,6 +1409,12 @@ public interface DdlStatement extends SqlStatement {
       this.collationName = collationName;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class TableOptionComment implements TableOption {
@@ -1136,6 +1426,12 @@ public interface DdlStatement extends SqlStatement {
 
       this.equal = equal;
       this.stringLiteral = stringLiteral;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -1150,6 +1446,12 @@ public interface DdlStatement extends SqlStatement {
       this.equal = equal;
       this.stringLiteralOrId = stringLiteralOrId;
     }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
   }
 
   public static class TableOptionConnection implements TableOption {
@@ -1162,6 +1464,12 @@ public interface DdlStatement extends SqlStatement {
       this.equal = equal;
       this.stringLiteral = stringLiteral;
     }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
   }
 
   public static class TableOptionDataDirectory implements TableOption {
@@ -1173,6 +1481,12 @@ public interface DdlStatement extends SqlStatement {
 
       this.equal = equal;
       this.stringLiteral = stringLiteral;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
   }
 
@@ -1187,6 +1501,12 @@ public interface DdlStatement extends SqlStatement {
       this.boolValue = boolValue;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class TableOptionEncryption implements TableOption {
@@ -1199,6 +1519,12 @@ public interface DdlStatement extends SqlStatement {
       this.equal = equal;
       this.stringLiteral = stringLiteral;
     }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
   }
 
   public static class TableOptionIndexDirectory implements TableOption {
@@ -1210,6 +1536,12 @@ public interface DdlStatement extends SqlStatement {
 
       this.equal = equal;
       this.stringLiteral = stringLiteral;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
   }
 
@@ -1228,6 +1560,12 @@ public interface DdlStatement extends SqlStatement {
       this.insertMethod = insertMethod;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class TableOptionKeyBlockSize implements TableOption {
@@ -1239,6 +1577,12 @@ public interface DdlStatement extends SqlStatement {
 
       this.equal = equal;
       this.fileSizeLiteral = fileSizeLiteral;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -1254,6 +1598,12 @@ public interface DdlStatement extends SqlStatement {
       this.decimalLiteral = decimalLiteral;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class TableOptionMinRows implements TableOption {
@@ -1265,6 +1615,12 @@ public interface DdlStatement extends SqlStatement {
 
       this.equal = equal;
       this.decimalLiteral = decimalLiteral;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
   }
 
@@ -1279,6 +1635,12 @@ public interface DdlStatement extends SqlStatement {
       this.extBoolValue = extBoolValue;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class TableOptionPassword implements TableOption {
@@ -1290,6 +1652,12 @@ public interface DdlStatement extends SqlStatement {
 
       this.equal = equal;
       this.stringLiteral = stringLiteral;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
   }
 
@@ -1308,6 +1676,12 @@ public interface DdlStatement extends SqlStatement {
       this.rowFormat = rowFormat;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class TableOptionRecalculation implements TableOption {
@@ -1319,6 +1693,12 @@ public interface DdlStatement extends SqlStatement {
 
       this.equal = equal;
       this.extBoolValue = extBoolValue;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
   }
 
@@ -1332,6 +1712,12 @@ public interface DdlStatement extends SqlStatement {
       this.equal = equal;
       this.extBoolValue = extBoolValue;
     }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
   }
 
   public static class TableOptionSamplePage implements TableOption {
@@ -1343,6 +1729,12 @@ public interface DdlStatement extends SqlStatement {
 
       this.equal = equal;
       this.decimalLiteral = decimalLiteral;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
   }
 
@@ -1359,6 +1751,12 @@ public interface DdlStatement extends SqlStatement {
       this.tablespaceStorage = tablespaceStorage;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class TableOptionUnion implements TableOption {
@@ -1370,6 +1768,12 @@ public interface DdlStatement extends SqlStatement {
 
       this.equal = equal;
       this.tables = tables;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -1416,6 +1820,12 @@ public interface DdlStatement extends SqlStatement {
       this.partitionDefinitions = partitionDefinitions;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   /**
@@ -1443,6 +1853,12 @@ public interface DdlStatement extends SqlStatement {
       this.expression = expression;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static enum PartitionAlgTypeEnum implements RelationalAlgebraEnum {
@@ -1463,6 +1879,12 @@ public interface DdlStatement extends SqlStatement {
       this.uidList = uidList;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class PartitionFunctionRange implements PartitionFunctionDefinition {
@@ -1476,6 +1898,12 @@ public interface DdlStatement extends SqlStatement {
       this.uidList = uidList;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class PartitionFunctionList implements PartitionFunctionDefinition {
@@ -1487,6 +1915,12 @@ public interface DdlStatement extends SqlStatement {
 
       this.expression = expression;
       this.uidList = uidList;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
   }
 
@@ -1512,6 +1946,12 @@ public interface DdlStatement extends SqlStatement {
       this.linear = linear;
       this.expression = expression;
     }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
   }
 
   public static class SubPartitionFunctionKey implements SubpartitionFunctionDefinition {
@@ -1525,6 +1965,12 @@ public interface DdlStatement extends SqlStatement {
       this.linear = linear;
       this.algType = algType;
       this.uidList = uidList;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
   }
 
@@ -1579,6 +2025,12 @@ public interface DdlStatement extends SqlStatement {
       this.subpartitionDefinitions = subpartitionDefinitions;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class PartitionListAtom implements PartitionDefinition {
@@ -1598,6 +2050,12 @@ public interface DdlStatement extends SqlStatement {
       this.partitionDefinerAtoms = partitionDefinerAtoms;
       this.partitionOptions = partitionOptions;
       this.subpartitionDefinitions = subpartitionDefinitions;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -1621,6 +2079,12 @@ public interface DdlStatement extends SqlStatement {
       this.subpartitionDefinitions = subpartitionDefinitions;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class PartitionSimple implements PartitionDefinition {
@@ -1635,6 +2099,12 @@ public interface DdlStatement extends SqlStatement {
       this.uid = uid;
       this.partitionOptions = partitionOptions;
       this.subpartitionDefinitions = subpartitionDefinitions;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
   }
 
@@ -1654,7 +2124,7 @@ public interface DdlStatement extends SqlStatement {
     public final Constant constant;
     public final Expression expression;
 
-    PartitionDefinerAtom(Type type, Constant constant, Expression expression) {
+    PartitionDefinerAtom(PartitionDefinerAtom.Type type, Constant constant, Expression expression) {
       Preconditions.checkArgument(type != null);
       switch (type) {
       case CONSTANT:
@@ -1673,6 +2143,12 @@ public interface DdlStatement extends SqlStatement {
       this.type = type;
       this.constant = constant;
       this.expression = expression;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
   }
 
@@ -1693,6 +2169,12 @@ public interface DdlStatement extends SqlStatement {
       this.partitionDefinerAtoms = partitionDefinerAtoms;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   /**
@@ -1711,6 +2193,12 @@ public interface DdlStatement extends SqlStatement {
 
       this.uid = uid;
       this.partitionOptions = partitionOptions;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -1745,6 +2233,12 @@ public interface DdlStatement extends SqlStatement {
       this.engineName = engineName;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class PartitionOptionComment implements PartitionOption {
@@ -1756,6 +2250,12 @@ public interface DdlStatement extends SqlStatement {
 
       this.equal = equal;
       this.comment = comment;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -1771,6 +2271,12 @@ public interface DdlStatement extends SqlStatement {
       this.dataDirectory = dataDirectory;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class PartitionOptionIndexDirectory implements PartitionOption {
@@ -1782,6 +2288,12 @@ public interface DdlStatement extends SqlStatement {
 
       this.equal = equal;
       this.indexDirectory = indexDirectory;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -1797,6 +2309,12 @@ public interface DdlStatement extends SqlStatement {
       this.maxRows = maxRows;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class PartitionOptionMinRows implements PartitionOption {
@@ -1808,6 +2326,12 @@ public interface DdlStatement extends SqlStatement {
 
       this.equal = equal;
       this.minRows = minRows;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -1823,6 +2347,12 @@ public interface DdlStatement extends SqlStatement {
       this.tablespace = tablespace;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class PartitionOptionNodeGroup implements PartitionOption {
@@ -1834,6 +2364,12 @@ public interface DdlStatement extends SqlStatement {
 
       this.equal = equal;
       this.nodegroup = nodegroup;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -1927,6 +2463,12 @@ public interface DdlStatement extends SqlStatement {
       this.tableOptions = tableOptions;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class AlterByAddColumn implements AlterSpecification {
@@ -1945,6 +2487,12 @@ public interface DdlStatement extends SqlStatement {
       this.afterUid = afterUid;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class AlterByAddColumns implements AlterSpecification {
@@ -1958,6 +2506,12 @@ public interface DdlStatement extends SqlStatement {
 
       this.uids = uids;
       this.columnDefinitions = columnDefinitions;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -1981,6 +2535,12 @@ public interface DdlStatement extends SqlStatement {
       this.indexOptions = indexOptions;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class AlterByAddPrimaryKey implements AlterSpecification {
@@ -1997,6 +2557,12 @@ public interface DdlStatement extends SqlStatement {
       this.indexType = indexType;
       this.indexColumnNames = indexColumnNames;
       this.indexOptions = indexOptions;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -2021,6 +2587,12 @@ public interface DdlStatement extends SqlStatement {
       this.indexType = indexType;
       this.indexColumnNames = indexColumnNames;
       this.indexOptions = indexOptions;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -2049,6 +2621,12 @@ public interface DdlStatement extends SqlStatement {
       this.indexOptions = indexOptions;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class AlterByAddForeignKey implements AlterSpecification {
@@ -2068,6 +2646,12 @@ public interface DdlStatement extends SqlStatement {
       this.referenceDefinition = referenceDefinition;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class AlterByAddCheckTableConstraint implements AlterSpecification {
@@ -2079,6 +2663,12 @@ public interface DdlStatement extends SqlStatement {
 
       this.name = name;
       this.expression = expression;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -2096,6 +2686,12 @@ public interface DdlStatement extends SqlStatement {
 
       this.equal = equal;
       this.algType = algType;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -2124,6 +2720,12 @@ public interface DdlStatement extends SqlStatement {
       this.defaultValue = defaultValue;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class AlterByChangeColumn implements AlterSpecification {
@@ -2147,6 +2749,12 @@ public interface DdlStatement extends SqlStatement {
       this.afterColumn = afterColumn;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class AlterByRenameColumn implements AlterSpecification {
@@ -2159,6 +2767,12 @@ public interface DdlStatement extends SqlStatement {
 
       this.oldColumn = oldColumn;
       this.newColumn = newColumn;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -2176,6 +2790,12 @@ public interface DdlStatement extends SqlStatement {
 
       this.equal = equal;
       this.lockType = lockType;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -2196,6 +2816,12 @@ public interface DdlStatement extends SqlStatement {
       this.afterUid = afterUid;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class AlterByDropColumn implements AlterSpecification {
@@ -2211,9 +2837,21 @@ public interface DdlStatement extends SqlStatement {
       this.restrict = restrict;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class AlterByDropPrimaryKey implements AlterSpecification {
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
   }
 
   public static class AlterByRenameIndex implements AlterSpecification {
@@ -2231,6 +2869,12 @@ public interface DdlStatement extends SqlStatement {
       this.newUid = newUid;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class AlterByDropIndex implements AlterSpecification {
@@ -2245,6 +2889,12 @@ public interface DdlStatement extends SqlStatement {
       this.uid = uid;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class AlterByDropForeignKey implements AlterSpecification {
@@ -2256,12 +2906,30 @@ public interface DdlStatement extends SqlStatement {
       this.uid = uid;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class AlterByDisableKeys implements AlterSpecification {
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
   }
 
   public static class AlterByEnableKeys implements AlterSpecification {
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
   }
 
   public static class AlterByRename implements AlterSpecification {
@@ -2281,6 +2949,12 @@ public interface DdlStatement extends SqlStatement {
       this.fullId = fullId;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class AlterByOrder implements AlterSpecification {
@@ -2290,6 +2964,12 @@ public interface DdlStatement extends SqlStatement {
       Preconditions.checkArgument(uidList != null);
 
       this.uidList = uidList;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -2303,6 +2983,12 @@ public interface DdlStatement extends SqlStatement {
 
       this.charsetName = charsetName;
       this.collationName = collationName;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -2320,15 +3006,39 @@ public interface DdlStatement extends SqlStatement {
       this.collationName = collationName;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class AlterByDiscardTablespace implements AlterSpecification {
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
   }
 
   public static class AlterByImportTablespace implements AlterSpecification {
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
   }
 
   public static class AlterByForce implements AlterSpecification {
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
   }
 
   public static class AlterByValidate implements AlterSpecification {
@@ -2344,6 +3054,12 @@ public interface DdlStatement extends SqlStatement {
       this.validationFormat = validationFormat;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class AlterByAddPartition implements AlterSpecification {
@@ -2353,6 +3069,12 @@ public interface DdlStatement extends SqlStatement {
       Preconditions.checkArgument(partitionDefinitions != null && partitionDefinitions.size() > 0);
 
       this.partitionDefinitions = partitionDefinitions;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -2366,6 +3088,12 @@ public interface DdlStatement extends SqlStatement {
       this.uidList = uidList;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class AlterByDiscardPartition implements AlterSpecification {
@@ -2373,6 +3101,12 @@ public interface DdlStatement extends SqlStatement {
 
     AlterByDiscardPartition(UidList uidList) {
       this.uidList = uidList;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
   }
 
@@ -2382,6 +3116,12 @@ public interface DdlStatement extends SqlStatement {
     AlterByImportPartition(UidList uidList) {
       this.uidList = uidList;
     }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
   }
 
   public static class AlterByTruncatePartition implements AlterSpecification {
@@ -2389,6 +3129,12 @@ public interface DdlStatement extends SqlStatement {
 
     AlterByTruncatePartition(UidList uidList) {
       this.uidList = uidList;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
   }
 
@@ -2399,6 +3145,12 @@ public interface DdlStatement extends SqlStatement {
       Preconditions.checkArgument(decimalLiteral != null);
 
       this.decimalLiteral = decimalLiteral;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -2413,6 +3165,12 @@ public interface DdlStatement extends SqlStatement {
 
       this.uidList = uidList;
       this.partitionDefinitions = partitionDefinitions;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -2435,6 +3193,12 @@ public interface DdlStatement extends SqlStatement {
       this.validationFormat = validationFormat;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class AlterByAnalyzePartition implements AlterSpecification {
@@ -2442,6 +3206,12 @@ public interface DdlStatement extends SqlStatement {
 
     AlterByAnalyzePartition(UidList uidList) {
       this.uidList = uidList;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
   }
 
@@ -2451,6 +3221,12 @@ public interface DdlStatement extends SqlStatement {
     AlterByCheckPartition(UidList uidList) {
       this.uidList = uidList;
     }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
   }
 
   public static class AlterByOptimizePartition implements AlterSpecification {
@@ -2458,6 +3234,12 @@ public interface DdlStatement extends SqlStatement {
 
     AlterByOptimizePartition(UidList uidList) {
       this.uidList = uidList;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
   }
 
@@ -2467,6 +3249,12 @@ public interface DdlStatement extends SqlStatement {
     AlterByRebuildPartition(UidList uidList) {
       this.uidList = uidList;
     }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
   }
 
   public static class AlterByRepairPartition implements AlterSpecification {
@@ -2475,12 +3263,30 @@ public interface DdlStatement extends SqlStatement {
     AlterByRepairPartition(UidList uidList) {
       this.uidList = uidList;
     }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
   }
 
   public static class AlterByRemovePartitioning implements AlterSpecification {
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
   }
 
   public static class AlterByUpgradePartitioning implements AlterSpecification {
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
   }
 
   // ---------------------------------------------------------------------------
@@ -2501,6 +3307,13 @@ public interface DdlStatement extends SqlStatement {
     RenameTableClause(TableName before, TableName after) {
       this.before = before;
       this.after = after;
+    }
+
+    @Override
+    public String literal() {
+      StringBuilder sb = new StringBuilder();
+      sb.append(before.literal()).append(" TO ").append(after.literal());
+      return sb.toString();
     }
 
   }

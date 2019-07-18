@@ -51,6 +51,12 @@ public interface UpdateStatement extends DmlStatement {
       this.limitClause = limitClause;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   /**
@@ -79,6 +85,12 @@ public interface UpdateStatement extends DmlStatement {
       this.tableSources = tableSources;
       this.updatedElements = updatedElements;
       this.where = where;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }

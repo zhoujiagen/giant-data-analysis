@@ -17,4 +17,9 @@ public class ResetSlave implements ReplicationStatement {
     this.channelOption = channelOption;
   }
 
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    return sb.toString();
+  }
 }

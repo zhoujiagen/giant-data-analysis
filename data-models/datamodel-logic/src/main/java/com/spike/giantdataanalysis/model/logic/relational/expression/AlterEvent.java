@@ -42,4 +42,36 @@ public class AlterEvent implements DdlStatement {
     this.routineBody = routineBody;
   }
 
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("ALTER ");
+    if (ownerStatement != null) {
+      sb.append(ownerStatement.literal()).append(" ");
+    }
+    sb.append("EVENT ").append(fullId.literal()).append(" ");
+    if (scheduleExpression != null) {
+      sb.append("ON SCHEDULE ").append(scheduleExpression.literal()).append(" ");
+    }
+    if (Boolean.TRUE.equals(notPreserve)) {
+      sb.append("ON COMPLETION NOT PRESERVE ");
+    } else if (Boolean.FALSE.equals(notPreserve)) {
+      sb.append("ON COMPLETION PRESERVE ");
+    }
+
+    if (fullId != null) {
+      sb.append("RENAME TO ").append(fullId.literal()).append(" ");
+    }
+    if (enableType != null) {
+      sb.append(enableType.name()).append(" ");
+    }
+    if (comment != null) {
+      sb.append("COMMENT ").append(comment).append(" ");
+    }
+    if (routineBody != null) {
+      sb.append("DO ").append(routineBody.literal());
+    }
+
+    return sb.toString();
+  }
 }

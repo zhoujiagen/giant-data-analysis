@@ -3,7 +3,7 @@ package com.spike.giantdataanalysis.model.logic.relational.core;
 /**
  * 关系代数运算.
  */
-public enum RelationalAlgebraOperationEnum implements RelationalAlgebraEnum{
+public enum RelationalAlgebraOperationEnum implements RelationalAlgebraEnum {
   SELECT("选择", 2), //
   PROJECT("投影", 2), //
   // GENERALIZED_PROJECTION("广义投影", 2), //

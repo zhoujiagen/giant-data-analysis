@@ -18,4 +18,9 @@ public class ReturnStatement implements CompoundStatement {
     this.expression = expression;
   }
 
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    return sb.toString();
+  }
 }

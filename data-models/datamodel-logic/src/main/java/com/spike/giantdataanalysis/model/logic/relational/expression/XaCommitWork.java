@@ -17,9 +17,14 @@ public class XaCommitWork implements ReplicationStatement {
 
   XaCommitWork(Xid xid, Boolean onePhase) {
     Preconditions.checkArgument(xid != null);
-    
+
     this.xid = xid;
     this.onePhase = onePhase;
   }
 
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    return sb.toString();
+  }
 }

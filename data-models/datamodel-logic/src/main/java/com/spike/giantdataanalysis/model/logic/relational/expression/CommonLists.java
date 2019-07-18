@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.spike.giantdataanalysis.model.logic.relational.expression.CommonExpressons.ExpressionOrDefault;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.IndexColumnName;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.TableName;
@@ -30,7 +31,7 @@ public interface CommonLists extends PrimitiveExpression {
     }
 
     @Override
-    public String toString() {
+    public String literal() {
       return Joiner.on(", ").join(uids);
     }
   }
@@ -50,6 +51,15 @@ public interface CommonLists extends PrimitiveExpression {
 
       this.tableNames = tableNames;
     }
+
+    @Override
+    public String literal() {
+      List<String> literals = Lists.newArrayList();
+      for (TableName tableName : tableNames) {
+        literals.add(tableName.literal());
+      }
+      return Joiner.on(", ").join(literals);
+    }
   }
 
   /**
@@ -68,6 +78,15 @@ public interface CommonLists extends PrimitiveExpression {
       this.indexColumnNames = indexColumnNames;
     }
 
+    @Override
+    public String literal() {
+      List<String> literals = Lists.newArrayList();
+      for (IndexColumnName indexColumnName : indexColumnNames) {
+        literals.add(indexColumnName.literal());
+      }
+      return Joiner.on(", ").join(literals);
+    }
+
   }
 
   /**
@@ -82,6 +101,15 @@ public interface CommonLists extends PrimitiveExpression {
       Preconditions.checkArgument(expressions != null && expressions.size() > 0);
 
       this.expressions = expressions;
+    }
+
+    @Override
+    public String literal() {
+      List<String> literals = Lists.newArrayList();
+      for (Expression expression : expressions) {
+        literals.add(expression.literal());
+      }
+      return Joiner.on(", ").join(literals);
     }
   }
 
@@ -100,6 +128,15 @@ public interface CommonLists extends PrimitiveExpression {
 
       this.expressionOrDefaults = expressionOrDefaults;
     }
+
+    @Override
+    public String literal() {
+      List<String> literals = Lists.newArrayList();
+      for (ExpressionOrDefault expressionOrDefault : expressionOrDefaults) {
+        literals.add(expressionOrDefault.literal());
+      }
+      return Joiner.on(", ").join(literals);
+    }
   }
 
   /**
@@ -116,6 +153,15 @@ public interface CommonLists extends PrimitiveExpression {
       Preconditions.checkArgument(constants != null && constants.size() > 0);
 
       this.constants = constants;
+    }
+
+    @Override
+    public String literal() {
+      List<String> literals = Lists.newArrayList();
+      for (Constant constant : constants) {
+        literals.add(constant.literal());
+      }
+      return Joiner.on(", ").join(literals);
     }
 
   }
@@ -136,6 +182,11 @@ public interface CommonLists extends PrimitiveExpression {
       this.stringLiterals = stringLiterals;
     }
 
+    @Override
+    public String literal() {
+      return Joiner.on(", ").join(stringLiterals);
+    }
+
   }
 
   /**
@@ -152,6 +203,11 @@ public interface CommonLists extends PrimitiveExpression {
       Preconditions.checkArgument(localIds != null && localIds.size() > 0);
 
       this.localIds = localIds;
+    }
+
+    @Override
+    public String literal() {
+      return Joiner.on(", ").join(localIds);
     }
   }
 

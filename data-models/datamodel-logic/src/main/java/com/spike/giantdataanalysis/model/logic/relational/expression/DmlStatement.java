@@ -64,6 +64,12 @@ public interface DmlStatement extends SqlStatement {
       this.expressionsWithDefaults = expressionsWithDefaults;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   /**
@@ -82,6 +88,12 @@ public interface DmlStatement extends SqlStatement {
 
       this.fullColumnName = fullColumnName;
       this.expression = expression;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -112,6 +124,12 @@ public interface DmlStatement extends SqlStatement {
       builder.append(localId);
       builder.append("]");
       return builder.toString();
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -151,6 +169,12 @@ public interface DmlStatement extends SqlStatement {
       builder.append("]");
       return builder.toString();
     }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
   }
 
   /**
@@ -185,6 +209,12 @@ public interface DmlStatement extends SqlStatement {
       builder.append("]");
       return builder.toString();
     }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
   }
 
   /**
@@ -208,6 +238,12 @@ public interface DmlStatement extends SqlStatement {
       StringBuilder builder = new StringBuilder();
       builder.append(Joiner.on(", ").join(tableSources));
       return builder.toString();
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -244,6 +280,12 @@ public interface DmlStatement extends SqlStatement {
       }
       return builder.toString();
     }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
   }
 
   public static class TableSourceNested implements TableSource {
@@ -268,6 +310,12 @@ public interface DmlStatement extends SqlStatement {
       }
       builder.append(")]");
       return builder.toString();
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -321,6 +369,12 @@ public interface DmlStatement extends SqlStatement {
       return builder.toString();
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class SubqueryTableItem implements TableSourceItem {
@@ -346,6 +400,12 @@ public interface DmlStatement extends SqlStatement {
       return builder.toString();
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class TableSourcesItem implements TableSourceItem {
@@ -364,6 +424,12 @@ public interface DmlStatement extends SqlStatement {
       builder.append(tableSources);
       builder.append("]");
       return builder.toString();
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -416,6 +482,12 @@ public interface DmlStatement extends SqlStatement {
       builder.append(uidList);
       builder.append("]");
       return builder.toString();
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -478,6 +550,12 @@ public interface DmlStatement extends SqlStatement {
       return builder.toString();
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class StraightJoin implements JoinPart {
@@ -500,6 +578,12 @@ public interface DmlStatement extends SqlStatement {
       builder.append(expression);
       builder.append("]");
       return builder.toString();
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
   }
 
@@ -536,6 +620,12 @@ public interface DmlStatement extends SqlStatement {
       return builder.toString();
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static enum OuterJoinType implements RelationalAlgebraEnum {
@@ -562,6 +652,12 @@ public interface DmlStatement extends SqlStatement {
       builder.append(tableSourceItem);
       builder.append("]");
       return builder.toString();
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }

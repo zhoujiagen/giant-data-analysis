@@ -15,7 +15,6 @@ import com.spike.giantdataanalysis.model.logic.relational.expression.SimpleIdSet
  * Literals
  */
 public abstract class Literals implements PrimitiveExpression {
-  public abstract String literal();
 
   @Override
   public String toString() {
@@ -51,11 +50,6 @@ public abstract class Literals implements PrimitiveExpression {
     @Override
     public String literal() {
       return literal;
-    }
-
-    @Override
-    public String toString() {
-      return this.literal();
     }
   }
 

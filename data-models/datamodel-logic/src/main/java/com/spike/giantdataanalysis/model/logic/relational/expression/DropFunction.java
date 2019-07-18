@@ -21,4 +21,15 @@ public class DropFunction implements DdlStatement {
     this.ifExists = ifExists;
     this.fullId = fullId;
   }
+
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("DROP FUNCTION ");
+    if (ifExists != null) {
+      sb.append(ifExists.literal()).append(" ");
+    }
+    sb.append(fullId.literal());
+    return sb.toString();
+  }
 }

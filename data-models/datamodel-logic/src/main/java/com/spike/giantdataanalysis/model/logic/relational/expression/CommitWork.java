@@ -19,4 +19,9 @@ public class CommitWork implements TransactionStatement {
     this.release = release;
   }
 
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    return sb.toString();
+  }
 }

@@ -36,4 +36,18 @@ public class AlterLogfileGroup implements DdlStatement {
     this.engineName = engineName;
   }
 
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("ALTER LOGFILE GROUP ").append(uid.literal()).append(" ");
+    sb.append("ADD UNDOFILE ").append(undoFile).append(" ");
+    if (fileSizeLiteral != null) {
+      sb.append("INITIAL_SIZE = ").append(fileSizeLiteral.literal()).append(" ");
+    }
+    if (Boolean.TRUE.equals(wait)) {
+      sb.append("WAIT ");
+    }
+    sb.append("ENGINE = ").append(engineName.literal());
+    return sb.toString();
+  }
 }

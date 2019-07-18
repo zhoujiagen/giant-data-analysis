@@ -2,7 +2,11 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
 
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
+
+import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.spike.giantdataanalysis.model.logic.relational.expression.CompoundStatement.RoutineBody;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.FullId;
 
@@ -32,7 +36,7 @@ public class CreateFunction implements DdlStatement {
     Preconditions.checkArgument(fullId != null);
     Preconditions.checkArgument(dataType != null);
     Preconditions.checkArgument(routineBody != null);
-    
+
     this.ownerStatement = ownerStatement;
     this.fullId = fullId;
     this.functionParameters = functionParameters;
@@ -41,4 +45,31 @@ public class CreateFunction implements DdlStatement {
     this.routineBody = routineBody;
   }
 
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("CREATE ");
+    if (ownerStatement != null) {
+      sb.append(ownerStatement.literal()).append(" ");
+    }
+    sb.append("FUNCTION ").append(fullId.literal()).append("(");
+    if (CollectionUtils.isNotEmpty(functionParameters)) {
+      List<String> literals = Lists.newArrayList();
+      for (FunctionParameter functionParameter : functionParameters) {
+        literals.add(functionParameter.literal());
+      }
+      sb.append(Joiner.on(", ").join(literals));
+    }
+    sb.append(") ");
+    sb.append("RETURNS ").append(dataType.literal()).append(" ");
+    if (CollectionUtils.isNotEmpty(routineOptions)) {
+      List<String> literals = Lists.newArrayList();
+      for (RoutineOption routineOption : routineOptions) {
+        literals.add(routineOption.literal());
+      }
+      sb.append(Joiner.on(" ").join(literals)).append(" ");
+    }
+    sb.append(routineBody.literal());
+    return sb.toString();
+  }
 }

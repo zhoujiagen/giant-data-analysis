@@ -2,7 +2,11 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
 
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
+
+import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.spike.giantdataanalysis.model.logic.relational.core.RelationalAlgebraEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.CommonExpressons.IfNotExists;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.TableName;
@@ -47,6 +51,22 @@ public interface CreateTable extends DdlStatement {
       this.likeTableName = likeTableName;
     }
 
+    @Override
+    public String literal() {
+      StringBuilder sb = new StringBuilder();
+      sb.append("CREATE ");
+      if (Boolean.TRUE.equals(temporary)) {
+        sb.append("TEMPORARY ");
+      }
+      sb.append("TABLE ");
+      if (ifNotExists != null) {
+        sb.append(ifNotExists.literal()).append(" ");
+      }
+      sb.append(tableName.literal()).append(" ");
+      sb.append("LIKE ").append(likeTableName.literal());
+      return sb.toString();
+    }
+
   }
 
   public static class QueryCreateTable implements CreateTable {
@@ -80,6 +100,38 @@ public interface CreateTable extends DdlStatement {
       this.selectStatement = selectStatement;
     }
 
+    @Override
+    public String literal() {
+      StringBuilder sb = new StringBuilder();
+      sb.append("CREATE ");
+      if (Boolean.TRUE.equals(temporary)) {
+        sb.append("TEMPORARY ");
+      }
+      sb.append("TABLE ");
+      if (ifNotExists != null) {
+        sb.append(ifNotExists.literal()).append(" ");
+      }
+      sb.append(tableName.literal()).append(" ");
+      if (createDefinitions != null) {
+        sb.append(createDefinitions.literal()).append(" ");
+      }
+      if (CollectionUtils.isNotEmpty(tableOptions)) {
+        List<String> literals = Lists.newArrayList();
+        for (TableOption tableOption : tableOptions) {
+          literals.add(tableOption.literal());
+        }
+        sb.append(Joiner.on(", ").join(literals));
+      }
+      if (partitionDefinitions != null) {
+        sb.append(partitionDefinitions.literal()).append(" ");
+      }
+      if (keyViolate != null) {
+        sb.append(keyViolate.name()).append(" ");
+      }
+      sb.append("AS ").append(selectStatement.literal());
+      return sb.toString();
+    }
+
   }
 
   public static class ColumnCreateTable implements CreateTable {
@@ -104,5 +156,28 @@ public interface CreateTable extends DdlStatement {
       this.partitionDefinitions = partitionDefinitions;
     }
 
+    @Override
+    public String literal() {
+      StringBuilder sb = new StringBuilder();
+      sb.append("CREATE ");
+      if (Boolean.TRUE.equals(temporary)) {
+        sb.append("TEMPORARY ");
+      }
+      sb.append("TABLE ");
+      if (ifNotExists != null) {
+        sb.append(ifNotExists.literal()).append(" ");
+      }
+      sb.append(tableName.literal()).append(" ");
+      sb.append(createDefinitions.literal()).append(" ");
+      if (CollectionUtils.isNotEmpty(tableOptions)) {
+        List<String> literals = Lists.newArrayList();
+        for (TableOption tableOption : tableOptions) {
+          literals.add(tableOption.literal());
+        }
+        sb.append(Joiner.on(", ").join(literals));
+      }
+      sb.append(partitionDefinitions.literal()).append(" ");
+      return sb.toString();
+    }
   }
 }

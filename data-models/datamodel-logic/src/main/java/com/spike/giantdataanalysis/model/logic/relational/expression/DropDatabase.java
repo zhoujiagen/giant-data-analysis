@@ -25,4 +25,14 @@ public class DropDatabase implements DdlStatement {
     this.uid = uid;
   }
 
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("DROP ").append(dbFormat.name()).append(" ");
+    if (ifExists != null) {
+      sb.append(ifExists.literal()).append(" ");
+    }
+    sb.append(uid.literal());
+    return sb.toString();
+  }
 }

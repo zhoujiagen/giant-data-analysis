@@ -22,4 +22,9 @@ public class ExecuteStatement implements PreparedStatement {
     this.userVariables = userVariables;
   }
 
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    return sb.toString();
+  }
 }

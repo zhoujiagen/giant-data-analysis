@@ -23,4 +23,11 @@ public class DropLogfileGroup implements DdlStatement {
     this.engineName = engineName;
   }
 
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("DROP LOGFILE GROUP ").append(uid.literal()).append(" ENGINE = ")
+        .append(engineName.literal());
+    return sb.toString();
+  }
 }

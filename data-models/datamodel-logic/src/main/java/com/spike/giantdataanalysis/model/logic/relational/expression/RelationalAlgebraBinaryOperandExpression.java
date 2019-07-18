@@ -18,4 +18,10 @@ public class RelationalAlgebraBinaryOperandExpression implements RelationalAlgeb
   public RelationalAlgebraExpression second() {
     return second;
   }
+
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    return sb.toString();
+  }
 }

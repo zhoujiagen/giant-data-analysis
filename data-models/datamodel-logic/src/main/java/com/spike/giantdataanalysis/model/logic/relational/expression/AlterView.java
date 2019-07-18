@@ -59,4 +59,31 @@ public class AlterView implements DdlStatement {
     this.checkOpt = checkOpt;
   }
 
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("ALTER ");
+    if (algType != null) {
+      sb.append("ALGORITHM = ").append(algType.name()).append(" ");
+    }
+    if (ownerStatement != null) {
+      sb.append(ownerStatement.literal()).append(" ");
+    }
+    if (Boolean.TRUE.equals(sqlSecurity)) {
+      sb.append("SQL SECURITY ").append(secContext.name()).append(" ");
+    }
+    sb.append("VIEW ").append(fullId.literal());
+    if (uidList != null) {
+      sb.append("(").append(uidList.literal()).append(") ");
+    }
+    sb.append("AS ").append(selectStatement.literal()).append(" ");
+    if (Boolean.TRUE.equals(withCheckOption)) {
+      sb.append("WITH ");
+      if (checkOpt != null) {
+        sb.append(checkOpt.name()).append(" ");
+      }
+      sb.append("CHECK OPTION");
+    }
+    return sb.toString();
+  }
 }

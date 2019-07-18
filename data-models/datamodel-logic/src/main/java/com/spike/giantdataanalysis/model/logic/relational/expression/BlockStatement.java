@@ -41,4 +41,9 @@ public class BlockStatement implements CompoundStatement {
     this.endUid = endUid;
   }
 
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    return sb.toString();
+  }
 }

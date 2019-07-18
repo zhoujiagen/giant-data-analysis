@@ -23,7 +23,7 @@ public class SqlStatements implements RelationalAlgebraExpression {
   }
 
   @Override
-  public String toString() {
+  public String literal() {
     if (CollectionUtils.isNotEmpty(sqlStatements)) {
       return Joiner.on(System.lineSeparator()).join(sqlStatements);
     } else {

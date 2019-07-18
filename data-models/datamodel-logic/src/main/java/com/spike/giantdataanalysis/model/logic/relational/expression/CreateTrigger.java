@@ -60,4 +60,21 @@ public class CreateTrigger implements DdlStatement {
     this.routineBody = routineBody;
   }
 
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("CREATE ").append(" ");
+    if (ownerStatement != null) {
+      sb.append("TRIGGER ").append(thisTrigger.literal()).append(" ");
+    }
+    sb.append(triggerTime.name()).append(" ");
+    sb.append(triggerEvent.name()).append(" ");
+    sb.append("ON ").append(tableName.literal()).append(" FOR EACH ROW");
+    if (otherTrigger != null) {
+      sb.append(triggerPlace.name()).append(" ").append(otherTrigger.literal()).append(" ");
+    }
+    sb.append(routineBody.literal()).append(" ");
+
+    return sb.toString();
+  }
 }

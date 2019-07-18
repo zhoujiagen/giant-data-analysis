@@ -34,6 +34,12 @@ public interface TransactionStatement extends SqlStatement {
       this.autocommitValue = autocommitValue;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   /**
@@ -58,6 +64,12 @@ public interface TransactionStatement extends SqlStatement {
 
       this.transactionContext = transactionContext;
       this.transactionOptions = transactionOptions;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -96,6 +108,12 @@ public interface TransactionStatement extends SqlStatement {
       this.lockAction = lockAction;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   /**
@@ -120,6 +138,12 @@ public interface TransactionStatement extends SqlStatement {
       this.type = type;
       this.local = local;
       this.lowPriority = lowPriority;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -149,6 +173,12 @@ public interface TransactionStatement extends SqlStatement {
 
       this.type = type;
       this.transactionLevel = transactionLevel;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }

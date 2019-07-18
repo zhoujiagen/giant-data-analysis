@@ -40,6 +40,12 @@ public interface CompoundStatement extends RelationalAlgebraExpression {
       this.sqlStatement = sqlStatement;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   /**
@@ -61,6 +67,12 @@ public interface CompoundStatement extends RelationalAlgebraExpression {
       this.uidList = uidList;
       this.dataType = dataType;
       this.defaultValue = defaultValue;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -87,6 +99,12 @@ public interface CompoundStatement extends RelationalAlgebraExpression {
       this.sqlState = sqlState;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   /**
@@ -106,6 +124,12 @@ public interface CompoundStatement extends RelationalAlgebraExpression {
 
       this.uid = uid;
       this.selectStatement = selectStatement;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -141,6 +165,12 @@ public interface CompoundStatement extends RelationalAlgebraExpression {
       this.routineBody = routineBody;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   /**
@@ -166,6 +196,12 @@ public interface CompoundStatement extends RelationalAlgebraExpression {
 
       this.decimalLiteral = decimalLiteral;
     }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
   }
 
   public static class HandlerConditionState implements HandlerConditionValue {
@@ -175,6 +211,12 @@ public interface CompoundStatement extends RelationalAlgebraExpression {
       Preconditions.checkArgument(stringLiteral != null);
 
       this.stringLiteral = stringLiteral;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -188,15 +230,39 @@ public interface CompoundStatement extends RelationalAlgebraExpression {
       this.uid = uid;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class HandlerConditionWarning implements HandlerConditionValue {
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
   }
 
   public static class HandlerConditionNotfound implements HandlerConditionValue {
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
   }
 
   public static class HandlerConditionException implements HandlerConditionValue {
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
   }
 
   /**
@@ -215,6 +281,12 @@ public interface CompoundStatement extends RelationalAlgebraExpression {
 
       this.compoundStatement = compoundStatement;
       this.sqlStatement = sqlStatement;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }
@@ -243,6 +315,12 @@ public interface CompoundStatement extends RelationalAlgebraExpression {
       this.procedureSqlStatements = procedureSqlStatements;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   /**
@@ -265,6 +343,12 @@ public interface CompoundStatement extends RelationalAlgebraExpression {
 
       this.elseIfExpression = elseIfExpression;
       this.procedureSqlStatements = procedureSqlStatements;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }

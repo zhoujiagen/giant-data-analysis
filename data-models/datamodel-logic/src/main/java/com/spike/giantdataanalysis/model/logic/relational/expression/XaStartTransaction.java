@@ -33,4 +33,9 @@ public class XaStartTransaction implements ReplicationStatement {
     this.xaAction = xaAction;
   }
 
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    return sb.toString();
+  }
 }

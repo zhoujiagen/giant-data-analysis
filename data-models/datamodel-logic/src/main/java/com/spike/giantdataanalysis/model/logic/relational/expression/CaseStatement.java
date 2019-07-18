@@ -30,4 +30,9 @@ public class CaseStatement implements CompoundStatement {
     this.procedureSqlStatements = procedureSqlStatements;
   }
 
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    return sb.toString();
+  }
 }

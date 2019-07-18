@@ -2,7 +2,9 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
 
 import java.util.List;
 
+import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.Uid;
 
 /**
@@ -17,12 +19,12 @@ import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.U
  */
 public interface AlterDatabase extends DdlStatement {
 
-  public static class alterSimpleDatabase implements AlterDatabase {
+  public static class AlterSimpleDatabase implements AlterDatabase {
     public final DbFormatEnum dbFormat;
     public final Uid uid;
     public final List<CreateDatabaseOption> createDatabaseOptions;
 
-    alterSimpleDatabase(DbFormatEnum dbFormat, Uid uid,
+    AlterSimpleDatabase(DbFormatEnum dbFormat, Uid uid,
         List<CreateDatabaseOption> createDatabaseOptions) {
       Preconditions.checkArgument(dbFormat != null);
       Preconditions
@@ -33,18 +35,40 @@ public interface AlterDatabase extends DdlStatement {
       this.createDatabaseOptions = createDatabaseOptions;
     }
 
+    @Override
+    public String literal() {
+      StringBuilder sb = new StringBuilder();
+      sb.append("ALTER ").append(dbFormat.name()).append(" ");
+      if (uid != null) {
+        sb.append(uid.literal()).append(" ");
+      }
+      List<String> literals = Lists.newArrayList();
+      for (CreateDatabaseOption createDatabaseOption : createDatabaseOptions) {
+        literals.add(createDatabaseOption.literal());
+      }
+      sb.append(Joiner.on(" ").join(literals));
+      return sb.toString();
+    }
   }
 
-  public static class alterUpgradeName implements AlterDatabase {
+  public static class AlterUpgradeName implements AlterDatabase {
     public final DbFormatEnum dbFormat;
     public final Uid uid;
 
-    alterUpgradeName(DbFormatEnum dbFormat, Uid uid) {
+    AlterUpgradeName(DbFormatEnum dbFormat, Uid uid) {
       Preconditions.checkArgument(dbFormat != null);
       Preconditions.checkArgument(uid != null);
 
       this.dbFormat = dbFormat;
       this.uid = uid;
+    }
+
+    @Override
+    public String literal() {
+      StringBuilder sb = new StringBuilder();
+      sb.append("ALTER ").append(dbFormat.name()).append(" ").append(uid.literal()).append(" ");
+      sb.append("UPGRADE DATA DIRECTORY NAME");
+      return sb.toString();
     }
 
   }

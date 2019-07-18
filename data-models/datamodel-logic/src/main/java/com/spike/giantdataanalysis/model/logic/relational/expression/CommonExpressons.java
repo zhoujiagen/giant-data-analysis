@@ -32,8 +32,8 @@ public interface CommonExpressons extends PrimitiveExpression {
     public final Constant constant;
     public final List<CurrentTimestamp> currentTimestamps;
 
-    DefaultValue(Type type, RelationalUnaryOperatorEnum unaryOperator, Constant constant,
-        List<CurrentTimestamp> currentTimestamps) {
+    DefaultValue(DefaultValue.Type type, RelationalUnaryOperatorEnum unaryOperator,
+        Constant constant, List<CurrentTimestamp> currentTimestamps) {
       Preconditions.checkArgument(type != null);
       switch (type) {
       case NULL_LITERAL:
@@ -53,6 +53,33 @@ public interface CommonExpressons extends PrimitiveExpression {
       this.unaryOperator = unaryOperator;
       this.constant = constant;
       this.currentTimestamps = currentTimestamps;
+    }
+
+    @Override
+    public String literal() {
+      StringBuilder sb = new StringBuilder();
+
+      switch (type) {
+      case NULL_LITERAL:
+        sb.append("NULL");
+        break;
+      case CONSTANT:
+        if (unaryOperator != null) {
+          sb.append(unaryOperator.symbol).append(" ");
+        }
+        sb.append(constant.literal());
+        break;
+      case CURRENTTIMESTAMP:
+        sb.append(currentTimestamps.get(0).literal());
+        if (currentTimestamps.size() > 1) {
+          sb.append(" ON UPDATE ").append(currentTimestamps.get(1).literal());
+        }
+        break;
+      default:
+        break;
+      }
+
+      return sb.toString();
     }
   }
 
@@ -81,6 +108,24 @@ public interface CommonExpressons extends PrimitiveExpression {
       this.type = type;
       this.decimalLiteral = decimalLiteral;
     }
+
+    @Override
+    public String literal() {
+      StringBuilder sb = new StringBuilder();
+      if (CurrentTimestamp.Type.NOW.equals(type)) {
+        sb.append("NOW (");
+        if (decimalLiteral != null) {
+          sb.append(decimalLiteral.literal());
+        }
+        sb.append(")");
+      } else {
+        sb.append(type.name());
+        if (decimalLiteral != null) {
+          sb.append("(").append(decimalLiteral.literal()).append(")");
+        }
+      }
+      return sb.toString();
+    }
   }
 
   /**
@@ -96,6 +141,15 @@ public interface CommonExpressons extends PrimitiveExpression {
     ExpressionOrDefault(Expression expression, Boolean isDefault) {
       this.expression = expression;
     }
+
+    @Override
+    public String literal() {
+      if (expression == null) {
+        return "DEFAULT";
+      } else {
+        return expression.literal();
+      }
+    }
   }
 
   /**
@@ -105,6 +159,14 @@ public interface CommonExpressons extends PrimitiveExpression {
    * </pre>
    */
   public static class IfExists implements CommonExpressons {
+
+    IfExists() {
+    }
+
+    @Override
+    public String literal() {
+      return "IF EXISTS";
+    }
   }
 
   /**
@@ -114,5 +176,13 @@ public interface CommonExpressons extends PrimitiveExpression {
    * </pre>
    */
   public static class IfNotExists implements CommonExpressons {
+
+    IfNotExists() {
+    }
+
+    @Override
+    public String literal() {
+      return "IF NOT EXISTS";
+    }
   }
 }

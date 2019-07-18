@@ -2,7 +2,11 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
 
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
+
+import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.spike.giantdataanalysis.model.logic.relational.expression.CommonLists.IndexColumnNames;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.TableName;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.Uid;
@@ -52,4 +56,37 @@ public class CreateIndex implements DdlStatement {
     this.algorithmOrLocks = algorithmOrLocks;
   }
 
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("CREATE ");
+    if (intimeAction != null) {
+      sb.append(intimeAction.name()).append(" ");
+    }
+    if (indexCategory != null) {
+      sb.append(indexCategory.name()).append(" ");
+    }
+    sb.append("INDEX ").append(uid.literal()).append(" ");
+    if (indexType != null) {
+      sb.append(indexType.name()).append(" ");
+    }
+    sb.append("ON ").append(tableName.literal()).append(" ").append(indexColumnNames.literal())
+        .append(" ");
+    if (CollectionUtils.isNotEmpty(indexOptions)) {
+      List<String> literals = Lists.newArrayList();
+      for (IndexOption indexOption : indexOptions) {
+        literals.add(indexOption.literal());
+      }
+      sb.append(Joiner.on(" ").join(literals)).append(" ");
+    }
+    if (CollectionUtils.isNotEmpty(algorithmOrLocks)) {
+      List<String> literals = Lists.newArrayList();
+      for (IndexAlgorithmOrLock indexAlgorithmOrLock : algorithmOrLocks) {
+        literals.add(indexAlgorithmOrLock.literal());
+      }
+      sb.append(Joiner.on(" ").join(literals)).append(" ");
+    }
+
+    return sb.toString();
+  }
 }

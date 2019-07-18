@@ -22,4 +22,10 @@ public class RelationalAlgebraProjectExpression implements RelationalAlgebraExpr
   public List<RelationalAttribute> attributes() {
     return attributes;
   }
+
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    return sb.toString();
+  }
 }

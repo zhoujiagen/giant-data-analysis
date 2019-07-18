@@ -20,4 +20,9 @@ public class LockTables implements TransactionStatement {
     this.lockTableElements = lockTableElements;
   }
 
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    return sb.toString();
+  }
 }

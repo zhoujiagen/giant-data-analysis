@@ -13,4 +13,10 @@ public class RelationalAlgebraBasicExpression implements RelationalAlgebraExpres
   public RelationalTuples tuples() {
     return tuples;
   }
+
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    return sb.toString();
+  }
 }

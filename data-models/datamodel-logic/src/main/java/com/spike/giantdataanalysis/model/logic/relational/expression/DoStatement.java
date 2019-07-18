@@ -19,4 +19,9 @@ public class DoStatement implements DmlStatement {
     this.expressions = expressions;
   }
 
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    return sb.toString();
+  }
 }

@@ -19,4 +19,9 @@ public class XaRollbackWork implements ReplicationStatement {
     this.xid = xid;
   }
 
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    return sb.toString();
+  }
 }

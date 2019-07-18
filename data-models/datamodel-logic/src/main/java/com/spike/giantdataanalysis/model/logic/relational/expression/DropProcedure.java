@@ -21,4 +21,15 @@ public class DropProcedure implements DdlStatement {
     this.ifExists = ifExists;
     this.fullId = fullId;
   }
+
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("DROP PROCEDURE ");
+    if (ifExists != null) {
+      sb.append(ifExists.literal()).append(" ");
+    }
+    sb.append(fullId.literal());
+    return sb.toString();
+  }
 }

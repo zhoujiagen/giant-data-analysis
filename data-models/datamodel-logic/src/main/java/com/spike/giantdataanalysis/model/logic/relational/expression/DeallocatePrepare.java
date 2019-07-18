@@ -27,4 +27,9 @@ public class DeallocatePrepare implements PreparedStatement {
     this.uid = uid;
   }
 
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    return sb.toString();
+  }
 }

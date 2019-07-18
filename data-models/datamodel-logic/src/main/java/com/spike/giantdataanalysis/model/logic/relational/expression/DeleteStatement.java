@@ -51,6 +51,12 @@ public interface DeleteStatement extends DmlStatement {
       this.limit = limit;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   /**
@@ -87,6 +93,12 @@ public interface DeleteStatement extends DmlStatement {
       this.tableNames = tableNames;
       this.tableSources = tableSources;
       this.where = where;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
 
   }

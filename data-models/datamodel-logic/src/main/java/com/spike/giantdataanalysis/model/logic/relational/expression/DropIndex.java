@@ -2,7 +2,11 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
 
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
+
+import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.TableName;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.Uid;
 
@@ -36,4 +40,21 @@ public class DropIndex implements DdlStatement {
     this.algorithmOrLocks = algorithmOrLocks;
   }
 
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("DROP INDEX ");
+    if (intimeAction != null) {
+      sb.append(intimeAction.name()).append(" ");
+    }
+    sb.append(uid.literal()).append(" ON").append(tableName.literal()).append(" ");
+    if (CollectionUtils.isNotEmpty(algorithmOrLocks)) {
+      List<String> literals = Lists.newArrayList();
+      for (IndexAlgorithmOrLock indexAlgorithmOrLock : algorithmOrLocks) {
+        literals.add(indexAlgorithmOrLock.literal());
+      }
+      sb.append(Joiner.on(" ").join(literals));
+    }
+    return sb.toString();
+  }
 }

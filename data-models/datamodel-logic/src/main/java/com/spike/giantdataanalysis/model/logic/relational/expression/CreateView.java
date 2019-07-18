@@ -29,24 +29,25 @@ public class CreateView implements DdlStatement {
     DEFINER, INVOKER
   }
 
-  public static enum CheckOptEnum implements RelationalAlgebraEnum {
+  public static enum CheckOptionEnum implements RelationalAlgebraEnum {
     CASCADED, LOCAL
   }
 
   public final Boolean replace;
-  public final AlgTypeEnum algType;
+  public final CreateView.AlgTypeEnum algType;
   public final OwnerStatement ownerStatement;
   public final Boolean sqlSecurity;
-  public final SecContextEnum secContext;
+  public final CreateView.SecContextEnum secContext;
   public final FullId fullId;
   public final UidList uidList;
   public final SelectStatement selectStatement;
   public Boolean withCheckOption;
-  public final CheckOptEnum checkOpt;
+  public final CreateView.CheckOptionEnum checkOption;
 
-  CreateView(Boolean replace, AlgTypeEnum algType, OwnerStatement ownerStatement,
-      Boolean sqlSecurity, SecContextEnum secContext, FullId fullId, UidList uidList,
-      SelectStatement selectStatement, Boolean withCheckOption, CheckOptEnum checkOpt) {
+  CreateView(Boolean replace, CreateView.AlgTypeEnum algType, OwnerStatement ownerStatement,
+      Boolean sqlSecurity, CreateView.SecContextEnum secContext, FullId fullId, UidList uidList,
+      SelectStatement selectStatement, Boolean withCheckOption,
+      CreateView.CheckOptionEnum checkOption) {
     Preconditions.checkArgument(fullId != null);
     Preconditions.checkArgument(selectStatement != null);
 
@@ -59,7 +60,35 @@ public class CreateView implements DdlStatement {
     this.uidList = uidList;
     this.selectStatement = selectStatement;
     this.withCheckOption = withCheckOption;
-    this.checkOpt = checkOpt;
+    this.checkOption = checkOption;
+  }
+
+  @Override
+  public String literal() {
+
+    StringBuilder sb = new StringBuilder();
+    sb.append("CREATE ");
+    if (algType != null) sb.append("ALGORITHM = ").append(algType.name()).append(" ");
+    if (ownerStatement != null) {
+      sb.append(ownerStatement.literal()).append(" ");
+    }
+    if (Boolean.TRUE.equals(sqlSecurity)) {
+      sb.append("SQL SECURITY ").append(secContext.name()).append(" ");
+    }
+    sb.append("VIEW ").append(fullId.literal()).append(" ");
+    if (uidList != null) {
+      sb.append("(").append(uidList.literal()).append(") ");
+    }
+    sb.append("AS ").append(selectStatement.literal()).append(" ");
+    if (Boolean.TRUE.equals(withCheckOption)) {
+      sb.append("WITH ");
+      if (checkOption != null) {
+        sb.append(checkOption.name()).append(" ");
+      }
+      sb.append("CHECK OPTION");
+    }
+    return sb.toString();
+
   }
 
 }

@@ -2,6 +2,7 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
 
 import java.util.List;
 
+import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import com.spike.giantdataanalysis.model.logic.relational.core.RelationalAlgebraEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.CharsetName;
@@ -78,6 +79,25 @@ public interface DataType extends PrimitiveExpression {
       this.collationName = collationName;
     }
 
+    @Override
+    public String literal() {
+      StringBuilder sb = new StringBuilder();
+      sb.append(dataType.name()).append(" ");
+      if (lengthOneDimension != null) {
+        sb.append(lengthOneDimension.literal()).append(" ");
+      }
+      if (Boolean.TRUE.equals(binary)) {
+        sb.append("BINARY ");
+      }
+      if (charsetName != null) {
+        sb.append("CHARSET ").append(charsetName.literal()).append(" ");
+      }
+      if (collationName != null) {
+        sb.append("COLLATE ").append(collationName.literal());
+      }
+      return sb.toString();
+    }
+
   }
 
   public static class NationalStringDataType implements DataType {
@@ -98,6 +118,7 @@ public interface DataType extends PrimitiveExpression {
         LengthOneDimension lengthOneDimension, Boolean binary) {
       Preconditions.checkArgument(type != null);
       Preconditions.checkArgument(dataType != null);
+
       switch (type) {
       case NATIONAL:
         Preconditions.checkArgument(NationalStringDataType.Type.CHARACTER.equals(dataType)
@@ -115,6 +136,20 @@ public interface DataType extends PrimitiveExpression {
       this.dataType = dataType;
       this.lengthOneDimension = lengthOneDimension;
       this.binary = binary;
+    }
+
+    @Override
+    public String literal() {
+      StringBuilder sb = new StringBuilder();
+      sb.append(type.name()).append(" ");
+      sb.append(dataType.name()).append(" ");
+      if (lengthOneDimension != null) {
+        sb.append(lengthOneDimension.literal()).append(" ");
+      }
+      if (Boolean.TRUE.equals(binary)) {
+        sb.append("BINARY");
+      }
+      return sb.toString();
     }
 
   }
@@ -135,6 +170,21 @@ public interface DataType extends PrimitiveExpression {
       this.dataType = dataType;
       this.lengthOneDimension = lengthOneDimension;
       this.binary = binary;
+    }
+
+    @Override
+    public String literal() {
+      StringBuilder sb = new StringBuilder();
+      sb.append("NATIONAL ");
+      sb.append(dataType.name()).append(" ");
+      sb.append("VARYING ");
+      if (lengthOneDimension != null) {
+        sb.append(lengthOneDimension.literal()).append(" ");
+      }
+      if (Boolean.TRUE.equals(binary)) {
+        sb.append("BINARY");
+      }
+      return sb.toString();
     }
   }
 
@@ -222,6 +272,103 @@ public interface DataType extends PrimitiveExpression {
       this.precision = precision;
     }
 
+    @Override
+    public String literal() {
+      StringBuilder sb = new StringBuilder();
+
+      switch (dataType) {
+      case TINYINT:
+      case SMALLINT:
+      case MEDIUMINT:
+      case INT:
+      case INTEGER:
+      case BIGINT:
+        sb.append(dataType.name()).append(" ");
+        if (lengthOneDimension != null) {
+          sb.append(lengthOneDimension.literal()).append(" ");
+        }
+        if (Boolean.TRUE.equals(signed)) {
+          sb.append("SIGNED ");
+        } else if (Boolean.FALSE.equals(signed)) {
+          sb.append("UNSIGNED ");
+        }
+        if (Boolean.TRUE.equals(zeroFill)) {
+          sb.append("ZEROFILL ");
+        }
+        break;
+
+      case REAL:
+        sb.append(dataType.name()).append(" ");
+        if (lengthTwoDimension != null) {
+          sb.append(lengthTwoDimension.literal()).append(" ");
+        }
+        if (Boolean.TRUE.equals(signed)) {
+          sb.append("SIGNED ");
+        } else if (Boolean.FALSE.equals(signed)) {
+          sb.append("UNSIGNED ");
+        }
+        if (Boolean.TRUE.equals(zeroFill)) {
+          sb.append("ZEROFILL ");
+        }
+        break;
+
+      case DOUBLE:
+        sb.append(dataType.name()).append(" ");
+        if (Boolean.TRUE.equals(precision)) {
+          sb.append("PRECISION ");
+        }
+        if (lengthTwoDimension != null) {
+          sb.append(lengthTwoDimension.literal()).append(" ");
+        }
+        if (Boolean.TRUE.equals(signed)) {
+          sb.append("SIGNED ");
+        } else if (Boolean.FALSE.equals(signed)) {
+          sb.append("UNSIGNED ");
+        }
+        if (Boolean.TRUE.equals(zeroFill)) {
+          sb.append("ZEROFILL ");
+        }
+        break;
+
+      case DECIMAL:
+      case DEC:
+      case FIXED:
+      case NUMERIC:
+      case FLOAT:
+        sb.append(dataType.name()).append(" ");
+        if (lengthTwoOptionalDimension != null) {
+          sb.append(lengthTwoOptionalDimension.literal()).append(" ");
+        }
+        if (Boolean.TRUE.equals(signed)) {
+          sb.append("SIGNED ");
+        } else if (Boolean.FALSE.equals(signed)) {
+          sb.append("UNSIGNED ");
+        }
+        if (Boolean.TRUE.equals(zeroFill)) {
+          sb.append("ZEROFILL ");
+        }
+        break;
+
+      case BIT:
+      case TIME:
+      case TIMESTAMP:
+      case DATETIME:
+      case BINARY:
+      case VARBINARY:
+      case YEAR:
+        sb.append(dataType.name()).append(" ");
+        if (lengthOneDimension != null) {
+          sb.append(lengthOneDimension.literal()).append(" ");
+        }
+        break;
+
+      default:
+        break;
+      }
+
+      return sb.toString();
+    }
+
   }
 
   public static class SimpleDataType implements DataType {
@@ -234,6 +381,11 @@ public interface DataType extends PrimitiveExpression {
     SimpleDataType(SimpleDataType.Type dataType) {
       Preconditions.checkArgument(dataType != null);
       this.dataType = dataType;
+    }
+
+    @Override
+    public String literal() {
+      return dataType.name();
     }
   }
 
@@ -257,6 +409,20 @@ public interface DataType extends PrimitiveExpression {
       this.binary = binary;
       this.charsetName = charsetName;
     }
+
+    @Override
+    public String literal() {
+      StringBuilder sb = new StringBuilder();
+      sb.append(dataType.name()).append(" ");
+      sb.append(collectionOptions.literal()).append(" ");
+      if (Boolean.TRUE.equals(binary)) {
+        sb.append("BINARY ");
+      }
+      if (charsetName != null) {
+        sb.append("CHARSET ").append(charsetName.literal());
+      }
+      return sb.toString();
+    }
   }
 
   public static class SpatialDataType implements DataType {
@@ -269,7 +435,13 @@ public interface DataType extends PrimitiveExpression {
 
     SpatialDataType(SpatialDataType.Type dataType) {
       Preconditions.checkArgument(dataType != null);
+
       this.dataType = dataType;
+    }
+
+    @Override
+    public String literal() {
+      return dataType.name();
     }
   }
 
@@ -287,6 +459,11 @@ public interface DataType extends PrimitiveExpression {
       Preconditions.checkArgument(stringLiterals != null && stringLiterals.size() > 0);
 
       this.stringLiterals = stringLiterals;
+    }
+
+    @Override
+    public String literal() {
+      return Joiner.on(", ").join(stringLiterals);
     }
   }
 
@@ -368,8 +545,10 @@ public interface DataType extends PrimitiveExpression {
     }
 
     /** Type.INTEGER */
-    ConvertedDataType(ConvertedDataType.Type type, boolean signed) {
-      Preconditions.checkArgument(Type.DECIMAL.equals(type));
+    ConvertedDataType(boolean signed, ConvertedDataType.Type type) {
+      if (type != null) {
+        Preconditions.checkArgument(Type.INTEGER.equals(type));
+      }
 
       this.type = type;
       this.lengthOneDimension = null;
@@ -379,20 +558,58 @@ public interface DataType extends PrimitiveExpression {
     }
 
     @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("ConvertedDataType [type=");
-      builder.append(type);
-      builder.append(", lengthOneDimension=");
-      builder.append(lengthOneDimension);
-      builder.append(", charsetName=");
-      builder.append(charsetName);
-      builder.append(", lengthTwoDimension=");
-      builder.append(lengthTwoDimension);
-      builder.append(", signed=");
-      builder.append(signed);
-      builder.append("]");
-      return builder.toString();
+    public String literal() {
+      StringBuilder sb = new StringBuilder();
+
+      switch (type) {
+      case BINARY:
+      case NCHAR:
+        sb.append(type.name());
+        if (lengthOneDimension != null) {
+          sb.append(" ").append(lengthOneDimension.literal());
+        }
+        break;
+
+      case CHAR:
+        sb.append(type.name());
+        if (lengthOneDimension != null) {
+          sb.append(" ").append(lengthOneDimension.literal());
+        }
+        if (charsetName != null) {
+          sb.append(" CHARACTER SET ").append(charsetName.name());
+        }
+        break;
+
+      case DATE:
+      case DATETIME:
+      case TIME:
+        sb.append(type.name());
+        break;
+
+      case DECIMAL:
+        sb.append(type.name());
+        if (lengthTwoDimension != null) {
+          sb.append(" ").append(lengthTwoDimension.literal());
+        }
+        break;
+
+      case INTEGER:
+        if (Boolean.TRUE.equals(signed)) {
+          sb.append("SIGNED");
+        } else {
+          sb.append("UNSIGNED");
+        }
+        if (type != null) {
+          sb.append(" ").append(type.name());
+        }
+        break;
+
+      default:
+        break;
+      }
+
+      return sb.toString();
+
     }
 
   }
@@ -412,12 +629,12 @@ public interface DataType extends PrimitiveExpression {
     }
 
     @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("(");
-      builder.append(decimalLiteral);
-      builder.append(")");
-      return builder.toString();
+    public String literal() {
+      StringBuilder sb = new StringBuilder();
+      sb.append("(");
+      sb.append(decimalLiteral.literal());
+      sb.append(")");
+      return sb.toString();
     }
 
   }
@@ -440,14 +657,14 @@ public interface DataType extends PrimitiveExpression {
     }
 
     @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("(");
-      builder.append(first);
-      builder.append(",");
-      builder.append(second);
-      builder.append(")");
-      return builder.toString();
+    public String literal() {
+      StringBuilder sb = new StringBuilder();
+      sb.append("(");
+      sb.append(first.literal());
+      sb.append(", ");
+      sb.append(second.literal());
+      sb.append(")");
+      return sb.toString();
     }
   }
 
@@ -468,16 +685,16 @@ public interface DataType extends PrimitiveExpression {
     }
 
     @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("(");
-      builder.append(first);
+    public String literal() {
+      StringBuilder sb = new StringBuilder();
+      sb.append("(");
+      sb.append(first.literal());
       if (second != null) {
-        builder.append(", ");
-        builder.append(second);
+        sb.append(", ");
+        sb.append(second.literal);
       }
-      builder.append(")");
-      return builder.toString();
+      sb.append(")");
+      return sb.toString();
     }
   }
 }

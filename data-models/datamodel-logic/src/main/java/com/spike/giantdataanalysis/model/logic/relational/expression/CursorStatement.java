@@ -24,6 +24,12 @@ public interface CursorStatement extends CompoundStatement {
       this.uid = uid;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class FetchCursor implements CursorStatement {
@@ -40,6 +46,12 @@ public interface CursorStatement extends CompoundStatement {
       this.uidList = uidList;
     }
 
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
+    }
+
   }
 
   public static class OpenCursor implements CursorStatement {
@@ -49,6 +61,12 @@ public interface CursorStatement extends CompoundStatement {
       Preconditions.checkArgument(uid != null);
 
       this.uid = uid;
+    }
+
+    @Override
+    public String literal() {
+      // TODO Implement RelationalAlgebraExpression.literal
+      return null;
     }
   }
 }

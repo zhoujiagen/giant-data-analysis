@@ -33,4 +33,9 @@ public class IfStatement implements CompoundStatement {
     this.elseStatements = elseStatements;
   }
 
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    return sb.toString();
+  }
 }

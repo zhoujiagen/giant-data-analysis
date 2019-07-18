@@ -11,12 +11,18 @@ import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.X
  * </pre>
  */
 public class XaPrepareStatement implements ReplicationStatement {
-  
+
   public final Xid xid;
-  
+
   XaPrepareStatement(Xid xid) {
     Preconditions.checkArgument(xid != null);
 
     this.xid = xid;
+  }
+
+  @Override
+  public String literal() {
+    StringBuilder sb = new StringBuilder();
+    return sb.toString();
   }
 }
