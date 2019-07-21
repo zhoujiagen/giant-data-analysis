@@ -2,7 +2,11 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
 
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
+
+import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.spike.giantdataanalysis.model.logic.relational.expression.CommonLists.UidList;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.CharsetName;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.TableName;
@@ -38,7 +42,7 @@ loadDataStatement
  */
 public class LoadDataStatement implements DmlStatement {
 
-  public final PriorityEnum priority;
+  public final DmlStatement.PriorityEnum priority;
   public final Boolean local;
   public final String filename;
   public final ViolationEnum violation;
@@ -53,11 +57,12 @@ public class LoadDataStatement implements DmlStatement {
   public final List<AssignmentField> assignmentFields;
   public final List<UpdatedElement> updatedElements;
 
-  LoadDataStatement(PriorityEnum priority, Boolean local, String filename, ViolationEnum violation,
-      TableName tableName, UidList uidList, CharsetName charsetName, FieldsFormatEnum fieldsFormat,
-      List<SelectFieldsInto> selectFieldsIntos, List<SelectLinesInto> selectLinesIntos,
-      DecimalLiteral decimalLiteral, LinesFormatEnum linesFormat,
-      List<AssignmentField> assignmentFields, List<UpdatedElement> updatedElements) {
+  LoadDataStatement(DmlStatement.PriorityEnum priority, Boolean local, String filename,
+      ViolationEnum violation, TableName tableName, UidList uidList, CharsetName charsetName,
+      FieldsFormatEnum fieldsFormat, List<SelectFieldsInto> selectFieldsIntos,
+      List<SelectLinesInto> selectLinesIntos, DecimalLiteral decimalLiteral,
+      LinesFormatEnum linesFormat, List<AssignmentField> assignmentFields,
+      List<UpdatedElement> updatedElements) {
     Preconditions.checkArgument(filename != null);
     Preconditions.checkArgument(tableName != null);
 
@@ -80,6 +85,60 @@ public class LoadDataStatement implements DmlStatement {
   @Override
   public String literal() {
     StringBuilder sb = new StringBuilder();
+    sb.append("LOAD DATA ");
+    if (priority != null) {
+      sb.append(priority.literal()).append(" ");
+    }
+    if (Boolean.TRUE.equals(local)) {
+      sb.append("LOCAL ");
+    }
+    sb.append("INFILE ").append(filename).append(" ");
+    if (violation != null) {
+      sb.append(violation.literal()).append(" ");
+    }
+    sb.append("INTO TABLE ").append(tableName.literal()).append(" ");
+    if (uidList != null) {
+      sb.append("PARTITION(").append(uidList.literal()).append(") ");
+    }
+    if (charsetName != null) {
+      sb.append("CHARACTER SET ").append(charsetName.literal()).append(" ");
+    }
+    if (fieldsFormat != null) {
+      sb.append(fieldsFormat.literal()).append(" ");
+      List<String> literals = Lists.newArrayList();
+      for (SelectFieldsInto selectFieldsInto : selectFieldsIntos) {
+        literals.add(selectFieldsInto.literal());
+      }
+      sb.append(Joiner.on(" ").join(literals));
+    }
+    if (CollectionUtils.isNotEmpty(selectLinesIntos)) {
+      sb.append("LINES ");
+      List<String> literals = Lists.newArrayList();
+      for (SelectLinesInto selectLinesInto : selectLinesIntos) {
+        literals.add(selectLinesInto.literal());
+      }
+      sb.append(Joiner.on(" ").join(literals));
+    }
+    if (decimalLiteral != null) {
+      sb.append("IGNORE ").append(decimalLiteral.literal()).append(linesFormat.literal()).append(" ");
+    }
+    if (CollectionUtils.isNotEmpty(assignmentFields)) {
+      sb.append("(");
+      List<String> literals = Lists.newArrayList();
+      for (AssignmentField assignmentField : assignmentFields) {
+        literals.add(assignmentField.literal());
+      }
+      sb.append(Joiner.on(" ").join(literals));
+      sb.append(")");
+    }
+    if (CollectionUtils.isNotEmpty(updatedElements)) {
+      List<String> literals = Lists.newArrayList();
+      for (UpdatedElement updatedElement : updatedElements) {
+        literals.add(updatedElement.literal());
+      }
+      sb.append(Joiner.on(" ").join(literals));
+    }
+
     return sb.toString();
   }
 }

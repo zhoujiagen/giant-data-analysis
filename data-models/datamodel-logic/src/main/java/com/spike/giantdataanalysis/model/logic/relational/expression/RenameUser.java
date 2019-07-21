@@ -2,7 +2,9 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
 
 import java.util.List;
 
+import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 
 /**
  * <pre>
@@ -24,6 +26,12 @@ public class RenameUser implements AdministrationStatement {
   @Override
   public String literal() {
     StringBuilder sb = new StringBuilder();
+    sb.append("RENAME USER ");
+    List<String> literals = Lists.newArrayList();
+    for (RenameUserClause renameUserClause : renameUserClauses) {
+      literals.add(renameUserClause.literal());
+    }
+    sb.append(Joiner.on(", ").join(literals));
     return sb.toString();
   }
 }

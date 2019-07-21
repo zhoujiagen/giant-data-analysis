@@ -63,7 +63,7 @@ public class AlterEvent implements DdlStatement {
       sb.append("RENAME TO ").append(fullId.literal()).append(" ");
     }
     if (enableType != null) {
-      sb.append(enableType.name()).append(" ");
+      sb.append(enableType.literal()).append(" ");
     }
     if (comment != null) {
       sb.append("COMMENT ").append(comment).append(" ");

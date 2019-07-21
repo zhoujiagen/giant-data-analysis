@@ -23,6 +23,7 @@ public class XaPrepareStatement implements ReplicationStatement {
   @Override
   public String literal() {
     StringBuilder sb = new StringBuilder();
+    sb.append("XA PREPARE ").append(xid.literal());
     return sb.toString();
   }
 }

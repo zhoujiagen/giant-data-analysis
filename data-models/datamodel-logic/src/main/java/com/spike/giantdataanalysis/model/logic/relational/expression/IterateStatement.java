@@ -22,6 +22,7 @@ public class IterateStatement implements CompoundStatement {
   @Override
   public String literal() {
     StringBuilder sb = new StringBuilder();
+    sb.append("ITERATE ").append(uid.literal());
     return sb.toString();
   }
 }

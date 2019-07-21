@@ -21,6 +21,7 @@ public class ReturnStatement implements CompoundStatement {
   @Override
   public String literal() {
     StringBuilder sb = new StringBuilder();
+    sb.append("RETURN ").append(expression.literal());
     return sb.toString();
   }
 }

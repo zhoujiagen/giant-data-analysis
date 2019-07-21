@@ -22,6 +22,7 @@ public class XaRollbackWork implements ReplicationStatement {
   @Override
   public String literal() {
     StringBuilder sb = new StringBuilder();
+    sb.append("XA ROLLBACK ").append(xid.literal());
     return sb.toString();
   }
 }

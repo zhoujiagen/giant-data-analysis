@@ -8,9 +8,11 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
  * </pre>
  */
 public class ResetStatement implements AdministrationStatement {
+  ResetStatement() {
+  }
+
   @Override
   public String literal() {
-    StringBuilder sb = new StringBuilder();
-    return sb.toString();
+    return "RESET QUERY CACHE";
   }
 }

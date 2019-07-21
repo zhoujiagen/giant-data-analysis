@@ -2,7 +2,9 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
 
 import java.util.List;
 
+import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.spike.giantdataanalysis.model.logic.relational.expression.CommonLists.UidList;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.Uid;
 
@@ -35,6 +37,19 @@ public class CacheIndexStatement implements AdministrationStatement {
   @Override
   public String literal() {
     StringBuilder sb = new StringBuilder();
+    sb.append("CACHE INDEX ");
+    List<String> literals = Lists.newArrayList();
+    for (TableIndexes ti : tableIndexes) {
+      literals.add(ti.literal());
+    }
+    sb.append(Joiner.on(", ").join(literals)).append(" ");
+    if (partitionUidList != null) {
+      sb.append("PARTITION (").append(partitionUidList).append(") ");
+    }
+    if (Boolean.TRUE.equals(partitionAll)) {
+      sb.append("PARTITION (ALL) ");
+    }
+    sb.append("IN ").append(schema.literal());
     return sb.toString();
   }
 }

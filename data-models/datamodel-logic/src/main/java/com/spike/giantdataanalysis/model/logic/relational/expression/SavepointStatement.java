@@ -23,6 +23,7 @@ public class SavepointStatement implements TransactionStatement {
   @Override
   public String literal() {
     StringBuilder sb = new StringBuilder();
+    sb.append("SAVEPOINT ").append(uid.literal());
     return sb.toString();
   }
 }

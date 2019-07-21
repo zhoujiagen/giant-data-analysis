@@ -22,6 +22,7 @@ public class UninstallPlugin implements AdministrationStatement {
   @Override
   public String literal() {
     StringBuilder sb = new StringBuilder();
+    sb.append("UNINSTALL PLUGIN ").append(uid.literal());
     return sb.toString();
   }
 }

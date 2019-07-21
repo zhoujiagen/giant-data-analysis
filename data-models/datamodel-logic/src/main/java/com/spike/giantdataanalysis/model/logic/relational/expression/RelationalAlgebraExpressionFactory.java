@@ -2,17 +2,54 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
 
 import java.util.List;
 
-import org.relaxng.datatype.Datatype;
-
 import com.google.common.base.Preconditions;
 import com.spike.giantdataanalysis.model.logic.relational.core.RelationalBitOperatorEnum;
 import com.spike.giantdataanalysis.model.logic.relational.core.RelationalComparisonOperatorEnum;
 import com.spike.giantdataanalysis.model.logic.relational.core.RelationalLogicalOperatorEnum;
 import com.spike.giantdataanalysis.model.logic.relational.core.RelationalMathOperatorEnum;
 import com.spike.giantdataanalysis.model.logic.relational.core.RelationalUnaryOperatorEnum;
+import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.AdminTableActionOptionEnum;
+import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.ChannelFlushOption;
+import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.CheckTableOptionEnum;
+import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.ConnectionFormatEnum;
+import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.CurrentSchemaPriviLevel;
+import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.DefiniteFullTablePrivLevel;
+import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.DefiniteSchemaPrivLevel;
+import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.DefiniteTablePrivLevel;
+import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.FlushFormatEnum;
+import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.FlushOption;
+import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.FlushTableOptionEnum;
+import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.GlobalPrivLevel;
+import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.HashAuthOption;
+import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.LoadedTableIndexes;
+import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.PasswordAuthOption;
+import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.PrivelegeClause;
+import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.PrivilegeEnum;
+import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.PrivilegeLevel;
+import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.PrivilegeObjectEnum;
+import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.RenameUserClause;
+import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.ShowCommonEntityEnum;
+import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.ShowFilter;
+import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.ShowGlobalInfoClauseEnum;
+import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.ShowProfileTypeEnum;
+import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.ShowSchemaEntityEnum;
+import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.SimpleAuthOption;
+import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.SimpleFlushOption;
+import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.StringAuthOption;
+import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.TableFlushOption;
+import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.TableIndexes;
+import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.TlsOption;
+import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.UserAuthOption;
+import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.UserLockOptionEnum;
+import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.UserPasswordOption;
+import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.UserResourceOption;
+import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.UserSpecification;
+import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.VariableClause;
 import com.spike.giantdataanalysis.model.logic.relational.expression.AlterDatabase.AlterSimpleDatabase;
 import com.spike.giantdataanalysis.model.logic.relational.expression.AlterDatabase.AlterUpgradeName;
 import com.spike.giantdataanalysis.model.logic.relational.expression.AlterTablespace.ObjectActionEnum;
+import com.spike.giantdataanalysis.model.logic.relational.expression.AlterUser.AlterUserMysqlV56;
+import com.spike.giantdataanalysis.model.logic.relational.expression.AlterUser.AlterUserMysqlV57;
 import com.spike.giantdataanalysis.model.logic.relational.expression.AlterView.AlgTypeEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.AlterView.CheckOptEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.AlterView.SecContextEnum;
@@ -29,6 +66,21 @@ import com.spike.giantdataanalysis.model.logic.relational.expression.CommonLists
 import com.spike.giantdataanalysis.model.logic.relational.expression.CommonLists.Tables;
 import com.spike.giantdataanalysis.model.logic.relational.expression.CommonLists.UidList;
 import com.spike.giantdataanalysis.model.logic.relational.expression.CommonLists.UserVariables;
+import com.spike.giantdataanalysis.model.logic.relational.expression.CompoundStatement.CaseAlternative;
+import com.spike.giantdataanalysis.model.logic.relational.expression.CompoundStatement.DeclareCondition;
+import com.spike.giantdataanalysis.model.logic.relational.expression.CompoundStatement.DeclareCursor;
+import com.spike.giantdataanalysis.model.logic.relational.expression.CompoundStatement.DeclareHandler;
+import com.spike.giantdataanalysis.model.logic.relational.expression.CompoundStatement.DeclareHandler.HandlerActionEnum;
+import com.spike.giantdataanalysis.model.logic.relational.expression.CompoundStatement.DeclareVariable;
+import com.spike.giantdataanalysis.model.logic.relational.expression.CompoundStatement.ElifAlternative;
+import com.spike.giantdataanalysis.model.logic.relational.expression.CompoundStatement.HandlerConditionCode;
+import com.spike.giantdataanalysis.model.logic.relational.expression.CompoundStatement.HandlerConditionException;
+import com.spike.giantdataanalysis.model.logic.relational.expression.CompoundStatement.HandlerConditionName;
+import com.spike.giantdataanalysis.model.logic.relational.expression.CompoundStatement.HandlerConditionNotfound;
+import com.spike.giantdataanalysis.model.logic.relational.expression.CompoundStatement.HandlerConditionState;
+import com.spike.giantdataanalysis.model.logic.relational.expression.CompoundStatement.HandlerConditionValue;
+import com.spike.giantdataanalysis.model.logic.relational.expression.CompoundStatement.HandlerConditionWarning;
+import com.spike.giantdataanalysis.model.logic.relational.expression.CompoundStatement.ProcedureSqlStatement;
 import com.spike.giantdataanalysis.model.logic.relational.expression.CompoundStatement.RoutineBody;
 import com.spike.giantdataanalysis.model.logic.relational.expression.CreateTable.ColumnCreateTable;
 import com.spike.giantdataanalysis.model.logic.relational.expression.CreateTable.CopyCreateTable;
@@ -37,6 +89,11 @@ import com.spike.giantdataanalysis.model.logic.relational.expression.CreateTable
 import com.spike.giantdataanalysis.model.logic.relational.expression.CreateTrigger.TriggerEventEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.CreateTrigger.TriggerPlaceEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.CreateTrigger.TriggerTimeEnum;
+import com.spike.giantdataanalysis.model.logic.relational.expression.CreateUser.CreateUserMysqlV56;
+import com.spike.giantdataanalysis.model.logic.relational.expression.CreateUser.CreateUserMysqlV57;
+import com.spike.giantdataanalysis.model.logic.relational.expression.CursorStatement.CloseCursor;
+import com.spike.giantdataanalysis.model.logic.relational.expression.CursorStatement.FetchCursor;
+import com.spike.giantdataanalysis.model.logic.relational.expression.CursorStatement.OpenCursor;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.AuthPlugin;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.CharsetName;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.CollationName;
@@ -71,7 +128,33 @@ import com.spike.giantdataanalysis.model.logic.relational.expression.DdlStatemen
 import com.spike.giantdataanalysis.model.logic.relational.expression.DdlStatement.GeneratedColumnConstraint.Type;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DdlStatement.StorageColumnConstraint.StoragevalEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DdlStatement.TableOptionInsertMethod.InsertMethodEnum;
+import com.spike.giantdataanalysis.model.logic.relational.expression.DeleteStatement.MultipleDeleteStatement;
+import com.spike.giantdataanalysis.model.logic.relational.expression.DeleteStatement.SingleDeleteStatement;
+import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.AssignmentField;
+import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.AtomTableItem;
+import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.FieldsFormatEnum;
+import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.IndexHint;
+import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.IndexHintTypeEnum;
+import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.InnerJoin;
+import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.InsertStatementValue;
+import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.JoinPart;
+import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.LinesFormatEnum;
+import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.LockClauseEnum;
+import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.NaturalJoin;
+import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.OrderByClause;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.OrderByExpression;
+import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.OuterJoin;
+import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.OuterJoinType;
+import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.StraightJoin;
+import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.SubqueryTableItem;
+import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.TableSource;
+import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.TableSourceBase;
+import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.TableSourceItem;
+import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.TableSourceNested;
+import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.TableSources;
+import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.TableSourcesItem;
+import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.UpdatedElement;
+import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.ViolationEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Expression.BetweenPredicate;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Expression.BinaryComparasionPredicate;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Expression.ExpressionAtom;
@@ -104,6 +187,7 @@ import com.spike.giantdataanalysis.model.logic.relational.expression.Functions.D
 import com.spike.giantdataanalysis.model.logic.relational.expression.Functions.ExtractFunctionCall;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Functions.FunctionArg;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Functions.FunctionArgs;
+import com.spike.giantdataanalysis.model.logic.relational.expression.Functions.FunctionCall;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Functions.GetFormatFunctionCall;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Functions.LevelInWeightListElement;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Functions.LevelWeightList;
@@ -117,6 +201,11 @@ import com.spike.giantdataanalysis.model.logic.relational.expression.Functions.S
 import com.spike.giantdataanalysis.model.logic.relational.expression.Functions.TrimFunctionCall;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Functions.ValuesFunctionCall;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Functions.WeightFunctionCall;
+import com.spike.giantdataanalysis.model.logic.relational.expression.HandlerStatement.HandlerCloseStatement;
+import com.spike.giantdataanalysis.model.logic.relational.expression.HandlerStatement.HandlerOpenStatement;
+import com.spike.giantdataanalysis.model.logic.relational.expression.HandlerStatement.HandlerReadIndexStatement;
+import com.spike.giantdataanalysis.model.logic.relational.expression.HandlerStatement.HandlerReadStatement;
+import com.spike.giantdataanalysis.model.logic.relational.expression.InsertStatement.PriorityType;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Literals.BooleanLiteral;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Literals.Constant;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Literals.DecimalLiteral;
@@ -124,6 +213,90 @@ import com.spike.giantdataanalysis.model.logic.relational.expression.Literals.Fi
 import com.spike.giantdataanalysis.model.logic.relational.expression.Literals.HexadecimalLiteral;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Literals.NullNotnull;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Literals.StringLiteral;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ReplaceStatement.PriorityEnum;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ReplicationStatement.BoolMasterOptionEnum;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ReplicationStatement.ChannelOption;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ReplicationStatement.ConnectionOption;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ReplicationStatement.DecimalMasterOptionEnum;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ReplicationStatement.DoDbReplication;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ReplicationStatement.DoTableReplication;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ReplicationStatement.GtidsUntilOption;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ReplicationStatement.GtuidSet;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ReplicationStatement.IgnoreDbReplication;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ReplicationStatement.IgnoreTableReplication;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ReplicationStatement.MasterBoolOption;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ReplicationStatement.MasterDecimalOption;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ReplicationStatement.MasterLogUntilOption;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ReplicationStatement.MasterOption;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ReplicationStatement.MasterRealOption;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ReplicationStatement.MasterStringOption;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ReplicationStatement.MasterUidListOption;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ReplicationStatement.RelayLogUntilOption;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ReplicationStatement.ReplicationFilter;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ReplicationStatement.RewriteDbReplication;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ReplicationStatement.SqlGapsUntilOption;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ReplicationStatement.StringMasterOptionEnum;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ReplicationStatement.TablePair;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ReplicationStatement.ThreadTypeEnum;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ReplicationStatement.UntilOption;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ReplicationStatement.WildDoTableReplication;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ReplicationStatement.WildIgnoreTableReplication;
+import com.spike.giantdataanalysis.model.logic.relational.expression.RevokeStatement.DetailRevoke;
+import com.spike.giantdataanalysis.model.logic.relational.expression.RevokeStatement.ShortRevoke;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.FromClause;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.GroupByItem;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.GroupByItem.OrderType;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.LimitClause;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.LimitClauseAtom;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.ParenthesisSelect;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.QueryExpression;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.QueryExpressionNointo;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.QuerySpecification;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.QuerySpecificationNointo;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.SelectColumnElement;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.SelectElement;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.SelectElements;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.SelectExpressionElement;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.SelectFieldsInto;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.SelectFunctionElement;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.SelectIntoDumpFile;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.SelectIntoExpression;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.SelectIntoTextFile;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.SelectIntoTextFile.TieldsFormatType;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.SelectIntoVariables;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.SelectLinesInto;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.SelectSpecEnum;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.SelectStarElement;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.SimpleSelect;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.UnionParenthesis;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.UnionParenthesisSelect;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.UnionSelect;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.UnionStatement;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.UnionTypeEnum;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SetStatement.SetCharset;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SetStatement.SetNames;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SetStatement.SetNewValueInsideTrigger;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SetStatement.SetPasswordStatement;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SetStatement.SetVariable;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ShowStatement.ShowColumns;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ShowStatement.ShowCountErrors;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ShowStatement.ShowCreateDb;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ShowStatement.ShowCreateFullIdObject;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ShowStatement.ShowCreateUser;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ShowStatement.ShowEngine;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ShowStatement.ShowErrors;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ShowStatement.ShowGlobalInfo;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ShowStatement.ShowGrants;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ShowStatement.ShowIndexes;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ShowStatement.ShowLogEvents;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ShowStatement.ShowMasterLogs;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ShowStatement.ShowObjectFilter;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ShowStatement.ShowOpenTables;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ShowStatement.ShowProfile;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ShowStatement.ShowRoutine;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ShowStatement.ShowSchemaFilter;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ShowStatement.ShowSchemaFilter.SchemaFormatEnum;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ShowStatement.ShowSlaveStatus;
 import com.spike.giantdataanalysis.model.logic.relational.expression.SimpleIdSets.CharsetNameBaseEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.SimpleIdSets.DataTypeBaseEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.SimpleIdSets.FunctionNameBaseEnum;
@@ -131,6 +304,21 @@ import com.spike.giantdataanalysis.model.logic.relational.expression.SimpleIdSet
 import com.spike.giantdataanalysis.model.logic.relational.expression.SimpleIdSets.KeywordsCanBeIdEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.SimpleIdSets.PrivilegesBaseEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.SimpleIdSets.TransactionLevelBaseEnum;
+import com.spike.giantdataanalysis.model.logic.relational.expression.TransactionStatement.LockAction;
+import com.spike.giantdataanalysis.model.logic.relational.expression.TransactionStatement.LockTableElement;
+import com.spike.giantdataanalysis.model.logic.relational.expression.TransactionStatement.SetAutocommitStatement;
+import com.spike.giantdataanalysis.model.logic.relational.expression.TransactionStatement.SetTransactionStatement;
+import com.spike.giantdataanalysis.model.logic.relational.expression.TransactionStatement.SetTransactionStatement.TransactionContextEnum;
+import com.spike.giantdataanalysis.model.logic.relational.expression.TransactionStatement.TransactionLevelEnum;
+import com.spike.giantdataanalysis.model.logic.relational.expression.TransactionStatement.TransactionModeEnum;
+import com.spike.giantdataanalysis.model.logic.relational.expression.TransactionStatement.TransactionOption;
+import com.spike.giantdataanalysis.model.logic.relational.expression.UpdateStatement.MultipleUpdateStatement;
+import com.spike.giantdataanalysis.model.logic.relational.expression.UpdateStatement.SingleUpdateStatement;
+import com.spike.giantdataanalysis.model.logic.relational.expression.UtilityStatement.DescribeConnection;
+import com.spike.giantdataanalysis.model.logic.relational.expression.UtilityStatement.DescribeObjectClause;
+import com.spike.giantdataanalysis.model.logic.relational.expression.UtilityStatement.DescribeStatements;
+import com.spike.giantdataanalysis.model.logic.relational.expression.XaStartTransaction.XaActionEnum;
+import com.spike.giantdataanalysis.model.logic.relational.expression.XaStartTransaction.XaStartEnum;
 import com.spike.giantdataanalysis.model.logic.relational.model.RelationalAttribute;
 import com.spike.giantdataanalysis.model.logic.relational.model.RelationalTuples;
 
@@ -288,9 +476,9 @@ public abstract class RelationalAlgebraExpressionFactory {
         uidList, selectStatement, withCheckOption, checkOption);
   }
 
-  public static CreateDatabaseOption makeCreateDatabaseOption(Boolean isDefault, Boolean isEqual,
+  public static CreateDatabaseOption makeCreateDatabaseOption(Boolean isDefault,
       CharsetName charsetName, CollationName collationName) {
-    return new CreateDatabaseOption(isDefault, isEqual, charsetName, collationName);
+    return new CreateDatabaseOption(isDefault, charsetName, collationName);
   }
 
   public static OwnerStatement makeOwnerStatement(UserName userName, Boolean currentUser) {
@@ -380,9 +568,9 @@ public abstract class RelationalAlgebraExpressionFactory {
     return new ColumnDeclaration(uid, columnDefinition);
   }
 
-  public static ColumnDefinition makeColumnDefinition(Datatype datatype,
+  public static ColumnDefinition makeColumnDefinition(DataType dataType,
       List<ColumnConstraint> columnConstraints) {
-    return new ColumnDefinition(datatype, columnConstraints);
+    return new ColumnDefinition(dataType, columnConstraints);
   }
 
   public static DefaultColumnConstraint makeDefaultColumnConstraint(DefaultValue defaultValue) {
@@ -394,12 +582,12 @@ public abstract class RelationalAlgebraExpressionFactory {
     return new AutoIncrementColumnConstraint(type, currentTimestamp);
   }
 
-  public static PrimaryKeyColumnConstraint makePrimaryKeyColumnConstraint(Boolean primary) {
-    return new PrimaryKeyColumnConstraint(primary);
+  public static PrimaryKeyColumnConstraint makePrimaryKeyColumnConstraint() {
+    return new PrimaryKeyColumnConstraint();
   }
 
-  public static UniqueKeyColumnConstraint makeUniqueKeyColumnConstraint(Boolean key) {
-    return new UniqueKeyColumnConstraint(key);
+  public static UniqueKeyColumnConstraint makeUniqueKeyColumnConstraint() {
+    return new UniqueKeyColumnConstraint();
   }
 
   public static CommentColumnConstraint makeCommentColumnConstraint(String comment) {
@@ -428,25 +616,30 @@ public abstract class RelationalAlgebraExpressionFactory {
     return new SerialDefaultColumnConstraint();
   }
 
-  public static PrimaryKeyTableConstraint makePrimaryKeyTableConstraint(Uid name, Uid index,
-      IndexTypeEnum indexType, IndexColumnNames indexColumnNames, IndexOption indexOption) {
-    return new PrimaryKeyTableConstraint(name, index, indexType, indexColumnNames, indexOption);
-  }
-
-  public static UniqueKeyTableConstraint makeUniqueKeyTableConstraint(Uid name,
-      IndexFormatEnum indexFormat, Uid index, IndexTypeEnum indexType,
-      IndexColumnNames indexColumnNames, List<IndexOption> indexOptions) {
-    return new UniqueKeyTableConstraint(name, indexFormat, index, indexType, indexColumnNames,
+  public static PrimaryKeyTableConstraint makePrimaryKeyTableConstraint(Boolean constraint,
+      Uid name, Uid index, IndexTypeEnum indexType, IndexColumnNames indexColumnNames,
+      List<IndexOption> indexOptions) {
+    return new PrimaryKeyTableConstraint(constraint, name, index, indexType, indexColumnNames,
         indexOptions);
   }
 
-  public static ForeignKeyTableConstraint makeForeignKeyTableConstraint(Uid name, Uid index,
-      IndexColumnNames indexColumnNames, ReferenceDefinition referenceDefinition) {
-    return new ForeignKeyTableConstraint(name, index, indexColumnNames, referenceDefinition);
+  public static UniqueKeyTableConstraint makeUniqueKeyTableConstraint(Boolean constraint, Uid name,
+      IndexFormatEnum indexFormat, Uid index, IndexTypeEnum indexType,
+      IndexColumnNames indexColumnNames, List<IndexOption> indexOptions) {
+    return new UniqueKeyTableConstraint(constraint, name, indexFormat, index, indexType,
+        indexColumnNames, indexOptions);
   }
 
-  public static CheckTableConstraint makeCheckTableConstraint(Uid name, Expression expression) {
-    return new CheckTableConstraint(name, expression);
+  public static ForeignKeyTableConstraint makeForeignKeyTableConstraint(Boolean constraint,
+      Uid name, Uid index, IndexColumnNames indexColumnNames,
+      ReferenceDefinition referenceDefinition) {
+    return new ForeignKeyTableConstraint(constraint, name, index, indexColumnNames,
+        referenceDefinition);
+  }
+
+  public static CheckTableConstraint makeCheckTableConstraint(Boolean constraint, Uid name,
+      Expression expression) {
+    return new CheckTableConstraint(constraint, name, expression);
   }
 
   public static ReferenceDefinition makeReferenceDefinition(TableName tableName,
@@ -480,111 +673,99 @@ public abstract class RelationalAlgebraExpressionFactory {
     return new TableOptionEngine(equal, engineName);
   }
 
-  public static TableOptionAutoIncrement makeTableOptionAutoIncrement(Boolean equal,
-      DecimalLiteral decimalLiteral) {
-    return new TableOptionAutoIncrement(equal, decimalLiteral);
+  public static TableOptionAutoIncrement
+      makeTableOptionAutoIncrement(DecimalLiteral decimalLiteral) {
+    return new TableOptionAutoIncrement(decimalLiteral);
   }
 
-  public static TableOptionAverage makeTableOptionAverage(Boolean equal,
-      DecimalLiteral decimalLiteral) {
-    return new TableOptionAverage(equal, decimalLiteral);
+  public static TableOptionAverage makeTableOptionAverage(DecimalLiteral decimalLiteral) {
+    return new TableOptionAverage(decimalLiteral);
   }
 
-  public static TableOptionCharset makeTableOptionCharset(Boolean isDefault, Boolean equal,
+  public static TableOptionCharset makeTableOptionCharset(Boolean isDefault,
       CharsetName charsetName) {
-    return new TableOptionCharset(isDefault, equal, charsetName);
+    return new TableOptionCharset(isDefault, charsetName);
   }
 
   public static TableOptionChecksum makeTableOptionChecksum(TableOptionChecksum.Type type,
-      Boolean equal, BoolValueEnum boolValue) {
-    return new TableOptionChecksum(type, equal, boolValue);
+      BoolValueEnum boolValue) {
+    return new TableOptionChecksum(type, boolValue);
   }
 
-  public static TableOptionCollate makeTableOptionCollate(Boolean isDefault, Boolean equal,
+  public static TableOptionCollate makeTableOptionCollate(Boolean isDefault,
       CollationName collationName) {
-    return new TableOptionCollate(isDefault, equal, collationName);
+    return new TableOptionCollate(isDefault, collationName);
   }
 
-  public static TableOptionComment makeTableOptionComment(Boolean equal, String stringLiteral) {
-    return new TableOptionComment(equal, stringLiteral);
+  public static TableOptionComment makeTableOptionComment(String stringLiteral) {
+    return new TableOptionComment(stringLiteral);
   }
 
-  public static TableOptionCompression makeTableOptionCompression(Boolean equal,
-      String stringLiteralOrId) {
-    return new TableOptionCompression(equal, stringLiteralOrId);
+  public static TableOptionCompression makeTableOptionCompression(String stringLiteralOrId) {
+    return new TableOptionCompression(stringLiteralOrId);
   }
 
-  public static TableOptionConnection makeTableOptionConnection(Boolean equal,
-      String stringLiteral) {
-    return new TableOptionConnection(equal, stringLiteral);
+  public static TableOptionConnection makeTableOptionConnection(String stringLiteral) {
+    return new TableOptionConnection(stringLiteral);
   }
 
-  public static TableOptionDataDirectory makeTableOptionDataDirectory(Boolean equal,
-      String stringLiteral) {
-    return new TableOptionDataDirectory(equal, stringLiteral);
+  public static TableOptionDataDirectory makeTableOptionDataDirectory(String stringLiteral) {
+    return new TableOptionDataDirectory(stringLiteral);
   }
 
-  public static TableOptionDelay makeTableOptionDelay(Boolean equal, BoolValueEnum boolValue) {
-    return new TableOptionDelay(equal, boolValue);
+  public static TableOptionDelay makeTableOptionDelay(BoolValueEnum boolValue) {
+    return new TableOptionDelay(boolValue);
   }
 
-  public static TableOptionEncryption makeTableOptionEncryption(Boolean equal,
-      String stringLiteral) {
-    return new TableOptionEncryption(equal, stringLiteral);
+  public static TableOptionEncryption makeTableOptionEncryption(String stringLiteral) {
+    return new TableOptionEncryption(stringLiteral);
   }
 
-  public static TableOptionIndexDirectory makeTableOptionIndexDirectory(Boolean equal,
-      String stringLiteral) {
-    return new TableOptionIndexDirectory(equal, stringLiteral);
+  public static TableOptionIndexDirectory makeTableOptionIndexDirectory(String stringLiteral) {
+    return new TableOptionIndexDirectory(stringLiteral);
   }
 
-  public static TableOptionInsertMethod makeTableOptionInsertMethod(Boolean equal,
-      InsertMethodEnum insertMethod) {
-    return new TableOptionInsertMethod(equal, insertMethod);
+  public static TableOptionInsertMethod makeTableOptionInsertMethod(InsertMethodEnum insertMethod) {
+    return new TableOptionInsertMethod(insertMethod);
   }
 
-  public static TableOptionKeyBlockSize makeTableOptionKeyBlockSize(Boolean equal,
-      FileSizeLiteral fileSizeLiteral) {
-    return new TableOptionKeyBlockSize(equal, fileSizeLiteral);
+  public static TableOptionKeyBlockSize
+      makeTableOptionKeyBlockSize(FileSizeLiteral fileSizeLiteral) {
+    return new TableOptionKeyBlockSize(fileSizeLiteral);
   }
 
-  public static TableOptionMaxRows makeTableOptionMaxRows(Boolean equal,
-      DecimalLiteral decimalLiteral) {
-    return new TableOptionMaxRows(equal, decimalLiteral);
+  public static TableOptionMaxRows makeTableOptionMaxRows(DecimalLiteral decimalLiteral) {
+    return new TableOptionMaxRows(decimalLiteral);
   }
 
-  public static TableOptionMinRows makeTableOptionMinRows(Boolean equal,
-      DecimalLiteral decimalLiteral) {
-    return new TableOptionMinRows(equal, decimalLiteral);
+  public static TableOptionMinRows makeTableOptionMinRows(DecimalLiteral decimalLiteral) {
+    return new TableOptionMinRows(decimalLiteral);
   }
 
-  public static TableOptionPackKeys makeTableOptionPackKeys(Boolean equal,
-      ExtBoolValueEnum extBoolValue) {
-    return new TableOptionPackKeys(equal, extBoolValue);
+  public static TableOptionPackKeys makeTableOptionPackKeys(ExtBoolValueEnum extBoolValue) {
+    return new TableOptionPackKeys(extBoolValue);
   }
 
-  public static TableOptionPassword makeTableOptionPassword(Boolean equal, String stringLiteral) {
-    return new TableOptionPassword(equal, stringLiteral);
+  public static TableOptionPassword makeTableOptionPassword(String stringLiteral) {
+    return new TableOptionPassword(stringLiteral);
   }
 
-  public static TableOptionRowFormat makeTableOptionRowFormat(Boolean equal,
-      TableOptionRowFormat.RowFormatEnum rowFormat) {
-    return new TableOptionRowFormat(equal, rowFormat);
+  public static TableOptionRowFormat
+      makeTableOptionRowFormat(TableOptionRowFormat.RowFormatEnum rowFormat) {
+    return new TableOptionRowFormat(rowFormat);
   }
 
-  public static TableOptionRecalculation makeTableOptionRecalculation(Boolean equal,
-      ExtBoolValueEnum extBoolValue) {
-    return new TableOptionRecalculation(equal, extBoolValue);
+  public static TableOptionRecalculation
+      makeTableOptionRecalculation(ExtBoolValueEnum extBoolValue) {
+    return new TableOptionRecalculation(extBoolValue);
   }
 
-  public static TableOptionPersistent makeTableOptionPersistent(Boolean equal,
-      ExtBoolValueEnum extBoolValue) {
-    return new TableOptionPersistent(equal, extBoolValue);
+  public static TableOptionPersistent makeTableOptionPersistent(ExtBoolValueEnum extBoolValue) {
+    return new TableOptionPersistent(extBoolValue);
   }
 
-  public static TableOptionSamplePage makeTableOptionSamplePage(Boolean equal,
-      DecimalLiteral decimalLiteral) {
-    return new TableOptionSamplePage(equal, decimalLiteral);
+  public static TableOptionSamplePage makeTableOptionSamplePage(DecimalLiteral decimalLiteral) {
+    return new TableOptionSamplePage(decimalLiteral);
   }
 
   public static TableOptionTablespace makeTableOptionTablespace(Uid uid,
@@ -592,8 +773,8 @@ public abstract class RelationalAlgebraExpressionFactory {
     return new TableOptionTablespace(uid, tablespaceStorage);
   }
 
-  public static TableOptionUnion makeTableOptionUnion(Boolean equal, Tables tables) {
-    return new TableOptionUnion(equal, tables);
+  public static TableOptionUnion makeTableOptionUnion(Tables tables) {
+    return new TableOptionUnion(tables);
   }
 
   public static TablespaceStorageEnum makeTablespaceStorage(String name) {
@@ -653,9 +834,9 @@ public abstract class RelationalAlgebraExpressionFactory {
   }
 
   public static PartitionListVector makePartitionListVector(Uid uid,
-      List<PartitionDefinerAtom> partitionDefinerAtoms, List<PartitionOption> partitionOptions,
+      List<PartitionDefinerVector> partitionDefinerVectors, List<PartitionOption> partitionOptions,
       List<SubpartitionDefinition> subpartitionDefinitions) {
-    return new PartitionListVector(uid, partitionDefinerAtoms, partitionOptions,
+    return new PartitionListVector(uid, partitionDefinerVectors, partitionOptions,
         subpartitionDefinitions);
   }
 
@@ -679,43 +860,38 @@ public abstract class RelationalAlgebraExpressionFactory {
     return new SubpartitionDefinition(uid, partitionOptions);
   }
 
-  public static PartitionOptionEngine makePartitionOptionEngine(Boolean storage, Boolean equal,
-      EngineName engineName) {
-    return new PartitionOptionEngine(storage, equal, engineName);
+  public static PartitionOptionEngine makePartitionOptionEngine(EngineName engineName) {
+    return new PartitionOptionEngine(engineName);
   }
 
-  public static PartitionOptionComment makePartitionOptionComment(Boolean equal, String comment) {
-    return new PartitionOptionComment(equal, comment);
+  public static PartitionOptionComment makePartitionOptionComment(String comment) {
+    return new PartitionOptionComment(comment);
   }
 
-  public static PartitionOptionDataDirectory makePartitionOptionDataDirectory(Boolean equal,
-      String dataDirectory) {
-    return new PartitionOptionDataDirectory(equal, dataDirectory);
+  public static PartitionOptionDataDirectory
+      makePartitionOptionDataDirectory(String dataDirectory) {
+    return new PartitionOptionDataDirectory(dataDirectory);
   }
 
-  public static PartitionOptionIndexDirectory makePartitionOptionIndexDirectory(Boolean equal,
-      String indexDirectory) {
-    return new PartitionOptionIndexDirectory(equal, indexDirectory);
+  public static PartitionOptionIndexDirectory
+      makePartitionOptionIndexDirectory(String indexDirectory) {
+    return new PartitionOptionIndexDirectory(indexDirectory);
   }
 
-  public static PartitionOptionMaxRows makePartitionOptionMaxRows(Boolean equal,
-      DecimalLiteral maxRows) {
-    return new PartitionOptionMaxRows(equal, maxRows);
+  public static PartitionOptionMaxRows makePartitionOptionMaxRows(DecimalLiteral maxRows) {
+    return new PartitionOptionMaxRows(maxRows);
   }
 
-  public static PartitionOptionMinRows makePartitionOptionMinRows(Boolean equal,
-      DecimalLiteral minRows) {
-    return new PartitionOptionMinRows(equal, minRows);
+  public static PartitionOptionMinRows makePartitionOptionMinRows(DecimalLiteral minRows) {
+    return new PartitionOptionMinRows(minRows);
   }
 
-  public static PartitionOptionTablespace makePartitionOptionTablespace(Boolean equal,
-      Uid tablespace) {
-    return new PartitionOptionTablespace(equal, tablespace);
+  public static PartitionOptionTablespace makePartitionOptionTablespace(Uid tablespace) {
+    return new PartitionOptionTablespace(tablespace);
   }
 
-  public static PartitionOptionNodeGroup makePartitionOptionNodeGroup(Boolean equal,
-      Uid nodegroup) {
-    return new PartitionOptionNodeGroup(equal, nodegroup);
+  public static PartitionOptionNodeGroup makePartitionOptionNodeGroup(Uid nodegroup) {
+    return new PartitionOptionNodeGroup(nodegroup);
   }
 
   // ---------------------------------------------------------------------------
@@ -798,16 +974,16 @@ public abstract class RelationalAlgebraExpressionFactory {
     return new AlterByAddIndex(indexFormat, uid, indexType, indexColumnNames, indexOptions);
   }
 
-  public static AlterByAddPrimaryKey makeAlterByAddPrimaryKey(Uid name, IndexTypeEnum indexType,
-      IndexColumnNames indexColumnNames, List<IndexOption> indexOptions) {
-    return new AlterByAddPrimaryKey(name, indexType, indexColumnNames, indexOptions);
+  public static AlterByAddPrimaryKey makeAlterByAddPrimaryKey(Boolean constraint, Uid name,
+      IndexTypeEnum indexType, IndexColumnNames indexColumnNames, List<IndexOption> indexOptions) {
+    return new AlterByAddPrimaryKey(constraint, name, indexType, indexColumnNames, indexOptions);
   }
 
-  public static AlterByAddUniqueKey makeAlterByAddUniqueKey(Uid name, IndexFormatEnum indexFormat,
-      Uid indexName, IndexTypeEnum indexType, IndexColumnNames indexColumnNames,
-      List<IndexOption> indexOptions) {
-    return new AlterByAddUniqueKey(name, indexFormat, indexName, indexType, indexColumnNames,
-        indexOptions);
+  public static AlterByAddUniqueKey makeAlterByAddUniqueKey(Boolean constraint, Uid name,
+      IndexFormatEnum indexFormat, Uid indexName, IndexTypeEnum indexType,
+      IndexColumnNames indexColumnNames, List<IndexOption> indexOptions) {
+    return new AlterByAddUniqueKey(constraint, name, indexFormat, indexName, indexType,
+        indexColumnNames, indexOptions);
   }
 
   public static AlterByAddSpecialIndex makeAlterByAddSpecialIndex(
@@ -816,19 +992,20 @@ public abstract class RelationalAlgebraExpressionFactory {
     return new AlterByAddSpecialIndex(keyType, indexFormat, uid, indexColumnNames, indexOptions);
   }
 
-  public static AlterByAddForeignKey makeAlterByAddForeignKey(Uid name, Uid indexName,
-      IndexColumnNames indexColumnNames, ReferenceDefinition referenceDefinition) {
-    return new AlterByAddForeignKey(name, indexName, indexColumnNames, referenceDefinition);
+  public static AlterByAddForeignKey makeAlterByAddForeignKey(Boolean constraint, Uid name,
+      Uid indexName, IndexColumnNames indexColumnNames, ReferenceDefinition referenceDefinition) {
+    return new AlterByAddForeignKey(constraint, name, indexName, indexColumnNames,
+        referenceDefinition);
   }
 
-  public static AlterByAddCheckTableConstraint makeAlterByAddCheckTableConstraint(Uid name,
-      Expression expression) {
-    return new AlterByAddCheckTableConstraint(name, expression);
+  public static AlterByAddCheckTableConstraint makeAlterByAddCheckTableConstraint(Boolean constant,
+      Uid name, Expression expression) {
+    return new AlterByAddCheckTableConstraint(constant, name, expression);
   }
 
-  public static AlterBySetAlgorithm makeAlterBySetAlgorithm(Boolean equal,
-      AlterBySetAlgorithm.AlgTypeEnum algType) {
-    return new AlterBySetAlgorithm(equal, algType);
+  public static AlterBySetAlgorithm
+      makeAlterBySetAlgorithm(AlterBySetAlgorithm.AlgTypeEnum algType) {
+    return new AlterBySetAlgorithm(algType);
   }
 
   public static AlterByChangeDefault makeAlterByChangeDefault(Boolean column, Uid uid,
@@ -845,8 +1022,8 @@ public abstract class RelationalAlgebraExpressionFactory {
     return new AlterByRenameColumn(oldColumn, newColumn);
   }
 
-  public static AlterByLock makeAlterByLock(Boolean equal, AlterByLock.LockTypeEnum lockType) {
-    return new AlterByLock(equal, lockType);
+  public static AlterByLock makeAlterByLock(AlterByLock.LockTypeEnum lockType) {
+    return new AlterByLock(lockType);
   }
 
   public static AlterByModifyColumn makeAlterByModifyColumn(Uid uid,
@@ -1056,95 +1233,391 @@ public abstract class RelationalAlgebraExpressionFactory {
   // ---------------------------------------------------------------------------
   // Primary DML Statements
 
-  // public static CallStatement makeCallStatement() { return new CallStatement(); }
-  // public static DeleteStatement makeDeleteStatement() { return new DeleteStatement(); }
-  // public static DoStatement makeDoStatement() { return new DoStatement(); }
-  // public static HandlerStatement makeHandlerStatement() { return new HandlerStatement(); }
-  // public static InsertStatement makeInsertStatement() { return new InsertStatement(); }
-  // public static LoadDataStatement makeLoadDataStatement() { return new LoadDataStatement(); }
-  // public static LoadXmlStatement makeLoadXmlStatement() { return new LoadXmlStatement(); }
-  // public static ReplaceStatement makeReplaceStatement() { return new ReplaceStatement(); }
-  // public static SelectStatement makeSelectStatement() { return new SelectStatement(); }
-  // public static UpdateStatement makeUpdateStatement() { return new UpdateStatement(); }
-  // public static InsertStatementValue makeInsertStatementValue() { return new
-  // InsertStatementValue(); }
-  // public static UpdatedElement makeUpdatedElement() { return new UpdatedElement(); }
-  // public static AssignmentField makeAssignmentField() { return new AssignmentField(); }
-  // public static LockClauseEnum makeLockClause() { return new LockClause(); }
+  public static CallStatement makeCallStatement(FullId fullId, Constants constants,
+      Expressions expressions) {
+    return new CallStatement(fullId, constants, expressions);
+  }
+
+  public static DoStatement makeDoStatement(Expressions expressions) {
+    return new DoStatement(expressions);
+  }
+
+  public static InsertStatement makeInsertStatement(PriorityType priority, Boolean ignore,
+      Boolean into, TableName tableName, UidList partitions, UidList columns,
+      InsertStatementValue insertStatementValue, List<UpdatedElement> setList,
+      List<UpdatedElement> duplicatedList) {
+    return new InsertStatement(priority, ignore, into, tableName, partitions, columns,
+        insertStatementValue, setList, duplicatedList);
+  }
+
+  public static LoadDataStatement makeLoadDataStatement(DmlStatement.PriorityEnum priority,
+      Boolean local, String filename, ViolationEnum violation, TableName tableName, UidList uidList,
+      CharsetName charsetName, FieldsFormatEnum fieldsFormat,
+      List<SelectFieldsInto> selectFieldsIntos, List<SelectLinesInto> selectLinesIntos,
+      DecimalLiteral decimalLiteral, LinesFormatEnum linesFormat,
+      List<AssignmentField> assignmentFields, List<UpdatedElement> updatedElements) {
+    return new LoadDataStatement(priority, local, filename, violation, tableName, uidList,
+        charsetName, fieldsFormat, selectFieldsIntos, selectLinesIntos, decimalLiteral, linesFormat,
+        assignmentFields, updatedElements);
+  }
+
+  public static LoadXmlStatement makeLoadXmlStatement(DmlStatement.PriorityEnum priority,
+      Boolean local, String filename, ViolationEnum violation, TableName tableName,
+      CharsetName charsetName, String tag, DecimalLiteral decimalLiteral,
+      LinesFormatEnum linesFormat, List<AssignmentField> assignmentFields,
+      List<UpdatedElement> updatedElements) {
+    return new LoadXmlStatement(priority, local, filename, violation, tableName, charsetName, tag,
+        decimalLiteral, linesFormat, assignmentFields, updatedElements);
+  }
+
+  public static ReplaceStatement makeReplaceStatement(PriorityEnum priority, TableName tableName,
+      UidList partitions, UidList columns, InsertStatementValue insertStatementValue,
+      List<UpdatedElement> setList) {
+    return new ReplaceStatement(priority, tableName, partitions, columns, insertStatementValue,
+        setList);
+  }
+
+  public static SimpleSelect makeSimpleSelect(QuerySpecification querySpecification,
+      LockClauseEnum lockClause) {
+    return new SimpleSelect(querySpecification, lockClause);
+  }
+
+  public static ParenthesisSelect makeParenthesisSelect(QueryExpression queryExpression,
+      LockClauseEnum lockClause) {
+    return new ParenthesisSelect(queryExpression, lockClause);
+  }
+
+  public static UnionSelect makeUnionSelect(QuerySpecificationNointo querySpecificationNointo,
+      List<UnionStatement> unionStatements, UnionTypeEnum unionType,
+      QuerySpecification querySpecification, QueryExpression queryExpression,
+      OrderByClause orderByClause, LimitClause limitClause, LockClauseEnum lockClause) {
+    return new UnionSelect(querySpecificationNointo, unionStatements, unionType, querySpecification,
+        queryExpression, orderByClause, limitClause, lockClause);
+  }
+
+  public static UnionParenthesisSelect makeUnionParenthesisSelect(
+      QueryExpressionNointo queryExpressionNointo, List<UnionParenthesis> unionParenthesisList,
+      UnionTypeEnum unionType, QueryExpression queryExpression, OrderByClause orderByClause,
+      LimitClause limitClause, LockClauseEnum lockClause) {
+    return new UnionParenthesisSelect(queryExpressionNointo, unionParenthesisList, unionType,
+        queryExpression, orderByClause, limitClause, lockClause);
+  }
+
+  public static InsertStatementValue makeInsertStatementValue(SelectStatement selectStatement,
+      List<ExpressionsWithDefaults> expressionsWithDefaults) {
+    return new InsertStatementValue(selectStatement, expressionsWithDefaults);
+  }
+
+  public static UpdatedElement makeUpdatedElement(FullColumnName fullColumnName,
+      Expression expression) {
+    return new UpdatedElement(fullColumnName, expression);
+  }
+
+  public static AssignmentField makeAssignmentField(Uid uid, String localId) {
+    return new AssignmentField(uid, localId);
+  }
+
+  public static LockClauseEnum makeLockClause(String name) {
+    return LockClauseEnum.valueOf(name);
+  }
 
   // ---------------------------------------------------------------------------
   // Detailed DML Statements
 
-  // public static SingleDeleteStatement makeSingleDeleteStatement() { return new
-  // SingleDeleteStatement(); }
-  // public static MultipleDeleteStatement makeMultipleDeleteStatement() { return new
-  // MultipleDeleteStatement(); }
-  // public static HandlerOpenStatement makeHandlerOpenStatement() { return new
-  // HandlerOpenStatement(); }
-  // public static HandlerReadIndexStatement makeHandlerReadIndexStatement() { return new
-  // HandlerReadIndexStatement(); }
-  // public static HandlerReadStatement makeHandlerReadStatement() { return new
-  // HandlerReadStatement(); }
-  // public static HandlerCloseStatement makeHandlerCloseStatement() { return new
-  // HandlerCloseStatement(); }
-  // public static SingleUpdateStatement makeSingleUpdateStatement() { return new
-  // SingleUpdateStatement(); }
-  // public static MultipleUpdateStatement makeMultipleUpdateStatement() { return new
-  // MultipleUpdateStatement(); }
-  // public static OrderByClause makeOrderByClause() { return new OrderByClause(); }
-  // public static OrderByExpression makeOrderByExpression() { return new OrderByExpression(); }
-  // public static TableSources makeTableSources() { return new TableSources(); }
-  // public static TableSource makeTableSource() { return new TableSource(); }
-  // public static TableSourceItem makeTableSourceItem() { return new TableSourceItem(); }
-  // public static IndexHint makeIndexHint() { return new IndexHint(); }
-  // public static IndexHintType makeIndexHintType() { return new IndexHintType(); }
-  // public static JoinPart makeJoinPart() { return new JoinPart(); }
+  public static SingleDeleteStatement makeSingleDeleteStatement(Boolean lowPriority, Boolean quick,
+      Boolean ignore, TableName tableName, UidList uidList, Expression where,
+      OrderByClause orderByClause, DecimalLiteral limit) {
+    return new SingleDeleteStatement(lowPriority, quick, ignore, tableName, uidList, where,
+        orderByClause, limit);
+  }
+
+  public static MultipleDeleteStatement makeMultipleDeleteStatement(Boolean lowPriority,
+      Boolean quick, Boolean ignore, boolean using, List<TableName> tableNames,
+      TableSources tableSources, Expression where) {
+    return new MultipleDeleteStatement(lowPriority, quick, ignore, using, tableNames, tableSources,
+        where);
+  }
+
+  public static HandlerOpenStatement makeHandlerOpenStatement(TableName tableName, Uid uid) {
+    return new HandlerOpenStatement(tableName, uid);
+  }
+
+  public static HandlerReadIndexStatement makeHandlerReadIndexStatement(TableName tableName,
+      Uid index, RelationalComparisonOperatorEnum comparisonOperator, Constants constants,
+      HandlerReadIndexStatement.MoveOrderEnum moveOrder, Expression where, DecimalLiteral limit) {
+    return new HandlerReadIndexStatement(tableName, index, comparisonOperator, constants, moveOrder,
+        where, limit);
+  }
+
+  public static HandlerReadStatement makeHandlerReadStatement(TableName tableName,
+      HandlerReadStatement.MoveOrderEnum moveOrder, Expression where, DecimalLiteral limit) {
+    return new HandlerReadStatement(tableName, moveOrder, where, limit);
+  }
+
+  public static HandlerCloseStatement makeHandlerCloseStatement(TableName tableName) {
+    return new HandlerCloseStatement(tableName);
+  }
+
+  public static SingleUpdateStatement makeSingleUpdateStatement(Boolean lowPriority, Boolean ignore,
+      TableName tableName, Uid uid, List<UpdatedElement> updatedElements, Expression where,
+      OrderByClause orderByClause, LimitClause limitClause) {
+    return new SingleUpdateStatement(lowPriority, ignore, tableName, uid, updatedElements, where,
+        orderByClause, limitClause);
+  }
+
+  public static MultipleUpdateStatement makeMultipleUpdateStatement(Boolean lowPriority,
+      Boolean ignore, TableSources tableSources, List<UpdatedElement> updatedElements,
+      Expression where) {
+    return new MultipleUpdateStatement(lowPriority, ignore, tableSources, updatedElements, where);
+  }
+
+  public static OrderByClause makeOrderByClause(List<OrderByExpression> orderByExpressions) {
+    return new OrderByClause(orderByExpressions);
+  }
+
+  public static OrderByExpression makeOrderByExpression(Expression expression,
+      OrderByExpression.OrderType order) {
+    return new OrderByExpression(expression, order);
+  }
+
+  public static TableSources makeTableSources(List<TableSource> tableSources) {
+    return new TableSources(tableSources);
+  }
+
+  public static TableSourceBase makeTableSourceBase(TableSourceItem tableSourceItem,
+      List<JoinPart> joinParts) {
+    return new TableSourceBase(tableSourceItem, joinParts);
+  }
+
+  public static TableSourceNested makeTableSourceNested(TableSourceItem tableSourceItem,
+      List<JoinPart> joinParts) {
+    return new TableSourceNested(tableSourceItem, joinParts);
+  }
+
+  public static AtomTableItem makeAtomTableItem(TableName tableName, UidList uidList, Uid alias,
+      List<IndexHint> indexHints) {
+    return new AtomTableItem(tableName, uidList, alias, indexHints);
+  }
+
+  public static SubqueryTableItem makeSubqueryTableItem(SelectStatement selectStatement,
+      Uid alias) {
+    return new SubqueryTableItem(selectStatement, alias);
+  }
+
+  public static TableSourcesItem makeTableSourcesItem(TableSources tableSources) {
+    return new TableSourcesItem(tableSources);
+  }
+
+  public static IndexHint makeIndexHint(IndexHint.IndexHintAction indexHintAction,
+      IndexHint.KeyFormat keyFormat, IndexHintTypeEnum indexHintType, UidList uidList) {
+    return new IndexHint(indexHintAction, keyFormat, indexHintType, uidList);
+  }
+
+  public static IndexHintTypeEnum makeIndexHintType(String name) {
+    return IndexHintTypeEnum.valueOf(name);
+  }
+
+  public static InnerJoin makeInnerJoin(TableSourceItem tableSourceItem, Expression expression,
+      UidList uidList) {
+    return new InnerJoin(tableSourceItem, expression, uidList);
+  }
+
+  public static StraightJoin makeStraightJoin(TableSourceItem tableSourceItem,
+      Expression expression) {
+    return new StraightJoin(tableSourceItem, expression);
+  }
+
+  public static OuterJoin makeOuterJoin(OuterJoinType type, TableSourceItem tableSourceItem,
+      Expression expression, UidList uidList) {
+    return new OuterJoin(type, tableSourceItem, expression, uidList);
+  }
+
+  public static NaturalJoin makeNaturalJoin(OuterJoinType outerJoinType,
+      TableSourceItem tableSourceItem) {
+    return new NaturalJoin(outerJoinType, tableSourceItem);
+  }
 
   // ---------------------------------------------------------------------------
   // Select Statement's Details
 
-  // public static QueryExpression makeQueryExpression() { return new QueryExpression(); }
-  // public static QueryExpressionNointo makeQueryExpressionNointo() { return new
-  // QueryExpressionNointo(); }
-  // public static QuerySpecification makeQuerySpecification() { return new QuerySpecification(); }
-  // public static QuerySpecificationNointo makeQuerySpecificationNointo() { return new
-  // QuerySpecificationNointo(); }
-  // public static UnionParenthesis makeUnionParenthesis() { return new UnionParenthesis(); }
-  // public static UnionStatement makeUnionStatement() { return new UnionStatement(); }
-  // public static SelectSpec makeSelectSpec() { return new SelectSpec(); }
-  // public static SelectElements makeSelectElements() { return new SelectElements(); }
-  // public static SelectElement makeSelectElement() { return new SelectElement(); }
-  // public static SelectIntoExpression makeSelectIntoExpression() { return new
-  // SelectIntoExpression(); }
-  // public static SelectFieldsInto makeSelectFieldsInto() { return new SelectFieldsInto(); }
-  // public static SelectLinesInto makeSelectLinesInto() { return new SelectLinesInto(); }
-  // public static FromClause makeFromClause() { return new FromClause(); }
-  // public static GroupByItem makeGroupByItem() { return new GroupByItem(); }
-  // public static LimitClause makeLimitClause() { return new LimitClause(); }
-  // public static LimitClauseAtom makeLimitClauseAtom() { return new LimitClauseAtom(); }
+  public static QueryExpression makeQueryExpression(QuerySpecification querySpecification,
+      QueryExpression queryExpression) {
+    return new QueryExpression(querySpecification, queryExpression);
+  }
+
+  public static QueryExpressionNointo
+      makeQueryExpressionNointo(QuerySpecificationNointo querySpecificationNointo) {
+    return new QueryExpressionNointo(querySpecificationNointo);
+  }
+
+  public static QuerySpecification makeQuerySpecification(List<SelectSpecEnum> selectSpecs,
+      SelectElements selectElements, SelectIntoExpression selectIntoExpression,
+      FromClause fromClause, OrderByClause orderByClause, LimitClause limitClause) {
+    return new QuerySpecification(selectSpecs, selectElements, selectIntoExpression, fromClause,
+        orderByClause, limitClause);
+  }
+
+  public static QuerySpecificationNointo makeQuerySpecificationNointo(
+      List<SelectSpecEnum> selectSpecs, SelectElements selectElements, FromClause fromClause,
+      OrderByClause orderByClause, LimitClause limitClause) {
+    return new QuerySpecificationNointo(selectSpecs, selectElements, fromClause, orderByClause,
+        limitClause);
+  }
+
+  public static UnionParenthesis makeUnionParenthesis(UnionTypeEnum unionType,
+      QueryExpressionNointo queryExpressionNointo) {
+    return new UnionParenthesis(unionType, queryExpressionNointo);
+  }
+
+  public static UnionStatement makeUnionStatement(UnionTypeEnum unionType,
+      QuerySpecificationNointo querySpecificationNointo,
+      QueryExpressionNointo queryExpressionNointo) {
+    return new UnionStatement(unionType, querySpecificationNointo, queryExpressionNointo);
+  }
+
+  public static SelectSpecEnum makeSelectSpec(String name) {
+    return SelectSpecEnum.valueOf(name);
+  }
+
+  public static SelectElements makeSelectElements(Boolean star,
+      List<SelectElement> selectElements) {
+    return new SelectElements(star, selectElements);
+  }
+
+  public static SelectStarElement makeSelectStarElement(FullId fullId) {
+    return new SelectStarElement(fullId);
+  }
+
+  public static SelectColumnElement makeSelectColumnElement(FullColumnName fullColumnName,
+      Uid uid) {
+    return new SelectColumnElement(fullColumnName, uid);
+  }
+
+  public static SelectFunctionElement makeSelectFunctionElement(FunctionCall functionCall,
+      Uid uid) {
+    return new SelectFunctionElement(functionCall, uid);
+  }
+
+  public static SelectExpressionElement makeSelectExpressionElement(String localId,
+      Expression expression, Uid uid) {
+    return new SelectExpressionElement(localId, expression, uid);
+  }
+
+  public static SelectIntoVariables
+      makeSelectIntoVariables(List<AssignmentField> assignmentFields) {
+    return new SelectIntoVariables(assignmentFields);
+  }
+
+  public static SelectIntoDumpFile makeSelectIntoDumpFile(String stringLiteral) {
+    return new SelectIntoDumpFile(stringLiteral);
+  }
+
+  public static SelectIntoTextFile makeSelectIntoTextFile(String filename, CharsetName charsetName,
+      TieldsFormatType fieldsFormat, List<SelectFieldsInto> selectFieldsIntos,
+      List<SelectLinesInto> selectLinesIntos) {
+    return new SelectIntoTextFile(filename, charsetName, fieldsFormat, selectFieldsIntos,
+        selectLinesIntos);
+  }
+
+  public static SelectFieldsInto makeSelectFieldsInto(SelectFieldsInto.Type type,
+      Boolean optionally, String stringLiteral) {
+    return new SelectFieldsInto(type, optionally, stringLiteral);
+  }
+
+  public static SelectLinesInto makeSelectLinesInto(SelectLinesInto.Type type,
+      String stringLiteral) {
+    return new SelectLinesInto(type, stringLiteral);
+  }
+
+  public static FromClause makeFromClause(TableSources tableSources, Expression whereExpr,
+      List<GroupByItem> groupByItems, Boolean withRollup, Expression havingExpr) {
+    return new FromClause(tableSources, whereExpr, groupByItems, withRollup, havingExpr);
+  }
+
+  public static GroupByItem makeGroupByItem(Expression expression, OrderType order) {
+    return new GroupByItem(expression, order);
+  }
+
+  public static LimitClause makeLimitClause(LimitClauseAtom limit, LimitClauseAtom offset) {
+    return new LimitClause(limit, offset);
+  }
+
+  public static LimitClauseAtom makeLimitClauseAtom(DecimalLiteral decimalLiteral,
+      MysqlVariable mysqlVariable) {
+    return new LimitClauseAtom(decimalLiteral, mysqlVariable);
+  }
 
   // ---------------------------------------------------------------------------
   // Transaction's Statements
   // ---------------------------------------------------------------------------
 
-  // public static StartTransaction makeStartTransaction() { return new StartTransaction(); }
-  // public static BeginWork makeBeginWork() { return new BeginWork(); }
-  // public static CommitWork makeCommitWork() { return new CommitWork(); }
-  // public static RollbackWork makeRollbackWork() { return new RollbackWork(); }
-  // public static SavepointStatement makeSavepointStatement() { return new SavepointStatement(); }
-  // public static RollbackStatement makeRollbackStatement() { return new RollbackStatement(); }
-  // public static ReleaseStatement makeReleaseStatement() { return new ReleaseStatement(); }
-  // public static LockTables makeLockTables() { return new LockTables(); }
-  // public static UnlockTables makeUnlockTables() { return new UnlockTables(); }
-  // public static SetAutocommitStatement makeSetAutocommitStatement() { return new
-  // SetAutocommitStatement(); }
-  // public static SetTransactionStatement makeSetTransactionStatement() { return new
-  // SetTransactionStatement(); }
-  // public static TransactionMode makeTransactionMode() { return new TransactionMode(); }
-  // public static LockTableElement makeLockTableElement() { return new LockTableElement(); }
-  // public static LockAction makeLockAction() { return new LockAction(); }
-  // public static TransactionOption makeTransactionOption() { return new TransactionOption(); }
-  // public static TransactionLevel makeTransactionLevel() { return new TransactionLevel(); }
+  public static StartTransaction makeStartTransaction(List<TransactionModeEnum> transactionModes) {
+    return new StartTransaction(transactionModes);
+  }
+
+  public static BeginWork makeBeginWork() {
+    return new BeginWork();
+  }
+
+  public static CommitWork makeCommitWork(Boolean chain, Boolean release) {
+    return new CommitWork(chain, release);
+  }
+
+  public static RollbackWork makeRollbackWork(Boolean chain, Boolean release) {
+    return new RollbackWork(chain, release);
+  }
+
+  public static SavepointStatement makeSavepointStatement(Uid uid) {
+    return new SavepointStatement(uid);
+  }
+
+  public static RollbackStatement makeRollbackStatement(Uid uid) {
+    return new RollbackStatement(uid);
+  }
+
+  public static ReleaseStatement makeReleaseStatement(Uid uid) {
+    return new ReleaseStatement(uid);
+  }
+
+  public static LockTables makeLockTables(List<LockTableElement> lockTableElements) {
+    return new LockTables(lockTableElements);
+  }
+
+  public static UnlockTables makeUnlockTables() {
+    return new UnlockTables();
+  }
+
+  public static SetAutocommitStatement makeSetAutocommitStatement(boolean autocommitValue) {
+    return new SetAutocommitStatement(autocommitValue);
+  }
+
+  public static SetTransactionStatement makeSetTransactionStatement(
+      TransactionContextEnum transactionContext, List<TransactionOption> transactionOptions) {
+    return new SetTransactionStatement(transactionContext, transactionOptions);
+  }
+
+  public static TransactionModeEnum makeTransactionMode(String name) {
+    return TransactionModeEnum.valueOf(name);
+  }
+
+  public static LockTableElement makeLockTableElement(TableName tableName, Uid uid,
+      LockAction lockAction) {
+    return new LockTableElement(tableName, uid, lockAction);
+  }
+
+  public static LockAction makeLockAction(LockAction.Type type, Boolean local,
+      Boolean lowPriority) {
+    return new LockAction(type, local, lowPriority);
+  }
+
+  public static TransactionOption makeTransactionOption(TransactionOption.Type type,
+      TransactionLevelEnum transactionLevel) {
+    return new TransactionOption(type, transactionLevel);
+  }
+
+  public static TransactionLevelEnum makeTransactionLevel(String name) {
+    return TransactionLevelEnum.valueOf(name);
+  }
 
   // ---------------------------------------------------------------------------
   // Replication's Statements
@@ -1153,74 +1626,320 @@ public abstract class RelationalAlgebraExpressionFactory {
   // ---------------------------------------------------------------------------
   // Base Replication
 
-  // public static ChangeMaster makeChangeMaster() { return new ChangeMaster(); }
-  // public static ChangeReplicationFilter makeChangeReplicationFilter() { return new
-  // ChangeReplicationFilter(); }
-  // public static PurgeBinaryLogs makePurgeBinaryLogs() { return new PurgeBinaryLogs(); }
-  // public static ResetMaster makeResetMaster() { return new ResetMaster(); }
-  // public static ResetSlave makeResetSlave() { return new ResetSlave(); }
-  // public static StartSlave makeStartSlave() { return new StartSlave(); }
-  // public static StopSlave makeStopSlave() { return new StopSlave(); }
-  // public static StartGroupReplication makeStartGroupReplication() { return new
-  // StartGroupReplication(); }
-  // public static StopGroupReplication makeStopGroupReplication() { return new
-  // StopGroupReplication(); }
-  // public static MasterOption makeMasterOption() { return new MasterOption(); }
-  // public static StringMasterOption makeStringMasterOption() { return new StringMasterOption(); }
-  // public static DecimalMasterOption makeDecimalMasterOption() { return new DecimalMasterOption();
-  // }
-  // public static BoolMasterOption makeBoolMasterOption() { return new BoolMasterOption(); }
-  // public static ChannelOption makeChannelOption() { return new ChannelOption(); }
-  // public static ReplicationFilter makeReplicationFilter() { return new ReplicationFilter(); }
-  // public static TablePair makeTablePair() { return new TablePair(); }
-  // public static ThreadType makeThreadType() { return new ThreadType(); }
-  // public static UntilOption makeUntilOption() { return new UntilOption(); }
-  // public static ConnectionOption makeConnectionOption() { return new ConnectionOption(); }
-  // public static GtuidSet makeGtuidSet() { return new GtuidSet(); }
+  public static ChangeMaster makeChangeMaster(List<MasterOption> masterOptions,
+      ChannelOption channelOption) {
+    return new ChangeMaster(masterOptions, channelOption);
+  }
+
+  public static ChangeReplicationFilter
+      makeChangeReplicationFilter(List<ReplicationFilter> replicationFilters) {
+    return new ChangeReplicationFilter(replicationFilters);
+  }
+
+  public static PurgeBinaryLogs makePurgeBinaryLogs(PurgeBinaryLogs.PurgeFormatEnum purgeFormat,
+      PurgeBinaryLogs.Type type, String typeValue) {
+    return new PurgeBinaryLogs(purgeFormat, type, typeValue);
+  }
+
+  public static ResetMaster makeResetMaster() {
+    return new ResetMaster();
+  }
+
+  public static ResetSlave makeResetSlave(Boolean all, ChannelOption channelOption) {
+    return new ResetSlave(all, channelOption);
+  }
+
+  public static StartSlave makeStartSlave(List<ThreadTypeEnum> threadTypes, UntilOption untilOption,
+      List<ConnectionOption> connectionOptions, ChannelOption channelOption) {
+    return new StartSlave(threadTypes, untilOption, connectionOptions, channelOption);
+  }
+
+  public static StopSlave makeStopSlave(List<ThreadTypeEnum> threadTypes) {
+    return new StopSlave(threadTypes);
+  }
+
+  public static StartGroupReplication makeStartGroupReplication() {
+    return new StartGroupReplication();
+  }
+
+  public static StopGroupReplication makeStopGroupReplication() {
+    return new StopGroupReplication();
+  }
+
+  public static MasterStringOption makeMasterStringOption(StringMasterOptionEnum stringMasterOption,
+      String value) {
+    return new MasterStringOption(stringMasterOption, value);
+  }
+
+  public static MasterDecimalOption
+      makeMasterDecimalOption(DecimalMasterOptionEnum decimalMasterOption, DecimalLiteral value) {
+    return new MasterDecimalOption(decimalMasterOption, value);
+  }
+
+  public static MasterBoolOption makeMasterBoolOption(BoolMasterOptionEnum boolMasterOption,
+      boolean value) {
+    return new MasterBoolOption(boolMasterOption, value);
+  }
+
+  public static MasterRealOption makeMasterRealOption(String realLiteral) {
+    return new MasterRealOption(realLiteral);
+  }
+
+  public static MasterUidListOption makeMasterUidListOption(List<Uid> uids) {
+    return new MasterUidListOption(uids);
+  }
+
+  public static StringMasterOptionEnum makeStringMasterOption(String name) {
+    return StringMasterOptionEnum.valueOf(name);
+  }
+
+  public static DecimalMasterOptionEnum makeDecimalMasterOption(String name) {
+    return DecimalMasterOptionEnum.valueOf(name);
+  }
+
+  public static BoolMasterOptionEnum makeBoolMasterOption(String name) {
+    return BoolMasterOptionEnum.valueOf(name);
+  }
+
+  public static ChannelOption makeChannelOption(String channel) {
+    return new ChannelOption(channel);
+  }
+
+  public static DoDbReplication makeDoDbReplication(UidList uidList) {
+    return new DoDbReplication(uidList);
+  }
+
+  public static IgnoreDbReplication makeIgnoreDbReplication(UidList uidList) {
+    return new IgnoreDbReplication(uidList);
+  }
+
+  public static DoTableReplication makeDoTableReplication(Tables tables) {
+    return new DoTableReplication(tables);
+  }
+
+  public static IgnoreTableReplication makeIgnoreTableReplication(Tables tables) {
+    return new IgnoreTableReplication(tables);
+  }
+
+  public static WildDoTableReplication makeWildDoTableReplication(SimpleStrings simpleStrings) {
+    return new WildDoTableReplication(simpleStrings);
+  }
+
+  public static WildIgnoreTableReplication
+      makeWildIgnoreTableReplication(SimpleStrings simpleStrings) {
+    return new WildIgnoreTableReplication(simpleStrings);
+  }
+
+  public static RewriteDbReplication makeRewriteDbReplication(List<TablePair> tablePairs) {
+    return new RewriteDbReplication(tablePairs);
+  }
+
+  public static TablePair makeTablePair(TableName firstTable, TableName secondTable) {
+    return new TablePair(firstTable, secondTable);
+  }
+
+  public static ThreadTypeEnum makeThreadType(String name) {
+    return ThreadTypeEnum.valueOf(name);
+  }
+
+  public static GtidsUntilOption makeGtidsUntilOption(GtidsUntilOption.Type type,
+      GtuidSet gtuidSet) {
+    return new GtidsUntilOption(type, gtuidSet);
+  }
+
+  public static MasterLogUntilOption makeMasterLogUntilOption(String logFile, DecimalLiteral pos) {
+    return new MasterLogUntilOption(logFile, pos);
+  }
+
+  public static RelayLogUntilOption makeRelayLogUntilOption(String logFile, DecimalLiteral pos) {
+    return new RelayLogUntilOption(logFile, pos);
+  }
+
+  public static SqlGapsUntilOption makeSqlGapsUntilOption() {
+    return new SqlGapsUntilOption();
+  }
+
+  public static ConnectionOption makeConnectionOption(ConnectionOption.Type type,
+      String stringLiteral) {
+    return new ConnectionOption(type, stringLiteral);
+  }
+
+  public static GtuidSet makeGtuidSet(List<UuidSet> uuidSets, String stringLiteral) {
+    return new GtuidSet(uuidSets, stringLiteral);
+  }
 
   // ---------------------------------------------------------------------------
   // XA Transactions
 
-  // public static XaStartTransaction makeXaStartTransaction() { return new XaStartTransaction(); }
-  // public static XaEndTransaction makeXaEndTransaction() { return new XaEndTransaction(); }
-  // public static XaPrepareStatement makeXaPrepareStatement() { return new XaPrepareStatement(); }
-  // public static XaCommitWork makeXaCommitWork() { return new XaCommitWork(); }
-  // public static XaRollbackWork makeXaRollbackWork() { return new XaRollbackWork(); }
-  // public static XaRecoverWork makeXaRecoverWork() { return new XaRecoverWork(); }
+  public static XaStartTransaction makeXaStartTransaction(XaStartEnum xaStart, Xid xid,
+      XaActionEnum xaAction) {
+    return new XaStartTransaction(xaStart, xid, xaAction);
+  }
+
+  public static XaEndTransaction makeXaEndTransaction(Xid xid, Boolean suspend,
+      Boolean forMigrate) {
+    return new XaEndTransaction(xid, suspend, forMigrate);
+  }
+
+  public static XaPrepareStatement makeXaPrepareStatement(Xid xid) {
+    return new XaPrepareStatement(xid);
+  }
+
+  public static XaCommitWork makeXaCommitWork(Xid xid, Boolean onePhase) {
+    return new XaCommitWork(xid, onePhase);
+  }
+
+  public static XaRollbackWork makeXaRollbackWork(Xid xid) {
+    return new XaRollbackWork(xid);
+  }
+
+  public static XaRecoverWork makeXaRecoverWork(Xid xid) {
+    return new XaRecoverWork(xid);
+  }
 
   // ---------------------------------------------------------------------------
   // Prepared Statements
   // ---------------------------------------------------------------------------
 
-  // public static PrepareStatement makePrepareStatement() { return new PrepareStatement(); }
-  // public static ExecuteStatement makeExecuteStatement() { return new ExecuteStatement(); }
-  // public static DeallocatePrepare makeDeallocatePrepare() { return new DeallocatePrepare(); }
+  public static PrepareStatement makePrepareStatement(Uid uid, PrepareStatement.Type type,
+      String typeValue) {
+    return new PrepareStatement(uid, type, typeValue);
+  }
+
+  public static ExecuteStatement makeExecuteStatement(Uid uid, UserVariables userVariables) {
+    return new ExecuteStatement(uid, userVariables);
+  }
+
+  public static DeallocatePrepare makeDeallocatePrepare(DeallocatePrepare.DropFormatEnum dropFormat,
+      Uid uid) {
+    return new DeallocatePrepare(dropFormat, uid);
+  }
 
   // ---------------------------------------------------------------------------
   // Compound Statements
   // ---------------------------------------------------------------------------
 
-  // public static RoutineBody makeRoutineBody() { return new RoutineBody(); }
-  // public static BlockStatement makeBlockStatement() { return new BlockStatement(); }
-  // public static CaseStatement makeCaseStatement() { return new CaseStatement(); }
-  // public static IfStatement makeIfStatement() { return new IfStatement(); }
-  // public static IterateStatement makeIterateStatement() { return new IterateStatement(); }
-  // public static LeaveStatement makeLeaveStatement() { return new LeaveStatement(); }
-  // public static LoopStatement makeLoopStatement() { return new LoopStatement(); }
-  // public static RepeatStatement makeRepeatStatement() { return new RepeatStatement(); }
-  // public static ReturnStatement makeReturnStatement() { return new ReturnStatement(); }
-  // public static WhileStatement makeWhileStatement() { return new WhileStatement(); }
-  // public static CursorStatement makeCursorStatement() { return new CursorStatement(); }
-  // public static DeclareVariable makeDeclareVariable() { return new DeclareVariable(); }
-  // public static DeclareCondition makeDeclareCondition() { return new DeclareCondition(); }
-  // public static DeclareCursor makeDeclareCursor() { return new DeclareCursor(); }
-  // public static DeclareHandler makeDeclareHandler() { return new DeclareHandler(); }
-  // public static HandlerConditionValue makeHandlerConditionValue() { return new
-  // HandlerConditionValue(); }
-  // public static ProcedureSqlStatement makeProcedureSqlStatement() { return new
-  // ProcedureSqlStatement(); }
-  // public static CaseAlternative makeCaseAlternative() { return new CaseAlternative(); }
-  // public static ElifAlternative makeElifAlternative() { return new ElifAlternative(); }
+  public static RoutineBody makeRoutineBody(BlockStatement blockStatement,
+      SqlStatement sqlStatement) {
+    return new RoutineBody(blockStatement, sqlStatement);
+  }
+
+  public static BlockStatement makeBlockStatement(Uid beginUid,
+      List<DeclareVariable> declareVariables, List<DeclareCondition> declareConditions,
+      List<DeclareCursor> declareCursors, List<DeclareHandler> declareHandlers,
+      List<ProcedureSqlStatement> procedureSqlStatements, Uid endUid) {
+    return new BlockStatement(beginUid, declareVariables, declareConditions, declareCursors,
+        declareHandlers, procedureSqlStatements, endUid);
+  }
+
+  public static CaseStatement makeCaseStatement(Uid uid, Expression expression,
+      List<CaseAlternative> caseAlternatives, List<ProcedureSqlStatement> procedureSqlStatements) {
+    return new CaseStatement(uid, expression, caseAlternatives, procedureSqlStatements);
+  }
+
+  public static IfStatement makeIfStatement(Expression ifExpression,
+      List<ProcedureSqlStatement> thenStatements, List<ElifAlternative> elifAlternatives,
+      List<ProcedureSqlStatement> elseStatements) {
+    return new IfStatement(ifExpression, thenStatements, elifAlternatives, elseStatements);
+  }
+
+  public static IterateStatement makeIterateStatement(Uid uid) {
+    return new IterateStatement(uid);
+  }
+
+  public static LeaveStatement makeLeaveStatement(Uid uid) {
+    return new LeaveStatement(uid);
+  }
+
+  public static LoopStatement makeLoopStatement(Uid uid,
+      List<ProcedureSqlStatement> procedureSqlStatements, Uid endLoopUid) {
+    return new LoopStatement(uid, procedureSqlStatements, endLoopUid);
+  }
+
+  public static RepeatStatement makeRepeatStatement(Uid uid,
+      List<ProcedureSqlStatement> procedureSqlStatements, Expression untilExpression,
+      Uid endRepeatUid) {
+    return new RepeatStatement(uid, procedureSqlStatements, untilExpression, endRepeatUid);
+  }
+
+  public static ReturnStatement makeReturnStatement(Expression expression) {
+    return new ReturnStatement(expression);
+  }
+
+  public static WhileStatement makeWhileStatement(Uid uid, Expression whileExpression,
+      List<ProcedureSqlStatement> procedureSqlStatements, Uid endWhileUid) {
+    return new WhileStatement(uid, whileExpression, procedureSqlStatements, endWhileUid);
+  }
+
+  public static CloseCursor makeCloseCursor(Uid uid) {
+    return new CloseCursor(uid);
+  }
+
+  public static FetchCursor makeFetchCursor(Boolean isNext, Uid uid, UidList uidList) {
+    return new FetchCursor(isNext, uid, uidList);
+  }
+
+  public static OpenCursor makeOpenCursor(Uid uid) {
+    return new OpenCursor(uid);
+  }
+
+  public static DeclareVariable makeDeclareVariable(UidList uidList, DataType dataType,
+      DefaultValue defaultValue) {
+    return new DeclareVariable(uidList, dataType, defaultValue);
+  }
+
+  public static DeclareCondition makeDeclareCondition(Uid uid, DecimalLiteral decimalLiteral,
+      String sqlState) {
+    return new DeclareCondition(uid, decimalLiteral, sqlState);
+  }
+
+  public static DeclareCursor makeDeclareCursor(Uid uid, SelectStatement selectStatement) {
+    return new DeclareCursor(uid, selectStatement);
+  }
+
+  public static DeclareHandler makeDeclareHandler(HandlerActionEnum handlerAction,
+      List<HandlerConditionValue> handlerConditionValues, RoutineBody routineBody) {
+    return new DeclareHandler(handlerAction, handlerConditionValues, routineBody);
+  }
+
+  public static HandlerConditionCode makeHandlerConditionCode(DecimalLiteral decimalLiteral) {
+    return new HandlerConditionCode(decimalLiteral);
+  }
+
+  public static HandlerConditionState makeHandlerConditionState(String stringLiteral) {
+    return new HandlerConditionState(stringLiteral);
+  }
+
+  public static HandlerConditionName makeHandlerConditionName(Uid uid) {
+    return new HandlerConditionName(uid);
+  }
+
+  public static HandlerConditionWarning makeHandlerConditionWarning() {
+    return new HandlerConditionWarning();
+  }
+
+  public static HandlerConditionNotfound makeHandlerConditionNotfound() {
+    return new HandlerConditionNotfound();
+  }
+
+  public static HandlerConditionException makeHandlerConditionException() {
+    return new HandlerConditionException();
+  }
+
+  public static ProcedureSqlStatement makeProcedureSqlStatement(CompoundStatement compoundStatement,
+      SqlStatement sqlStatement) {
+    return new ProcedureSqlStatement(compoundStatement, sqlStatement);
+  }
+
+  public static CaseAlternative makeCaseAlternative(Constant whenConstant,
+      Expression whenExpression, List<ProcedureSqlStatement> procedureSqlStatements) {
+    return new CaseAlternative(whenConstant, whenExpression, procedureSqlStatements);
+  }
+
+  public static ElifAlternative makeElifAlternative(Expression elseIfExpression,
+      List<ProcedureSqlStatement> procedureSqlStatements) {
+    return new ElifAlternative(elseIfExpression, procedureSqlStatements);
+  }
 
   // ---------------------------------------------------------------------------
   // Administration Statements
@@ -1229,88 +1948,434 @@ public abstract class RelationalAlgebraExpressionFactory {
   // ---------------------------------------------------------------------------
   // Account management statements
 
-  // public static AlterUser makeAlterUser() { return new AlterUser(); }
-  // public static CreateUser makeCreateUser() { return new CreateUser(); }
-  // public static DropUser makeDropUser() { return new DropUser(); }
-  // public static GrantStatement makeGrantStatement() { return new GrantStatement(); }
-  // public static GrantProxy makeGrantProxy() { return new GrantProxy(); }
-  // public static RenameUser makeRenameUser() { return new RenameUser(); }
-  // public static RevokeStatement makeRevokeStatement() { return new RevokeStatement(); }
-  // public static RevokeProxy makeRevokeProxy() { return new RevokeProxy(); }
-  // public static SetPasswordStatement makeSetPasswordStatement() { return new
-  // SetPasswordStatement(); }
-  // public static UserSpecification makeUserSpecification() { return new UserSpecification(); }
-  // public static UserAuthOption makeUserAuthOption() { return new UserAuthOption(); }
-  // public static TlsOption makeTlsOption() { return new TlsOption(); }
-  // public static UserResourceOption makeUserResourceOption() { return new UserResourceOption(); }
-  // public static UserPasswordOption makeUserPasswordOption() { return new UserPasswordOption(); }
-  // public static UserLockOption makeUserLockOption() { return new UserLockOption(); }
-  // public static PrivelegeClause makePrivelegeClause() { return new PrivelegeClause(); }
-  // public static Privilege makePrivilege() { return new Privilege(); }
-  // public static PrivilegeLevel makePrivilegeLevel() { return new PrivilegeLevel(); }
-  // public static RenameUserClause makeRenameUserClause() { return new RenameUserClause(); }
+  public static AlterUserMysqlV56
+      makeAlterUserMysqlV56(List<UserSpecification> userSpecifications) {
+    return new AlterUserMysqlV56(userSpecifications);
+  }
+
+  public static AlterUserMysqlV57 makeAlterUserMysqlV57(IfExists ifExists,
+      List<UserAuthOption> userAuthOptions, Boolean tlsNone, List<TlsOption> tlsOptions,
+      List<UserResourceOption> userResourceOptions, List<UserPasswordOption> userPasswordOptions,
+      List<UserLockOptionEnum> userLockOptions) {
+    return new AlterUserMysqlV57(ifExists, userAuthOptions, tlsNone, tlsOptions,
+        userResourceOptions, userPasswordOptions, userLockOptions);
+  }
+
+  public static CreateUserMysqlV56 makeCreateUserMysqlV56(List<UserAuthOption> userAuthOptions) {
+    return new CreateUserMysqlV56(userAuthOptions);
+  }
+
+  public static CreateUserMysqlV57 makeCreateUserMysqlV57(IfNotExists ifNotExists,
+      List<UserAuthOption> userAuthOptions, Boolean tlsNone, List<TlsOption> tlsOptions,
+      List<UserResourceOption> userResourceOptions, List<UserPasswordOption> userPasswordOptions,
+      List<UserLockOptionEnum> userLockOptions) {
+    return new CreateUserMysqlV57(ifNotExists, userAuthOptions, tlsNone, tlsOptions,
+        userResourceOptions, userPasswordOptions, userLockOptions);
+  }
+
+  public static DropUser makeDropUser(IfExists ifExists, List<UserName> userNames) {
+    return new DropUser(ifExists, userNames);
+  }
+
+  public static GrantStatement makeGrantStatement(List<PrivelegeClause> privelegeClauses,
+      PrivilegeObjectEnum privilegeObject, PrivilegeLevel privilegeLevel,
+      List<UserAuthOption> userAuthOptions, Boolean tlsNone, List<TlsOption> tlsOptions,
+      List<UserResourceOption> userResourceOptions) {
+    return new GrantStatement(privelegeClauses, privilegeObject, privilegeLevel, userAuthOptions,
+        tlsNone, tlsOptions, userResourceOptions);
+  }
+
+  public static GrantProxy makeGrantProxy(UserName fromFirst, List<UserName> tos,
+      Boolean withGrantOption) {
+    return new GrantProxy(fromFirst, tos, withGrantOption);
+  }
+
+  public static RenameUser makeRenameUser(List<RenameUserClause> renameUserClauses) {
+    return new RenameUser(renameUserClauses);
+  }
+
+  public static DetailRevoke makeDetailRevoke(List<PrivelegeClause> privelegeClauses,
+      PrivilegeObjectEnum privilegeObject, PrivilegeLevel privilegeLevel,
+      List<UserName> userNames) {
+    return new DetailRevoke(privelegeClauses, privilegeObject, privilegeLevel, userNames);
+  }
+
+  public static ShortRevoke makeShortRevoke(List<UserName> userNames) {
+    return new ShortRevoke(userNames);
+  }
+
+  public static RevokeProxy makeRevokeProxy(UserName onUser, List<UserName> froms) {
+    return new RevokeProxy(onUser, froms);
+  }
+
+  public static SetPasswordStatement makeSetPasswordStatement(UserName userName,
+      PasswordFunctionClause passwordFunctionClause, String password) {
+    return new SetPasswordStatement(userName, passwordFunctionClause, password);
+  }
+
+  public static UserSpecification makeUserSpecification(UserName userName,
+      UserPasswordOption userPasswordOption) {
+    return new UserSpecification(userName, userPasswordOption);
+  }
+
+  public static PasswordAuthOption makePasswordAuthOption(UserName userName, String hashed) {
+    return new PasswordAuthOption(userName, hashed);
+  }
+
+  public static StringAuthOption makeStringAuthOption(UserName userName, AuthPlugin authPlugin,
+      String by) {
+    return new StringAuthOption(userName, authPlugin, by);
+  }
+
+  public static HashAuthOption makeHashAuthOption(UserName userName, AuthPlugin authPlugin,
+      String as) {
+    return new HashAuthOption(userName, authPlugin, as);
+  }
+
+  public static SimpleAuthOption makeSimpleAuthOption(UserName userName) {
+    return new SimpleAuthOption(userName);
+  }
+
+  public static TlsOption makeTlsOption(TlsOption.Type type, String value) {
+    return new TlsOption(type, value);
+  }
+
+  public static UserResourceOption makeUserResourceOption(UserResourceOption.Type type,
+      DecimalLiteral decimalLiteral) {
+    return new UserResourceOption(type, decimalLiteral);
+  }
+
+  public static UserPasswordOption makeUserPasswordOption(UserPasswordOption.ExpireType expireType,
+      DecimalLiteral day) {
+    return new UserPasswordOption(expireType, day);
+  }
+
+  public static UserLockOptionEnum makeUserLockOption(String name) {
+    return UserLockOptionEnum.valueOf(name);
+  }
+
+  public static PrivelegeClause makePrivelegeClause(PrivilegeEnum privilege, UidList uidList) {
+    return new PrivelegeClause(privilege, uidList);
+  }
+
+  public static PrivilegeEnum makePrivilege(String name) {
+    return PrivilegeEnum.valueOf(name);
+  }
+
+  public static CurrentSchemaPriviLevel makeCurrentSchemaPriviLevel() {
+    return new CurrentSchemaPriviLevel();
+  }
+
+  public static GlobalPrivLevel makeGlobalPrivLevel() {
+    return new GlobalPrivLevel();
+  }
+
+  public static DefiniteSchemaPrivLevel makeDefiniteSchemaPrivLevel(Uid uid) {
+    return new DefiniteSchemaPrivLevel(uid);
+  }
+
+  public static DefiniteFullTablePrivLevel makeDefiniteFullTablePrivLevel(Uid uid1, Uid uid2) {
+    return new DefiniteFullTablePrivLevel(uid1, uid2);
+  }
+
+  public static DefiniteTablePrivLevel makeDefiniteTablePrivLevel(Uid uid) {
+    return new DefiniteTablePrivLevel(uid);
+  }
+
+  public static RenameUserClause makeRenameUserClause(UserName fromFirst, UserName toFirst) {
+    return new RenameUserClause(fromFirst, toFirst);
+  }
 
   // ---------------------------------------------------------------------------
   // Table maintenance statements
 
-  // public static AnalyzeTable makeAnalyzeTable() { return new AnalyzeTable(); }
-  // public static CheckTable makeCheckTable() { return new CheckTable(); }
-  // public static ChecksumTable makeChecksumTable() { return new ChecksumTable(); }
-  // public static OptimizeTable makeOptimizeTable() { return new OptimizeTable(); }
-  // public static RepairTable makeRepairTable() { return new RepairTable(); }
-  // public static CheckTableOption makeCheckTableOption() { return new CheckTableOption(); }
+  public static AnalyzeTable makeAnalyzeTable(AdminTableActionOptionEnum actionOption,
+      Tables tables) {
+    return new AnalyzeTable(actionOption, tables);
+  }
+
+  public static CheckTable makeCheckTable(Tables tables,
+      List<CheckTableOptionEnum> checkTableOptions) {
+    return new CheckTable(tables, checkTableOptions);
+  }
+
+  public static ChecksumTable makeChecksumTable(Tables tables,
+      ChecksumTable.ActionOptionEnum actionOption) {
+    return new ChecksumTable(tables, actionOption);
+  }
+
+  public static OptimizeTable makeOptimizeTable(AdminTableActionOptionEnum actionOption,
+      Tables tables) {
+    return new OptimizeTable(actionOption, tables);
+  }
+
+  public static RepairTable makeRepairTable(AdminTableActionOptionEnum actionOption, Tables tables,
+      Boolean quick, Boolean extended, Boolean useFrm) {
+    return new RepairTable(actionOption, tables, quick, extended, useFrm);
+  }
+
+  public static CheckTableOptionEnum makeCheckTableOption(String name) {
+    return CheckTableOptionEnum.valueOf(name);
+  }
 
   // ---------------------------------------------------------------------------
   // Plugin and udf statements
 
-  // public static CreateUdfunction makeCreateUdfunction() { return new CreateUdfunction(); }
-  // public static InstallPlugin makeInstallPlugin() { return new InstallPlugin(); }
-  // public static UninstallPlugin makeUninstallPlugin() { return new UninstallPlugin(); }
+  public static CreateUdfunction makeCreateUdfunction(Boolean aggregate, Uid uid,
+      CreateUdfunction.ReturnTypeEnum returnType, String soName) {
+    return new CreateUdfunction(aggregate, uid, returnType, soName);
+  }
+
+  public static InstallPlugin makeInstallPlugin(Uid uid, String soName) {
+    return new InstallPlugin(uid, soName);
+  }
+
+  public static UninstallPlugin makeUninstallPlugin(Uid uid) {
+    return new UninstallPlugin(uid);
+  }
 
   // ---------------------------------------------------------------------------
   // Set and show statements
 
-  // public static SetStatement makeSetStatement() { return new SetStatement(); }
-  // public static ShowStatement makeShowStatement() { return new ShowStatement(); }
-  // public static VariableClause makeVariableClause() { return new VariableClause(); }
-  // public static ShowCommonEntity makeShowCommonEntity() { return new ShowCommonEntity(); }
-  // public static ShowFilter makeShowFilter() { return new ShowFilter(); }
-  // public static ShowGlobalInfoClause makeShowGlobalInfoClause() { return new
-  // ShowGlobalInfoClause(); }
-  // public static ShowSchemaEntity makeShowSchemaEntity() { return new ShowSchemaEntity(); }
-  // public static ShowProfileType makeShowProfileType() { return new ShowProfileType(); }
+  public static SetVariable makeSetVariable(List<VariableClause> variableClauses,
+      List<Expression> expressions) {
+    return new SetVariable(variableClauses, expressions);
+  }
+
+  public static SetCharset makeSetCharset(CharsetName charsetName) {
+    return new SetCharset(charsetName);
+  }
+
+  public static SetNames makeSetNames(CharsetName charsetName, CollationName collationName) {
+    return new SetNames(charsetName, collationName);
+  }
+
+  public static SetNewValueInsideTrigger makeSetNewValueInsideTrigger(FullId fullId,
+      Expression expression) {
+    return new SetNewValueInsideTrigger(fullId, expression);
+  }
+
+  public static ShowMasterLogs makeShowMasterLogs(ShowMasterLogs.LogFormatEnum logFormat) {
+    return new ShowMasterLogs(logFormat);
+  }
+
+  public static ShowLogEvents makeShowLogEvents(ShowLogEvents.LogFormatEnum logFormat,
+      String filename, DecimalLiteral fromPosition, DecimalLiteral offset,
+      DecimalLiteral rowCount) {
+    return new ShowLogEvents(logFormat, filename, fromPosition, offset, rowCount);
+  }
+
+  public static ShowObjectFilter makeShowObjectFilter(ShowCommonEntityEnum showCommonEntity,
+      ShowFilter showFilter) {
+    return new ShowObjectFilter(showCommonEntity, showFilter);
+  }
+
+  public static ShowColumns makeShowColumns(Boolean full,
+      ShowColumns.ColumnsFormatEnum columnsFormat, ShowColumns.TableFormatEnum tableFormat,
+      TableName tableName, ShowColumns.SchemaFormatEnum schemaFormat, Uid uid,
+      ShowFilter showFilter) {
+    return new ShowColumns(full, columnsFormat, tableFormat, tableName, schemaFormat, uid,
+        showFilter);
+  }
+
+  public static ShowCreateDb makeShowCreateDb(ShowCreateDb.SchemaFormatEnum schemaFormat,
+      IfNotExists ifNotExists, Uid uid) {
+    return new ShowCreateDb(schemaFormat, ifNotExists, uid);
+  }
+
+  public static ShowCreateFullIdObject makeShowCreateFullIdObject(
+      ShowCreateFullIdObject.NamedEntityEnum namedEntity, FullId fullId) {
+    return new ShowCreateFullIdObject(namedEntity, fullId);
+  }
+
+  public static ShowCreateUser makeShowCreateUser(UserName userName) {
+    return new ShowCreateUser(userName);
+  }
+
+  public static ShowEngine makeShowEngine(EngineName engineName,
+      ShowEngine.EngineOptionEnum engineOption) {
+    return new ShowEngine(engineName, engineOption);
+  }
+
+  public static ShowGlobalInfo makeShowGlobalInfo(ShowGlobalInfoClauseEnum showGlobalInfoClause) {
+    return new ShowGlobalInfo(showGlobalInfoClause);
+  }
+
+  public static ShowErrors makeShowErrors(ShowErrors.ErrorFormatEnum errorFormat,
+      DecimalLiteral offset, DecimalLiteral rowCount) {
+    return new ShowErrors(errorFormat, offset, rowCount);
+  }
+
+  public static ShowCountErrors makeShowCountErrors(ShowCountErrors.ErrorFormatEnum errorFormat) {
+    return new ShowCountErrors(errorFormat);
+  }
+
+  public static ShowSchemaFilter makeShowSchemaFilter(
+      ShowSchemaFilter.ShowSchemaEntityEnum showSchemaEntity, SchemaFormatEnum schemaFormat,
+      Uid uid, ShowFilter showFilter) {
+    return new ShowSchemaFilter(showSchemaEntity, schemaFormat, uid, showFilter);
+  }
+
+  public static ShowRoutine makeShowRoutine(ShowRoutine.RoutineEnum routine, FullId fullId) {
+    return new ShowRoutine(routine, fullId);
+  }
+
+  public static ShowGrants makeShowGrants(UserName userName) {
+    return new ShowGrants(userName);
+  }
+
+  public static ShowIndexes makeShowIndexes(ShowIndexes.IndexFormatEnum indexFormat,
+      ShowIndexes.TableFormatEnum tableFormat, TableName tableName,
+      ShowIndexes.SchemaFormatEnum schemaFormat, Uid uid, Expression where) {
+    return new ShowIndexes(indexFormat, tableFormat, tableName, schemaFormat, uid, where);
+  }
+
+  public static ShowOpenTables makeShowOpenTables(ShowOpenTables.SchemaFormatEnum schemaFormat,
+      Uid uid, ShowFilter showFilter) {
+    return new ShowOpenTables(schemaFormat, uid, showFilter);
+  }
+
+  public static ShowProfile makeShowProfile(List<ShowProfileTypeEnum> showProfileTypes,
+      DecimalLiteral queryCount, DecimalLiteral offset, DecimalLiteral rowCount) {
+    return new ShowProfile(showProfileTypes, queryCount, offset, rowCount);
+  }
+
+  public static ShowSlaveStatus makeShowSlaveStatus(String channel) {
+    return new ShowSlaveStatus(channel);
+  }
+
+  public static VariableClause makeVariableClause(VariableClause.Type type, String id) {
+    return new VariableClause(type, id);
+  }
+
+  public static VariableClause makeVariableClause(VariableClause.Type type, String id, Boolean has,
+      VariableClause.ScopeType scopeType, Uid uid) {
+    return new VariableClause(type, id, has, scopeType, uid);
+  }
+
+  public static ShowCommonEntityEnum makeShowCommonEntity(String name) {
+    return ShowCommonEntityEnum.valueOf(name);
+  }
+
+  public static ShowFilter makeShowFilter(String like, Expression where) {
+    return new ShowFilter(like, where);
+  }
+
+  public static ShowGlobalInfoClauseEnum makeShowGlobalInfoClause(String name) {
+    return ShowGlobalInfoClauseEnum.valueOf(name);
+  }
+
+  public static ShowSchemaEntityEnum makeShowSchemaEntity(String name) {
+    return ShowSchemaEntityEnum.valueOf(name);
+  }
+
+  public static ShowProfileTypeEnum makeShowProfileType(String name) {
+    return ShowProfileTypeEnum.valueOf(name);
+  }
 
   // ---------------------------------------------------------------------------
   // Other administrative statements
 
-  // public static BinlogStatement makeBinlogStatement() { return new BinlogStatement(); }
-  // public static CacheIndexStatement makeCacheIndexStatement() { return new CacheIndexStatement();
-  // }
-  // public static FlushStatement makeFlushStatement() { return new FlushStatement(); }
-  // public static KillStatement makeKillStatement() { return new KillStatement(); }
-  // public static LoadIndexIntoCache makeLoadIndexIntoCache() { return new LoadIndexIntoCache(); }
-  // public static ResetStatement makeResetStatement() { return new ResetStatement(); }
-  // public static ShutdownStatement makeShutdownStatement() { return new ShutdownStatement(); }
-  // public static TableIndexes makeTableIndexes() { return new TableIndexes(); }
-  // public static FlushOption makeFlushOption() { return new FlushOption(); }
-  // public static FlushTableOption makeFlushTableOption() { return new FlushTableOption(); }
-  // public static LoadedTableIndexes makeLoadedTableIndexes() { return new LoadedTableIndexes(); }
+  public static BinlogStatement makeBinlogStatement(String binlog) {
+    return new BinlogStatement(binlog);
+  }
+
+  public static CacheIndexStatement makeCacheIndexStatement(List<TableIndexes> tableIndexes,
+      UidList partitionUidList, Boolean partitionAll, Uid schema) {
+    return new CacheIndexStatement(tableIndexes, partitionUidList, partitionAll, schema);
+  }
+
+  public static FlushStatement makeFlushStatement(FlushFormatEnum flushFormat,
+      List<FlushOption> flushOptions) {
+    return new FlushStatement(flushFormat, flushOptions);
+  }
+
+  public static KillStatement makeKillStatement(ConnectionFormatEnum connectionFormat,
+      List<DecimalLiteral> decimalLiterals) {
+    return new KillStatement(connectionFormat, decimalLiterals);
+  }
+
+  public static LoadIndexIntoCache
+      makeLoadIndexIntoCache(List<LoadedTableIndexes> loadedTableIndexes) {
+    return new LoadIndexIntoCache(loadedTableIndexes);
+  }
+
+  public static ResetStatement makeResetStatement() {
+    return new ResetStatement();
+  }
+
+  public static ShutdownStatement makeShutdownStatement() {
+    return new ShutdownStatement();
+  }
+
+  public static TableIndexes makeTableIndexes(TableName tableName, IndexFormatEnum indexFormat,
+      UidList uidList) {
+    return new TableIndexes(tableName, indexFormat, uidList);
+  }
+
+  public static SimpleFlushOption makeSimpleFlushOption(SimpleFlushOption.Type type,
+      SimpleFlushOption.LogType logType, Boolean tablesWithReadLock) {
+    return new SimpleFlushOption(type, logType, tablesWithReadLock);
+  }
+
+  public static ChannelFlushOption makeChannelFlushOption(ChannelOption channelOption) {
+    return new ChannelFlushOption(channelOption);
+  }
+
+  public static TableFlushOption makeTableFlushOption(Tables tables,
+      FlushTableOptionEnum flushTableOption) {
+    return new TableFlushOption(tables, flushTableOption);
+  }
+
+  public static FlushTableOptionEnum makeFlushTableOption(String name) {
+    return FlushTableOptionEnum.valueOf(name);
+  }
+
+  public static LoadedTableIndexes makeLoadedTableIndexes(TableName tableName,
+      UidList partitionList, Boolean partitionAll, IndexFormatEnum indexFormat, UidList indexList,
+      Boolean ignoreLeaves) {
+    return new LoadedTableIndexes(tableName, partitionList, partitionAll, indexFormat, indexList,
+        ignoreLeaves);
+  }
 
   // ---------------------------------------------------------------------------
   // Utility Statements
   // ---------------------------------------------------------------------------
 
-  // public static SimpleDescribeStatement makeSimpleDescribeStatement() { return new
-  // SimpleDescribeStatement(); }
-  // public static FullDescribeStatement makeFullDescribeStatement() { return new
-  // FullDescribeStatement(); }
-  // public static HelpStatement makeHelpStatement() { return new HelpStatement(); }
-  // public static UseStatement makeUseStatement() { return new UseStatement(); }
-  // public static DescribeObjectClause makeDescribeObjectClause() { return new
-  // DescribeObjectClause(); }
+  public static SimpleDescribeStatement makeSimpleDescribeStatement(
+      SimpleDescribeStatement.CommandEnum command, TableName tableName, Uid column,
+      String pattern) {
+    return new SimpleDescribeStatement(command, tableName, column, pattern);
+  }
+
+  public static FullDescribeStatement makeFullDescribeStatement(
+      FullDescribeStatement.CommandEnum command, FullDescribeStatement.FormatTypeEnum formatType,
+      FullDescribeStatement.FormatValueEnum formatValue,
+      DescribeObjectClause describeObjectClause) {
+    return new FullDescribeStatement(command, formatType, formatValue, describeObjectClause);
+  }
+
+  public static HelpStatement makeHelpStatement(String help) {
+    return new HelpStatement(help);
+  }
+
+  public static UseStatement makeUseStatement(Uid uid) {
+    return new UseStatement(uid);
+  }
+
+  public static DescribeStatements makeDescribeStatements(SelectStatement selectStatement,
+      DeleteStatement deleteStatement, InsertStatement insertStatement,
+      ReplaceStatement replaceStatement, UpdateStatement updateStatement) {
+    return new DescribeStatements(selectStatement, deleteStatement, insertStatement,
+        replaceStatement, updateStatement);
+  }
+
+  public static DescribeConnection makeDescribeConnection(Uid uid) {
+    return new DescribeConnection(uid);
+  }
 
   // ---------------------------------------------------------------------------
-  // DB Objects - literal
+  // DB Objects
   // ---------------------------------------------------------------------------
 
   public static FullId makeFullId(List<Uid> uids, String dotId) {
@@ -1381,7 +2446,7 @@ public abstract class RelationalAlgebraExpressionFactory {
   }
 
   // ---------------------------------------------------------------------------
-  // Literals - literal
+  // Literals
   // ---------------------------------------------------------------------------
 
   public static DecimalLiteral makeDecimalLiteral(DecimalLiteral.Type type, String literal) {
@@ -1418,7 +2483,7 @@ public abstract class RelationalAlgebraExpressionFactory {
   }
 
   // ---------------------------------------------------------------------------
-  // Data Types - literal
+  // Data Types
   // ---------------------------------------------------------------------------
 
   public static StringDataType makeStringDataType(StringDataType.Type dataType,
@@ -1507,7 +2572,7 @@ public abstract class RelationalAlgebraExpressionFactory {
   }
 
   // ---------------------------------------------------------------------------
-  // Common Lists - literal
+  // Common Lists
   // ---------------------------------------------------------------------------
 
   public static UidList makeUidList(List<Uid> uids) {
@@ -1544,7 +2609,7 @@ public abstract class RelationalAlgebraExpressionFactory {
   }
 
   // ---------------------------------------------------------------------------
-  // Common Expressons - literal
+  // Common Expressons
   // ---------------------------------------------------------------------------
 
   public static DefaultValue makeDefaultValue(DefaultValue.Type type,
@@ -1572,7 +2637,7 @@ public abstract class RelationalAlgebraExpressionFactory {
   }
 
   // ---------------------------------------------------------------------------
-  // Functions - literal
+  // Functions
   // ---------------------------------------------------------------------------
 
   public static SimpleFunctionCall makeSimpleFunctionCall(SimpleFunctionCall.Type type) {
@@ -1603,23 +2668,17 @@ public abstract class RelationalAlgebraExpressionFactory {
     return new PositionFunctionCall(positionString, positionExpression, inString, inExpression);
   }
 
-  public static SubstrFunctionCall makeSubstrFunctionCall(//
-      StringLiteral sourceString, Expression sourceExpression, //
-      DecimalLiteral fromDecimal, Expression fromExpression, //
-      DecimalLiteral forDecimal, Expression forExpression//
-  ) {
+  public static SubstrFunctionCall makeSubstrFunctionCall(StringLiteral sourceString,
+      Expression sourceExpression, DecimalLiteral fromDecimal, Expression fromExpression,
+      DecimalLiteral forDecimal, Expression forExpression) {
     return new SubstrFunctionCall(sourceString, sourceExpression, fromDecimal, fromExpression,
         forDecimal, forExpression);
   }
 
-  public static TrimFunctionCall makeTrimFunctionCall(TrimFunctionCall.PositioinFormType type, //
-      StringLiteral sourceString, Expression sourceExpression, //
-      StringLiteral fromString, Expression fromExpression//
-  ) {
-    return new TrimFunctionCall(type, //
-        sourceString, sourceExpression, //
-        fromString, fromExpression//
-    );
+  public static TrimFunctionCall makeTrimFunctionCall(TrimFunctionCall.PositioinFormType type,
+      StringLiteral sourceString, Expression sourceExpression, StringLiteral fromString,
+      Expression fromExpression) {
+    return new TrimFunctionCall(type, sourceString, sourceExpression, fromString, fromExpression);
   }
 
   public static WeightFunctionCall makeWeightFunctionCall(StringLiteral stringLiteral,
@@ -1685,7 +2744,7 @@ public abstract class RelationalAlgebraExpressionFactory {
   }
 
   // ---------------------------------------------------------------------------
-  // Expressions, predicates - literal
+  // Expressions, predicates
   // ---------------------------------------------------------------------------
 
   public static NotExpression makeNotExpression(Expression expression) {
@@ -1814,7 +2873,7 @@ public abstract class RelationalAlgebraExpressionFactory {
   }
 
   // ---------------------------------------------------------------------------
-  // Simple id sets - literal
+  // Simple id sets
   // ---------------------------------------------------------------------------
   public static CharsetNameBaseEnum makeCharsetNameBase(String name) {
     return CharsetNameBaseEnum.valueOf(name);

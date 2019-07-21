@@ -106,4 +106,8 @@ public enum RelationalAttributeTypeEnum implements RelationalAlgebraEnum {
     this.reprClass = reprClass;
   }
 
+  @Override
+  public String literal() {
+    return name();
+  }
 }

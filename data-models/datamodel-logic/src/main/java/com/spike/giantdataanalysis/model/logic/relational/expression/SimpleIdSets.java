@@ -26,6 +26,11 @@ public interface SimpleIdSets extends PrimitiveExpression {
     LATIN1, LATIN2, LATIN5, LATIN7, MACCE, MACROMAN, SJIS, //
     SWE7, TIS620, UCS2, UJIS, UTF16, UTF16LE, UTF32, UTF8, //
     UTF8MB3, UTF8MB4;
+
+    @Override
+    public String literal() {
+      return name();
+    }
   }
 
   /**
@@ -36,7 +41,11 @@ public interface SimpleIdSets extends PrimitiveExpression {
    * </pre>
    */
   public static enum TransactionLevelBaseEnum implements RelationalAlgebraEnum {
-    REPEATABLE, COMMITTED, UNCOMMITTED, SERIALIZABLE
+    REPEATABLE, COMMITTED, UNCOMMITTED, SERIALIZABLE;
+    @Override
+    public String literal() {
+      return name();
+    }
   }
 
   /**
@@ -49,7 +58,11 @@ public interface SimpleIdSets extends PrimitiveExpression {
    */
   public static enum PrivilegesBaseEnum implements RelationalAlgebraEnum {
     TABLES, ROUTINE, EXECUTE, FILE, PROCESS, //
-    RELOAD, SHUTDOWN, SUPER, PRIVILEGES
+    RELOAD, SHUTDOWN, SUPER, PRIVILEGES;
+    @Override
+    public String literal() {
+      return name();
+    }
   }
 
   /**
@@ -63,6 +76,10 @@ public interface SimpleIdSets extends PrimitiveExpression {
   public static enum IntervalTypeBaseEnum implements RelationalAlgebraEnum {
     QUARTER, MONTH, DAY, HOUR, //
     MINUTE, WEEK, SECOND, MICROSECOND;
+    @Override
+    public String literal() {
+      return name();
+    }
   }
 
   /**
@@ -73,7 +90,11 @@ public interface SimpleIdSets extends PrimitiveExpression {
    * </pre>
    */
   public static enum DataTypeBaseEnum implements RelationalAlgebraEnum {
-    DATE, TIME, TIMESTAMP, DATETIME, YEAR, ENUM, TEXT
+    DATE, TIME, TIMESTAMP, DATETIME, YEAR, ENUM, TEXT;
+    @Override
+    public String literal() {
+      return name();
+    }
   }
 
   /**
@@ -176,6 +197,11 @@ public interface SimpleIdSets extends PrimitiveExpression {
     TEMPTABLE, THAN, TRADITIONAL, TRANSACTION, TRIGGERS, TRUNCATE, UNDEFINED, UNDOFILE,
     UNDO_BUFFER_SIZE, UNINSTALL, UNKNOWN, UNTIL, UPGRADE, USER, USE_FRM, USER_RESOURCES, VALIDATION,
     VALUE, VARIABLES, VIEW, WAIT, WARNINGS, WITHOUT, WORK, WRAPPER, X509, XA, XML;
+
+    @Override
+    public String literal() {
+      return name();
+    }
   }
 
   /**
@@ -305,6 +331,11 @@ public interface SimpleIdSets extends PrimitiveExpression {
     UNHEX, UNIX_TIMESTAMP, UPDATEXML, UPPER, UUID, UUID_SHORT, VALIDATE_PASSWORD_STRENGTH, VERSION,
     WAIT_UNTIL_SQL_THREAD_AFTER_GTIDS, WEEK, WEEKDAY, WEEKOFYEAR, WEIGHT_STRING, WITHIN, YEAR,
     YEARWEEK, Y_FUNCTION, X_FUNCTION;
+
+    @Override
+    public String literal() {
+      return name();
+    }
   }
 
 }

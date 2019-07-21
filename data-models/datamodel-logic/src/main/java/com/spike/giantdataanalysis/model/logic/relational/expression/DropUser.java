@@ -2,7 +2,9 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
 
 import java.util.List;
 
+import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.spike.giantdataanalysis.model.logic.relational.expression.CommonExpressons.IfExists;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.UserName;
 
@@ -27,6 +29,15 @@ public class DropUser implements AdministrationStatement {
   @Override
   public String literal() {
     StringBuilder sb = new StringBuilder();
+    sb.append("DROP USER ");
+    if (ifExists != null) {
+      sb.append(ifExists.literal()).append(" ");
+    }
+    List<String> literals = Lists.newArrayList();
+    for (UserName userName : userNames) {
+      literals.add(userName.literal());
+    }
+    sb.append(Joiner.on(", ").join(literals));
     return sb.toString();
   }
 }

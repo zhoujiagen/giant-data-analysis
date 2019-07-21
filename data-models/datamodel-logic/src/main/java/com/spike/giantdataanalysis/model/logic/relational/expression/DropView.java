@@ -42,7 +42,7 @@ public class DropView implements DdlStatement {
     }
     sb.append(Joiner.on(", ").join(literals)).append(" ");
     if (dropType != null) {
-      sb.append(dropType.name());
+      sb.append(dropType.literal());
     }
     return sb.toString();
   }

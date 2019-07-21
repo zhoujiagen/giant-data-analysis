@@ -22,6 +22,7 @@ public class DoStatement implements DmlStatement {
   @Override
   public String literal() {
     StringBuilder sb = new StringBuilder();
+    sb.append("DO ").append(expressions.literal());
     return sb.toString();
   }
 }

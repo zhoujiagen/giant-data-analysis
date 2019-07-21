@@ -2,7 +2,9 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
 
 import java.util.List;
 
+import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.spike.giantdataanalysis.model.logic.relational.expression.CommonLists.UidList;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.TableName;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Literals.DecimalLiteral;
@@ -53,8 +55,31 @@ public interface DeleteStatement extends DmlStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("DELETE ");
+      if (Boolean.TRUE.equals(lowPriority)) {
+        sb.append("LOW_PRIORITY ");
+      }
+      if (Boolean.TRUE.equals(quick)) {
+        sb.append("QUICK ");
+      }
+      if (Boolean.TRUE.equals(ignore)) {
+        sb.append("IGNORE ");
+      }
+      sb.append("FROM ").append(tableName.literal()).append(" ");
+      if (uidList != null) {
+        sb.append("PARTITION (").append(uidList.literal()).append(") ");
+      }
+      if (where != null) {
+        sb.append("WHERE ").append(where.literal()).append(" ");
+      }
+      if (orderByClause != null) {
+        sb.append(orderByClause.literal()).append(" ");
+      }
+      if (limit != null) {
+        sb.append("LIMIT ").append(limit.literal());
+      }
+      return sb.toString();
     }
 
   }
@@ -78,11 +103,12 @@ public interface DeleteStatement extends DmlStatement {
     public final Boolean lowPriority;
     public final Boolean quick;
     public final Boolean ignore;
+    public final boolean using;
     public final List<TableName> tableNames;
     public final TableSources tableSources;
     public final Expression where;
 
-    MultipleDeleteStatement(Boolean lowPriority, Boolean quick, Boolean ignore,
+    MultipleDeleteStatement(Boolean lowPriority, Boolean quick, Boolean ignore, boolean using,
         List<TableName> tableNames, TableSources tableSources, Expression where) {
       Preconditions.checkArgument(tableNames != null && tableNames.size() > 0);
       Preconditions.checkArgument(tableSources != null);
@@ -90,6 +116,7 @@ public interface DeleteStatement extends DmlStatement {
       this.lowPriority = lowPriority;
       this.quick = quick;
       this.ignore = ignore;
+      this.using = using;
       this.tableNames = tableNames;
       this.tableSources = tableSources;
       this.where = where;
@@ -97,8 +124,37 @@ public interface DeleteStatement extends DmlStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("DELETE ");
+      if (Boolean.TRUE.equals(lowPriority)) {
+        sb.append("LOW_PRIORITY ");
+      }
+      if (Boolean.TRUE.equals(quick)) {
+        sb.append("QUICK ");
+      }
+      if (Boolean.TRUE.equals(ignore)) {
+        sb.append("IGNORE ");
+      }
+      if (!using) {
+        List<String> literals = Lists.newArrayList();
+        for (TableName tableName : tableNames) {
+          literals.add(tableName.literal());
+        }
+        sb.append(Joiner.on(", ").join(literals)).append(" ");
+        sb.append("FROM ").append(tableSources.literal()).append(" ");
+      } else {
+        sb.append("FROM ");
+        List<String> literals = Lists.newArrayList();
+        for (TableName tableName : tableNames) {
+          literals.add(tableName.literal());
+        }
+        sb.append(Joiner.on(", ").join(literals)).append(" ");
+        sb.append("USING ").append(tableSources.literal()).append(" ");
+      }
+      if (where != null) {
+        sb.append(where.literal());
+      }
+      return sb.toString();
     }
 
   }

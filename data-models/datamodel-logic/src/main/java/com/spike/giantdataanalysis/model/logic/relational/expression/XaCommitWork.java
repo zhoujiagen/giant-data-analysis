@@ -25,6 +25,10 @@ public class XaCommitWork implements ReplicationStatement {
   @Override
   public String literal() {
     StringBuilder sb = new StringBuilder();
+    sb.append("XA COMMIT ").append(xid.literal());
+    if (Boolean.TRUE.equals(onePhase)) {
+      sb.append(" ONE PHASE");
+    }
     return sb.toString();
   }
 }

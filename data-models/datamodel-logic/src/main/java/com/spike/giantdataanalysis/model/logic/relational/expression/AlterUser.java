@@ -2,7 +2,11 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
 
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
+
+import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.spike.giantdataanalysis.model.logic.relational.expression.CommonExpressons.IfExists;
 
 /**
@@ -33,8 +37,14 @@ public interface AlterUser extends AdministrationStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("ALTER USER ");
+      List<String> literals = Lists.newArrayList();
+      for (UserSpecification userSpecification : userSpecifications) {
+        literals.add(userSpecification.literal());
+      }
+      sb.append(Joiner.on(", ").join(literals));
+      return sb.toString();
     }
 
   }
@@ -64,8 +74,52 @@ public interface AlterUser extends AdministrationStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("ALTER USER ");
+      if (ifExists != null) {
+        sb.append(ifExists.literal()).append(" ");
+      }
+      List<String> literals = Lists.newArrayList();
+      for (UserAuthOption userAuthOption : userAuthOptions) {
+        literals.add(userAuthOption.literal());
+      }
+      sb.append(Joiner.on(", ").join(literals)).append(" ");
+      if (tlsNone != null) {
+        sb.append("REQUIRE NONE ");
+      }
+      if (CollectionUtils.isNotEmpty(tlsOptions)) {
+        sb.append("REQUIRE ");
+        List<String> literals2 = Lists.newArrayList();
+        for (TlsOption tlsOption : tlsOptions) {
+          literals2.add(tlsOption.literal());
+          sb.append(Joiner.on("AND ").join(literals2)).append(" ");
+        }
+      }
+      if (CollectionUtils.isNotEmpty(userResourceOptions)) {
+        sb.append("WITH ");
+        List<String> literals3 = Lists.newArrayList();
+        for (UserResourceOption userResourceOption : userResourceOptions) {
+          literals3.add(userResourceOption.literal());
+        }
+        sb.append(Joiner.on(" ").join(literals3)).append(" ");
+      }
+      if (CollectionUtils.isNotEmpty(userPasswordOptions)) {
+        List<String> literals4 = Lists.newArrayList();
+        for (UserPasswordOption userPasswordOption : userPasswordOptions) {
+          literals4.add(userPasswordOption.literal());
+        }
+        sb.append(Joiner.on(" ").join(literals4)).append(" ");
+      }
+      if (CollectionUtils.isNotEmpty(userLockOptions)) {
+        sb.append("WITH ");
+        List<String> literals5 = Lists.newArrayList();
+        for (UserLockOptionEnum userLockOption : userLockOptions) {
+          literals5.add(userLockOption.literal());
+        }
+        sb.append(Joiner.on(" ").join(literals5)).append(" ");
+      }
+
+      return sb.toString();
     }
 
   }

@@ -40,8 +40,12 @@ public interface HandlerStatement extends DmlStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("HANDLER ").append(tableName.literal()).append(" OPEN");
+      if (uid != null) {
+        sb.append(" AS ").append(uid.literal());
+      }
+      return sb.toString();
     }
 
   }
@@ -60,7 +64,12 @@ public interface HandlerStatement extends DmlStatement {
    */
   public static class HandlerReadIndexStatement implements HandlerStatement {
     public static enum MoveOrderEnum implements RelationalAlgebraEnum {
-      FIRST, NEXT, PREV, LAST
+      FIRST, NEXT, PREV, LAST;
+
+      @Override
+      public String literal() {
+        return name();
+      }
     }
 
     public final TableName tableName;
@@ -73,7 +82,7 @@ public interface HandlerStatement extends DmlStatement {
 
     HandlerReadIndexStatement(TableName tableName, Uid index,
         RelationalComparisonOperatorEnum comparisonOperator, Constants constants,
-        MoveOrderEnum moveOrder, Expression where, DecimalLiteral limit) {
+        HandlerReadIndexStatement.MoveOrderEnum moveOrder, Expression where, DecimalLiteral limit) {
       Preconditions.checkArgument(tableName != null);
       Preconditions.checkArgument(index != null);
       Preconditions.checkArgument(!(comparisonOperator == null && moveOrder == null));
@@ -91,8 +100,21 @@ public interface HandlerStatement extends DmlStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("HANDLER ").append(tableName.literal());
+      sb.append(" READ ").append(index.literal()).append(" ");
+      if (comparisonOperator != null) {
+        sb.append(comparisonOperator.symbol).append("(").append(constants.literal()).append(") ");
+      } else {
+        sb.append(moveOrder.literal()).append(" ");
+      }
+      if (where != null) {
+        sb.append("WHERE ").append(where.literal()).append(" ");
+      }
+      if (limit != null) {
+        sb.append("LIMIT ").append(limit.literal());
+      }
+      return sb.toString();
     }
 
   }
@@ -107,7 +129,12 @@ public interface HandlerStatement extends DmlStatement {
    */
   public static class HandlerReadStatement implements HandlerStatement {
     public static enum MoveOrderEnum implements RelationalAlgebraEnum {
-      FIRST, NEXT
+      FIRST, NEXT;
+
+      @Override
+      public String literal() {
+        return name();
+      }
     }
 
     public final TableName tableName;
@@ -115,8 +142,8 @@ public interface HandlerStatement extends DmlStatement {
     public final Expression where;
     public final DecimalLiteral limit;
 
-    HandlerReadStatement(TableName tableName, MoveOrderEnum moveOrder, Expression where,
-        DecimalLiteral limit) {
+    HandlerReadStatement(TableName tableName, HandlerReadStatement.MoveOrderEnum moveOrder,
+        Expression where, DecimalLiteral limit) {
       Preconditions.checkArgument(tableName != null);
       Preconditions.checkArgument(moveOrder != null);
 
@@ -128,8 +155,16 @@ public interface HandlerStatement extends DmlStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("HANDLER ").append(tableName.literal());
+      sb.append(" READ ").append(moveOrder.literal()).append(" ");
+      if (where != null) {
+        sb.append("WHERE ").append(where.literal()).append(" ");
+      }
+      if (limit != null) {
+        sb.append("LIMIT ").append(limit.literal());
+      }
+      return sb.toString();
     }
 
   }
@@ -152,8 +187,9 @@ public interface HandlerStatement extends DmlStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("HANDLER ").append(tableName.literal()).append(" CLOSE");
+      return sb.toString();
     }
 
   }

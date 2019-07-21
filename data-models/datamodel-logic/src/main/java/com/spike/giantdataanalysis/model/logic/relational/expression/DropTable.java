@@ -41,7 +41,7 @@ public class DropTable implements DdlStatement {
     }
     sb.append(tables.literal()).append(" ");
     if (dropType != null) {
-      sb.append(dropType.name());
+      sb.append(dropType.literal());
     }
     return sb.toString();
   }

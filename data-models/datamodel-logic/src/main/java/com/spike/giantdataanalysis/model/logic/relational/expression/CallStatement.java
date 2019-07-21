@@ -31,6 +31,14 @@ public class CallStatement implements DmlStatement {
   @Override
   public String literal() {
     StringBuilder sb = new StringBuilder();
+    sb.append("CALL ").append(fullId.literal());
+    if (constants != null) {
+      sb.append("(").append(constants.literal()).append(")");
+    } else if (expressions != null) {
+      sb.append("(").append(expressions.literal()).append(")");
+    } else {
+      sb.append("()");
+    }
     return sb.toString();
   }
 }

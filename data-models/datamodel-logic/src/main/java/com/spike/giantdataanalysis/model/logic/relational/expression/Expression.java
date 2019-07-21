@@ -73,7 +73,11 @@ public interface Expression extends RelationalAlgebraExpression {
 
   public static class IsExpression implements Expression {
     public static enum TestValue implements RelationalAlgebraEnum {
-      TRUE, FALSE, UNKNOWN
+      TRUE, FALSE, UNKNOWN;
+      @Override
+      public String literal() {
+        return name();
+      }
     }
 
     final PredicateExpression predicate;
@@ -97,7 +101,7 @@ public interface Expression extends RelationalAlgebraExpression {
       if (Boolean.TRUE.equals(not)) {
         sb.append("NOT ");
       }
-      sb.append(testValue.name());
+      sb.append(testValue.literal());
       return sb.toString();
     }
   }
@@ -196,15 +200,6 @@ public interface Expression extends RelationalAlgebraExpression {
     }
 
     @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append(left);
-      builder.append(" ").append(comparisonOperator.symbol);
-      builder.append(" ").append(right);
-      return builder.toString();
-    }
-
-    @Override
     public String literal() {
       StringBuilder sb = new StringBuilder();
       sb.append(left);
@@ -217,7 +212,11 @@ public interface Expression extends RelationalAlgebraExpression {
 
   public static class SubqueryComparasionPredicate implements PredicateExpression {
     public static enum QuantifierEnum implements RelationalAlgebraEnum {
-      ALL, ANY, SOME
+      ALL, ANY, SOME;
+      @Override
+      public String literal() {
+        return name();
+      }
     }
 
     final PredicateExpression predicate;
@@ -244,7 +243,7 @@ public interface Expression extends RelationalAlgebraExpression {
       StringBuilder sb = new StringBuilder();
       sb.append(predicate.literal()).append(" ");
       sb.append(comparisonOperator.symbol);
-      sb.append(quantifier.name());
+      sb.append(quantifier.literal());
       sb.append("(");
       sb.append(selectStatement.literal());
       sb.append(")");
@@ -344,7 +343,11 @@ public interface Expression extends RelationalAlgebraExpression {
 
   public static class RegexpPredicate implements PredicateExpression {
     public static enum RegexType implements RelationalAlgebraEnum {
-      REGEXP, RLIKE
+      REGEXP, RLIKE;
+      @Override
+      public String literal() {
+        return name();
+      }
     }
 
     final PredicateExpression first;
@@ -371,7 +374,7 @@ public interface Expression extends RelationalAlgebraExpression {
       if (Boolean.TRUE.equals(not)) {
         sb.append("NOT ");
       }
-      sb.append(regex.name()).append(" ");
+      sb.append(regex.literal()).append(" ");
       sb.append(second.literal());
       return sb.toString();
     }
@@ -434,17 +437,6 @@ public interface Expression extends RelationalAlgebraExpression {
 
         this.expressionAtom = expressionAtom;
         this.collationName = collationName;
-      }
-
-      @Override
-      public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("CollateExpressionAtom [expressionAtom=");
-        builder.append(expressionAtom);
-        builder.append(", collationName=");
-        builder.append(collationName);
-        builder.append("]");
-        return builder.toString();
       }
 
       @Override

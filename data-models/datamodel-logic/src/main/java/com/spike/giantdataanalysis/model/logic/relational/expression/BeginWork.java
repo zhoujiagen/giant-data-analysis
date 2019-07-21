@@ -8,15 +8,12 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
  * </pre>
  */
 public class BeginWork implements TransactionStatement {
-  public final Boolean work;
 
-  BeginWork(Boolean work) {
-    this.work = work;
+  BeginWork() {
   }
 
   @Override
   public String literal() {
-    StringBuilder sb = new StringBuilder();
-    return sb.toString();
+    return "BEGIN WORK";
   }
 }

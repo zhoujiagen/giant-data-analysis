@@ -2,7 +2,11 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
 
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
+
+import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 
 /**
  * <pre>
@@ -36,6 +40,32 @@ public class IfStatement implements CompoundStatement {
   @Override
   public String literal() {
     StringBuilder sb = new StringBuilder();
+    sb.append("IF ").append(ifExpression.literal()).append(" ");
+    sb.append("THEN ");
+    List<String> literals = Lists.newArrayList();
+    for (ProcedureSqlStatement thenStatement : thenStatements) {
+      literals.add(thenStatement.literal());
+    }
+    sb.append(Joiner.on(" ").join(literals)).append(" ");
+
+    if (CollectionUtils.isNotEmpty(elifAlternatives)) {
+      List<String> literals2 = Lists.newArrayList();
+      for (ElifAlternative elifAlternative : elifAlternatives) {
+        literals2.add(elifAlternative.literal());
+      }
+      sb.append(Joiner.on(" ").join(literals2)).append(" ");
+    }
+
+    if (CollectionUtils.isNotEmpty(elseStatements)) {
+      sb.append("ELSE ");
+      List<String> literals2 = Lists.newArrayList();
+      for (ProcedureSqlStatement elseStatement : elseStatements) {
+        literals2.add(elseStatement.literal());
+      }
+      sb.append(Joiner.on(" ").join(literals2)).append(" ");
+    }
+
+    sb.append("END IF");
     return sb.toString();
   }
 }

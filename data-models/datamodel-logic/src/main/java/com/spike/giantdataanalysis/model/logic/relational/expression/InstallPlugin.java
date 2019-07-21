@@ -25,6 +25,7 @@ public class InstallPlugin implements AdministrationStatement {
   @Override
   public String literal() {
     StringBuilder sb = new StringBuilder();
+    sb.append("INSTALL PLUGIN ").append(uid.literal()).append(" SONAME ").append(soName);
     return sb.toString();
   }
 }

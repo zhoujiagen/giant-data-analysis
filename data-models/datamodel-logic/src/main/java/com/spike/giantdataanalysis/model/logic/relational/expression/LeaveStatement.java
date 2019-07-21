@@ -22,6 +22,7 @@ public class LeaveStatement implements CompoundStatement {
   @Override
   public String literal() {
     StringBuilder sb = new StringBuilder();
+    sb.append("LEAVE ").append(uid.literal());
     return sb.toString();
   }
 }

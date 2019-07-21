@@ -2,7 +2,9 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
 
 import java.util.List;
 
+import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 
 /**
  * <pre>
@@ -25,6 +27,12 @@ public class ChangeReplicationFilter implements ReplicationStatement {
   @Override
   public String literal() {
     StringBuilder sb = new StringBuilder();
+    sb.append("CHANGE REPLICATION FILTER ");
+    List<String> literals = Lists.newArrayList();
+    for (ReplicationFilter replicationFilter : replicationFilters) {
+      literals.add(replicationFilter.literal());
+    }
+    sb.append(Joiner.on(", ").join(literals));
     return sb.toString();
   }
 }

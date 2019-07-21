@@ -45,7 +45,7 @@ public class DropIndex implements DdlStatement {
     StringBuilder sb = new StringBuilder();
     sb.append("DROP INDEX ");
     if (intimeAction != null) {
-      sb.append(intimeAction.name()).append(" ");
+      sb.append(intimeAction.literal()).append(" ");
     }
     sb.append(uid.literal()).append(" ON").append(tableName.literal()).append(" ");
     if (CollectionUtils.isNotEmpty(algorithmOrLocks)) {

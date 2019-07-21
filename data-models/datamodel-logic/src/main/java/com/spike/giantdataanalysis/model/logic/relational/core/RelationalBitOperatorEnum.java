@@ -34,4 +34,9 @@ public enum RelationalBitOperatorEnum implements RelationalAlgebraEnum {
 
     return null;
   }
+
+  @Override
+  public String literal() {
+    return symbol;
+  }
 }

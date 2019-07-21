@@ -2,7 +2,9 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
 
 import java.util.List;
 
+import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 
 /**
  * <pre>
@@ -23,6 +25,13 @@ public class LockTables implements TransactionStatement {
   @Override
   public String literal() {
     StringBuilder sb = new StringBuilder();
+    sb.append("LOCK TABLES ");
+    List<String> literals = Lists.newArrayList();
+    for (LockTableElement lockTableElement : lockTableElements) {
+      literals.add(lockTableElement.literal());
+    }
+    sb.append(Joiner.on(", ").join(literals));
+
     return sb.toString();
   }
 }

@@ -15,15 +15,20 @@ import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.U
  */
 public class SimpleDescribeStatement implements UtilityStatement {
   public static enum CommandEnum implements RelationalAlgebraEnum {
-    EXPLAIN, DESCRIBE, DESC
+    EXPLAIN, DESCRIBE, DESC;
+    @Override
+    public String literal() {
+      return name();
+    }
   }
 
-  public final CommandEnum command;
+  public final SimpleDescribeStatement.CommandEnum command;
   public final TableName tableName;
   public final Uid column;
   public final String pattern;
 
-  SimpleDescribeStatement(CommandEnum command, TableName tableName, Uid column, String pattern) {
+  SimpleDescribeStatement(SimpleDescribeStatement.CommandEnum command, TableName tableName,
+      Uid column, String pattern) {
     Preconditions.checkArgument(command != null);
     Preconditions.checkArgument(tableName != null);
 
@@ -36,6 +41,12 @@ public class SimpleDescribeStatement implements UtilityStatement {
   @Override
   public String literal() {
     StringBuilder sb = new StringBuilder();
+    sb.append(command.literal()).append(" ").append(tableName.literal());
+    if (column != null) {
+      sb.append(" ").append(column.literal());
+    } else if (pattern != null) {
+      sb.append(" ").append(pattern);
+    }
     return sb.toString();
   }
 }

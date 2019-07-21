@@ -25,6 +25,10 @@ public class ExecuteStatement implements PreparedStatement {
   @Override
   public String literal() {
     StringBuilder sb = new StringBuilder();
+    sb.append("EXECUTE ").append(uid.literal());
+    if (userVariables != null) {
+      sb.append(" USING ").append(userVariables.literal());
+    }
     return sb.toString();
   }
 }

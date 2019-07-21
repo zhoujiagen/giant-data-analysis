@@ -16,11 +16,6 @@ import com.spike.giantdataanalysis.model.logic.relational.expression.SimpleIdSet
  */
 public abstract class Literals implements PrimitiveExpression {
 
-  @Override
-  public String toString() {
-    return literal();
-  }
-
   /**
    * <pre>
    decimalLiteral
@@ -34,6 +29,11 @@ public abstract class Literals implements PrimitiveExpression {
       ZERO_DECIMAL, // 0
       ONE_DECIMAL, // 1
       TWO_DECIMAL; // 2
+
+      @Override
+      public String literal() {
+        return name();
+      }
     }
 
     public final DecimalLiteral.Type type;
@@ -232,6 +232,11 @@ public abstract class Literals implements PrimitiveExpression {
       REAL_LITERAL, //
       BIT_STRING, //
       NULL_LITERAL;
+
+      @Override
+      public String literal() {
+        return name();
+      }
     }
 
     public final Constant.Type type;

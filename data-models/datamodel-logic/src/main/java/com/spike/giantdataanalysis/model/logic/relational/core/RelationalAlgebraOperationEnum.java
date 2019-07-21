@@ -28,4 +28,8 @@ public enum RelationalAlgebraOperationEnum implements RelationalAlgebraEnum {
     this.operandArity = operandArity;
   }
 
+  @Override
+  public String literal() {
+    return name();
+  }
 }

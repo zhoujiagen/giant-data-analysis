@@ -2,7 +2,9 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
 
 import java.util.List;
 
+import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.spike.giantdataanalysis.model.logic.relational.core.RelationalAlgebraEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.TableName;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.Uid;
@@ -36,8 +38,14 @@ public interface TransactionStatement extends SqlStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("SET AUTOCOMMIT = ");
+      if (autocommitValue) {
+        sb.append("1");
+      } else {
+        sb.append("0");
+      }
+      return sb.toString();
     }
 
   }
@@ -52,13 +60,17 @@ public interface TransactionStatement extends SqlStatement {
    */
   public static class SetTransactionStatement implements SetStatement {
     public static enum TransactionContextEnum implements RelationalAlgebraEnum {
-      GLOBAL, SESSION
+      GLOBAL, SESSION;
+      @Override
+      public String literal() {
+        return name();
+      }
     }
 
-    public final TransactionContextEnum transactionContext;
+    public final SetTransactionStatement.TransactionContextEnum transactionContext;
     public final List<TransactionOption> transactionOptions;
 
-    SetTransactionStatement(TransactionContextEnum transactionContext,
+    SetTransactionStatement(SetTransactionStatement.TransactionContextEnum transactionContext,
         List<TransactionOption> transactionOptions) {
       Preconditions.checkArgument(transactionOptions != null && transactionOptions.size() > 0);
 
@@ -68,8 +80,18 @@ public interface TransactionStatement extends SqlStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("SET ");
+      if (transactionContext != null) {
+        sb.append(transactionContext.literal()).append(" ");
+      }
+      sb.append("TRANSACTION ");
+      List<String> literals = Lists.newArrayList();
+      for (TransactionOption transactionOption : transactionOptions) {
+        literals.add(transactionOption.literal());
+      }
+      sb.append(Joiner.on(", ").join(literals));
+      return sb.toString();
     }
 
   }
@@ -84,7 +106,19 @@ public interface TransactionStatement extends SqlStatement {
    * </pre>
    */
   public static enum TransactionModeEnum implements RelationalAlgebraEnum {
-    WITH_CONSISTENT_SNAPSHOT, READ_WRITE, READ_ONLY
+    WITH_CONSISTENT_SNAPSHOT("WITH CONSISTENT SNAPSHOT"), READ_WRITE("READ WRITE"),
+    READ_ONLY("READ ONLY");
+
+    public String literal;
+
+    TransactionModeEnum(String literal) {
+      this.literal = literal;
+    }
+
+    @Override
+    public String literal() {
+      return literal;
+    }
   }
 
   /**
@@ -110,8 +144,13 @@ public interface TransactionStatement extends SqlStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append(tableName.literal()).append(" ");
+      if (uid != null) {
+        sb.append("AS ").append(uid.literal()).append(" ");
+      }
+      sb.append(lockAction.literal());
+      return sb.toString();
     }
 
   }
@@ -126,13 +165,18 @@ public interface TransactionStatement extends SqlStatement {
   public static class LockAction implements PrimitiveExpression {
     public static enum Type implements RelationalAlgebraEnum {
       READ, WRITE;
+
+      @Override
+      public String literal() {
+        return name();
+      }
     }
 
-    public final Type type;
+    public final LockAction.Type type;
     public final Boolean local;
     public final Boolean lowPriority;
 
-    LockAction(Type type, Boolean local, Boolean lowPriority) {
+    LockAction(LockAction.Type type, Boolean local, Boolean lowPriority) {
       Preconditions.checkArgument(type != null);
 
       this.type = type;
@@ -142,8 +186,24 @@ public interface TransactionStatement extends SqlStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      switch (type) {
+      case READ:
+        sb.append("READ");
+        if (Boolean.TRUE.equals(local)) {
+          sb.append(" LOCAL");
+        }
+        break;
+      case WRITE:
+        if (Boolean.TRUE.equals(lowPriority)) {
+          sb.append(" LOW_PRIORITY");
+        }
+        sb.append("WRITE");
+        break;
+      default:
+        break;
+      }
+      return sb.toString();
     }
 
   }
@@ -160,12 +220,17 @@ public interface TransactionStatement extends SqlStatement {
   public static class TransactionOption implements PrimitiveExpression {
     public static enum Type implements RelationalAlgebraEnum {
       ISOLATION_LEVEL, READ_WRITE, READ_ONLY;
+
+      @Override
+      public String literal() {
+        return name();
+      }
     }
 
-    public final Type type;
+    public final TransactionOption.Type type;
     public final TransactionLevelEnum transactionLevel;
 
-    TransactionOption(Type type, TransactionLevelEnum transactionLevel) {
+    TransactionOption(TransactionOption.Type type, TransactionLevelEnum transactionLevel) {
       Preconditions.checkArgument(type != null);
       if (Type.ISOLATION_LEVEL.equals(type)) {
         Preconditions.checkArgument(transactionLevel != null);
@@ -177,8 +242,21 @@ public interface TransactionStatement extends SqlStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      switch (type) {
+      case ISOLATION_LEVEL:
+        sb.append("ISOLATION LEVEL ").append(transactionLevel.literal());
+        break;
+      case READ_WRITE:
+        sb.append("READ WRITE");
+        break;
+      case READ_ONLY:
+        sb.append("READ ONLY");
+        break;
+      default:
+        break;
+      }
+      return sb.toString();
     }
 
   }
@@ -194,6 +272,19 @@ public interface TransactionStatement extends SqlStatement {
    * </pre>
    */
   public static enum TransactionLevelEnum implements RelationalAlgebraEnum {
-    REPEATABLE_READ, READ_COMMITTED, READ_UNCOMMITTED, SERIALIZABLE
+    REPEATABLE_READ("REPEATABLE READ"), READ_COMMITTED("READ COMMITTED"),
+    READ_UNCOMMITTED("READ UNCOMMITTED"), SERIALIZABLE("SERIALIZABLE");
+
+    public String literal;
+
+    TransactionLevelEnum(String literal) {
+      this.literal = literal;
+    }
+
+    @Override
+    public String literal() {
+      return literal;
+    }
+
   }
 }

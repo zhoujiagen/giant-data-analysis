@@ -61,14 +61,14 @@ public class CreateIndex implements DdlStatement {
     StringBuilder sb = new StringBuilder();
     sb.append("CREATE ");
     if (intimeAction != null) {
-      sb.append(intimeAction.name()).append(" ");
+      sb.append(intimeAction.literal()).append(" ");
     }
     if (indexCategory != null) {
-      sb.append(indexCategory.name()).append(" ");
+      sb.append(indexCategory.literal()).append(" ");
     }
     sb.append("INDEX ").append(uid.literal()).append(" ");
     if (indexType != null) {
-      sb.append(indexType.name()).append(" ");
+      sb.append(indexType.literal()).append(" ");
     }
     sb.append("ON ").append(tableName.literal()).append(" ").append(indexColumnNames.literal())
         .append(" ");

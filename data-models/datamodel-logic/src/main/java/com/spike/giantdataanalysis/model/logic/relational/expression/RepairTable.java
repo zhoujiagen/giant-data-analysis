@@ -33,6 +33,20 @@ public class RepairTable implements AdministrationStatement {
   @Override
   public String literal() {
     StringBuilder sb = new StringBuilder();
+    sb.append("REPAIR ");
+    if (actionOption != null) {
+      sb.append(actionOption.literal()).append(" ");
+    }
+    sb.append("TABLE ").append(tables.literal()).append(" ");
+    if (Boolean.TRUE.equals(quick)) {
+      sb.append("QUICK ");
+    }
+    if (Boolean.TRUE.equals(extended)) {
+      sb.append("EXTENDED ");
+    }
+    if (Boolean.TRUE.equals(useFrm)) {
+      sb.append("USE_FRM");
+    }
     return sb.toString();
   }
 }

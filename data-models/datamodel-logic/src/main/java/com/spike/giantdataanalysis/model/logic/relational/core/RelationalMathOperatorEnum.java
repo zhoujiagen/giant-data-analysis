@@ -37,4 +37,9 @@ public enum RelationalMathOperatorEnum implements RelationalAlgebraEnum {
 
     return null;
   }
+
+  @Override
+  public String literal() {
+    return symbol;
+  }
 }

@@ -26,8 +26,9 @@ public interface CursorStatement extends CompoundStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("CLOSE ").append(uid.literal());
+      return sb.toString();
     }
 
   }
@@ -48,8 +49,13 @@ public interface CursorStatement extends CompoundStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("FETCH ");
+      if (Boolean.TRUE.equals(isNext)) {
+        sb.append("NEXT FROM ");
+      }
+      sb.append(uid.literal()).append(" INTO ").append(uidList.literal());
+      return sb.toString();
     }
 
   }
@@ -65,8 +71,9 @@ public interface CursorStatement extends CompoundStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("OPEN ").append(uid.literal());
+      return sb.toString();
     }
   }
 }

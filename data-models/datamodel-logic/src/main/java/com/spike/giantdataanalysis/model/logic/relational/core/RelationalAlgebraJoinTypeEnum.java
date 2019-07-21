@@ -11,5 +11,11 @@ public enum RelationalAlgebraJoinTypeEnum implements RelationalAlgebraEnum {
   /** 右外连接 */
   RIGHT_OUTER_JION,
   /** 全外连接 */
-  FULL_OUTER_JOIN,
+  FULL_OUTER_JOIN;
+
+  @Override
+  public String literal() {
+    return name();
+  }
+
 }

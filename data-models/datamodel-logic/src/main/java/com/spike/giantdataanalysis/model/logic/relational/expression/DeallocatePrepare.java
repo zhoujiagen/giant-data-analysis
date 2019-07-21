@@ -13,13 +13,17 @@ import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.U
  */
 public class DeallocatePrepare implements PreparedStatement {
   public static enum DropFormatEnum implements RelationalAlgebraEnum {
-    DEALLOCATE, DROP
+    DEALLOCATE, DROP;
+    @Override
+    public String literal() {
+      return name();
+    }
   }
 
-  public final DropFormatEnum dropFormat;
+  public final DeallocatePrepare.DropFormatEnum dropFormat;
   public final Uid uid;
 
-  DeallocatePrepare(DropFormatEnum dropFormat, Uid uid) {
+  DeallocatePrepare(DeallocatePrepare.DropFormatEnum dropFormat, Uid uid) {
     Preconditions.checkArgument(dropFormat != null);
     Preconditions.checkArgument(uid != null);
 
@@ -30,6 +34,7 @@ public class DeallocatePrepare implements PreparedStatement {
   @Override
   public String literal() {
     StringBuilder sb = new StringBuilder();
+    sb.append(dropFormat.literal()).append(" PREPARE ").append(uid.literal());
     return sb.toString();
   }
 }

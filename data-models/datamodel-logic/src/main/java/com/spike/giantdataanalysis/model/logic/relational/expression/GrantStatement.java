@@ -2,7 +2,11 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
 
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
+
+import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 
 /**
  * <pre>
@@ -48,6 +52,42 @@ public class GrantStatement implements AdministrationStatement {
   @Override
   public String literal() {
     StringBuilder sb = new StringBuilder();
+    sb.append("GRANT ");
+    List<String> literals = Lists.newArrayList();
+    for (PrivelegeClause privelegeClause : privelegeClauses) {
+      literals.add(privelegeClause.literal());
+    }
+    sb.append(Joiner.on(", ").join(literals)).append(" ");
+    sb.append("ON ");
+    if (privilegeObject != null) {
+      sb.append(privilegeObject.literal()).append(" ");
+    }
+    sb.append(privilegeLevel.literal()).append(" ");
+    sb.append("TO ");
+    List<String> literals2 = Lists.newArrayList();
+    for (UserAuthOption userAuthOption : userAuthOptions) {
+      literals.add(userAuthOption.literal());
+    }
+    sb.append(Joiner.on(", ").join(literals2)).append(" ");
+    if (tlsNone != null) {
+      sb.append("REQUIRE NONE ");
+    }
+    if (CollectionUtils.isNotEmpty(tlsOptions)) {
+      sb.append("REQUIRE ");
+      List<String> literals3 = Lists.newArrayList();
+      for (TlsOption tlsOption : tlsOptions) {
+        literals3.add(tlsOption.literal());
+        sb.append(Joiner.on(", ").join(literals3)).append(" ");
+      }
+    }
+    if (CollectionUtils.isNotEmpty(userResourceOptions)) {
+      sb.append("WITH GRANT OPTION ");
+      List<String> literals4 = Lists.newArrayList();
+      for (UserResourceOption userResourceOption : userResourceOptions) {
+        literals4.add(userResourceOption.literal());
+      }
+      sb.append(Joiner.on(" ").join(literals4));
+    }
     return sb.toString();
   }
 }

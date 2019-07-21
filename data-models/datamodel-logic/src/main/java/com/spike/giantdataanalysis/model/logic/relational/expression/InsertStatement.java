@@ -2,7 +2,11 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
 
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
+
+import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.spike.giantdataanalysis.model.logic.relational.core.RelationalAlgebraEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.CommonLists.UidList;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.TableName;
@@ -30,7 +34,12 @@ insertStatement
  */
 public class InsertStatement implements DmlStatement {
   public static enum PriorityType implements RelationalAlgebraEnum {
-    LOW_PRIORITY, DELAYED, HIGH_PRIORITY
+    LOW_PRIORITY, DELAYED, HIGH_PRIORITY;
+
+    @Override
+    public String literal() {
+      return name();
+    }
   }
 
   public final PriorityType priority;
@@ -65,8 +74,45 @@ public class InsertStatement implements DmlStatement {
 
   @Override
   public String literal() {
-    // TODO Implement RelationalAlgebraExpression.literal
-    return null;
+    StringBuilder sb = new StringBuilder();
+    sb.append("INSERT").append(" ");
+    if (priority != null) {
+      sb.append(priority.literal()).append(" ");
+    }
+    if (Boolean.TRUE.equals(ignore)) {
+      sb.append("IGNORE ");
+    }
+    if (Boolean.TRUE.equals(into)) {
+      sb.append("INTO ");
+    }
+    sb.append(tableName.literal()).append(" ");
+    if (partitions != null) {
+      sb.append("PARTITION (").append(partitions.literal()).append(") ");
+    }
+
+    if (insertStatementValue != null) {
+      if (columns != null) {
+        sb.append("(").append(columns.literal()).append(") ");
+      }
+      sb.append(insertStatementValue.literal()).append(" ");
+    } else {
+      sb.append("SET ");
+      List<String> literals = Lists.newArrayList();
+      for (UpdatedElement updatedElement : setList) {
+        literals.add(updatedElement.literal());
+      }
+      sb.append(Joiner.on(", ").join(literals));
+    }
+
+    if (CollectionUtils.isNotEmpty(duplicatedList)) {
+      sb.append("ON DUPLICATE KEY UPDATE ");
+      List<String> literals = Lists.newArrayList();
+      for (UpdatedElement updatedElement : duplicatedList) {
+        literals.add(updatedElement.literal());
+      }
+      sb.append(Joiner.on(", ").join(literals));
+    }
+    return sb.toString();
   }
 
 }

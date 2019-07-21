@@ -16,15 +16,21 @@ import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.U
 public class CreateUdfunction implements AdministrationStatement {
 
   public static enum ReturnTypeEnum implements RelationalAlgebraEnum {
-    STRING, INTEGER, REAL, DECIMAL
+    STRING, INTEGER, REAL, DECIMAL;
+
+    @Override
+    public String literal() {
+      return name();
+    }
   }
 
   public final Boolean aggregate;
   public final Uid uid;
-  public final ReturnTypeEnum returnType;
+  public final CreateUdfunction.ReturnTypeEnum returnType;
   public final String soName;
 
-  CreateUdfunction(Boolean aggregate, Uid uid, ReturnTypeEnum returnType, String soName) {
+  CreateUdfunction(Boolean aggregate, Uid uid, CreateUdfunction.ReturnTypeEnum returnType,
+      String soName) {
     Preconditions.checkArgument(uid != null);
     Preconditions.checkArgument(returnType != null);
     Preconditions.checkArgument(soName != null);
@@ -38,6 +44,13 @@ public class CreateUdfunction implements AdministrationStatement {
   @Override
   public String literal() {
     StringBuilder sb = new StringBuilder();
+    sb.append("CREATE ");
+    if (Boolean.TRUE.equals(aggregate)) {
+      sb.append("AGGREGATE ");
+    }
+    sb.append("FUNCTION ").append(uid.literal()).append(" ");
+    sb.append("RETURNS ").append(returnType.literal()).append(" ");
+    sb.append("SONAME ").append(soName);
     return sb.toString();
   }
 }

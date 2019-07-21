@@ -21,15 +21,28 @@ import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.T
  */
 public class CreateTrigger implements DdlStatement {
   public static enum TriggerTimeEnum implements RelationalAlgebraEnum {
-    BEFORE, AFTER
+    BEFORE, AFTER;
+    @Override
+    public String literal() {
+      return name();
+    }
   }
 
   public static enum TriggerEventEnum implements RelationalAlgebraEnum {
-    INSERT, UPDATE, DELETE
+    INSERT, UPDATE, DELETE;
+    @Override
+    public String literal() {
+      return name();
+    }
   }
 
   public static enum TriggerPlaceEnum implements RelationalAlgebraEnum {
-    FOLLOWS, PRECEDES
+    FOLLOWS, PRECEDES;
+
+    @Override
+    public String literal() {
+      return name();
+    }
   }
 
   public final OwnerStatement ownerStatement;
@@ -67,11 +80,11 @@ public class CreateTrigger implements DdlStatement {
     if (ownerStatement != null) {
       sb.append("TRIGGER ").append(thisTrigger.literal()).append(" ");
     }
-    sb.append(triggerTime.name()).append(" ");
-    sb.append(triggerEvent.name()).append(" ");
+    sb.append(triggerTime.literal()).append(" ");
+    sb.append(triggerEvent.literal()).append(" ");
     sb.append("ON ").append(tableName.literal()).append(" FOR EACH ROW");
     if (otherTrigger != null) {
-      sb.append(triggerPlace.name()).append(" ").append(otherTrigger.literal()).append(" ");
+      sb.append(triggerPlace.literal()).append(" ").append(otherTrigger.literal()).append(" ");
     }
     sb.append(routineBody.literal()).append(" ");
 

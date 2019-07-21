@@ -24,7 +24,12 @@ public interface CommonExpressons extends PrimitiveExpression {
    */
   public static class DefaultValue implements CommonExpressons {
     public static enum Type implements RelationalAlgebraEnum {
-      NULL_LITERAL, CONSTANT, CURRENTTIMESTAMP
+      NULL_LITERAL, CONSTANT, CURRENTTIMESTAMP;
+
+      @Override
+      public String literal() {
+        return name();
+      }
     }
 
     public final DefaultValue.Type type;
@@ -96,7 +101,12 @@ public interface CommonExpressons extends PrimitiveExpression {
    */
   public static class CurrentTimestamp implements CommonExpressons {
     public static enum Type implements RelationalAlgebraEnum {
-      CURRENT_TIMESTAMP, LOCALTIME, LOCALTIMESTAMP, NOW
+      CURRENT_TIMESTAMP, LOCALTIME, LOCALTIMESTAMP, NOW;
+
+      @Override
+      public String literal() {
+        return name();
+      }
     }
 
     public final CurrentTimestamp.Type type;
@@ -119,7 +129,7 @@ public interface CommonExpressons extends PrimitiveExpression {
         }
         sb.append(")");
       } else {
-        sb.append(type.name());
+        sb.append(type.literal());
         if (decimalLiteral != null) {
           sb.append("(").append(decimalLiteral.literal()).append(")");
         }

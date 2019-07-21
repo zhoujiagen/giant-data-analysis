@@ -13,13 +13,18 @@ import com.spike.giantdataanalysis.model.logic.relational.expression.CommonLists
  */
 public class ChecksumTable implements AdministrationStatement {
   public static enum ActionOptionEnum implements RelationalAlgebraEnum {
-    QUICK, EXTENDED
+    QUICK, EXTENDED;
+
+    @Override
+    public String literal() {
+      return name();
+    }
   }
 
   public final Tables tables;
-  public final ActionOptionEnum actionOption;
+  public final ChecksumTable.ActionOptionEnum actionOption;
 
-  ChecksumTable(Tables tables, ActionOptionEnum actionOption) {
+  ChecksumTable(Tables tables, ChecksumTable.ActionOptionEnum actionOption) {
     Preconditions.checkArgument(tables != null);
 
     this.tables = tables;
@@ -29,6 +34,10 @@ public class ChecksumTable implements AdministrationStatement {
   @Override
   public String literal() {
     StringBuilder sb = new StringBuilder();
+    sb.append("CHECKSUM TABLE ").append(tables);
+    if (actionOption != null) {
+      sb.append(" ").append(actionOption.literal());
+    }
     return sb.toString();
   }
 }

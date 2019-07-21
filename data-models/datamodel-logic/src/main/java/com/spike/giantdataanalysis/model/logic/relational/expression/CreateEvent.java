@@ -64,7 +64,7 @@ public class CreateEvent implements DdlStatement {
       sb.append("ON COMPLETION PRESERVE ");
     }
     if (enableType != null) {
-      sb.append(enableType.name()).append(" ");
+      sb.append(enableType.literal()).append(" ");
     }
     if (comment != null) {
       sb.append("COMMENT ").append(comment).append(" ");

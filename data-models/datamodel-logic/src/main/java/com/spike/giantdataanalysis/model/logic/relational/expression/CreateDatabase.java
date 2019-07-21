@@ -39,7 +39,7 @@ public class CreateDatabase implements DdlStatement {
   @Override
   public String literal() {
     StringBuilder sb = new StringBuilder();
-    sb.append("CREATE ").append(dbFormat.name()).append(" ");
+    sb.append("CREATE ").append(dbFormat.literal()).append(" ");
     if (ifNotExists != null) {
       sb.append(ifNotExists.literal()).append(" ");
     }

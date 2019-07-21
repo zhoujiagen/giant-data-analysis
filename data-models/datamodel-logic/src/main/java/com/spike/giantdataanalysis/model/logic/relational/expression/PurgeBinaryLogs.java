@@ -16,25 +16,34 @@ import com.spike.giantdataanalysis.model.logic.relational.core.RelationalAlgebra
  */
 public class PurgeBinaryLogs implements ReplicationStatement {
   public static enum PurgeFormatEnum implements RelationalAlgebraEnum {
-    BINARY, MASTER
+    BINARY, MASTER;
+
+    @Override
+    public String literal() {
+      return name();
+    }
   }
 
   public static enum Type implements RelationalAlgebraEnum {
-    TO_FILE, BEFORE_TIME
+    TO_FILE, BEFORE_TIME;
+
+    @Override
+    public String literal() {
+      return name();
+    }
   }
 
-  public final PurgeFormatEnum purgeFormat;
-  public final String fileName;
-  public final Type type;
+  public final PurgeBinaryLogs.PurgeFormatEnum purgeFormat;
+  public final PurgeBinaryLogs.Type type;
   public final String typeValue;
 
-  PurgeBinaryLogs(PurgeFormatEnum purgeFormat, String fileName, Type type, String typeValue) {
+  PurgeBinaryLogs(PurgeBinaryLogs.PurgeFormatEnum purgeFormat, PurgeBinaryLogs.Type type,
+      String typeValue) {
     Preconditions.checkArgument(purgeFormat != null);
     Preconditions.checkArgument(type != null);
     Preconditions.checkArgument(typeValue != null);
 
     this.purgeFormat = purgeFormat;
-    this.fileName = fileName;
     this.type = type;
     this.typeValue = typeValue;
   }
@@ -42,6 +51,17 @@ public class PurgeBinaryLogs implements ReplicationStatement {
   @Override
   public String literal() {
     StringBuilder sb = new StringBuilder();
+    sb.append("PURGE ").append(purgeFormat.literal()).append(" LOGS ");
+    switch (type) {
+    case TO_FILE:
+      sb.append("TO ").append(typeValue);
+      break;
+    case BEFORE_TIME:
+      sb.append("BEFORE ").append(typeValue);
+      break;
+    default:
+      break;
+    }
     return sb.toString();
   }
 }

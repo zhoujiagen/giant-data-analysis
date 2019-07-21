@@ -2,7 +2,11 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
 
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
+
+import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.spike.giantdataanalysis.model.logic.relational.core.RelationalAlgebraEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.CommonLists.SimpleStrings;
 import com.spike.giantdataanalysis.model.logic.relational.expression.CommonLists.Tables;
@@ -53,8 +57,9 @@ public interface ReplicationStatement extends SqlStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append(stringMasterOption.literal()).append(" = ").append(value);
+      return sb.toString();
     }
 
   }
@@ -73,8 +78,9 @@ public interface ReplicationStatement extends SqlStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append(decimalMasterOption.literal()).append(" = ").append(value.literal());
+      return sb.toString();
     }
 
   }
@@ -92,8 +98,14 @@ public interface ReplicationStatement extends SqlStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append(boolMasterOption.literal()).append(" = ");
+      if (value) {
+        sb.append("1");
+      } else {
+        sb.append("0");
+      }
+      return sb.toString();
     }
 
   }
@@ -109,8 +121,9 @@ public interface ReplicationStatement extends SqlStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("MASTER_HEARTBEAT_PERIOD = ").append(realLiteral);
+      return sb.toString();
     }
 
   }
@@ -119,15 +132,22 @@ public interface ReplicationStatement extends SqlStatement {
     public final List<Uid> uids;
 
     MasterUidListOption(List<Uid> uids) {
-      Preconditions.checkArgument(uids != null && uids.size() > 0);
-
       this.uids = uids;
     }
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("IGNORE_SERVER_IDS = (");
+      if (CollectionUtils.isNotEmpty(uids)) {
+        List<String> literals = Lists.newArrayList();
+        for (Uid uid : uids) {
+          literals.add(uid.literal());
+        }
+        sb.append(Joiner.on(", ").join(literals));
+      }
+      sb.append(")");
+      return sb.toString();
     }
 
   }
@@ -146,7 +166,12 @@ public interface ReplicationStatement extends SqlStatement {
   public static enum StringMasterOptionEnum implements RelationalAlgebraEnum {
     MASTER_BIND, MASTER_HOST, MASTER_USER, MASTER_PASSWORD, MASTER_LOG_FILE, RELAY_LOG_FILE,
     MASTER_SSL_CA, MASTER_SSL_CAPATH, MASTER_SSL_CERT, MASTER_SSL_CRL, MASTER_SSL_CRLPATH,
-    MASTER_SSL_KEY, MASTER_SSL_CIPHER, MASTER_TLS_VERSION
+    MASTER_SSL_KEY, MASTER_SSL_CIPHER, MASTER_TLS_VERSION;
+
+    @Override
+    public String literal() {
+      return name();
+    }
   }
 
   /**
@@ -159,7 +184,12 @@ public interface ReplicationStatement extends SqlStatement {
    */
   public static enum DecimalMasterOptionEnum implements RelationalAlgebraEnum {
     MASTER_PORT, MASTER_CONNECT_RETRY, MASTER_RETRY_COUNT, MASTER_DELAY, MASTER_LOG_POS,
-    RELAY_LOG_POS
+    RELAY_LOG_POS;
+
+    @Override
+    public String literal() {
+      return name();
+    }
   }
 
   /**
@@ -171,7 +201,12 @@ public interface ReplicationStatement extends SqlStatement {
    * </pre>
    */
   public static enum BoolMasterOptionEnum implements RelationalAlgebraEnum {
-    MASTER_AUTO_POSITION, MASTER_SSL, MASTER_SSL_VERIFY_SERVER_CERT
+    MASTER_AUTO_POSITION, MASTER_SSL, MASTER_SSL_VERIFY_SERVER_CERT;
+
+    @Override
+    public String literal() {
+      return name();
+    }
   }
 
   /**
@@ -192,8 +227,9 @@ public interface ReplicationStatement extends SqlStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("FOR CHANNEL ").append(channel);
+      return sb.toString();
     }
 
   }
@@ -227,8 +263,9 @@ public interface ReplicationStatement extends SqlStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("REPLICATE_DO_DB = (").append(uidList.literal()).append(")");
+      return sb.toString();
     }
   }
 
@@ -243,8 +280,9 @@ public interface ReplicationStatement extends SqlStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("REPLICATE_IGNORE_DB = (").append(uidList.literal()).append(")");
+      return sb.toString();
     }
 
   }
@@ -260,8 +298,9 @@ public interface ReplicationStatement extends SqlStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("REPLICATE_DO_TABLE = (").append(tables.literal()).append(")");
+      return sb.toString();
     }
   }
 
@@ -276,8 +315,9 @@ public interface ReplicationStatement extends SqlStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("REPLICATE_IGNORE_TABLE = (").append(tables.literal()).append(")");
+      return sb.toString();
     }
   }
 
@@ -292,8 +332,9 @@ public interface ReplicationStatement extends SqlStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("REPLICATE_WILD_DO_TABLE = (").append(simpleStrings.literal()).append(")");
+      return sb.toString();
     }
 
   }
@@ -309,8 +350,9 @@ public interface ReplicationStatement extends SqlStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("REPLICATE_WILD_IGNORE_TABLE = (").append(simpleStrings.literal()).append(")");
+      return sb.toString();
     }
 
   }
@@ -326,8 +368,16 @@ public interface ReplicationStatement extends SqlStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("REPLICATE_REWRITE_DB = ");
+      sb.append("(");
+      List<String> literals = Lists.newArrayList();
+      for (TablePair tablePair : tablePairs) {
+        literals.add(tablePair.literal());
+      }
+      sb.append(Joiner.on(", ").join(literals));
+      sb.append(")");
+      return sb.toString();
     }
 
   }
@@ -353,8 +403,10 @@ public interface ReplicationStatement extends SqlStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("(").append(firstTable.literal()).append(", ").append(secondTable.literal())
+          .append(")");
+      return sb.toString();
     }
 
   }
@@ -367,7 +419,12 @@ public interface ReplicationStatement extends SqlStatement {
    * </pre>
    */
   public static enum ThreadTypeEnum implements RelationalAlgebraEnum {
-    IO_THREAD, SQL_THREAD
+    IO_THREAD, SQL_THREAD;
+
+    @Override
+    public String literal() {
+      return name();
+    }
   }
 
   /**
@@ -388,13 +445,18 @@ public interface ReplicationStatement extends SqlStatement {
 
   public static class GtidsUntilOption implements UntilOption {
     public static enum Type implements RelationalAlgebraEnum {
-      SQL_BEFORE_GTIDS, SQL_AFTER_GTIDS
+      SQL_BEFORE_GTIDS, SQL_AFTER_GTIDS;
+
+      @Override
+      public String literal() {
+        return name();
+      }
     }
 
-    public final Type type;
+    public final GtidsUntilOption.Type type;
     public final GtuidSet gtuidSet;
 
-    GtidsUntilOption(Type type, GtuidSet gtuidSet) {
+    GtidsUntilOption(GtidsUntilOption.Type type, GtuidSet gtuidSet) {
       Preconditions.checkArgument(type != null);
       Preconditions.checkArgument(gtuidSet != null);
 
@@ -404,8 +466,9 @@ public interface ReplicationStatement extends SqlStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append(type.literal()).append(" = ").append(gtuidSet.literal());
+      return sb.toString();
     }
 
   }
@@ -424,8 +487,10 @@ public interface ReplicationStatement extends SqlStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("MASTER_LOG_FILE = ").append(logFile).append(", ");
+      sb.append("MASTER_LOG_POS = ").append(pos.literal());
+      return sb.toString();
     }
 
   }
@@ -444,17 +509,21 @@ public interface ReplicationStatement extends SqlStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("RELAY_LOG_FILE = ").append(logFile).append(", ");
+      sb.append("RELAY_LOG_POS = ").append(pos.literal());
+      return sb.toString();
     }
   }
 
   public static class SqlGapsUntilOption implements UntilOption {
 
+    SqlGapsUntilOption() {
+    }
+
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      return "SQL_AFTER_MTS_GAPS";
     }
   }
 
@@ -470,13 +539,18 @@ public interface ReplicationStatement extends SqlStatement {
    */
   public static class ConnectionOption implements PrimitiveExpression {
     public static enum Type implements RelationalAlgebraEnum {
-      USER, PASSWORD, DEFAULT_AUTH, PLUGIN_DIR
+      USER, PASSWORD, DEFAULT_AUTH, PLUGIN_DIR;
+
+      @Override
+      public String literal() {
+        return name();
+      }
     }
 
-    public final Type type;
+    public final ConnectionOption.Type type;
     public final String stringLiteral;
 
-    ConnectionOption(Type type, String stringLiteral) {
+    ConnectionOption(ConnectionOption.Type type, String stringLiteral) {
       Preconditions.checkArgument(type != null);
       Preconditions.checkArgument(stringLiteral != null);
 
@@ -486,8 +560,9 @@ public interface ReplicationStatement extends SqlStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append(type.literal()).append(" ").append(stringLiteral);
+      return sb.toString();
     }
 
   }
@@ -514,8 +589,17 @@ public interface ReplicationStatement extends SqlStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      if (stringLiteral != null) {
+        sb.append(stringLiteral);
+      } else {
+        List<String> literals = Lists.newArrayList();
+        for (UuidSet uuidSet : uuidSets) {
+          literals.add(uuidSet.literal());
+        }
+        sb.append(Joiner.on(", ").join(literals));
+      }
+      return sb.toString();
     }
 
   }

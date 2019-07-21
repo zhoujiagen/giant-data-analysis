@@ -19,6 +19,10 @@ public class XaRecoverWork implements ReplicationStatement {
   @Override
   public String literal() {
     StringBuilder sb = new StringBuilder();
+    sb.append("XA RECOVER");
+    if (xid != null) {
+      sb.append(" CONVERT ").append(xid.literal());
+    }
     return sb.toString();
   }
 }

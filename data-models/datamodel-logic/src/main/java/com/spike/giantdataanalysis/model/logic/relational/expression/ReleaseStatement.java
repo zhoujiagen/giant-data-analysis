@@ -22,6 +22,7 @@ public class ReleaseStatement implements TransactionStatement {
   @Override
   public String literal() {
     StringBuilder sb = new StringBuilder();
+    sb.append("RELEASE SAVEPOINT ").append(uid.literal());
     return sb.toString();
   }
 }

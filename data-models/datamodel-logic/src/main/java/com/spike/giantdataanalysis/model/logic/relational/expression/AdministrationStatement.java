@@ -29,19 +29,39 @@ administrationStatement
  */
 public interface AdministrationStatement extends SqlStatement {
   public static enum PrivilegeObjectEnum implements RelationalAlgebraEnum {
-    TABLE, FUNCTION, PROCEDURE
+    TABLE, FUNCTION, PROCEDURE;
+
+    @Override
+    public String literal() {
+      return name();
+    }
   }
 
   public static enum AdminTableActionOptionEnum implements RelationalAlgebraEnum {
-    NO_WRITE_TO_BINLOG, LOCAL
+    NO_WRITE_TO_BINLOG, LOCAL;
+
+    @Override
+    public String literal() {
+      return name();
+    }
   }
 
   public static enum FlushFormatEnum implements RelationalAlgebraEnum {
-    NO_WRITE_TO_BINLOG, LOCAL
+    NO_WRITE_TO_BINLOG, LOCAL;
+
+    @Override
+    public String literal() {
+      return name();
+    }
   }
 
   public static enum ConnectionFormatEnum implements RelationalAlgebraEnum {
-    CONNECTION, QUERY
+    CONNECTION, QUERY;
+
+    @Override
+    public String literal() {
+      return name();
+    }
   }
 
   /**
@@ -65,8 +85,9 @@ public interface AdministrationStatement extends SqlStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append(userName.literal()).append(" ").append(userPasswordOption.literal());
+      return sb.toString();
     }
 
   }
@@ -101,8 +122,9 @@ public interface AdministrationStatement extends SqlStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append(userName.literal()).append(" IDENTIFIED BY PASSWORD ").append(hashed);
+      return sb.toString();
     }
 
   }
@@ -123,8 +145,13 @@ public interface AdministrationStatement extends SqlStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append(userName.literal()).append(" IDENTIFIED ");
+      if (authPlugin != null) {
+        sb.append("WITH ").append(authPlugin.literal()).append(" ");
+      }
+      sb.append("BY ").append(by);
+      return sb.toString();
     }
 
   }
@@ -145,8 +172,12 @@ public interface AdministrationStatement extends SqlStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append(userName.literal()).append(" IDENTIFIED WITH ").append(authPlugin.literal());
+      if (as != null) {
+        sb.append(" AS ").append(as);
+      }
+      return sb.toString();
     }
 
   }
@@ -162,8 +193,7 @@ public interface AdministrationStatement extends SqlStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      return userName.literal();
     }
   }
 
@@ -180,13 +210,17 @@ public interface AdministrationStatement extends SqlStatement {
    */
   public static class TlsOption implements PrimitiveExpression {
     public static enum Type implements RelationalAlgebraEnum {
-      SSL, X509, CIPHER, ISSUER, SUBJECT
+      SSL, X509, CIPHER, ISSUER, SUBJECT;
+      @Override
+      public String literal() {
+        return name();
+      }
     }
 
-    public final Type type;
+    public final TlsOption.Type type;
     public final String value;
 
-    TlsOption(Type type, String value) {
+    TlsOption(TlsOption.Type type, String value) {
       Preconditions.checkArgument(type != null);
       switch (type) {
       case SSL:
@@ -208,8 +242,22 @@ public interface AdministrationStatement extends SqlStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      switch (type) {
+      case SSL:
+      case X509:
+        sb.append(type.literal());
+        break;
+      case CIPHER:
+      case ISSUER:
+      case SUBJECT:
+        sb.append(type.literal()).append(" ");
+        sb.append(value);
+        break;
+      default:
+        break;
+      }
+      return sb.toString();
     }
 
   }
@@ -226,13 +274,17 @@ public interface AdministrationStatement extends SqlStatement {
    */
   public static class UserResourceOption implements PrimitiveExpression {
     public static enum Type implements RelationalAlgebraEnum {
-      MAX_QUERIES_PER_HOUR, MAX_UPDATES_PER_HOUR, MAX_CONNECTIONS_PER_HOUR, MAX_USER_CONNECTIONS
+      MAX_QUERIES_PER_HOUR, MAX_UPDATES_PER_HOUR, MAX_CONNECTIONS_PER_HOUR, MAX_USER_CONNECTIONS;
+      @Override
+      public String literal() {
+        return name();
+      }
     }
 
-    public final Type type;
+    public final UserResourceOption.Type type;
     public final DecimalLiteral decimalLiteral;
 
-    UserResourceOption(Type type, DecimalLiteral decimalLiteral) {
+    UserResourceOption(UserResourceOption.Type type, DecimalLiteral decimalLiteral) {
       Preconditions.checkArgument(type != null);
       Preconditions.checkArgument(decimalLiteral != null);
 
@@ -242,8 +294,9 @@ public interface AdministrationStatement extends SqlStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append(type.literal()).append(" ").append(decimalLiteral.literal());
+      return sb.toString();
     }
 
   }
@@ -261,13 +314,17 @@ public interface AdministrationStatement extends SqlStatement {
    */
   public static class UserPasswordOption implements PrimitiveExpression {
     public static enum ExpireType implements RelationalAlgebraEnum {
-      DEFAULT, NEVER, INTERVAL
+      DEFAULT, NEVER, INTERVAL;
+      @Override
+      public String literal() {
+        return name();
+      }
     }
 
-    public final ExpireType expireType;
+    public final UserPasswordOption.ExpireType expireType;
     public final DecimalLiteral day;
 
-    UserPasswordOption(ExpireType expireType, DecimalLiteral day) {
+    UserPasswordOption(UserPasswordOption.ExpireType expireType, DecimalLiteral day) {
       if (ExpireType.INTERVAL.equals(expireType)) {
         Preconditions.checkArgument(day != null);
       }
@@ -278,8 +335,25 @@ public interface AdministrationStatement extends SqlStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("PASSWORD EXPIRE ");
+      if (expireType != null) {
+        switch (expireType) {
+        case DEFAULT:
+          sb.append(expireType.literal());
+          break;
+        case NEVER:
+          sb.append(expireType.literal());
+          break;
+        case INTERVAL:
+          sb.append(expireType.literal()).append(" ");
+          sb.append(day.literal()).append(" DAY");
+          break;
+        default:
+          break;
+        }
+      }
+      return sb.toString();
     }
 
   }
@@ -292,7 +366,12 @@ public interface AdministrationStatement extends SqlStatement {
    * </pre>
    */
   public static enum UserLockOptionEnum implements RelationalAlgebraEnum {
-    LOCK, UNLOCK
+    LOCK, UNLOCK;
+
+    @Override
+    public String literal() {
+      return "ACCOUNT " + name();
+    }
   }
 
   /**
@@ -315,8 +394,12 @@ public interface AdministrationStatement extends SqlStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append(privilege.literal());
+      if (uidList != null) {
+        sb.append("(").append(uidList.literal()).append(")");
+      }
+      return sb.toString();
     }
 
   }
@@ -339,15 +422,30 @@ public interface AdministrationStatement extends SqlStatement {
    * </pre>
    */
   public static enum PrivilegeEnum implements RelationalAlgebraEnum {
-    ALL, ALL_PRIVILEGES, //
-    ALTER, ALTER_ROUTINE, //
-    CREATE, CREATE_TEMPORARY_TABLES, CREATE_ROUTINE, CREATE_VIEW, CREATE_USER, CREATE_TABLESPACE, //
-    DELETE, DROP, EVENT, EXECUTE, FILE, GRANT_OPTION, //
-    INDEX, INSERT, LOCK_TABLES, PROCESS, PROXY, REFERENCES, RELOAD, //
-    REPLICATION_CLIENT, REPLICATION_SLAVE, //
-    SELECT, //
-    SHOW_VIEW, SHOW_DATABASES, //
-    SHUTDOWN, SUPER, TRIGGER, UPDATE, USAGE
+    ALL("ALL"), ALL_PRIVILEGES("ALL PRIVILEGES"), //
+    ALTER("ALTER"), ALTER_ROUTINE("ALTER ROUTINE"), //
+    CREATE("CREATE"), CREATE_TEMPORARY_TABLES("CREATE TEMPORARY TABLES"),
+    CREATE_ROUTINE("CREATE ROUTINE"), CREATE_VIEW("CREATE VIEW"), CREATE_USER("CREATE USER"),
+    CREATE_TABLESPACE("CREATE TABLESPACE"), //
+    DELETE("DELETE"), DROP("DROP"), EVENT("EVENT"), EXECUTE("EXECUTE"), FILE("FILE"),
+    GRANT_OPTION("GRANT OPTION"), //
+    INDEX("INDEX"), INSERT("INSERT"), LOCK_TABLES("LOCK TABLES"), PROCESS("PROCESS"),
+    PROXY("PROXY"), REFERENCES("REFERENCES"), RELOAD("RELOAD"), //
+    REPLICATION_CLIENT("REPLICATION CLIENT"), REPLICATION_SLAVE("REPLICATION SLAVE"), //
+    SELECT("SELECT"), //
+    SHOW_VIEW("SHOW VIEW"), SHOW_DATABASES("SHOW DATABASES"), //
+    SHUTDOWN("SHUTDOWN"), SUPER("SUPER"), TRIGGER("TRIGGER"), UPDATE("UPDATE"), USAGE("USAGE");
+
+    public String literal;
+
+    PrivilegeEnum(String literal) {
+      this.literal = literal;
+    }
+
+    @Override
+    public String literal() {
+      return literal;
+    }
   }
 
   /**
@@ -366,19 +464,22 @@ public interface AdministrationStatement extends SqlStatement {
 
   public static class CurrentSchemaPriviLevel implements PrivilegeLevel {
 
+    CurrentSchemaPriviLevel() {
+    }
+
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      return "*";
     }
   }
 
   public static class GlobalPrivLevel implements PrivilegeLevel {
+    GlobalPrivLevel() {
+    }
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      return "*.*";
     }
   }
 
@@ -393,8 +494,9 @@ public interface AdministrationStatement extends SqlStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append(uid.literal()).append(".*");
+      return sb.toString();
     }
   }
 
@@ -412,8 +514,9 @@ public interface AdministrationStatement extends SqlStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append(uid1.literal()).append(".").append(uid2.literal());
+      return sb.toString();
     }
 
   }
@@ -429,8 +532,7 @@ public interface AdministrationStatement extends SqlStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      return uid.literal();
     }
 
   }
@@ -456,8 +558,9 @@ public interface AdministrationStatement extends SqlStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append(fromFirst.literal()).append(" TO ").append(toFirst.literal());
+      return sb.toString();
     }
 
   }
@@ -470,7 +573,19 @@ public interface AdministrationStatement extends SqlStatement {
    * </pre>
    */
   public static enum CheckTableOptionEnum implements RelationalAlgebraEnum {
-    FOR_UPGRADE, QUICK, FAST, MEDIUM, EXTENDED, CHANGED
+    FOR_UPGRADE("FOR UPGRADE"), QUICK("QUICK"), FAST("FAST"), MEDIUM("MEDIUM"),
+    EXTENDED("EXTENDED"), CHANGED("CHANGED");
+
+    public String literal;
+
+    CheckTableOptionEnum(String literal) {
+      this.literal = literal;
+    }
+
+    @Override
+    public String literal() {
+      return name();
+    }
   }
 
   /**
@@ -482,11 +597,19 @@ public interface AdministrationStatement extends SqlStatement {
    */
   public static class VariableClause implements PrimitiveExpression {
     public static enum Type implements RelationalAlgebraEnum {
-      LOCAL_ID, GLOBAL_ID, UID
+      LOCAL_ID, GLOBAL_ID, UID;
+      @Override
+      public String literal() {
+        return name();
+      }
     }
 
     public static enum ScopeType implements RelationalAlgebraEnum {
-      GLOBAL, SESSION, LOCAL
+      GLOBAL, SESSION, LOCAL;
+      @Override
+      public String literal() {
+        return name();
+      }
     }
 
     public final Type type;
@@ -495,7 +618,7 @@ public interface AdministrationStatement extends SqlStatement {
     public final ScopeType scopeType;
     public final Uid uid;
 
-    VariableClause(Type type, String id) {
+    VariableClause(VariableClause.Type type, String id) {
       Preconditions.checkArgument(Type.LOCAL_ID.equals(type) || Type.GLOBAL_ID.equals(type));
       Preconditions.checkArgument(id != null);
 
@@ -506,7 +629,8 @@ public interface AdministrationStatement extends SqlStatement {
       this.uid = null;
     }
 
-    VariableClause(Type type, String id, Boolean has, ScopeType scopeType, Uid uid) {
+    VariableClause(VariableClause.Type type, String id, Boolean has,
+        VariableClause.ScopeType scopeType, Uid uid) {
       Preconditions.checkArgument(Type.UID.equals(type));
       Preconditions.checkArgument(uid != null);
 
@@ -519,8 +643,27 @@ public interface AdministrationStatement extends SqlStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      switch (type) {
+      case LOCAL_ID:
+        sb.append(type.literal());
+        break;
+      case GLOBAL_ID:
+        sb.append(type.literal());
+        break;
+      case UID:
+        if (Boolean.TRUE.equals(has)) {
+          sb.append("@@ ");
+        }
+        if (scopeType != null) {
+          sb.append(scopeType.literal()).append(" ");
+        }
+        sb.append(uid.literal());
+        break;
+      default:
+        break;
+      }
+      return sb.toString();
     }
   }
 
@@ -534,8 +677,23 @@ public interface AdministrationStatement extends SqlStatement {
    * </pre>
    */
   public static enum ShowCommonEntityEnum implements RelationalAlgebraEnum {
-    CHARACTER_SET, COLLATION, DATABASES, SCHEMAS, FUNCTION_STATUS, PROCEDURE_STATUS, //
-    STATUS, VARIABLES, GLOBAL_STATUS, GLOBAL_VARIABLES, SESSION_STATUS, SESSION_VARIABLES,
+    CHARACTER_SET("CHARACTER SET"), COLLATION("COLLATION"), DATABASES("DATABASES"),
+    SCHEMAS("SCHEMAS"), //
+    FUNCTION_STATUS("FUNCTION STATUS"), PROCEDURE_STATUS("PROCEDURE STATUS"), //
+    STATUS("STATUS"), VARIABLES("VARIABLES"), GLOBAL_STATUS("GLOBAL STATUS"),
+    GLOBAL_VARIABLES("GLOBAL VARIABLES"), SESSION_STATUS("SESSION STATUS"),
+    SESSION_VARIABLES("SESSION VARIABLES");
+
+    public String literal;
+
+    ShowCommonEntityEnum(String literal) {
+      this.literal = literal;
+    }
+
+    @Override
+    public String literal() {
+      return literal;
+    }
   }
 
   /**
@@ -559,8 +717,9 @@ public interface AdministrationStatement extends SqlStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("LIKE ").append(like).append(" WHERE ").append(where.literal());
+      return sb.toString();
     }
 
   }
@@ -575,8 +734,22 @@ public interface AdministrationStatement extends SqlStatement {
    * </pre>
    */
   public static enum ShowGlobalInfoClauseEnum implements RelationalAlgebraEnum {
-    ENGINES, STORAGE_ENGINES, MASTER_STATUS, PLUGINS, PRIVILEGES, PROCESSLIST, FULL_PROCESSLIST,
-    PROFILES, SLAVE_HOSTS, AUTHORS, CONTRIBUTORS
+    ENGINES("ENGINES"), STORAGE_ENGINES("STORAGE ENGINES"), MASTER_STATUS("MASTER STATUS"),
+    PLUGINS("PLUGINS"), //
+    PRIVILEGES("PRIVILEGES"), PROCESSLIST("PROCESSLIST"), FULL_PROCESSLIST("FULL PROCESSLIST"),
+    PROFILES("PROFILES"), //
+    SLAVE_HOSTS("SLAVE HOSTS"), AUTHORS("AUTHORS"), CONTRIBUTORS("CONTRIBUTORS");
+
+    public String literal;
+
+    ShowGlobalInfoClauseEnum(String literal) {
+      this.literal = literal;
+    }
+
+    @Override
+    public String literal() {
+      return literal;
+    }
   }
 
   /**
@@ -587,7 +760,19 @@ public interface AdministrationStatement extends SqlStatement {
    * </pre>
    */
   public static enum ShowSchemaEntityEnum implements RelationalAlgebraEnum {
-    EVENTS, TABLE_STATUS, TABLES, FULL_TABLES, TRIGGERS
+    EVENTS("EVENTS"), TABLE_STATUS("TABLE STATUS"), TABLES("TABLES"), FULL_TABLES("FULL TABLES"),
+    TRIGGERS("TRIGGERS");
+
+    public String literal;
+
+    ShowSchemaEntityEnum(String literal) {
+      this.literal = literal;
+    }
+
+    @Override
+    public String literal() {
+      return literal;
+    }
   }
 
   /**
@@ -599,7 +784,20 @@ public interface AdministrationStatement extends SqlStatement {
    * </pre>
    */
   public static enum ShowProfileTypeEnum implements RelationalAlgebraEnum {
-    ALL, BLOCK_IO, CONTEXTSWITCHES, CPU, IPC, MEMORY, PAGE_FAULTS, SOURCE, SWAPS
+    ALL("ALL"), BLOCK_IO("BLOCK IO"), CONTEXT_SWITCHES("CONTEXT SWITCHES"), CPU("CPU"), IPC("IPC"),
+    MEMORY("MEMORY"), //
+    PAGE_FAULTS("PAGE FAULTS"), SOURCE("SOURCE"), SWAPS("SWAPS");
+
+    public String literal;
+
+    ShowProfileTypeEnum(String literal) {
+      this.literal = literal;
+    }
+
+    @Override
+    public String literal() {
+      return literal;
+    }
   }
 
   /**
@@ -624,8 +822,15 @@ public interface AdministrationStatement extends SqlStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append(tableName.literal()).append(" ");
+      if (uidList != null) {
+        if (indexFormat != null) {
+          sb.append(indexFormat.literal()).append(" ");
+        }
+        sb.append("(").append(uidList.literal()).append(")");
+      }
+      return sb.toString();
     }
 
   }
@@ -656,19 +861,37 @@ public interface AdministrationStatement extends SqlStatement {
 
   public static class SimpleFlushOption implements FlushOption {
     public static enum Type implements RelationalAlgebraEnum {
-      DES_KEY_FILE, HOSTS, LOGS, OPTIMIZER_COSTS, PRIVILEGES, QUERY_CACHE, STATUS, USER_RESOURCES,
-      TABLES
+      DES_KEY_FILE("DES_KEY_FILE"), HOSTS("HOSTS"), LOGS("LOGS"),
+      OPTIMIZER_COSTS("OPTIMIZER_COSTS"), PRIVILEGES("PRIVILEGES"), QUERY_CACHE("QUERY CACHE"),
+      STATUS("STATUS"), USER_RESOURCES("USER_RESOURCES"), TABLES("TABLES");
+
+      public String literal;
+
+      Type(String literal) {
+        this.literal = literal;
+      }
+
+      @Override
+      public String literal() {
+        return literal;
+      }
     }
 
     public static enum LogType implements RelationalAlgebraEnum {
-      BINARY, ENGINE, ERROR, GENERAL, RELAY, SLOW
+      BINARY, ENGINE, ERROR, GENERAL, RELAY, SLOW;
+
+      @Override
+      public String literal() {
+        return name();
+      }
     }
 
     public final Type type;
     public final LogType logType;
     public final Boolean tablesWithReadLock;
 
-    SimpleFlushOption(Type type, LogType logType, Boolean tablesWithReadLock) {
+    SimpleFlushOption(SimpleFlushOption.Type type, SimpleFlushOption.LogType logType,
+        Boolean tablesWithReadLock) {
       Preconditions.checkArgument(type != null);
 
       this.type = type;
@@ -678,8 +901,32 @@ public interface AdministrationStatement extends SqlStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      switch (type) {
+      case DES_KEY_FILE:
+      case HOSTS:
+      case OPTIMIZER_COSTS:
+      case PRIVILEGES:
+      case QUERY_CACHE:
+      case STATUS:
+      case USER_RESOURCES:
+        sb.append(type.literal());
+        break;
+      case LOGS:
+        if (logType != null) {
+          sb.append(logType.literal()).append(" ");
+        }
+        sb.append(type.literal());
+        break;
+      case TABLES:
+        sb.append("TABLES");
+        if (Boolean.TRUE.equals(tablesWithReadLock)) {
+          sb.append(" WITH READ LOCK");
+        }
+      default:
+        break;
+      }
+      return sb.toString();
     }
 
   }
@@ -693,8 +940,9 @@ public interface AdministrationStatement extends SqlStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("RELAY LOGS ").append(channelOption.literal());
+      return sb.toString();
     }
 
   }
@@ -712,8 +960,12 @@ public interface AdministrationStatement extends SqlStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("TABLES ").append(tables.literal());
+      if (flushTableOption != null) {
+        sb.append(" ").append(flushTableOption.literal());
+      }
+      return sb.toString();
     }
 
   }
@@ -727,7 +979,18 @@ public interface AdministrationStatement extends SqlStatement {
    * </pre>
    */
   public static enum FlushTableOptionEnum implements RelationalAlgebraEnum {
-    WITH_READ_LOCK, FOR_EXPORT
+    WITH_READ_LOCK("WITH READ LOCK"), FOR_EXPORT("FOR EXPORT");
+
+    public String literal;
+
+    FlushTableOptionEnum(String literal) {
+      this.literal = literal;
+    }
+
+    @Override
+    public String literal() {
+      return literal;
+    }
   }
 
   /**
@@ -746,7 +1009,7 @@ public interface AdministrationStatement extends SqlStatement {
     public final Boolean partitionAll;
     public final IndexFormatEnum indexFormat;
     public final UidList indexList;
-    public final Boolean IgnoreLeaves;
+    public final Boolean ignoreLeaves;
 
     LoadedTableIndexes(TableName tableName, UidList partitionList, Boolean partitionAll,
         IndexFormatEnum indexFormat, UidList indexList, Boolean ignoreLeaves) {
@@ -757,13 +1020,28 @@ public interface AdministrationStatement extends SqlStatement {
       this.partitionAll = partitionAll;
       this.indexFormat = indexFormat;
       this.indexList = indexList;
-      IgnoreLeaves = ignoreLeaves;
+      this.ignoreLeaves = ignoreLeaves;
     }
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append(tableName.literal()).append(" ");
+      if (partitionList != null) {
+        sb.append("PARTITION (").append(partitionList.literal()).append(") ");
+      } else if (Boolean.TRUE.equals(partitionAll)) {
+        sb.append("PARTITION (ALL) ");
+      }
+      if (indexList != null) {
+        if (indexFormat != null) {
+          sb.append(indexFormat.literal()).append(" ");
+        }
+        sb.append(indexList.literal());
+      }
+      if (Boolean.TRUE.equals(ignoreLeaves)) {
+        sb.append("IGNORE LEAVES");
+      }
+      return sb.toString();
     }
 
   }

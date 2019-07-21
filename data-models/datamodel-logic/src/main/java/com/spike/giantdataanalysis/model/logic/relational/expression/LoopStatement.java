@@ -2,7 +2,9 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
 
 import java.util.List;
 
+import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.Uid;
 
 /**
@@ -31,6 +33,19 @@ public class LoopStatement implements CompoundStatement {
   @Override
   public String literal() {
     StringBuilder sb = new StringBuilder();
+    if (uid != null) {
+      sb.append(uid.literal()).append(" :");
+    }
+    sb.append("LOOP ");
+    List<String> literals = Lists.newArrayList();
+    for (ProcedureSqlStatement procedureSqlStatement : procedureSqlStatements) {
+      literals.add(procedureSqlStatement.literal());
+    }
+    sb.append(Joiner.on(" ").join(literals)).append(" ");
+    sb.append("END LOOP");
+    if (endLoopUid != null) {
+      sb.append(" ").append(endLoopUid.literal());
+    }
     return sb.toString();
   }
 }

@@ -88,10 +88,10 @@ public class RoleConstructorTest {
   @Test
   public void complex_example() {
     RoleConstructor r = new RUnion(//
-        new RIntersection(RoleConstructor.atomic("R1"), RoleConstructor.atomic("R2")),//
-        new RComplement(RoleConstructor.atomic("R3")),//
+        new RIntersection(RoleConstructor.atomic("R1"), RoleConstructor.atomic("R2")), //
+        new RComplement(RoleConstructor.atomic("R3")), //
         new RRestriction(RoleConstructor.atomic("R"))//
-        );
+    );
     // (or (and R1 R2) (not R3) (restrict R))
     System.out.println(r);
   }

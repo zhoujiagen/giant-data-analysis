@@ -2,7 +2,9 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
 
 import java.util.List;
 
+import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 
 /**
  * <pre>
@@ -26,6 +28,15 @@ public class ChangeMaster implements ReplicationStatement {
   @Override
   public String literal() {
     StringBuilder sb = new StringBuilder();
+    sb.append("CHANGE MASTER TO ");
+    List<String> literals = Lists.newArrayList();
+    for (MasterOption masterOption : masterOptions) {
+      literals.add(masterOption.literal());
+    }
+    sb.append(Joiner.on(", ").join(literals));
+    if (channelOption != null) {
+      sb.append(channelOption.literal());
+    }
     return sb.toString();
   }
 }

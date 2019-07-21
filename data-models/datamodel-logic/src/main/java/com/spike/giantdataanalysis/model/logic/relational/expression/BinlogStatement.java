@@ -21,6 +21,7 @@ public class BinlogStatement implements AdministrationStatement {
   @Override
   public String literal() {
     StringBuilder sb = new StringBuilder();
+    sb.append("BINLOG ").append(binlog);
     return sb.toString();
   }
 }

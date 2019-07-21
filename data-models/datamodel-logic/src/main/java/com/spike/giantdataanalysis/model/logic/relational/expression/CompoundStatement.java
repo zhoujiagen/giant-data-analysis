@@ -2,7 +2,9 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
 
 import java.util.List;
 
+import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.spike.giantdataanalysis.model.logic.relational.core.RelationalAlgebraEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.CommonExpressons.DefaultValue;
 import com.spike.giantdataanalysis.model.logic.relational.expression.CommonLists.UidList;
@@ -42,8 +44,11 @@ public interface CompoundStatement extends RelationalAlgebraExpression {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      if (blockStatement != null) {
+        return blockStatement.literal();
+      } else {
+        return sqlStatement.literal();
+      }
     }
 
   }
@@ -71,8 +76,12 @@ public interface CompoundStatement extends RelationalAlgebraExpression {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("DECLARE ").append(uidList.literal()).append(" ").append(dataType.literal());
+      if (defaultValue != null) {
+        sb.append(" DEFAULT ").append(defaultValue.literal());
+      }
+      return sb.toString();
     }
 
   }
@@ -101,8 +110,14 @@ public interface CompoundStatement extends RelationalAlgebraExpression {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("DECLARE ").append(uid.literal()).append(" CONDITION FOR ");
+      if (decimalLiteral != null) {
+        sb.append(decimalLiteral.literal());
+      } else {
+        sb.append("SQLSTATE VALUE ").append(sqlState);
+      }
+      return sb.toString();
     }
 
   }
@@ -128,8 +143,9 @@ public interface CompoundStatement extends RelationalAlgebraExpression {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("DECLARE ").append(uid.literal()).append(" FOR ").append(selectStatement.literal());
+      return sb.toString();
     }
 
   }
@@ -146,7 +162,11 @@ public interface CompoundStatement extends RelationalAlgebraExpression {
    */
   public static class DeclareHandler implements PrimitiveExpression {
     public static enum HandlerActionEnum implements RelationalAlgebraEnum {
-      CONTINUE, EXIT, UNDO
+      CONTINUE, EXIT, UNDO;
+      @Override
+      public String literal() {
+        return name();
+      }
     }
 
     public final HandlerActionEnum handlerAction;
@@ -167,8 +187,16 @@ public interface CompoundStatement extends RelationalAlgebraExpression {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("DECLARE ").append(handlerAction.literal()).append(" ");
+      sb.append("HANDLER FOR ");
+      List<String> literals = Lists.newArrayList();
+      for (HandlerConditionValue handlerConditionValue : handlerConditionValues) {
+        literals.add(handlerConditionValue.literal());
+      }
+      sb.append(Joiner.on(", ").join(literals)).append(" ");
+      sb.append(routineBody.literal());
+      return sb.toString();
     }
 
   }
@@ -199,8 +227,7 @@ public interface CompoundStatement extends RelationalAlgebraExpression {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      return decimalLiteral.literal();
     }
   }
 
@@ -215,8 +242,9 @@ public interface CompoundStatement extends RelationalAlgebraExpression {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("SQLSTATE VALUE ").append(stringLiteral);
+      return sb.toString();
     }
 
   }
@@ -232,36 +260,38 @@ public interface CompoundStatement extends RelationalAlgebraExpression {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      return uid.literal();
     }
 
   }
 
   public static class HandlerConditionWarning implements HandlerConditionValue {
+    HandlerConditionWarning() {
+    }
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      return "SQLWARNING";
     }
   }
 
   public static class HandlerConditionNotfound implements HandlerConditionValue {
+    HandlerConditionNotfound() {
+    }
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      return "NOT FOUND";
     }
   }
 
   public static class HandlerConditionException implements HandlerConditionValue {
+    HandlerConditionException() {
+    }
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      return "SQLEXCEPTION";
     }
   }
 
@@ -285,8 +315,14 @@ public interface CompoundStatement extends RelationalAlgebraExpression {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      if (compoundStatement != null) {
+        sb.append(compoundStatement.literal());
+      } else {
+        sb.append(sqlStatement.literal());
+      }
+      sb.append(";");
+      return sb.toString();
     }
 
   }
@@ -317,8 +353,20 @@ public interface CompoundStatement extends RelationalAlgebraExpression {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("WHEN ");
+      if (whenConstant != null) {
+        sb.append(whenConstant.literal()).append(" ");
+      } else {
+        sb.append(whenExpression.literal()).append(" ");
+      }
+      sb.append("THEN ");
+      List<String> literals = Lists.newArrayList();
+      for (ProcedureSqlStatement procedureSqlStatement : procedureSqlStatements) {
+        literals.add(procedureSqlStatement.literal());
+      }
+      sb.append(Joiner.on(" ").join(literals));
+      return sb.toString();
     }
 
   }
@@ -347,8 +395,15 @@ public interface CompoundStatement extends RelationalAlgebraExpression {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("ELSEIF ").append(elseIfExpression.literal()).append(" ");
+      sb.append("THEN ");
+      List<String> literals = Lists.newArrayList();
+      for (ProcedureSqlStatement procedureSqlStatement : procedureSqlStatements) {
+        literals.add(procedureSqlStatement.literal());
+      }
+      sb.append(Joiner.on(" ").join(literals));
+      return sb.toString();
     }
 
   }

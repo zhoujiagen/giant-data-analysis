@@ -19,23 +19,37 @@ import com.spike.giantdataanalysis.model.logic.relational.core.RelationalAlgebra
 public class FullDescribeStatement implements UtilityStatement {
 
   public static enum CommandEnum implements RelationalAlgebraEnum {
-    EXPLAIN, DESCRIBE, DESC
+    EXPLAIN, DESCRIBE, DESC;
+    @Override
+    public String literal() {
+      return name();
+    }
   }
 
   public static enum FormatTypeEnum implements RelationalAlgebraEnum {
-    EXTENDED, PARTITIONS, FORMAT
+    EXTENDED, PARTITIONS, FORMAT;
+    @Override
+    public String literal() {
+      return name();
+    }
   }
 
   public static enum FormatValueEnum implements RelationalAlgebraEnum {
-    TRADITIONAL, JSON
+    TRADITIONAL, JSON;
+    @Override
+    public String literal() {
+      return name();
+    }
   }
 
-  public final CommandEnum command;
-  public final FormatTypeEnum formatType;
-  public final FormatValueEnum formatValue;
+  public final FullDescribeStatement.CommandEnum command;
+  public final FullDescribeStatement.FormatTypeEnum formatType;
+  public final FullDescribeStatement.FormatValueEnum formatValue;
   public final DescribeObjectClause describeObjectClause;
 
-  FullDescribeStatement(CommandEnum command, FormatTypeEnum formatType, FormatValueEnum formatValue,
+  FullDescribeStatement(FullDescribeStatement.CommandEnum command,
+      FullDescribeStatement.FormatTypeEnum formatType,
+      FullDescribeStatement.FormatValueEnum formatValue,
       DescribeObjectClause describeObjectClause) {
     Preconditions.checkArgument(command != null);
     Preconditions.checkArgument(describeObjectClause != null);
@@ -49,6 +63,11 @@ public class FullDescribeStatement implements UtilityStatement {
   @Override
   public String literal() {
     StringBuilder sb = new StringBuilder();
+    sb.append(command.literal()).append(" ");
+    if (formatType != null) {
+      sb.append(formatType.literal()).append(" = ").append(formatValue.literal()).append(" ");
+    }
+    sb.append(describeObjectClause.literal());
     return sb.toString();
   }
 }

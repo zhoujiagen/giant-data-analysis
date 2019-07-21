@@ -2,7 +2,11 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
 
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
+
+import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.CharsetName;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.TableName;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Literals.DecimalLiteral;
@@ -59,6 +63,46 @@ public class LoadXmlStatement implements DmlStatement {
   @Override
   public String literal() {
     StringBuilder sb = new StringBuilder();
+    sb.append("LOAD XML ");
+    if (priority != null) {
+      sb.append(priority.literal()).append(" ");
+    }
+    if (Boolean.TRUE.equals(local)) {
+      sb.append("LOCAL ");
+    }
+    sb.append("INFILE ").append(filename).append(" ");
+    if (violation != null) {
+      sb.append(violation.literal()).append(" ");
+    }
+    sb.append("INTO TABLE ").append(tableName.literal()).append(" ");
+    if (charsetName != null) {
+      sb.append("CHARACTER SET ").append(charsetName.literal()).append(" ");
+    }
+    if (tag != null) {
+      sb.append("ROWS IDENTIFIED BY <").append(tag).append("> ");
+    }
+    if (decimalLiteral != null) {
+      sb.append("IGNORE ").append(decimalLiteral.literal()).append(linesFormat.literal()).append(" ");
+    }
+
+    if (CollectionUtils.isNotEmpty(assignmentFields)) {
+      sb.append("(");
+      List<String> literals = Lists.newArrayList();
+      for (AssignmentField assignmentField : assignmentFields) {
+        literals.add(assignmentField.literal());
+      }
+      sb.append(Joiner.on(", ").join(literals));
+      sb.append(")");
+    }
+
+    if (CollectionUtils.isNotEmpty(updatedElements)) {
+      sb.append("SET ");
+      List<String> literals = Lists.newArrayList();
+      for (UpdatedElement updatedElement : updatedElements) {
+        literals.add(updatedElement.literal());
+      }
+      sb.append(Joiner.on(", ").join(literals));
+    }
     return sb.toString();
   }
 }

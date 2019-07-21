@@ -8,6 +8,9 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
  * </pre>
  */
 public class ShutdownStatement implements AdministrationStatement {
+  ShutdownStatement() {
+  }
+
   @Override
   public String literal() {
     return "SHUTDOWN";

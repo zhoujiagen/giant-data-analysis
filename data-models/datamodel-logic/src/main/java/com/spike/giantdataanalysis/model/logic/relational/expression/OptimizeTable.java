@@ -25,6 +25,11 @@ public class OptimizeTable implements AdministrationStatement {
   @Override
   public String literal() {
     StringBuilder sb = new StringBuilder();
+    sb.append("OPTIMIZE ");
+    if (actionOption != null) {
+      sb.append(actionOption.literal()).append(" ");
+    }
+    sb.append("TABLE ").append(tables.literal());
     return sb.toString();
   }
 }

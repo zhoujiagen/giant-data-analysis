@@ -71,7 +71,12 @@ public interface CreateTable extends DdlStatement {
 
   public static class QueryCreateTable implements CreateTable {
     public static enum KeyViolateEnum implements RelationalAlgebraEnum {
-      IGNORE, REPLACE
+      IGNORE, REPLACE;
+
+      @Override
+      public String literal() {
+        return name();
+      }
     }
 
     public final Boolean temporary;
@@ -126,7 +131,7 @@ public interface CreateTable extends DdlStatement {
         sb.append(partitionDefinitions.literal()).append(" ");
       }
       if (keyViolate != null) {
-        sb.append(keyViolate.name()).append(" ");
+        sb.append(keyViolate.literal()).append(" ");
       }
       sb.append("AS ").append(selectStatement.literal());
       return sb.toString();

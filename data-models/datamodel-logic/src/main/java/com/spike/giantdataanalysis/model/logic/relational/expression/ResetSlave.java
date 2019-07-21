@@ -20,6 +20,13 @@ public class ResetSlave implements ReplicationStatement {
   @Override
   public String literal() {
     StringBuilder sb = new StringBuilder();
+    sb.append("RESET SLAVE ");
+    if (Boolean.TRUE.equals(all)) {
+      sb.append("ALL ");
+    }
+    if (channelOption != null) {
+      sb.append(channelOption.literal());
+    }
     return sb.toString();
   }
 }

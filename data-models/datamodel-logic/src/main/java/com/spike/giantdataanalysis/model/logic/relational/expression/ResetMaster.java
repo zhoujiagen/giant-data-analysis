@@ -8,9 +8,11 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
  * </pre>
  */
 public class ResetMaster implements ReplicationStatement {
+  ResetMaster() {
+  }
+
   @Override
   public String literal() {
-    StringBuilder sb = new StringBuilder();
-    return sb.toString();
+    return "RESET MASTER";
   }
 }

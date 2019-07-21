@@ -26,6 +26,11 @@ public class AnalyzeTable implements AdministrationStatement {
   @Override
   public String literal() {
     StringBuilder sb = new StringBuilder();
+    sb.append("ANALYZE ");
+    if (actionOption != null) {
+      sb.append(actionOption.literal()).append(" ");
+    }
+    sb.append("TABLE ").append(tables.literal());
     return sb.toString();
   }
 

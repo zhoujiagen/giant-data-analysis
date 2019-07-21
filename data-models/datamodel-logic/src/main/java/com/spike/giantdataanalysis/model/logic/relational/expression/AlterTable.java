@@ -44,7 +44,7 @@ public class AlterTable implements DdlStatement {
     StringBuilder sb = new StringBuilder();
     sb.append("ALTER ");
     if (intimeAction != null) {
-      sb.append(intimeAction.name()).append(" ");
+      sb.append(intimeAction.literal()).append(" ");
     }
     if (Boolean.TRUE.equals(ignore)) {
       sb.append("IGNORE ");

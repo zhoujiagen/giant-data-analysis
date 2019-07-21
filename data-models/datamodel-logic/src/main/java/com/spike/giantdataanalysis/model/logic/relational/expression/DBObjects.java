@@ -106,7 +106,11 @@ public interface DBObjects extends PrimitiveExpression {
    */
   public static class IndexColumnName implements DBObjects {
     public static enum SortType implements RelationalAlgebraEnum {
-      ASC, DESC
+      ASC, DESC;
+      @Override
+      public String literal() {
+        return name();
+      }
     }
 
     public final Uid uid;
@@ -137,7 +141,7 @@ public interface DBObjects extends PrimitiveExpression {
         sb.append("(").append(decimalLiteral.literal()).append(") ");
       }
       if (sortType != null) {
-        sb.append(sortType.name());
+        sb.append(sortType.literal());
       }
 
       return sb.toString();
@@ -152,7 +156,12 @@ public interface DBObjects extends PrimitiveExpression {
    */
   public static class UserName implements DBObjects {
     public static enum Type implements RelationalAlgebraEnum {
-      STRING_USER_NAME, ID, STRING_LITERAL
+      STRING_USER_NAME, ID, STRING_LITERAL;
+
+      @Override
+      public String literal() {
+        return name();
+      }
     }
 
     public final UserName.Type type;
@@ -186,7 +195,12 @@ public interface DBObjects extends PrimitiveExpression {
   public static class EngineName implements DBObjects {
     public static enum Type implements RelationalAlgebraEnum {
       ARCHIVE, BLACKHOLE, CSV, FEDERATED, INNODB, MEMORY, MRG_MYISAM, MYISAM, NDB, NDBCLUSTER,
-      PERFORMANCE_SCHEMA, TOKUDB, STRING_LITERAL, REVERSE_QUOTE_ID
+      PERFORMANCE_SCHEMA, TOKUDB, STRING_LITERAL, REVERSE_QUOTE_ID;
+
+      @Override
+      public String literal() {
+        return name();
+      }
     }
 
     public final EngineName.Type type;
@@ -308,7 +322,12 @@ public interface DBObjects extends PrimitiveExpression {
    */
   public static class XuidStringId implements DBObjects {
     public static enum Type implements RelationalAlgebraEnum {
-      STRING_LITERAL, BIT_STRING, HEXADECIMAL_LITERAL
+      STRING_LITERAL, BIT_STRING, HEXADECIMAL_LITERAL;
+
+      @Override
+      public String literal() {
+        return name();
+      }
     }
 
     public final XuidStringId.Type type;
@@ -404,7 +423,12 @@ public interface DBObjects extends PrimitiveExpression {
    */
   public static class CharsetName implements PrimitiveExpression {
     public static enum Type implements RelationalAlgebraEnum {
-      BINARY, CHARSET_NAME_BASE, STRING_LITERAL, CHARSET_REVERSE_QOUTE_STRING
+      BINARY, CHARSET_NAME_BASE, STRING_LITERAL, CHARSET_REVERSE_QOUTE_STRING;
+
+      @Override
+      public String literal() {
+        return name();
+      }
     }
 
     public final CharsetName.Type type;
@@ -464,7 +488,12 @@ public interface DBObjects extends PrimitiveExpression {
    */
   public static class Uid implements DBObjects {
     public static enum Type implements RelationalAlgebraEnum {
-      SIMPLE_ID, REVERSE_QUOTE_ID, CHARSET_REVERSE_QOUTE_STRING
+      SIMPLE_ID, REVERSE_QUOTE_ID, CHARSET_REVERSE_QOUTE_STRING;
+
+      @Override
+      public String literal() {
+        return name();
+      }
     }
 
     public final Uid.Type type;
@@ -510,6 +539,11 @@ public interface DBObjects extends PrimitiveExpression {
       DATA_TYPE_BASE, //
       KEYWORDS_CAN_BE_ID, //
       FUNCTION_NAME_BASE;
+
+      @Override
+      public String literal() {
+        return name();
+      }
     }
 
     public final SimpleId.Type type;

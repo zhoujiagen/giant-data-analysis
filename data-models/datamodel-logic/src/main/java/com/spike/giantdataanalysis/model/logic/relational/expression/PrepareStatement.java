@@ -14,14 +14,19 @@ import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.U
  */
 public class PrepareStatement implements PreparedStatement {
   public static enum Type implements RelationalAlgebraEnum {
-    STRING_LITERAL, LOCAL_ID
+    STRING_LITERAL, LOCAL_ID;
+
+    @Override
+    public String literal() {
+      return name();
+    }
   }
 
   public final Uid uid;
-  public final Type type;
+  public final PrepareStatement.Type type;
   public final String typeValue;
 
-  PrepareStatement(Uid uid, Type type, String typeValue) {
+  PrepareStatement(Uid uid, PrepareStatement.Type type, String typeValue) {
     Preconditions.checkArgument(uid != null);
     Preconditions.checkArgument(type != null);
     Preconditions.checkArgument(typeValue != null);
@@ -34,6 +39,8 @@ public class PrepareStatement implements PreparedStatement {
   @Override
   public String literal() {
     StringBuilder sb = new StringBuilder();
+    sb.append("PREPARE ").append(uid.literal()).append(" FROM ");
+    sb.append(typeValue);
     return sb.toString();
   }
 }

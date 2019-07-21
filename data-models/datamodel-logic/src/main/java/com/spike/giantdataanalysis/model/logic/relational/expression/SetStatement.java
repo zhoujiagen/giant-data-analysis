@@ -2,7 +2,9 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
 
 import java.util.List;
 
+import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.CharsetName;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.CollationName;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.FullId;
@@ -41,8 +43,15 @@ public interface SetStatement extends AdministrationStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("SET ");
+      int size = variableClauses.size();
+      List<String> literals = Lists.newArrayList();
+      for (int i = 0; i < size; i++) {
+        literals.add(variableClauses.get(i).literal() + " = " + expressions.get(i).literal());
+      }
+      sb.append(Joiner.on(", ").join(literals));
+      return sb.toString();
     }
 
   }
@@ -56,8 +65,14 @@ public interface SetStatement extends AdministrationStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("SET CHARSET ");
+      if (charsetName != null) {
+        sb.append(charsetName.literal());
+      } else {
+        sb.append("DEFAULT");
+      }
+      return sb.toString();
     }
 
   }
@@ -73,8 +88,17 @@ public interface SetStatement extends AdministrationStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("SET NAMES ");
+      if (charsetName != null) {
+        sb.append(charsetName.literal());
+        if (collationName != null) {
+          sb.append(" COLLATE ").append(collationName.literal());
+        }
+      } else {
+        sb.append("DEFAULT");
+      }
+      return sb.toString();
     }
 
   }
@@ -93,8 +117,9 @@ public interface SetStatement extends AdministrationStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("SET ").append(fullId.literal()).append(" = ").append(expression.literal());
+      return sb.toString();
     }
 
   }
@@ -123,8 +148,18 @@ public interface SetStatement extends AdministrationStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("SET PASSWORD ");
+      if (userName != null) {
+        sb.append("FOR ").append(userName.literal()).append(" ");
+      }
+      sb.append("= ");
+      if (passwordFunctionClause != null) {
+        sb.append(passwordFunctionClause.literal());
+      } else {
+        sb.append(password);
+      }
+      return sb.toString();
     }
   }
 }

@@ -38,4 +38,9 @@ public enum RelationalComparisonOperatorEnum implements RelationalAlgebraEnum {
 
     return null;
   }
+
+  @Override
+  public String literal() {
+    return symbol;
+  }
 }

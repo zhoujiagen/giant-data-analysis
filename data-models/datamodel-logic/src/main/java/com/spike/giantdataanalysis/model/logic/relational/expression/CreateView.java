@@ -22,15 +22,28 @@ import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.F
 public class CreateView implements DdlStatement {
 
   public static enum AlgTypeEnum implements RelationalAlgebraEnum {
-    UNDEFINED, MERGE, TEMPTABLE
+    UNDEFINED, MERGE, TEMPTABLE;
+    @Override
+    public String literal() {
+      return name();
+    }
   }
 
   public static enum SecContextEnum implements RelationalAlgebraEnum {
-    DEFINER, INVOKER
+    DEFINER, INVOKER;
+
+    @Override
+    public String literal() {
+      return name();
+    }
   }
 
   public static enum CheckOptionEnum implements RelationalAlgebraEnum {
-    CASCADED, LOCAL
+    CASCADED, LOCAL;
+    @Override
+    public String literal() {
+      return name();
+    }
   }
 
   public final Boolean replace;
@@ -68,12 +81,12 @@ public class CreateView implements DdlStatement {
 
     StringBuilder sb = new StringBuilder();
     sb.append("CREATE ");
-    if (algType != null) sb.append("ALGORITHM = ").append(algType.name()).append(" ");
+    if (algType != null) sb.append("ALGORITHM = ").append(algType.literal()).append(" ");
     if (ownerStatement != null) {
       sb.append(ownerStatement.literal()).append(" ");
     }
     if (Boolean.TRUE.equals(sqlSecurity)) {
-      sb.append("SQL SECURITY ").append(secContext.name()).append(" ");
+      sb.append("SQL SECURITY ").append(secContext.literal()).append(" ");
     }
     sb.append("VIEW ").append(fullId.literal()).append(" ");
     if (uidList != null) {
@@ -83,7 +96,7 @@ public class CreateView implements DdlStatement {
     if (Boolean.TRUE.equals(withCheckOption)) {
       sb.append("WITH ");
       if (checkOption != null) {
-        sb.append(checkOption.name()).append(" ");
+        sb.append(checkOption.literal()).append(" ");
       }
       sb.append("CHECK OPTION");
     }

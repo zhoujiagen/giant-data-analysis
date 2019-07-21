@@ -21,6 +21,7 @@ public class HelpStatement implements UtilityStatement {
   @Override
   public String literal() {
     StringBuilder sb = new StringBuilder();
+    sb.append("HELP ").append(help);
     return sb.toString();
   }
 }

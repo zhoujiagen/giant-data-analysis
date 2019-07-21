@@ -59,7 +59,12 @@ public interface DataType extends PrimitiveExpression {
 
   public static class StringDataType implements DataType {
     public static enum Type implements RelationalAlgebraEnum {
-      CHAR, VARCHAR, TINYTEXT, TEXT, MEDIUMTEXT, LONGTEXT, NCHAR, NVARCHAR
+      CHAR, VARCHAR, TINYTEXT, TEXT, MEDIUMTEXT, LONGTEXT, NCHAR, NVARCHAR;
+
+      @Override
+      public String literal() {
+        return name();
+      }
     }
 
     public final StringDataType.Type dataType;
@@ -82,7 +87,7 @@ public interface DataType extends PrimitiveExpression {
     @Override
     public String literal() {
       StringBuilder sb = new StringBuilder();
-      sb.append(dataType.name()).append(" ");
+      sb.append(dataType.literal()).append(" ");
       if (lengthOneDimension != null) {
         sb.append(lengthOneDimension.literal()).append(" ");
       }
@@ -102,11 +107,20 @@ public interface DataType extends PrimitiveExpression {
 
   public static class NationalStringDataType implements DataType {
     public static enum NType implements RelationalAlgebraEnum {
-      NATIONAL, NCHAR
+      NATIONAL, NCHAR;
+
+      @Override
+      public String literal() {
+        return name();
+      }
     }
 
     public static enum Type implements RelationalAlgebraEnum {
-      VARCHAR, CHARACTER
+      VARCHAR, CHARACTER;
+      @Override
+      public String literal() {
+        return name();
+      }
     }
 
     public final NationalStringDataType.NType type;
@@ -141,8 +155,8 @@ public interface DataType extends PrimitiveExpression {
     @Override
     public String literal() {
       StringBuilder sb = new StringBuilder();
-      sb.append(type.name()).append(" ");
-      sb.append(dataType.name()).append(" ");
+      sb.append(type.literal()).append(" ");
+      sb.append(dataType.literal()).append(" ");
       if (lengthOneDimension != null) {
         sb.append(lengthOneDimension.literal()).append(" ");
       }
@@ -156,7 +170,11 @@ public interface DataType extends PrimitiveExpression {
 
   public static class NationalVaryingStringDataType implements DataType {
     public static enum Type implements RelationalAlgebraEnum {
-      CHAR, CHARACTER
+      CHAR, CHARACTER;
+      @Override
+      public String literal() {
+        return name();
+      }
     }
 
     public final NationalVaryingStringDataType.Type dataType;
@@ -176,7 +194,7 @@ public interface DataType extends PrimitiveExpression {
     public String literal() {
       StringBuilder sb = new StringBuilder();
       sb.append("NATIONAL ");
-      sb.append(dataType.name()).append(" ");
+      sb.append(dataType.literal()).append(" ");
       sb.append("VARYING ");
       if (lengthOneDimension != null) {
         sb.append(lengthOneDimension.literal()).append(" ");
@@ -195,6 +213,11 @@ public interface DataType extends PrimitiveExpression {
       DOUBLE, //
       DECIMAL, DEC, FIXED, NUMERIC, FLOAT, //
       BIT, TIME, TIMESTAMP, DATETIME, BINARY, VARBINARY, YEAR;
+
+      @Override
+      public String literal() {
+        return name();
+      }
     }
 
     public final DimensionDataType.Type dataType;
@@ -283,7 +306,7 @@ public interface DataType extends PrimitiveExpression {
       case INT:
       case INTEGER:
       case BIGINT:
-        sb.append(dataType.name()).append(" ");
+        sb.append(dataType.literal()).append(" ");
         if (lengthOneDimension != null) {
           sb.append(lengthOneDimension.literal()).append(" ");
         }
@@ -298,7 +321,7 @@ public interface DataType extends PrimitiveExpression {
         break;
 
       case REAL:
-        sb.append(dataType.name()).append(" ");
+        sb.append(dataType.literal()).append(" ");
         if (lengthTwoDimension != null) {
           sb.append(lengthTwoDimension.literal()).append(" ");
         }
@@ -313,7 +336,7 @@ public interface DataType extends PrimitiveExpression {
         break;
 
       case DOUBLE:
-        sb.append(dataType.name()).append(" ");
+        sb.append(dataType.literal()).append(" ");
         if (Boolean.TRUE.equals(precision)) {
           sb.append("PRECISION ");
         }
@@ -335,7 +358,7 @@ public interface DataType extends PrimitiveExpression {
       case FIXED:
       case NUMERIC:
       case FLOAT:
-        sb.append(dataType.name()).append(" ");
+        sb.append(dataType.literal()).append(" ");
         if (lengthTwoOptionalDimension != null) {
           sb.append(lengthTwoOptionalDimension.literal()).append(" ");
         }
@@ -356,7 +379,7 @@ public interface DataType extends PrimitiveExpression {
       case BINARY:
       case VARBINARY:
       case YEAR:
-        sb.append(dataType.name()).append(" ");
+        sb.append(dataType.literal()).append(" ");
         if (lengthOneDimension != null) {
           sb.append(lengthOneDimension.literal()).append(" ");
         }
@@ -373,7 +396,12 @@ public interface DataType extends PrimitiveExpression {
 
   public static class SimpleDataType implements DataType {
     public static enum Type implements RelationalAlgebraEnum {
-      DATE, TINYBLOB, BLOB, MEDIUMBLOB, LONGBLOB, BOOL, BOOLEAN, SERIAL
+      DATE, TINYBLOB, BLOB, MEDIUMBLOB, LONGBLOB, BOOL, BOOLEAN, SERIAL;
+
+      @Override
+      public String literal() {
+        return name();
+      }
     }
 
     public final SimpleDataType.Type dataType;
@@ -385,13 +413,18 @@ public interface DataType extends PrimitiveExpression {
 
     @Override
     public String literal() {
-      return dataType.name();
+      return dataType.literal();
     }
   }
 
   public static class CollectionDataType implements DataType {
     public static enum Type implements RelationalAlgebraEnum {
-      ENUM, SET
+      ENUM, SET;
+
+      @Override
+      public String literal() {
+        return name();
+      }
     }
 
     public final CollectionDataType.Type dataType;
@@ -413,7 +446,7 @@ public interface DataType extends PrimitiveExpression {
     @Override
     public String literal() {
       StringBuilder sb = new StringBuilder();
-      sb.append(dataType.name()).append(" ");
+      sb.append(dataType.literal()).append(" ");
       sb.append(collectionOptions.literal()).append(" ");
       if (Boolean.TRUE.equals(binary)) {
         sb.append("BINARY ");
@@ -428,7 +461,12 @@ public interface DataType extends PrimitiveExpression {
   public static class SpatialDataType implements DataType {
     public static enum Type implements RelationalAlgebraEnum {
       GEOMETRYCOLLECTION, GEOMCOLLECTION, LINESTRING, MULTILINESTRING, MULTIPOINT, MULTIPOLYGON,
-      POINT, POLYGON, JSON, GEOMETRY
+      POINT, POLYGON, JSON, GEOMETRY;
+
+      @Override
+      public String literal() {
+        return name();
+      }
     }
 
     public final SpatialDataType.Type dataType;
@@ -441,7 +479,7 @@ public interface DataType extends PrimitiveExpression {
 
     @Override
     public String literal() {
-      return dataType.name();
+      return dataType.literal();
     }
   }
 
@@ -489,7 +527,12 @@ public interface DataType extends PrimitiveExpression {
       // typeName=DECIMAL lengthTwoDimension?
       DECIMAL, //
       // (SIGNED | UNSIGNED) INTEGER?
-      INTEGER
+      INTEGER;
+
+      @Override
+      public String literal() {
+        return name();
+      }
     }
 
     public final ConvertedDataType.Type type;
@@ -564,30 +607,30 @@ public interface DataType extends PrimitiveExpression {
       switch (type) {
       case BINARY:
       case NCHAR:
-        sb.append(type.name());
+        sb.append(type.literal());
         if (lengthOneDimension != null) {
           sb.append(" ").append(lengthOneDimension.literal());
         }
         break;
 
       case CHAR:
-        sb.append(type.name());
+        sb.append(type.literal());
         if (lengthOneDimension != null) {
           sb.append(" ").append(lengthOneDimension.literal());
         }
         if (charsetName != null) {
-          sb.append(" CHARACTER SET ").append(charsetName.name());
+          sb.append(" CHARACTER SET ").append(charsetName.literal());
         }
         break;
 
       case DATE:
       case DATETIME:
       case TIME:
-        sb.append(type.name());
+        sb.append(type.literal());
         break;
 
       case DECIMAL:
-        sb.append(type.name());
+        sb.append(type.literal());
         if (lengthTwoDimension != null) {
           sb.append(" ").append(lengthTwoDimension.literal());
         }
@@ -600,7 +643,7 @@ public interface DataType extends PrimitiveExpression {
           sb.append("UNSIGNED");
         }
         if (type != null) {
-          sb.append(" ").append(type.name());
+          sb.append(" ").append(type.literal());
         }
         break;
 

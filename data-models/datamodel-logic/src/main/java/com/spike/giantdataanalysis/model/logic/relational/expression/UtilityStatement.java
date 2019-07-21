@@ -49,8 +49,23 @@ public interface UtilityStatement extends SqlStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      if (selectStatement != null) {
+        return selectStatement.literal();
+      }
+      if (deleteStatement != null) {
+        return deleteStatement.literal();
+      }
+      if (insertStatement != null) {
+        return insertStatement.literal();
+      }
+      if (replaceStatement != null) {
+        return replaceStatement.literal();
+      }
+      if (updateStatement != null) {
+        return updateStatement.literal();
+      }
+
+      return "";
     }
 
   }
@@ -66,8 +81,7 @@ public interface UtilityStatement extends SqlStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      return "FOR CONNECTION " + uid.literal();
     }
 
   }

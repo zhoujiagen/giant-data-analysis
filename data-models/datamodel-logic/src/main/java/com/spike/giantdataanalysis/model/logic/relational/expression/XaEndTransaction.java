@@ -26,6 +26,13 @@ public class XaEndTransaction implements ReplicationStatement {
   @Override
   public String literal() {
     StringBuilder sb = new StringBuilder();
+    sb.append("XA END ").append(xid.literal());
+    if (Boolean.TRUE.equals(suspend)) {
+      sb.append(" SUSPEND");
+      if (Boolean.TRUE.equals(forMigrate)) {
+        sb.append(" FOR MIGRATE");
+      }
+    }
     return sb.toString();
   }
 }

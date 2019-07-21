@@ -6,6 +6,7 @@ import org.apache.commons.collections4.CollectionUtils;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.spike.giantdataanalysis.model.logic.relational.core.RelationalAlgebraEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.CharsetName;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.FullColumnName;
@@ -49,19 +50,13 @@ public interface SelectStatement extends DmlStatement {
     }
 
     @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append(querySpecification);
-      if (lockClause != null) {
-        builder.append(" ").append(lockClause);
-      }
-      return builder.toString();
-    }
-
-    @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append(querySpecification);
+      if (lockClause != null) {
+        sb.append(" ").append(lockClause);
+      }
+      return sb.toString();
     }
   }
 
@@ -77,20 +72,13 @@ public interface SelectStatement extends DmlStatement {
     }
 
     @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("ParenthesisSelect [queryExpression=");
-      builder.append(queryExpression);
-      builder.append(", lockClause=");
-      builder.append(lockClause);
-      builder.append("]");
-      return builder.toString();
-    }
-
-    @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append(queryExpression.literal()).append(" ");
+      if (lockClause != null) {
+        sb.append(lockClause.literal());
+      }
+      return sb.toString();
     }
 
   }
@@ -109,7 +97,7 @@ public interface SelectStatement extends DmlStatement {
         List<UnionStatement> unionStatements, UnionTypeEnum unionType,
         QuerySpecification querySpecification, QueryExpression queryExpression,
         OrderByClause orderByClause, LimitClause limitClause, LockClauseEnum lockClause) {
-      Preconditions.checkArgument(querySpecification != null);
+      Preconditions.checkArgument(querySpecificationNointo != null);
       Preconditions.checkArgument(unionStatements != null && unionStatements.size() > 0);
 
       this.querySpecificationNointo = querySpecificationNointo;
@@ -123,32 +111,35 @@ public interface SelectStatement extends DmlStatement {
     }
 
     @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("UnionSelect [querySpecificationNointo=");
-      builder.append(querySpecificationNointo);
-      builder.append(", unionStatements=");
-      builder.append(unionStatements);
-      builder.append(", unionType=");
-      builder.append(unionType);
-      builder.append(", querySpecification=");
-      builder.append(querySpecification);
-      builder.append(", queryExpression=");
-      builder.append(queryExpression);
-      builder.append(", orderByClause=");
-      builder.append(orderByClause);
-      builder.append(", limitClause=");
-      builder.append(limitClause);
-      builder.append(", lockClause=");
-      builder.append(lockClause);
-      builder.append("]");
-      return builder.toString();
-    }
-
-    @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append(querySpecificationNointo.literal()).append(" ");
+      List<String> literals = Lists.newArrayList();
+      for (UnionStatement unionStatement : unionStatements) {
+        literals.add(unionStatement.literal());
+      }
+      sb.append(Joiner.on(" ").join(literals)).append(" ");
+      if (!(querySpecification == null && queryExpression == null)) {
+        sb.append("UNION ");
+        if (unionType != null) {
+          sb.append(unionType.literal()).append(" ");
+        }
+        if (querySpecification != null) {
+          sb.append(querySpecification.literal()).append(" ");
+        } else {
+          sb.append(queryExpression.literal()).append(" ");
+        }
+      }
+      if (orderByClause != null) {
+        sb.append(orderByClause.literal()).append(" ");
+      }
+      if (limitClause != null) {
+        sb.append(limitClause.literal()).append(" ");
+      }
+      if (lockClause != null) {
+        sb.append(lockClause.literal());
+      }
+      return sb.toString();
     }
 
   }
@@ -179,36 +170,42 @@ public interface SelectStatement extends DmlStatement {
     }
 
     @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("UnionParenthesisSelect [queryExpressionNointo=");
-      builder.append(queryExpressionNointo);
-      builder.append(", unionParenthesisList=");
-      builder.append(unionParenthesisList);
-      builder.append(", unionType=");
-      builder.append(unionType);
-      builder.append(", queryExpression=");
-      builder.append(queryExpression);
-      builder.append(", orderByClause=");
-      builder.append(orderByClause);
-      builder.append(", limitClause=");
-      builder.append(limitClause);
-      builder.append(", lockClause=");
-      builder.append(lockClause);
-      builder.append("]");
-      return builder.toString();
-    }
-
-    @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append(queryExpressionNointo.literal()).append(" ");
+      List<String> literals = Lists.newArrayList();
+      for (UnionParenthesis unionParenthesis : unionParenthesisList) {
+        literals.add(unionParenthesis.literal());
+      }
+      sb.append(Joiner.on(" ").join(literals)).append(" ");
+      if (queryExpression != null) {
+        sb.append("UNION ");
+        if (unionType != null) {
+          sb.append(unionType.literal()).append(" ");
+        }
+        sb.append(queryExpression.literal()).append(" ");
+      }
+      if (orderByClause != null) {
+        sb.append(orderByClause.literal()).append(" ");
+      }
+      if (limitClause != null) {
+        sb.append(limitClause.literal()).append(" ");
+      }
+      if (lockClause != null) {
+        sb.append(lockClause.literal());
+      }
+      return sb.toString();
     }
 
   }
 
   public static enum UnionTypeEnum implements RelationalAlgebraEnum {
-    ALL, DISTINCT
+    ALL, DISTINCT;
+
+    @Override
+    public String literal() {
+      return name();
+    }
   }
 
   // ---------------------------------------------------------------------------
@@ -235,20 +232,14 @@ public interface SelectStatement extends DmlStatement {
     }
 
     @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("QueryExpression [querySpecification=");
-      builder.append(querySpecification);
-      builder.append(", queryExpression=");
-      builder.append(queryExpression);
-      builder.append("]");
-      return builder.toString();
-    }
-
-    @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      if (querySpecification != null) {
+        sb.append("(").append(querySpecification.literal()).append(")");
+      } else {
+        sb.append("(").append(queryExpression.literal()).append(")");
+      }
+      return sb.toString();
     }
 
   }
@@ -264,25 +255,17 @@ public interface SelectStatement extends DmlStatement {
   public static class QueryExpressionNointo implements PrimitiveExpression {
     public final QuerySpecificationNointo querySpecificationNointo;
 
-    public QueryExpressionNointo(QuerySpecificationNointo querySpecificationNointo) {
+    QueryExpressionNointo(QuerySpecificationNointo querySpecificationNointo) {
       Preconditions.checkArgument(querySpecificationNointo != null);
 
       this.querySpecificationNointo = querySpecificationNointo;
     }
 
     @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("QueryExpressionNointo [querySpecificationNointo=");
-      builder.append(querySpecificationNointo);
-      builder.append("]");
-      return builder.toString();
-    }
-
-    @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("(").append(querySpecificationNointo.literal()).append(")");
+      return sb.toString();
     }
 
   }
@@ -319,41 +302,31 @@ public interface SelectStatement extends DmlStatement {
     }
 
     @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("SELECT").append(" ");
+    public String literal() {
+      StringBuilder sb = new StringBuilder();
+      sb.append("SELECT ");
       if (CollectionUtils.isNotEmpty(selectSpecs)) {
-        builder.append(Joiner.on(" ").join(selectSpecs));
+        List<String> literals = Lists.newArrayList();
+        for (SelectSpecEnum selectSpec : selectSpecs) {
+          literals.add(selectSpec.literal());
+        }
+        sb.append(Joiner.on(" ").join(literals));
       }
-
-      builder.append(selectElements);
+      sb.append(selectElements.literal()).append(" ");
 
       if (selectIntoExpression != null) {
-        builder.append(System.lineSeparator());
-        builder.append(selectIntoExpression);
+        sb.append(selectIntoExpression.literal()).append(" ");
       }
-
       if (fromClause != null) {
-        builder.append(System.lineSeparator());
-        builder.append(fromClause);
+        sb.append(fromClause.literal()).append(" ");
       }
-
       if (orderByClause != null) {
-        builder.append(System.lineSeparator());
-        builder.append(orderByClause);
+        sb.append(orderByClause.literal()).append(" ");
       }
-
       if (limitClause != null) {
-        builder.append(System.lineSeparator());
-        builder.append(limitClause);
+        sb.append(limitClause.literal());
       }
-      return builder.toString();
-    }
-
-    @Override
-    public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      return sb.toString();
     }
 
   }
@@ -385,26 +358,18 @@ public interface SelectStatement extends DmlStatement {
     }
 
     @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("QuerySpecificationNointo [selectSpecs=");
-      builder.append(selectSpecs);
-      builder.append(", selectElements=");
-      builder.append(selectElements);
-      builder.append(", fromClause=");
-      builder.append(fromClause);
-      builder.append(", orderByClause=");
-      builder.append(orderByClause);
-      builder.append(", limitClause=");
-      builder.append(limitClause);
-      builder.append("]");
-      return builder.toString();
-    }
-
-    @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("SELECT ");
+      if (CollectionUtils.isNotEmpty(selectSpecs)) {
+        List<String> literals = Lists.newArrayList();
+        for (SelectSpecEnum selectSpec : selectSpecs) {
+          literals.add(selectSpec.literal());
+        }
+        sb.append(Joiner.on(" ").join(literals));
+
+      }
+      return sb.toString();
     }
 
   }
@@ -428,20 +393,14 @@ public interface SelectStatement extends DmlStatement {
     }
 
     @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("UnionParenthesis [unionType=");
-      builder.append(unionType);
-      builder.append(", queryExpressionNointo=");
-      builder.append(queryExpressionNointo);
-      builder.append("]");
-      return builder.toString();
-    }
-
-    @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("UNION ");
+      if (unionType != null) {
+        sb.append(unionType.literal()).append(" ");
+      }
+      sb.append(queryExpressionNointo.literal());
+      return sb.toString();
     }
 
   }
@@ -471,22 +430,18 @@ public interface SelectStatement extends DmlStatement {
     }
 
     @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("UnionStatement [unionType=");
-      builder.append(unionType);
-      builder.append(", querySpecificationNointo=");
-      builder.append(querySpecificationNointo);
-      builder.append(", queryExpressionNointo=");
-      builder.append(queryExpressionNointo);
-      builder.append("]");
-      return builder.toString();
-    }
-
-    @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("UNION ");
+      if (unionType != null) {
+        sb.append(unionType.literal()).append(" ");
+      }
+      if (querySpecificationNointo != null) {
+        sb.append(querySpecificationNointo.literal());
+      } else {
+        sb.append(queryExpressionNointo.literal());
+      }
+      return sb.toString();
     }
 
   }
@@ -507,6 +462,11 @@ public interface SelectStatement extends DmlStatement {
     HIGH_PRIORITY, STRAIGHT_JOIN, SQL_SMALL_RESULT, SQL_BIG_RESULT, SQL_BUFFER_RESULT, //
     SQL_CACHE, SQL_NO_CACHE, // only one
     SQL_CALC_FOUND_ROWS;
+
+    @Override
+    public String literal() {
+      return name();
+    }
   }
 
   /**
@@ -526,24 +486,23 @@ public interface SelectStatement extends DmlStatement {
     }
 
     @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
+    public String literal() {
+      StringBuilder sb = new StringBuilder();
       if (Boolean.TRUE.equals(star)) {
-        builder.append("*");
+        sb.append("* ");
+        if (CollectionUtils.isNotEmpty(selectElements)) {
+          sb.append(", ");
+        }
       }
       if (CollectionUtils.isNotEmpty(selectElements)) {
-        if (Boolean.TRUE.equals(star)) {
-          builder.append(", ");
+        List<String> literals = Lists.newArrayList();
+        for (SelectElement selectElement : selectElements) {
+          literals.add(selectElement.literal());
         }
-        builder.append(Joiner.on(", ").join(selectElements));
+        sb.append(Joiner.on(", ").join(literals));
       }
-      return builder.toString();
-    }
 
-    @Override
-    public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      return sb.toString();
     }
 
   }
@@ -569,18 +528,10 @@ public interface SelectStatement extends DmlStatement {
     }
 
     @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("SelectStarElement [fullId=");
-      builder.append(fullId);
-      builder.append("]");
-      return builder.toString();
-    }
-
-    @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append(fullId.literal()).append(".*");
+      return sb.toString();
     }
   }
 
@@ -596,19 +547,13 @@ public interface SelectStatement extends DmlStatement {
     }
 
     @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append(fullColumnName);
-      if (uid != null) {
-        builder.append(", uid=");
-      }
-      return builder.toString();
-    }
-
-    @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append(fullColumnName.literal()).append(" ");
+      if (uid != null) {
+        sb.append("AS ").append(uid.literal());
+      }
+      return sb.toString();
     }
 
   }
@@ -625,20 +570,13 @@ public interface SelectStatement extends DmlStatement {
     }
 
     @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("SelectFunctionElement [functionCall=");
-      builder.append(functionCall);
-      builder.append(", uid=");
-      builder.append(uid);
-      builder.append("]");
-      return builder.toString();
-    }
-
-    @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append(functionCall.literal()).append(" ");
+      if (uid != null) {
+        sb.append("AS ").append(uid.literal());
+      }
+      return sb.toString();
     }
 
   }
@@ -657,22 +595,16 @@ public interface SelectStatement extends DmlStatement {
     }
 
     @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("SelectExpressionElement [localId=");
-      builder.append(localId);
-      builder.append(", expression=");
-      builder.append(expression);
-      builder.append(", uid=");
-      builder.append(uid);
-      builder.append("]");
-      return builder.toString();
-    }
-
-    @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      if (localId != null) {
+        sb.append(localId).append(" := ");
+      }
+      sb.append(expression.literal()).append(" ");
+      if (uid != null) {
+        sb.append("AS ").append(uid.literal());
+      }
+      return sb.toString();
     }
 
   }
@@ -709,18 +641,15 @@ public interface SelectStatement extends DmlStatement {
     }
 
     @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("SelectIntoVariables [assignmentFields=");
-      builder.append(assignmentFields);
-      builder.append("]");
-      return builder.toString();
-    }
-
-    @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("INTO ");
+      List<String> literals = Lists.newArrayList();
+      for (AssignmentField assignmentField : assignmentFields) {
+        literals.add(assignmentField.literal());
+      }
+      sb.append(Joiner.on(", ").join(literals));
+      return sb.toString();
     }
 
   }
@@ -735,37 +664,34 @@ public interface SelectStatement extends DmlStatement {
     }
 
     @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("SelectIntoDumpFile [stringLiteral=");
-      builder.append(stringLiteral);
-      builder.append("]");
-      return builder.toString();
-    }
-
-    @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("INTO DUMPFILE ").append(stringLiteral);
+      return sb.toString();
     }
 
   }
 
   public static class SelectIntoTextFile implements SelectIntoExpression {
     public static enum TieldsFormatType implements RelationalAlgebraEnum {
-      FIELDS, COLUMNS
+      FIELDS, COLUMNS;
+
+      @Override
+      public String literal() {
+        return name();
+      }
     }
 
     public final String filename;
     public final CharsetName charsetName;
     public final TieldsFormatType fieldsFormat;
     public final List<SelectFieldsInto> selectFieldsIntos;
-    public final List<SelectLinesInto> selectLinesInto;
+    public final List<SelectLinesInto> selectLinesIntos;
 
     SelectIntoTextFile(String filename, //
         CharsetName charsetName, //
         TieldsFormatType fieldsFormat, List<SelectFieldsInto> selectFieldsIntos, //
-        List<SelectLinesInto> selectLinesInto//
+        List<SelectLinesInto> selectLinesIntos//
     ) {
       Preconditions.checkArgument(filename != null);
 
@@ -773,30 +699,33 @@ public interface SelectStatement extends DmlStatement {
       this.charsetName = charsetName;
       this.fieldsFormat = fieldsFormat;
       this.selectFieldsIntos = selectFieldsIntos;
-      this.selectLinesInto = selectLinesInto;
-    }
-
-    @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("SelectIntoTextFile [filename=");
-      builder.append(filename);
-      builder.append(", charsetName=");
-      builder.append(charsetName);
-      builder.append(", fieldsFormat=");
-      builder.append(fieldsFormat);
-      builder.append(", selectFieldsIntos=");
-      builder.append(selectFieldsIntos);
-      builder.append(", selectLinesInto=");
-      builder.append(selectLinesInto);
-      builder.append("]");
-      return builder.toString();
+      this.selectLinesIntos = selectLinesIntos;
     }
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("INTO OUTFILE ").append(filename).append(" ");
+      if (charsetName != null) {
+        sb.append("CHARACTER SET ").append(charsetName.literal()).append(" ");
+      }
+      if (fieldsFormat != null) {
+        sb.append(fieldsFormat.literal()).append(" ");
+        List<String> literals = Lists.newArrayList();
+        for (SelectFieldsInto selectFieldsInto : selectFieldsIntos) {
+          literals.add(selectFieldsInto.literal());
+        }
+        sb.append(Joiner.on(" ").join(literals)).append(" ");
+      }
+      if (CollectionUtils.isNotEmpty(selectFieldsIntos)) {
+        sb.append("LINES ");
+        List<String> literals = Lists.newArrayList();
+        for (SelectLinesInto selectFieldsInto : selectLinesIntos) {
+          literals.add(selectFieldsInto.literal());
+        }
+        sb.append(Joiner.on(" ").join(literals));
+      }
+      return sb.toString();
     }
 
   }
@@ -812,7 +741,12 @@ public interface SelectStatement extends DmlStatement {
    */
   public static class SelectFieldsInto implements PrimitiveExpression {
     public static enum Type implements RelationalAlgebraEnum {
-      TERMINATED_BY, ENCLOSED_BY, ESCAPED_BY
+      TERMINATED_BY, ENCLOSED_BY, ESCAPED_BY;
+
+      @Override
+      public String literal() {
+        return name();
+      }
     }
 
     public final SelectFieldsInto.Type type;
@@ -829,22 +763,25 @@ public interface SelectStatement extends DmlStatement {
     }
 
     @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("SelectFieldsInto [type=");
-      builder.append(type);
-      builder.append(", optionally=");
-      builder.append(optionally);
-      builder.append(", stringLiteral=");
-      builder.append(stringLiteral);
-      builder.append("]");
-      return builder.toString();
-    }
-
-    @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      switch (type) {
+      case TERMINATED_BY:
+        sb.append("TERMINATED BY ").append(stringLiteral);
+        break;
+      case ENCLOSED_BY:
+        if (Boolean.TRUE.equals(optionally)) {
+          sb.append("OPTIONALLY ");
+        }
+        sb.append("ENCLOSED ").append(stringLiteral);
+        break;
+      case ESCAPED_BY:
+        sb.append("ESCAPED BY ").append(stringLiteral);
+        break;
+      default:
+        break;
+      }
+      return sb.toString();
     }
 
   }
@@ -859,7 +796,12 @@ public interface SelectStatement extends DmlStatement {
    */
   public static class SelectLinesInto implements PrimitiveExpression {
     public static enum Type implements RelationalAlgebraEnum {
-      STARTING_BY, TERMINATED_BY
+      STARTING_BY, TERMINATED_BY;
+
+      @Override
+      public String literal() {
+        return name();
+      }
     }
 
     public final SelectLinesInto.Type type;
@@ -874,20 +816,19 @@ public interface SelectStatement extends DmlStatement {
     }
 
     @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("SelectLinesInto [type=");
-      builder.append(type);
-      builder.append(", stringLiteral=");
-      builder.append(stringLiteral);
-      builder.append("]");
-      return builder.toString();
-    }
-
-    @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      switch (type) {
+      case STARTING_BY:
+        sb.append("STARTING BY ").append(stringLiteral);
+        break;
+      case TERMINATED_BY:
+        sb.append("TERMINATED BY ").append(stringLiteral);
+        break;
+      default:
+        break;
+      }
+      return sb.toString();
     }
   }
 
@@ -924,34 +865,27 @@ public interface SelectStatement extends DmlStatement {
     }
 
     @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("FROM ");
-      builder.append(tableSources);
+    public String literal() {
+      StringBuilder sb = new StringBuilder();
+      sb.append("FROM ").append(tableSources.literal()).append(" ");
       if (whereExpr != null) {
-        builder.append(System.lineSeparator());
-        builder.append("WHERE ").append(whereExpr);
+        sb.append("WHERE ").append(whereExpr.literal()).append(" ");
       }
       if (CollectionUtils.isNotEmpty(groupByItems)) {
-        builder.append(System.lineSeparator());
-        builder.append("GROUP BY ");
-        builder.append(Joiner.on(", ").join(groupByItems));
+        sb.append("GROUP BY ");
+        List<String> literals = Lists.newArrayList();
+        for (GroupByItem groupByItem : groupByItems) {
+          literals.add(groupByItem.literal());
+        }
+        sb.append(Joiner.on(", ").join(literals)).append(" ");
       }
       if (Boolean.TRUE.equals(withRollup)) {
-        builder.append(System.lineSeparator());
-        builder.append(" WITH ROLLUP ");
+        sb.append(" WITH ROLLUP ");
       }
       if (havingExpr != null) {
-        builder.append(System.lineSeparator());
-        builder.append(havingExpr);
+        sb.append(havingExpr.literal());
       }
-      return builder.toString();
-    }
-
-    @Override
-    public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      return sb.toString();
     }
   }
 
@@ -964,7 +898,11 @@ public interface SelectStatement extends DmlStatement {
    */
   public static class GroupByItem implements PrimitiveExpression {
     public static enum OrderType implements RelationalAlgebraEnum {
-      ASC, DESC
+      ASC, DESC;
+      @Override
+      public String literal() {
+        return name();
+      }
     }
 
     public final Expression expression;
@@ -978,20 +916,13 @@ public interface SelectStatement extends DmlStatement {
     }
 
     @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("GroupByItem [expression=");
-      builder.append(expression);
-      builder.append(", order=");
-      builder.append(order);
-      builder.append("]");
-      return builder.toString();
-    }
-
-    @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append(expression.literal());
+      if (order != null) {
+        sb.append(" ").append(order.literal());
+      }
+      return sb.toString();
     }
 
   }
@@ -1019,20 +950,16 @@ public interface SelectStatement extends DmlStatement {
     }
 
     @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("LimitClause [limit=");
-      builder.append(limit);
-      builder.append(", offset=");
-      builder.append(offset);
-      builder.append("]");
-      return builder.toString();
-    }
-
-    @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("LIMIT ");
+      if (limit != null) {
+        sb.append(limit.literal()).append(" ");
+      }
+      if (offset != null) {
+        sb.append(offset.literal()).append(" ");
+      }
+      return sb.toString();
     }
 
   }
@@ -1056,20 +983,12 @@ public interface SelectStatement extends DmlStatement {
     }
 
     @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("LimitClauseAtom [decimalLiteral=");
-      builder.append(decimalLiteral);
-      builder.append(", mysqlVariable=");
-      builder.append(mysqlVariable);
-      builder.append("]");
-      return builder.toString();
-    }
-
-    @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      if (decimalLiteral != null) {
+        return decimalLiteral.literal();
+      } else {
+        return mysqlVariable.literal();
+      }
     }
 
   }

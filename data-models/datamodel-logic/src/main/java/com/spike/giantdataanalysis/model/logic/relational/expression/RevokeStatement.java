@@ -2,7 +2,9 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
 
 import java.util.List;
 
+import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.UserName;
 
 /**
@@ -40,8 +42,25 @@ public interface RevokeStatement extends AdministrationStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("REVOKE ");
+      List<String> literals = Lists.newArrayList();
+      for (PrivelegeClause privelegeClause : privelegeClauses) {
+        literals.add(privelegeClause.literal());
+      }
+      sb.append(Joiner.on(", ").join(literals)).append(" ");
+      sb.append("ON ");
+      if (privilegeObject != null) {
+        sb.append(privilegeObject.literal()).append(" ");
+      }
+      sb.append(privilegeLevel.literal()).append(" ");
+      sb.append("FROM ");
+      List<String> literals2 = Lists.newArrayList();
+      for (UserName userName : userNames) {
+        literals2.add(userName.literal());
+      }
+      sb.append(Joiner.on(", ").join(literals2));
+      return sb.toString();
     }
 
   }
@@ -57,8 +76,15 @@ public interface RevokeStatement extends AdministrationStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("REVOKE ALL PRIVILEGES, GRANT OPTION ");
+      sb.append("FROM ");
+      List<String> literals = Lists.newArrayList();
+      for (UserName userName : userNames) {
+        literals.add(userName.literal());
+      }
+      sb.append(Joiner.on(", ").join(literals));
+      return sb.toString();
     }
 
   }

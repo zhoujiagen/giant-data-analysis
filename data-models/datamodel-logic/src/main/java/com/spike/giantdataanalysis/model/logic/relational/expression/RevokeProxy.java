@@ -2,7 +2,9 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
 
 import java.util.List;
 
+import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.UserName;
 
 /**
@@ -15,21 +17,26 @@ import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.U
  */
 public class RevokeProxy implements AdministrationStatement {
   public final UserName onUser;
-  public final UserName fromFirst;
-  public final List<UserName> fromOther;
+  public final List<UserName> froms;
 
-  RevokeProxy(UserName onUser, UserName fromFirst, List<UserName> fromOther) {
+  RevokeProxy(UserName onUser, List<UserName> froms) {
     Preconditions.checkArgument(onUser != null);
-    Preconditions.checkArgument(fromFirst != null);
+    Preconditions.checkArgument(froms != null && froms.size() > 0);
 
     this.onUser = onUser;
-    this.fromFirst = fromFirst;
-    this.fromOther = fromOther;
+    this.froms = froms;
   }
 
   @Override
   public String literal() {
     StringBuilder sb = new StringBuilder();
+    sb.append("REVOKE PROXY ON ").append(onUser.literal()).append(" ");
+    sb.append("FROM ");
+    List<String> literals = Lists.newArrayList();
+    for (UserName userName : froms) {
+      literals.add(userName.literal());
+    }
+    sb.append(Joiner.on(", ").join(literals));
     return sb.toString();
   }
 }

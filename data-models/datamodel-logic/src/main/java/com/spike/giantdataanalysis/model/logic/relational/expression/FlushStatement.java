@@ -2,7 +2,9 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
 
 import java.util.List;
 
+import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 
 /**
  * <pre>
@@ -26,6 +28,15 @@ public class FlushStatement implements AdministrationStatement {
   @Override
   public String literal() {
     StringBuilder sb = new StringBuilder();
+    sb.append("FLUSH ");
+    if (flushFormat != null) {
+      sb.append(flushFormat.literal()).append(" ");
+    }
+    List<String> literals = Lists.newArrayList();
+    for (FlushOption flushOption : flushOptions) {
+      literals.add(flushOption.literal());
+    }
+    sb.append(Joiner.on(", ").join(literals));
     return sb.toString();
   }
 }

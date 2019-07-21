@@ -22,6 +22,17 @@ public class CommitWork implements TransactionStatement {
   @Override
   public String literal() {
     StringBuilder sb = new StringBuilder();
+    sb.append("COMMIT WORK ");
+    if (Boolean.TRUE.equals(chain)) {
+      sb.append("AND CHAIN ");
+    } else if (Boolean.FALSE.equals(chain)) {
+      sb.append("AND NO CHAIN ");
+    }
+    if (Boolean.TRUE.equals(release)) {
+      sb.append("RELEASE");
+    } else if (Boolean.FALSE.equals(release)) {
+      sb.append("NO RELEASE");
+    }
     return sb.toString();
   }
 }

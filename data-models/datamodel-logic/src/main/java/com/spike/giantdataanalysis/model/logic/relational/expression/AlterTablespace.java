@@ -19,7 +19,12 @@ import com.spike.giantdataanalysis.model.logic.relational.expression.Literals.Fi
  */
 public class AlterTablespace implements DdlStatement {
   public static enum ObjectActionEnum implements RelationalAlgebraEnum {
-    ADD, DROP
+    ADD, DROP;
+
+    @Override
+    public String literal() {
+      return name();
+    }
   }
 
   public final Uid uid;
@@ -48,7 +53,7 @@ public class AlterTablespace implements DdlStatement {
   public String literal() {
     StringBuilder sb = new StringBuilder();
     sb.append("ALTER TABLESPACE ").append(uid.literal()).append(" ");
-    sb.append(objectAction.name()).append(" DATAFILE ").append(dataFile).append(" ");
+    sb.append(objectAction.literal()).append(" DATAFILE ").append(dataFile).append(" ");
     if (fileSizeLiteral != null) {
       sb.append("INITIAL_SIZE = ").append(fileSizeLiteral.literal()).append(" ");
     }

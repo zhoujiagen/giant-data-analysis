@@ -2,7 +2,9 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
 
 import java.util.List;
 
+import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.TableName;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.Uid;
 import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.LimitClause;
@@ -53,8 +55,34 @@ public interface UpdateStatement extends DmlStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("UPDATE ");
+      if (Boolean.TRUE.equals(lowPriority)) {
+        sb.append("LOW_PRIORITY ");
+      }
+      if (Boolean.TRUE.equals(ignore)) {
+        sb.append("IGNORE ");
+      }
+      sb.append(tableName.literal()).append(" ");
+      if (uid != null) {
+        sb.append("AS ").append(uid.literal()).append(" ");
+      }
+      sb.append("SET ");
+      List<String> literals = Lists.newArrayList();
+      for (UpdatedElement updatedElement : updatedElements) {
+        literals.add(updatedElement.literal());
+      }
+      sb.append(Joiner.on(", ").join(literals)).append(" ");
+      if (where != null) {
+        sb.append("WHERE ").append(where.literal()).append(" ");
+      }
+      if (orderByClause != null) {
+        sb.append(orderByClause.literal()).append(" ");
+      }
+      if (limitClause != null) {
+        sb.append(limitClause.literal()).append(" ");
+      }
+      return sb.toString();
     }
 
   }
@@ -89,8 +117,25 @@ public interface UpdateStatement extends DmlStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("UPDATE ");
+      if (Boolean.TRUE.equals(lowPriority)) {
+        sb.append("LOW_PRIORITY ");
+      }
+      if (Boolean.TRUE.equals(ignore)) {
+        sb.append("IGNORE ");
+      }
+      sb.append(tableSources.literal()).append(" ");
+      sb.append("SET ");
+      List<String> literals = Lists.newArrayList();
+      for (UpdatedElement updatedElement : updatedElements) {
+        literals.add(updatedElement.literal());
+      }
+      sb.append(Joiner.on(", ").join(literals)).append(" ");
+      if (where != null) {
+        sb.append("WHERE ").append(where.literal()).append(" ");
+      }
+      return sb.toString();
     }
 
   }

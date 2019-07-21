@@ -2,7 +2,11 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
 
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
+
+import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.Uid;
 
 /**
@@ -33,6 +37,29 @@ public class CaseStatement implements CompoundStatement {
   @Override
   public String literal() {
     StringBuilder sb = new StringBuilder();
+    sb.append("CASE ");
+    if (uid != null || expression != null) {
+      if (uid != null) {
+        sb.append(uid.literal()).append(" ");
+      }
+      if (expression != null) {
+        sb.append(expression.literal()).append(" ");
+      }
+    }
+    List<String> literals = Lists.newArrayList();
+    for (CaseAlternative caseAlternative : caseAlternatives) {
+      literals.add(caseAlternative.literal());
+    }
+    sb.append(Joiner.on(" ").join(literals)).append(" ");
+    if (CollectionUtils.isNotEmpty(procedureSqlStatements)) {
+      sb.append("ELSE ");
+      List<String> literals2 = Lists.newArrayList();
+      for (ProcedureSqlStatement procedureSqlStatement : procedureSqlStatements) {
+        literals2.add(procedureSqlStatement.literal());
+      }
+      sb.append(Joiner.on(" ").join(literals2)).append(" ");
+    }
+    sb.append("END CASE");
     return sb.toString();
   }
 }

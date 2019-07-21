@@ -22,6 +22,7 @@ public class UseStatement implements UtilityStatement {
   @Override
   public String literal() {
     StringBuilder sb = new StringBuilder();
+    sb.append("USE ").append(uid.literal());
     return sb.toString();
   }
 }

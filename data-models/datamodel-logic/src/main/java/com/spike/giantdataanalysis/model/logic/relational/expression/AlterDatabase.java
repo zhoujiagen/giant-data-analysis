@@ -38,7 +38,7 @@ public interface AlterDatabase extends DdlStatement {
     @Override
     public String literal() {
       StringBuilder sb = new StringBuilder();
-      sb.append("ALTER ").append(dbFormat.name()).append(" ");
+      sb.append("ALTER ").append(dbFormat.literal()).append(" ");
       if (uid != null) {
         sb.append(uid.literal()).append(" ");
       }
@@ -66,7 +66,7 @@ public interface AlterDatabase extends DdlStatement {
     @Override
     public String literal() {
       StringBuilder sb = new StringBuilder();
-      sb.append("ALTER ").append(dbFormat.name()).append(" ").append(uid.literal()).append(" ");
+      sb.append("ALTER ").append(dbFormat.literal()).append(" ").append(uid.literal()).append(" ");
       sb.append("UPGRADE DATA DIRECTORY NAME");
       return sb.toString();
     }

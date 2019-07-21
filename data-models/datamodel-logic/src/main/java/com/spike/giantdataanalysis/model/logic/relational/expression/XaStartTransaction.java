@@ -7,17 +7,25 @@ import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.X
 /**
  * <pre>
  xaStartTransaction
-    : XA xaStart=(START | BEGIN) xid xaAction=(JOIN | RESUME)?
+    :  xaStart=(START | BEGIN) xid xaAction=(JOIN | RESUME)?
     ;
  * </pre>
  */
 public class XaStartTransaction implements ReplicationStatement {
   public static enum XaStartEnum implements RelationalAlgebraEnum {
-    START, BEGIN
+    START, BEGIN;
+    @Override
+    public String literal() {
+      return name();
+    }
   }
 
   public static enum XaActionEnum implements RelationalAlgebraEnum {
-    JOIN, RESUME
+    JOIN, RESUME;
+    @Override
+    public String literal() {
+      return name();
+    }
   }
 
   public final XaStartEnum xaStart;
@@ -36,6 +44,10 @@ public class XaStartTransaction implements ReplicationStatement {
   @Override
   public String literal() {
     StringBuilder sb = new StringBuilder();
+    sb.append("XA ").append(xaStart.literal()).append(" ").append(xid.literal());
+    if (xaAction != null) {
+      sb.append(" ").append(xaAction.literal());
+    }
     return sb.toString();
   }
 }

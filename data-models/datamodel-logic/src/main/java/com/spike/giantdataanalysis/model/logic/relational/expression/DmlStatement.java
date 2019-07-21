@@ -6,6 +6,7 @@ import org.apache.commons.collections4.CollectionUtils;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.spike.giantdataanalysis.model.logic.relational.core.RelationalAlgebraEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.CommonLists.ExpressionsWithDefaults;
 import com.spike.giantdataanalysis.model.logic.relational.expression.CommonLists.UidList;
@@ -26,19 +27,35 @@ dmlStatement
 public interface DmlStatement extends SqlStatement {
 
   public static enum PriorityEnum implements RelationalAlgebraEnum {
-    LOW_PRIORITY, CONCURRENT
+    LOW_PRIORITY, CONCURRENT;
+    @Override
+    public String literal() {
+      return name();
+    }
   }
 
   public static enum ViolationEnum implements RelationalAlgebraEnum {
-    REPLACE, IGNORE
+    REPLACE, IGNORE;
+    @Override
+    public String literal() {
+      return name();
+    }
   }
 
   public static enum FieldsFormatEnum implements RelationalAlgebraEnum {
-    FIELDS, COLUMNS
+    FIELDS, COLUMNS;
+    @Override
+    public String literal() {
+      return name();
+    }
   }
 
   public static enum LinesFormatEnum implements RelationalAlgebraEnum {
-    LINES, ROWS
+    LINES, ROWS;
+    @Override
+    public String literal() {
+      return name();
+    }
   }
 
   /**
@@ -66,8 +83,19 @@ public interface DmlStatement extends SqlStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      if (selectStatement != null) {
+        sb.append(selectStatement.literal());
+      } else {
+        sb.append("VALUES ");
+        List<String> literals = Lists.newArrayList();
+        for (ExpressionsWithDefaults e : expressionsWithDefaults) {
+          literals.add("(" + e.literal() + ")");
+        }
+        sb.append(Joiner.on(", ").join(literals));
+
+      }
+      return sb.toString();
     }
 
   }
@@ -92,8 +120,14 @@ public interface DmlStatement extends SqlStatement {
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append(fullColumnName.literal()).append(" = ");
+      if (expression != null) {
+        sb.append(expression.literal());
+      } else {
+        sb.append("DEFAULT");
+      }
+      return sb.toString();
     }
 
   }
@@ -116,20 +150,12 @@ public interface DmlStatement extends SqlStatement {
     }
 
     @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("AssignmentField [uid=");
-      builder.append(uid);
-      builder.append(", localId=");
-      builder.append(localId);
-      builder.append("]");
-      return builder.toString();
-    }
-
-    @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      if (uid != null) {
+        return uid.literal();
+      } else {
+        return localId;
+      }
     }
 
   }
@@ -142,7 +168,18 @@ public interface DmlStatement extends SqlStatement {
    * </pre>
    */
   public static enum LockClauseEnum implements RelationalAlgebraEnum {
-    FOR_UPDATE, LOCK_IN_SHARE_MODE
+    FOR_UPDATE("FOR UPDATE"), LOCK_IN_SHARE_MODE("LOCK IN SHARE MODE");
+
+    public String literal;
+
+    LockClauseEnum(String literal) {
+      this.literal = literal;
+    }
+
+    @Override
+    public String literal() {
+      return literal;
+    }
   }
 
   /**
@@ -162,18 +199,15 @@ public interface DmlStatement extends SqlStatement {
     }
 
     @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("OrderByClause [orderByExpressions=");
-      builder.append(orderByExpressions);
-      builder.append("]");
-      return builder.toString();
-    }
-
-    @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("ORDER BY ");
+      List<String> literals = Lists.newArrayList();
+      for (OrderByExpression orderByExpression : orderByExpressions) {
+        literals.add(orderByExpression.literal());
+      }
+      sb.append(Joiner.on(", ").join(literals));
+      return sb.toString();
     }
   }
 
@@ -186,7 +220,11 @@ public interface DmlStatement extends SqlStatement {
    */
   public static class OrderByExpression implements PrimitiveExpression {
     public static enum OrderType implements RelationalAlgebraEnum {
-      ASC, DESC
+      ASC, DESC;
+      @Override
+      public String literal() {
+        return name();
+      }
     }
 
     public final Expression expression;
@@ -200,20 +238,13 @@ public interface DmlStatement extends SqlStatement {
     }
 
     @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("OrderByExpression [expression=");
-      builder.append(expression);
-      builder.append(", order=");
-      builder.append(order);
-      builder.append("]");
-      return builder.toString();
-    }
-
-    @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append(expression.literal());
+      if (order != null) {
+        sb.append(" ").append(order.literal());
+      }
+      return sb.toString();
     }
   }
 
@@ -234,16 +265,14 @@ public interface DmlStatement extends SqlStatement {
     }
 
     @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append(Joiner.on(", ").join(tableSources));
-      return builder.toString();
-    }
-
-    @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      List<String> literals = Lists.newArrayList();
+      for (TableSource tableSource : tableSources) {
+        literals.add(tableSource.literal());
+      }
+      sb.append(Joiner.on(", ").join(literals));
+      return sb.toString();
     }
 
   }
@@ -271,20 +300,17 @@ public interface DmlStatement extends SqlStatement {
     }
 
     @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append(tableSourceItem);
-      if (CollectionUtils.isNotEmpty(joinParts)) {
-        builder.append(" ");
-        builder.append(Joiner.on(" ").join(joinParts));
-      }
-      return builder.toString();
-    }
-
-    @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append(tableSourceItem.literal()).append(" ");
+      if (CollectionUtils.isNotEmpty(joinParts)) {
+        List<String> literals = Lists.newArrayList();
+        for (JoinPart joinPart : joinParts) {
+          literals.add(joinPart.literal());
+        }
+        sb.append(Joiner.on(", ").join(literals)).append(" ");
+      }
+      return sb.toString();
     }
   }
 
@@ -300,22 +326,18 @@ public interface DmlStatement extends SqlStatement {
     }
 
     @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("TableSourceNested [(");
-      builder.append(tableSourceItem);
-      if (CollectionUtils.isNotEmpty(joinParts)) {
-        builder.append(" ");
-        builder.append(Joiner.on(" ").join(joinParts));
-      }
-      builder.append(")]");
-      return builder.toString();
-    }
-
-    @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("(").append(tableSourceItem.literal()).append(" ");
+      if (CollectionUtils.isNotEmpty(joinParts)) {
+        List<String> literals = Lists.newArrayList();
+        for (JoinPart joinPart : joinParts) {
+          literals.add(joinPart.literal());
+        }
+        sb.append(Joiner.on(", ").join(literals)).append(" ");
+      }
+      sb.append(")");
+      return sb.toString();
     }
 
   }
@@ -354,56 +376,42 @@ public interface DmlStatement extends SqlStatement {
     }
 
     @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append(tableName);
+    public String literal() {
+      StringBuilder sb = new StringBuilder();
+      sb.append(tableName.literal()).append(" ");
       if (uidList != null) {
-        builder.append("PARTITION (" + uidList + ")");
+        sb.append("PARTITION (").append(uidList.literal()).append(") ");
       }
       if (alias != null) {
-        builder.append(alias);
+        sb.append("AS ").append(alias.literal()).append(" ");
       }
-      if (CollectionUtils.isNotEmpty(indexHints)) {
-        builder.append(Joiner.on(", ").join(indexHints));
+      List<String> literals = Lists.newArrayList();
+      for (IndexHint indexHint : indexHints) {
+        literals.add(indexHint.literal());
       }
-      return builder.toString();
-    }
-
-    @Override
-    public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      sb.append(Joiner.on(", ").join(literals));
+      return sb.toString();
     }
 
   }
 
   public static class SubqueryTableItem implements TableSourceItem {
     public final SelectStatement selectStatement;
-    public final SelectStatement parenthesisSubquery;
+    public final Uid alias;
 
-    SubqueryTableItem(SelectStatement selectStatement, SelectStatement parenthesisSubquery) {
+    SubqueryTableItem(SelectStatement selectStatement, Uid alias) {
       Preconditions.checkArgument(selectStatement != null);
-      Preconditions.checkArgument(parenthesisSubquery != null);
+      Preconditions.checkArgument(alias != null);
 
       this.selectStatement = selectStatement;
-      this.parenthesisSubquery = parenthesisSubquery;
-    }
-
-    @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("SubqueryTableItem [selectStatement=");
-      builder.append(selectStatement);
-      builder.append(", parenthesisSubquery=");
-      builder.append(parenthesisSubquery);
-      builder.append("]");
-      return builder.toString();
+      this.alias = alias;
     }
 
     @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("(").append(selectStatement.literal()).append(") AS ").append(alias.literal());
+      return sb.toString();
     }
 
   }
@@ -418,18 +426,10 @@ public interface DmlStatement extends SqlStatement {
     }
 
     @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("TableSourcesItem [tableSources=");
-      builder.append(tableSources);
-      builder.append("]");
-      return builder.toString();
-    }
-
-    @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("(").append(tableSources.literal()).append(")");
+      return sb.toString();
     }
 
   }
@@ -446,10 +446,20 @@ public interface DmlStatement extends SqlStatement {
   public static class IndexHint implements PrimitiveExpression {
     public static enum IndexHintAction implements RelationalAlgebraEnum {
       USE, IGNORE, FORCE;
+
+      @Override
+      public String literal() {
+        return name();
+      }
     }
 
     public static enum KeyFormat implements RelationalAlgebraEnum {
       INDEX, KEY;
+
+      @Override
+      public String literal() {
+        return name();
+      }
     }
 
     public final IndexHintAction indexHintAction;
@@ -457,8 +467,8 @@ public interface DmlStatement extends SqlStatement {
     public final IndexHintTypeEnum indexHintType;
     public final UidList uidList;
 
-    IndexHint(IndexHintAction indexHintAction, KeyFormat keyFormat, IndexHintTypeEnum indexHintType,
-        UidList uidList) {
+    IndexHint(IndexHint.IndexHintAction indexHintAction, IndexHint.KeyFormat keyFormat,
+        IndexHintTypeEnum indexHintType, UidList uidList) {
       Preconditions.checkArgument(indexHintAction != null);
       Preconditions.checkArgument(keyFormat != null);
       Preconditions.checkArgument(uidList != null);
@@ -470,24 +480,14 @@ public interface DmlStatement extends SqlStatement {
     }
 
     @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("IndexHint [indexHintAction=");
-      builder.append(indexHintAction);
-      builder.append(", keyFormat=");
-      builder.append(keyFormat);
-      builder.append(", indexHintType=");
-      builder.append(indexHintType);
-      builder.append(", uidList=");
-      builder.append(uidList);
-      builder.append("]");
-      return builder.toString();
-    }
-
-    @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append(indexHintAction.literal()).append(" ").append(keyFormat.literal()).append(" ");
+      if (indexHintType != null) {
+        sb.append("FOR ").append(indexHintType.literal()).append(" ");
+      }
+      sb.append("(").append(uidList.literal()).append(")");
+      return sb.toString();
     }
 
   }
@@ -500,7 +500,18 @@ public interface DmlStatement extends SqlStatement {
    * </pre>
    */
   public static enum IndexHintTypeEnum implements RelationalAlgebraEnum {
-    JOIN, ORDER_BY, GROUP_BY;
+    JOIN("JOIN"), ORDER_BY("ORDER BY"), GROUP_BY("GROUP BY");
+
+    public String literal;
+
+    IndexHintTypeEnum(String literal) {
+      this.literal = literal;
+    }
+
+    @Override
+    public String literal() {
+      return literal;
+    }
   }
 
   /**
@@ -538,22 +549,16 @@ public interface DmlStatement extends SqlStatement {
     }
 
     @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("InnerJoin [tableSourceItem=");
-      builder.append(tableSourceItem);
-      builder.append(", expression=");
-      builder.append(expression);
-      builder.append(", uidList=");
-      builder.append(uidList);
-      builder.append("]");
-      return builder.toString();
-    }
-
-    @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("INNER JOIN ").append(tableSourceItem.literal());
+      if (expression != null) {
+        sb.append(" ON ").append(expression.literal()).append(" ");
+      }
+      if (uidList == null) {
+        sb.append(" USING ").append(uidList.literal());
+      }
+      return sb.toString();
     }
 
   }
@@ -570,20 +575,13 @@ public interface DmlStatement extends SqlStatement {
     }
 
     @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("StraightJoin [tableSourceItem=");
-      builder.append(tableSourceItem);
-      builder.append(", expression=");
-      builder.append(expression);
-      builder.append("]");
-      return builder.toString();
-    }
-
-    @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("STRAIGHT_JOIN ").append(tableSourceItem.literal());
+      if (expression != null) {
+        sb.append(" ON ").append(expression.literal());
+      }
+      return sb.toString();
     }
   }
 
@@ -606,30 +604,26 @@ public interface DmlStatement extends SqlStatement {
     }
 
     @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("OuterJoin [type=");
-      builder.append(type);
-      builder.append(", tableSourceItem=");
-      builder.append(tableSourceItem);
-      builder.append(", expression=");
-      builder.append(expression);
-      builder.append(", uidList=");
-      builder.append(uidList);
-      builder.append("]");
-      return builder.toString();
-    }
-
-    @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append(type.literal()).append(" OUTER JOIN ").append(tableSourceItem.literal()).append(" ");
+      if (expression != null) {
+        sb.append("ON ").append(expression.literal());
+      } else {
+        sb.append("USING (").append(uidList.literal()).append(")");
+      }
+      return sb.toString();
     }
 
   }
 
   public static enum OuterJoinType implements RelationalAlgebraEnum {
-    LEFT, RIGHT
+    LEFT, RIGHT;
+
+    @Override
+    public String literal() {
+      return name();
+    }
   }
 
   public static class NaturalJoin implements JoinPart {
@@ -644,20 +638,14 @@ public interface DmlStatement extends SqlStatement {
     }
 
     @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("NaturalJoin [outerJoinType=");
-      builder.append(outerJoinType);
-      builder.append(", tableSourceItem=");
-      builder.append(tableSourceItem);
-      builder.append("]");
-      return builder.toString();
-    }
-
-    @Override
     public String literal() {
-      // TODO Implement RelationalAlgebraExpression.literal
-      return null;
+      StringBuilder sb = new StringBuilder();
+      sb.append("NATURAL ");
+      if (outerJoinType != null) {
+        sb.append(outerJoinType.literal()).append(" OUTER ");
+      }
+      sb.append("JOIN ").append(tableSourceItem.literal());
+      return sb.toString();
     }
 
   }

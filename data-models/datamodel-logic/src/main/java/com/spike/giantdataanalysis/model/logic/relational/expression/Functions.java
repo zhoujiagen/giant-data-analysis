@@ -134,7 +134,12 @@ public interface Functions extends PrimitiveExpression {
 
   public static class SimpleFunctionCall implements SpecificFunction {
     public static enum Type implements RelationalAlgebraEnum {
-      CURRENT_DATE, CURRENT_TIME, CURRENT_TIMESTAMP, CURRENT_USER, LOCALTIME
+      CURRENT_DATE, CURRENT_TIME, CURRENT_TIMESTAMP, CURRENT_USER, LOCALTIME;
+
+      @Override
+      public String literal() {
+        return name();
+      }
     }
 
     public final SimpleFunctionCall.Type type;
@@ -145,7 +150,7 @@ public interface Functions extends PrimitiveExpression {
 
     @Override
     public String literal() {
-      return type.name();
+      return type.literal();
     }
 
   }
@@ -157,7 +162,12 @@ public interface Functions extends PrimitiveExpression {
       // CONVERT '(' expression USING charsetName ')' #dataTypeFunctionCall
       CONVERT_CHARSET,
       // CAST '(' expression AS convertedDataType ')' #dataTypeFunctionCall
-      CAST
+      CAST;
+
+      @Override
+      public String literal() {
+        return name();
+      }
     }
 
     public final DataTypeFunctionCall.Type type;
@@ -409,7 +419,11 @@ public interface Functions extends PrimitiveExpression {
 
   public static class TrimFunctionCall implements SpecificFunction {
     public static enum PositioinFormType implements RelationalAlgebraEnum {
-      BOTH, LEADING, TRAILING
+      BOTH, LEADING, TRAILING;
+      @Override
+      public String literal() {
+        return name();
+      }
     }
 
     public final TrimFunctionCall.PositioinFormType positioinForm;
@@ -444,7 +458,7 @@ public interface Functions extends PrimitiveExpression {
           sb.append(sourceExpression.literal());
         }
       } else {
-        sb.append(positioinForm.name()).append(" ");
+        sb.append(positioinForm.literal()).append(" ");
         if (sourceString != null) {
           sb.append(sourceString.literal());
         } else if (sourceExpression != null) {
@@ -467,7 +481,11 @@ public interface Functions extends PrimitiveExpression {
 
   public static class WeightFunctionCall implements SpecificFunction {
     public static enum StringFormatType implements RelationalAlgebraEnum {
-      CHAR, BINARY
+      CHAR, BINARY;
+      @Override
+      public String literal() {
+        return name();
+      }
     };
 
     public final StringLiteral stringLiteral;
@@ -501,7 +519,7 @@ public interface Functions extends PrimitiveExpression {
         sb.append(expression.literal());
       }
       if (stringFormat != null) {
-        sb.append("AS ").append(stringFormat.name());
+        sb.append("AS ").append(stringFormat.literal());
         sb.append("(");
         sb.append(decimalLiteral.literal());
         sb.append(")");
@@ -549,7 +567,11 @@ public interface Functions extends PrimitiveExpression {
 
   public static class GetFormatFunctionCall implements SpecificFunction {
     public static enum DatetimeFormatType implements RelationalAlgebraEnum {
-      DATE, TIME, DATETIME
+      DATE, TIME, DATETIME;
+      @Override
+      public String literal() {
+        return name();
+      }
     }
 
     public final GetFormatFunctionCall.DatetimeFormatType type;
@@ -568,7 +590,7 @@ public interface Functions extends PrimitiveExpression {
     public String literal() {
       StringBuilder sb = new StringBuilder();
       sb.append("GET_FORMAT(");
-      sb.append(type.name());
+      sb.append(type.literal());
       sb.append(", ");
       sb.append(stringLiteral.literal());
       sb.append(")");
@@ -622,7 +644,7 @@ public interface Functions extends PrimitiveExpression {
     @Override
     public String literal() {
       StringBuilder sb = new StringBuilder();
-      sb.append(scalarFunctionName.name());
+      sb.append(scalarFunctionName.literal());
       sb.append("(");
       if (functionArgs != null) {
         sb.append(functionArgs.literal());
@@ -693,6 +715,11 @@ public interface Functions extends PrimitiveExpression {
     ASCII, CURDATE, CURRENT_DATE, CURRENT_TIME, CURRENT_TIMESTAMP, CURTIME, DATE_ADD, DATE_SUB, IF,
     INSERT, LOCALTIME, LOCALTIMESTAMP, MID, NOW, REPLACE, SUBSTR, SUBSTRING, SYSDATE, TRIM,
     UTC_DATE, UTC_TIME, UTC_TIMESTAMP;
+
+    @Override
+    public String literal() {
+      return name();
+    }
   }
 
   public static class UdfFunctionCall implements FunctionCall {
@@ -729,7 +756,12 @@ public interface Functions extends PrimitiveExpression {
    */
   public static class PasswordFunctionClause implements FunctionCall {
     public static enum Type implements RelationalAlgebraEnum {
-      PASSWORD, OLD_PASSWORD
+      PASSWORD, OLD_PASSWORD;
+
+      @Override
+      public String literal() {
+        return name();
+      }
     }
 
     public final PasswordFunctionClause.Type functionName;
@@ -746,7 +778,7 @@ public interface Functions extends PrimitiveExpression {
     @Override
     public String literal() {
       StringBuilder sb = new StringBuilder();
-      sb.append(functionName.name());
+      sb.append(functionName.literal());
       sb.append("(");
       sb.append(functionArg.literal());
       sb.append(")");
@@ -825,7 +857,12 @@ public interface Functions extends PrimitiveExpression {
    */
   public static class LevelInWeightListElement implements Functions {
     public static enum OrderType implements RelationalAlgebraEnum {
-      ASC, DESC, REVERSE
+      ASC, DESC, REVERSE;
+
+      @Override
+      public String literal() {
+        return name();
+      }
     }
 
     public final DecimalLiteral decimalLiteral;
@@ -844,7 +881,7 @@ public interface Functions extends PrimitiveExpression {
       StringBuilder sb = new StringBuilder();
       sb.append(decimalLiteral.literal());
       if (orderType != null) {
-        sb.append(" ").append(orderType.name());
+        sb.append(" ").append(orderType.literal());
       }
       return sb.toString();
     }
@@ -877,10 +914,20 @@ public interface Functions extends PrimitiveExpression {
       COUNT, COUNT_DISTINCT, //
       BIT_AND, BIT_OR, BIT_XOR, STD, STDDEV, STDDEV_POP, STDDEV_SAMP, VAR_POP, VAR_SAMP, VARIANCE, //
       GROUP_CONCAT;
+
+      @Override
+      public String literal() {
+        return name();
+      }
     }
 
     public static enum AggregatorEnum implements RelationalAlgebraEnum {
-      ALL, DISTINCT
+      ALL, DISTINCT;
+
+      @Override
+      public String literal() {
+        return name();
+      }
     }
 
     public final AggregateWindowedFunction.Type type;
@@ -943,17 +990,17 @@ public interface Functions extends PrimitiveExpression {
       case MAX:
       case MIN:
       case SUM:
-        sb.append(type.name());
+        sb.append(type.literal());
         sb.append("(");
         if (aggregator != null) {
-          sb.append(aggregator.name());
+          sb.append(aggregator.literal());
         }
         sb.append(functionArg.literal());
         sb.append(")");
 
         break;
       case COUNT:
-        sb.append(type.name());
+        sb.append(type.literal());
         sb.append("(");
         if (functionArg == null) {
           sb.append("*");
@@ -975,17 +1022,17 @@ public interface Functions extends PrimitiveExpression {
       case STDDEV_POP:
       case STDDEV_SAMP:
       case VAR_POP:
-        sb.append(type.name());
+        sb.append(type.literal());
         sb.append("(");
         sb.append(functionArg.literal());
         sb.append(")");
         Preconditions.checkArgument(functionArg != null);
         break;
       case GROUP_CONCAT:
-        sb.append(type.name());
+        sb.append(type.literal());
         sb.append("(");
         if (aggregator != null) {
-          sb.append(aggregator.name()).append(" ");
+          sb.append(aggregator.literal()).append(" ");
         }
         sb.append(functionArgs.literal());
         if (orderByExpression != null && orderByExpression.size() > 0) {
@@ -1028,15 +1075,6 @@ public interface Functions extends PrimitiveExpression {
     }
 
     @Override
-    public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("FunctionArgs [functionArgs=");
-      builder.append(functionArgs);
-      builder.append("]");
-      return builder.toString();
-    }
-
-    @Override
     public String literal() {
       List<String> literals = Lists.newArrayList();
       for (FunctionArg functionArg : functionArgs) {
@@ -1056,7 +1094,12 @@ public interface Functions extends PrimitiveExpression {
    */
   public static class FunctionArg implements Functions {
     public static enum Type implements RelationalAlgebraEnum {
-      CONSTANT, FULL_COLUMN_NAME, FUNCTION_CALL, EXPRESSION
+      CONSTANT, FULL_COLUMN_NAME, FUNCTION_CALL, EXPRESSION;
+
+      @Override
+      public String literal() {
+        return name();
+      }
     }
 
     public final FunctionArg.Type type;

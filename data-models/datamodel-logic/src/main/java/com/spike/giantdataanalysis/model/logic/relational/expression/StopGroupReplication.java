@@ -8,9 +8,11 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
  * </pre>
  */
 public class StopGroupReplication implements ReplicationStatement {
+  StopGroupReplication() {
+  }
+
   @Override
   public String literal() {
-    StringBuilder sb = new StringBuilder();
-    return sb.toString();
+    return "STOP GROUP_REPLICATION";
   }
 }

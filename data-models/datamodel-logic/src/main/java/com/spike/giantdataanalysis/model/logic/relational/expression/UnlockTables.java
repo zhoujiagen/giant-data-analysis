@@ -8,9 +8,11 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
  * </pre>
  */
 public class UnlockTables implements TransactionStatement {
+  UnlockTables() {
+  }
+
   @Override
   public String literal() {
-    StringBuilder sb = new StringBuilder();
-    return sb.toString();
+    return "UNLOCK TABLES";
   }
 }

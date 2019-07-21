@@ -2,7 +2,9 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
 
 import java.util.List;
 
+import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.UserName;
 
 /**
@@ -16,24 +18,31 @@ import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.U
  */
 public class GrantProxy implements AdministrationStatement {
   public final UserName fromFirst;
-  public final UserName toFirst;
-  public final List<UserName> toOther;
+  public final List<UserName> tos;
   public final Boolean withGrantOption;
 
-  GrantProxy(UserName fromFirst, UserName toFirst, List<UserName> toOther,
-      Boolean withGrantOption) {
+  GrantProxy(UserName fromFirst, List<UserName> tos, Boolean withGrantOption) {
     Preconditions.checkArgument(fromFirst != null);
-    Preconditions.checkArgument(toFirst != null);
+    Preconditions.checkArgument(tos != null && tos.size() > 0);
 
     this.fromFirst = fromFirst;
-    this.toFirst = toFirst;
-    this.toOther = toOther;
+    this.tos = tos;
     this.withGrantOption = withGrantOption;
   }
 
   @Override
   public String literal() {
     StringBuilder sb = new StringBuilder();
+    sb.append("GRANT PROXY ON ").append(fromFirst.literal()).append(" ");
+    sb.append("TO ");
+    List<String> literals = Lists.newArrayList();
+    for (UserName userName : tos) {
+      literals.add(userName.literal());
+    }
+    sb.append(Joiner.on(", ").join(literals)).append(" ");
+    if (Boolean.TRUE.equals(withGrantOption)) {
+      sb.append("WITH GRANT OPTION");
+    }
     return sb.toString();
   }
 }

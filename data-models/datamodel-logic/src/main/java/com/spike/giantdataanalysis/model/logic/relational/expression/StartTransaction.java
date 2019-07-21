@@ -2,6 +2,9 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
 
 import java.util.List;
 
+import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
+
 /**
  * <pre>
  startTransaction
@@ -20,6 +23,13 @@ public class StartTransaction implements TransactionStatement {
   @Override
   public String literal() {
     StringBuilder sb = new StringBuilder();
+    sb.append("START TRANSACTION ");
+    List<String> literals = Lists.newArrayList();
+    for (TransactionModeEnum transactionMode : transactionModes) {
+      literals.add(transactionMode.literal());
+    }
+    sb.append(Joiner.on(", ").join(literals));
+
     return sb.toString();
   }
 }
