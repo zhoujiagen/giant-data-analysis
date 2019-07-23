@@ -181,7 +181,9 @@ public interface CreateTable extends DdlStatement {
         }
         sb.append(Joiner.on(", ").join(literals));
       }
-      sb.append(partitionDefinitions.literal()).append(" ");
+      if (partitionDefinitions != null) {
+        sb.append(partitionDefinitions.literal());
+      }
       return sb.toString();
     }
   }

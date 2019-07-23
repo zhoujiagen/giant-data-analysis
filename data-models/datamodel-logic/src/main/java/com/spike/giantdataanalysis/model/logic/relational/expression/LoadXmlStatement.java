@@ -82,7 +82,8 @@ public class LoadXmlStatement implements DmlStatement {
       sb.append("ROWS IDENTIFIED BY <").append(tag).append("> ");
     }
     if (decimalLiteral != null) {
-      sb.append("IGNORE ").append(decimalLiteral.literal()).append(linesFormat.literal()).append(" ");
+      sb.append("IGNORE ").append(decimalLiteral.literal()).append(linesFormat.literal())
+          .append(" ");
     }
 
     if (CollectionUtils.isNotEmpty(assignmentFields)) {

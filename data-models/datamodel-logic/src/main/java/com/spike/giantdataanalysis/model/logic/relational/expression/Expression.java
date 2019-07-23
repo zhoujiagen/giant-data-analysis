@@ -202,9 +202,9 @@ public interface Expression extends RelationalAlgebraExpression {
     @Override
     public String literal() {
       StringBuilder sb = new StringBuilder();
-      sb.append(left);
+      sb.append(left.literal());
       sb.append(" ").append(comparisonOperator.symbol);
-      sb.append(" ").append(right);
+      sb.append(" ").append(right.literal());
       return sb.toString();
     }
 
@@ -397,7 +397,7 @@ public interface Expression extends RelationalAlgebraExpression {
       if (localId != null) {
         sb.append(localId).append(" := ");
       }
-      sb.append(expressionAtom);
+      sb.append(expressionAtom.literal());
       return sb.toString();
     }
 

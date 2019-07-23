@@ -120,7 +120,8 @@ public class LoadDataStatement implements DmlStatement {
       sb.append(Joiner.on(" ").join(literals));
     }
     if (decimalLiteral != null) {
-      sb.append("IGNORE ").append(decimalLiteral.literal()).append(linesFormat.literal()).append(" ");
+      sb.append("IGNORE ").append(decimalLiteral.literal()).append(linesFormat.literal())
+          .append(" ");
     }
     if (CollectionUtils.isNotEmpty(assignmentFields)) {
       sb.append("(");

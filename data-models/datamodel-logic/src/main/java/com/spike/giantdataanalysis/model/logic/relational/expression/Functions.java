@@ -2,6 +2,8 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
 
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
+
 import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
@@ -934,12 +936,12 @@ public interface Functions extends PrimitiveExpression {
     public final AggregateWindowedFunction.AggregatorEnum aggregator;
     public final FunctionArg functionArg;
     public final FunctionArgs functionArgs;
-    public final List<OrderByExpression> orderByExpression;
+    public final List<OrderByExpression> orderByExpressions;
     public final String separator;
 
     AggregateWindowedFunction(AggregateWindowedFunction.Type type,
         AggregateWindowedFunction.AggregatorEnum aggregator, FunctionArg functionArg,
-        FunctionArgs functionArgs, List<OrderByExpression> orderByExpression, String separator) {
+        FunctionArgs functionArgs, List<OrderByExpression> orderByExpressions, String separator) {
       Preconditions.checkArgument(type != null);
 
       switch (type) {
@@ -977,7 +979,7 @@ public interface Functions extends PrimitiveExpression {
       this.aggregator = aggregator;
       this.functionArg = functionArg;
       this.functionArgs = functionArgs;
-      this.orderByExpression = orderByExpression;
+      this.orderByExpressions = orderByExpressions;
       this.separator = separator;
     }
 
@@ -1035,10 +1037,10 @@ public interface Functions extends PrimitiveExpression {
           sb.append(aggregator.literal()).append(" ");
         }
         sb.append(functionArgs.literal());
-        if (orderByExpression != null && orderByExpression.size() > 0) {
+        if (CollectionUtils.isNotEmpty(orderByExpressions)) {
           sb.append("ORDER BY ");
           List<String> literals = Lists.newArrayList();
-          for (OrderByExpression e : orderByExpression) {
+          for (OrderByExpression e : orderByExpressions) {
             literals.add(e.literal());
           }
           sb.append(Joiner.on(", ").join(literals));

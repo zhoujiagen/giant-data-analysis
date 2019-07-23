@@ -606,7 +606,8 @@ public interface DmlStatement extends SqlStatement {
     @Override
     public String literal() {
       StringBuilder sb = new StringBuilder();
-      sb.append(type.literal()).append(" OUTER JOIN ").append(tableSourceItem.literal()).append(" ");
+      sb.append(type.literal()).append(" OUTER JOIN ").append(tableSourceItem.literal())
+          .append(" ");
       if (expression != null) {
         sb.append("ON ").append(expression.literal());
       } else {

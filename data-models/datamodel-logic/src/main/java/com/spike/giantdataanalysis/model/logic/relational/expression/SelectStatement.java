@@ -222,23 +222,17 @@ public interface SelectStatement extends DmlStatement {
    */
   public static class QueryExpression implements PrimitiveExpression {
     public final QuerySpecification querySpecification;
-    public final QueryExpression queryExpression;
 
-    QueryExpression(QuerySpecification querySpecification, QueryExpression queryExpression) {
-      Preconditions.checkArgument(!(querySpecification == null && queryExpression == null));
+    QueryExpression(QuerySpecification querySpecification) {
+      Preconditions.checkArgument(querySpecification != null);
 
       this.querySpecification = querySpecification;
-      this.queryExpression = queryExpression;
     }
 
     @Override
     public String literal() {
       StringBuilder sb = new StringBuilder();
-      if (querySpecification != null) {
-        sb.append("(").append(querySpecification.literal()).append(")");
-      } else {
-        sb.append("(").append(queryExpression.literal()).append(")");
-      }
+      sb.append("(").append(querySpecification.literal()).append(")");
       return sb.toString();
     }
 
@@ -684,13 +678,13 @@ public interface SelectStatement extends DmlStatement {
 
     public final String filename;
     public final CharsetName charsetName;
-    public final TieldsFormatType fieldsFormat;
+    public final SelectIntoTextFile.TieldsFormatType fieldsFormat;
     public final List<SelectFieldsInto> selectFieldsIntos;
     public final List<SelectLinesInto> selectLinesIntos;
 
     SelectIntoTextFile(String filename, //
         CharsetName charsetName, //
-        TieldsFormatType fieldsFormat, List<SelectFieldsInto> selectFieldsIntos, //
+        SelectIntoTextFile.TieldsFormatType fieldsFormat, List<SelectFieldsInto> selectFieldsIntos, //
         List<SelectLinesInto> selectLinesIntos//
     ) {
       Preconditions.checkArgument(filename != null);

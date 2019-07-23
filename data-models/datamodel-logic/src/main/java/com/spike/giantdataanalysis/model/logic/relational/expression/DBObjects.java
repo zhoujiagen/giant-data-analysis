@@ -35,13 +35,13 @@ public interface DBObjects extends PrimitiveExpression {
     @Override
     public String literal() {
       StringBuilder sb = new StringBuilder();
-      sb.append(uids.get(0)).append(" ");
+      sb.append(uids.get(0).literal()).append(" ");
       if (dotId != null) {
         sb.append(dotId);
       }
       if (uids.size() > 1) {
         sb.append(".");
-        sb.append(uids.get(1));
+        sb.append(uids.get(1).literal());
       }
       return sb.toString();
     }
@@ -87,7 +87,7 @@ public interface DBObjects extends PrimitiveExpression {
     @Override
     public String literal() {
       StringBuilder sb = new StringBuilder();
-      sb.append(uid).append(" ");
+      sb.append(uid.literal()).append(" ");
       if (CollectionUtils.isNotEmpty(dottedIds)) {
         List<String> literals = Lists.newArrayList();
         for (DottedId dottedId : dottedIds) {

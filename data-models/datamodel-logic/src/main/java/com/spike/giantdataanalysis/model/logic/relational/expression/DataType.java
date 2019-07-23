@@ -8,7 +8,6 @@ import com.spike.giantdataanalysis.model.logic.relational.core.RelationalAlgebra
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.CharsetName;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.CollationName;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Literals.DecimalLiteral;
-import com.spike.giantdataanalysis.model.logic.relational.expression.SimpleIdSets.CharsetNameBaseEnum;
 
 /**
  * <pre>
@@ -537,7 +536,7 @@ public interface DataType extends PrimitiveExpression {
 
     public final ConvertedDataType.Type type;
     public final LengthOneDimension lengthOneDimension;
-    public final CharsetNameBaseEnum charsetName;
+    public final CharsetName charsetName;
     public final LengthTwoDimension lengthTwoDimension;
     public final Boolean signed;
 
@@ -554,7 +553,7 @@ public interface DataType extends PrimitiveExpression {
 
     /** Type.CHAR */
     ConvertedDataType(ConvertedDataType.Type type, LengthOneDimension lengthOneDimension,
-        CharsetNameBaseEnum charsetName) {
+        CharsetName charsetName) {
       Preconditions.checkArgument(Type.CHAR.equals(type));
 
       this.type = type;

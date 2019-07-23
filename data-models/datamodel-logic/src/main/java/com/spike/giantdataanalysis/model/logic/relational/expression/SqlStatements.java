@@ -3,9 +3,9 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
 import java.util.List;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
 
 /**
  * <pre>
@@ -24,11 +24,16 @@ public class SqlStatements implements RelationalAlgebraExpression {
 
   @Override
   public String literal() {
+    StringBuilder sb = new StringBuilder();
+
     if (CollectionUtils.isNotEmpty(sqlStatements)) {
-      return Joiner.on(System.lineSeparator()).join(sqlStatements);
-    } else {
-      return StringUtils.EMPTY;
+      List<String> literals = Lists.newArrayList();
+      for (SqlStatement sqlStatement : sqlStatements) {
+        literals.add(sqlStatement.literal() + ";"); // REMARK ;
+      }
+      sb.append(Joiner.on(System.lineSeparator()).join(literals));
     }
+    return sb.toString();
   }
 
 }

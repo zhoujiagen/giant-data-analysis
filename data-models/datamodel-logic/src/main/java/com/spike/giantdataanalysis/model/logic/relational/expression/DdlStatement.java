@@ -93,10 +93,13 @@ public interface DdlStatement extends SqlStatement {
    * </pre>
    */
   public static class IndexAlgorithmOrLock implements PrimitiveExpression {
-    public final IndexAlgTypeEnum algType;
-    public final LockTypeEnum lockType;
+    public final DdlStatement.IndexAlgTypeEnum algType;
+    public final DdlStatement.LockTypeEnum lockType;
 
-    IndexAlgorithmOrLock(IndexAlgTypeEnum algType, LockTypeEnum lockType) {
+    IndexAlgorithmOrLock(DdlStatement.IndexAlgTypeEnum algType,
+        DdlStatement.LockTypeEnum lockType) {
+      Preconditions.checkArgument(!(algType == null && lockType == null));
+
       this.algType = algType;
       this.lockType = lockType;
     }
@@ -1107,9 +1110,9 @@ public interface DdlStatement extends SqlStatement {
       }
     }
 
-    public final StoragevalEnum storageval;
+    public final StorageColumnConstraint.StoragevalEnum storageval;
 
-    StorageColumnConstraint(StoragevalEnum storageval) {
+    StorageColumnConstraint(StorageColumnConstraint.StoragevalEnum storageval) {
       Preconditions.checkArgument(storageval != null);
 
       this.storageval = storageval;
@@ -1168,9 +1171,10 @@ public interface DdlStatement extends SqlStatement {
 
     public final Boolean always;
     public final Expression expression;
-    public final Type type;
+    public final GeneratedColumnConstraint.Type type;
 
-    GeneratedColumnConstraint(Boolean always, Expression expression, Type type) {
+    GeneratedColumnConstraint(Boolean always, Expression expression,
+        GeneratedColumnConstraint.Type type) {
       Preconditions.checkArgument(expression != null);
 
       this.always = always;
@@ -1660,13 +1664,11 @@ public interface DdlStatement extends SqlStatement {
   }
 
   public static class TableOptionEngine implements TableOption {
-    public final Boolean equal;
     public final EngineName engineName;
 
-    TableOptionEngine(Boolean equal, EngineName engineName) {
+    TableOptionEngine(EngineName engineName) {
       Preconditions.checkArgument(engineName != null);
 
-      this.equal = equal;
       this.engineName = engineName;
     }
 
@@ -3412,14 +3414,14 @@ public interface DdlStatement extends SqlStatement {
   }
 
   public static class AlterByAddCheckTableConstraint implements AlterSpecification {
-    public final Boolean constant;
+    public final Boolean constraint;
     public final Uid name;
     public final Expression expression;
 
-    AlterByAddCheckTableConstraint(Boolean constant, Uid name, Expression expression) {
+    AlterByAddCheckTableConstraint(Boolean constraint, Uid name, Expression expression) {
       Preconditions.checkArgument(expression != null);
 
-      this.constant = constant;
+      this.constraint = constraint;
       this.name = name;
       this.expression = expression;
     }
@@ -3428,7 +3430,7 @@ public interface DdlStatement extends SqlStatement {
     public String literal() {
       StringBuilder sb = new StringBuilder();
       sb.append("ADD ");
-      if (Boolean.TRUE.equals(constant)) {
+      if (Boolean.TRUE.equals(constraint)) {
         sb.append("CONSTRAINT ");
         if (name != null) {
           sb.append(name.literal()).append(" ");

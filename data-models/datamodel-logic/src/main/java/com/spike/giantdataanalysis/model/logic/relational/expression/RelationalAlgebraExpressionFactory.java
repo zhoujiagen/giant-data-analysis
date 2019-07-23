@@ -8,31 +8,20 @@ import com.spike.giantdataanalysis.model.logic.relational.core.RelationalCompari
 import com.spike.giantdataanalysis.model.logic.relational.core.RelationalLogicalOperatorEnum;
 import com.spike.giantdataanalysis.model.logic.relational.core.RelationalMathOperatorEnum;
 import com.spike.giantdataanalysis.model.logic.relational.core.RelationalUnaryOperatorEnum;
-import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.AdminTableActionOptionEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.ChannelFlushOption;
-import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.CheckTableOptionEnum;
-import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.ConnectionFormatEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.CurrentSchemaPriviLevel;
 import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.DefiniteFullTablePrivLevel;
 import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.DefiniteSchemaPrivLevel;
 import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.DefiniteTablePrivLevel;
-import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.FlushFormatEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.FlushOption;
-import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.FlushTableOptionEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.GlobalPrivLevel;
 import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.HashAuthOption;
 import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.LoadedTableIndexes;
 import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.PasswordAuthOption;
 import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.PrivelegeClause;
-import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.PrivilegeEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.PrivilegeLevel;
-import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.PrivilegeObjectEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.RenameUserClause;
-import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.ShowCommonEntityEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.ShowFilter;
-import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.ShowGlobalInfoClauseEnum;
-import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.ShowProfileTypeEnum;
-import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.ShowSchemaEntityEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.SimpleAuthOption;
 import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.SimpleFlushOption;
 import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.StringAuthOption;
@@ -40,19 +29,14 @@ import com.spike.giantdataanalysis.model.logic.relational.expression.Administrat
 import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.TableIndexes;
 import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.TlsOption;
 import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.UserAuthOption;
-import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.UserLockOptionEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.UserPasswordOption;
 import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.UserResourceOption;
 import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.UserSpecification;
 import com.spike.giantdataanalysis.model.logic.relational.expression.AdministrationStatement.VariableClause;
 import com.spike.giantdataanalysis.model.logic.relational.expression.AlterDatabase.AlterSimpleDatabase;
 import com.spike.giantdataanalysis.model.logic.relational.expression.AlterDatabase.AlterUpgradeName;
-import com.spike.giantdataanalysis.model.logic.relational.expression.AlterTablespace.ObjectActionEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.AlterUser.AlterUserMysqlV56;
 import com.spike.giantdataanalysis.model.logic.relational.expression.AlterUser.AlterUserMysqlV57;
-import com.spike.giantdataanalysis.model.logic.relational.expression.AlterView.AlgTypeEnum;
-import com.spike.giantdataanalysis.model.logic.relational.expression.AlterView.CheckOptEnum;
-import com.spike.giantdataanalysis.model.logic.relational.expression.AlterView.SecContextEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.CommonExpressons.CurrentTimestamp;
 import com.spike.giantdataanalysis.model.logic.relational.expression.CommonExpressons.DefaultValue;
 import com.spike.giantdataanalysis.model.logic.relational.expression.CommonExpressons.ExpressionOrDefault;
@@ -70,7 +54,6 @@ import com.spike.giantdataanalysis.model.logic.relational.expression.CompoundSta
 import com.spike.giantdataanalysis.model.logic.relational.expression.CompoundStatement.DeclareCondition;
 import com.spike.giantdataanalysis.model.logic.relational.expression.CompoundStatement.DeclareCursor;
 import com.spike.giantdataanalysis.model.logic.relational.expression.CompoundStatement.DeclareHandler;
-import com.spike.giantdataanalysis.model.logic.relational.expression.CompoundStatement.DeclareHandler.HandlerActionEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.CompoundStatement.DeclareVariable;
 import com.spike.giantdataanalysis.model.logic.relational.expression.CompoundStatement.ElifAlternative;
 import com.spike.giantdataanalysis.model.logic.relational.expression.CompoundStatement.HandlerConditionCode;
@@ -85,10 +68,6 @@ import com.spike.giantdataanalysis.model.logic.relational.expression.CompoundSta
 import com.spike.giantdataanalysis.model.logic.relational.expression.CreateTable.ColumnCreateTable;
 import com.spike.giantdataanalysis.model.logic.relational.expression.CreateTable.CopyCreateTable;
 import com.spike.giantdataanalysis.model.logic.relational.expression.CreateTable.QueryCreateTable;
-import com.spike.giantdataanalysis.model.logic.relational.expression.CreateTable.QueryCreateTable.KeyViolateEnum;
-import com.spike.giantdataanalysis.model.logic.relational.expression.CreateTrigger.TriggerEventEnum;
-import com.spike.giantdataanalysis.model.logic.relational.expression.CreateTrigger.TriggerPlaceEnum;
-import com.spike.giantdataanalysis.model.logic.relational.expression.CreateTrigger.TriggerTimeEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.CreateUser.CreateUserMysqlV56;
 import com.spike.giantdataanalysis.model.logic.relational.expression.CreateUser.CreateUserMysqlV57;
 import com.spike.giantdataanalysis.model.logic.relational.expression.CursorStatement.CloseCursor;
@@ -123,28 +102,18 @@ import com.spike.giantdataanalysis.model.logic.relational.expression.DataType.Si
 import com.spike.giantdataanalysis.model.logic.relational.expression.DataType.SpatialDataType;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DataType.StringDataType;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DdlStatement.*;
-import com.spike.giantdataanalysis.model.logic.relational.expression.DdlStatement.AlterByExchangePartition.ValidationFormatEnum;
-import com.spike.giantdataanalysis.model.logic.relational.expression.DdlStatement.AlterByRename.RenameFormatEnum;
-import com.spike.giantdataanalysis.model.logic.relational.expression.DdlStatement.GeneratedColumnConstraint.Type;
-import com.spike.giantdataanalysis.model.logic.relational.expression.DdlStatement.StorageColumnConstraint.StoragevalEnum;
-import com.spike.giantdataanalysis.model.logic.relational.expression.DdlStatement.TableOptionInsertMethod.InsertMethodEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DeleteStatement.MultipleDeleteStatement;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DeleteStatement.SingleDeleteStatement;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.AssignmentField;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.AtomTableItem;
-import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.FieldsFormatEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.IndexHint;
-import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.IndexHintTypeEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.InnerJoin;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.InsertStatementValue;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.JoinPart;
-import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.LinesFormatEnum;
-import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.LockClauseEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.NaturalJoin;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.OrderByClause;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.OrderByExpression;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.OuterJoin;
-import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.OuterJoinType;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.StraightJoin;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.SubqueryTableItem;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.TableSource;
@@ -154,7 +123,6 @@ import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatemen
 import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.TableSources;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.TableSourcesItem;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.UpdatedElement;
-import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.ViolationEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Expression.BetweenPredicate;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Expression.BinaryComparasionPredicate;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Expression.ExpressionAtom;
@@ -195,17 +163,17 @@ import com.spike.giantdataanalysis.model.logic.relational.expression.Functions.L
 import com.spike.giantdataanalysis.model.logic.relational.expression.Functions.LevelsInWeightString;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Functions.PasswordFunctionClause;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Functions.PositionFunctionCall;
-import com.spike.giantdataanalysis.model.logic.relational.expression.Functions.ScalarFunctionNameEnum;
+import com.spike.giantdataanalysis.model.logic.relational.expression.Functions.ScalarFunctionCall;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Functions.SimpleFunctionCall;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Functions.SubstrFunctionCall;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Functions.TrimFunctionCall;
+import com.spike.giantdataanalysis.model.logic.relational.expression.Functions.UdfFunctionCall;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Functions.ValuesFunctionCall;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Functions.WeightFunctionCall;
 import com.spike.giantdataanalysis.model.logic.relational.expression.HandlerStatement.HandlerCloseStatement;
 import com.spike.giantdataanalysis.model.logic.relational.expression.HandlerStatement.HandlerOpenStatement;
 import com.spike.giantdataanalysis.model.logic.relational.expression.HandlerStatement.HandlerReadIndexStatement;
 import com.spike.giantdataanalysis.model.logic.relational.expression.HandlerStatement.HandlerReadStatement;
-import com.spike.giantdataanalysis.model.logic.relational.expression.InsertStatement.PriorityType;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Literals.BooleanLiteral;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Literals.Constant;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Literals.DecimalLiteral;
@@ -213,11 +181,8 @@ import com.spike.giantdataanalysis.model.logic.relational.expression.Literals.Fi
 import com.spike.giantdataanalysis.model.logic.relational.expression.Literals.HexadecimalLiteral;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Literals.NullNotnull;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Literals.StringLiteral;
-import com.spike.giantdataanalysis.model.logic.relational.expression.ReplaceStatement.PriorityEnum;
-import com.spike.giantdataanalysis.model.logic.relational.expression.ReplicationStatement.BoolMasterOptionEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.ReplicationStatement.ChannelOption;
 import com.spike.giantdataanalysis.model.logic.relational.expression.ReplicationStatement.ConnectionOption;
-import com.spike.giantdataanalysis.model.logic.relational.expression.ReplicationStatement.DecimalMasterOptionEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.ReplicationStatement.DoDbReplication;
 import com.spike.giantdataanalysis.model.logic.relational.expression.ReplicationStatement.DoTableReplication;
 import com.spike.giantdataanalysis.model.logic.relational.expression.ReplicationStatement.GtidsUntilOption;
@@ -235,9 +200,7 @@ import com.spike.giantdataanalysis.model.logic.relational.expression.Replication
 import com.spike.giantdataanalysis.model.logic.relational.expression.ReplicationStatement.ReplicationFilter;
 import com.spike.giantdataanalysis.model.logic.relational.expression.ReplicationStatement.RewriteDbReplication;
 import com.spike.giantdataanalysis.model.logic.relational.expression.ReplicationStatement.SqlGapsUntilOption;
-import com.spike.giantdataanalysis.model.logic.relational.expression.ReplicationStatement.StringMasterOptionEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.ReplicationStatement.TablePair;
-import com.spike.giantdataanalysis.model.logic.relational.expression.ReplicationStatement.ThreadTypeEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.ReplicationStatement.UntilOption;
 import com.spike.giantdataanalysis.model.logic.relational.expression.ReplicationStatement.WildDoTableReplication;
 import com.spike.giantdataanalysis.model.logic.relational.expression.ReplicationStatement.WildIgnoreTableReplication;
@@ -245,7 +208,6 @@ import com.spike.giantdataanalysis.model.logic.relational.expression.RevokeState
 import com.spike.giantdataanalysis.model.logic.relational.expression.RevokeStatement.ShortRevoke;
 import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.FromClause;
 import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.GroupByItem;
-import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.GroupByItem.OrderType;
 import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.LimitClause;
 import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.LimitClauseAtom;
 import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.ParenthesisSelect;
@@ -262,17 +224,14 @@ import com.spike.giantdataanalysis.model.logic.relational.expression.SelectState
 import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.SelectIntoDumpFile;
 import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.SelectIntoExpression;
 import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.SelectIntoTextFile;
-import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.SelectIntoTextFile.TieldsFormatType;
 import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.SelectIntoVariables;
 import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.SelectLinesInto;
-import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.SelectSpecEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.SelectStarElement;
 import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.SimpleSelect;
 import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.UnionParenthesis;
 import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.UnionParenthesisSelect;
 import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.UnionSelect;
 import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.UnionStatement;
-import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.UnionTypeEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.SetStatement.SetCharset;
 import com.spike.giantdataanalysis.model.logic.relational.expression.SetStatement.SetNames;
 import com.spike.giantdataanalysis.model.logic.relational.expression.SetStatement.SetNewValueInsideTrigger;
@@ -295,30 +254,17 @@ import com.spike.giantdataanalysis.model.logic.relational.expression.ShowStateme
 import com.spike.giantdataanalysis.model.logic.relational.expression.ShowStatement.ShowProfile;
 import com.spike.giantdataanalysis.model.logic.relational.expression.ShowStatement.ShowRoutine;
 import com.spike.giantdataanalysis.model.logic.relational.expression.ShowStatement.ShowSchemaFilter;
-import com.spike.giantdataanalysis.model.logic.relational.expression.ShowStatement.ShowSchemaFilter.SchemaFormatEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.ShowStatement.ShowSlaveStatus;
-import com.spike.giantdataanalysis.model.logic.relational.expression.SimpleIdSets.CharsetNameBaseEnum;
-import com.spike.giantdataanalysis.model.logic.relational.expression.SimpleIdSets.DataTypeBaseEnum;
-import com.spike.giantdataanalysis.model.logic.relational.expression.SimpleIdSets.FunctionNameBaseEnum;
-import com.spike.giantdataanalysis.model.logic.relational.expression.SimpleIdSets.IntervalTypeBaseEnum;
-import com.spike.giantdataanalysis.model.logic.relational.expression.SimpleIdSets.KeywordsCanBeIdEnum;
-import com.spike.giantdataanalysis.model.logic.relational.expression.SimpleIdSets.PrivilegesBaseEnum;
-import com.spike.giantdataanalysis.model.logic.relational.expression.SimpleIdSets.TransactionLevelBaseEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.TransactionStatement.LockAction;
 import com.spike.giantdataanalysis.model.logic.relational.expression.TransactionStatement.LockTableElement;
 import com.spike.giantdataanalysis.model.logic.relational.expression.TransactionStatement.SetAutocommitStatement;
 import com.spike.giantdataanalysis.model.logic.relational.expression.TransactionStatement.SetTransactionStatement;
-import com.spike.giantdataanalysis.model.logic.relational.expression.TransactionStatement.SetTransactionStatement.TransactionContextEnum;
-import com.spike.giantdataanalysis.model.logic.relational.expression.TransactionStatement.TransactionLevelEnum;
-import com.spike.giantdataanalysis.model.logic.relational.expression.TransactionStatement.TransactionModeEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.TransactionStatement.TransactionOption;
 import com.spike.giantdataanalysis.model.logic.relational.expression.UpdateStatement.MultipleUpdateStatement;
 import com.spike.giantdataanalysis.model.logic.relational.expression.UpdateStatement.SingleUpdateStatement;
 import com.spike.giantdataanalysis.model.logic.relational.expression.UtilityStatement.DescribeConnection;
 import com.spike.giantdataanalysis.model.logic.relational.expression.UtilityStatement.DescribeObjectClause;
 import com.spike.giantdataanalysis.model.logic.relational.expression.UtilityStatement.DescribeStatements;
-import com.spike.giantdataanalysis.model.logic.relational.expression.XaStartTransaction.XaActionEnum;
-import com.spike.giantdataanalysis.model.logic.relational.expression.XaStartTransaction.XaStartEnum;
 import com.spike.giantdataanalysis.model.logic.relational.model.RelationalAttribute;
 import com.spike.giantdataanalysis.model.logic.relational.model.RelationalTuples;
 
@@ -394,9 +340,9 @@ public abstract class RelationalAlgebraExpressionFactory {
         notPreserve, enableType, comment, routineBody);
   }
 
-  public static CreateIndex makeCreateIndex(IntimeActionEnum intimeAction,
-      IndexCategoryEnum indexCategory, Uid uid, IndexTypeEnum indexType, TableName tableName,
-      IndexColumnNames indexColumnNames, List<IndexOption> indexOptions,
+  public static CreateIndex makeCreateIndex(DdlStatement.IntimeActionEnum intimeAction,
+      DdlStatement.IndexCategoryEnum indexCategory, Uid uid, DdlStatement.IndexTypeEnum indexType,
+      TableName tableName, IndexColumnNames indexColumnNames, List<IndexOption> indexOptions,
       List<IndexAlgorithmOrLock> algorithmOrLocks) {
     return new CreateIndex(intimeAction, indexCategory, uid, indexType, tableName, indexColumnNames,
         indexOptions, algorithmOrLocks);
@@ -435,7 +381,7 @@ public abstract class RelationalAlgebraExpressionFactory {
 
   public static QueryCreateTable makeQueryCreateTable(Boolean temporary, IfNotExists ifNotExists,
       TableName tableName, CreateDefinitions createDefinitions, List<TableOption> tableOptions,
-      PartitionDefinitions partitionDefinitions, KeyViolateEnum keyViolate,
+      PartitionDefinitions partitionDefinitions, QueryCreateTable.KeyViolateEnum keyViolate,
       SelectStatement selectStatement) {
     return new QueryCreateTable(temporary, ifNotExists, tableName, createDefinitions, tableOptions,
         partitionDefinitions, keyViolate, selectStatement);
@@ -462,8 +408,9 @@ public abstract class RelationalAlgebraExpressionFactory {
   }
 
   public static CreateTrigger makeCreateTrigger(OwnerStatement ownerStatement, FullId thisTrigger,
-      TriggerTimeEnum triggerTime, TriggerEventEnum triggerEvent, TableName tableName,
-      TriggerPlaceEnum triggerPlace, FullId otherTrigger, RoutineBody routineBody) {
+      CreateTrigger.TriggerTimeEnum triggerTime, CreateTrigger.TriggerEventEnum triggerEvent,
+      TableName tableName, CreateTrigger.TriggerPlaceEnum triggerPlace, FullId otherTrigger,
+      RoutineBody routineBody) {
     return new CreateTrigger(ownerStatement, thisTrigger, triggerTime, triggerEvent, tableName,
         triggerPlace, otherTrigger, routineBody);
   }
@@ -508,16 +455,16 @@ public abstract class RelationalAlgebraExpressionFactory {
   }
 
   public static IntervalType makeIntervalType(IntervalType.Type type,
-      IntervalTypeBaseEnum intervalTypeBase) {
+      SimpleIdSets.IntervalTypeBaseEnum intervalTypeBase) {
     return new IntervalType(type, intervalTypeBase);
   }
 
   public static EnableTypeEnum makeEnableType(String name) {
-    return EnableTypeEnum.valueOf(name);
+    return EnableTypeEnum.valueOf(name.toUpperCase());
   }
 
   public static IndexTypeEnum makeIndexType(String name) {
-    return IndexTypeEnum.valueOf(name);
+    return IndexTypeEnum.valueOf(name.toUpperCase());
   }
 
   public static IndexOption makeIndexOption(IndexOption.Type type, FileSizeLiteral fileSizeLiteral,
@@ -573,6 +520,10 @@ public abstract class RelationalAlgebraExpressionFactory {
     return new ColumnDefinition(dataType, columnConstraints);
   }
 
+  public static NullColumnConstraint makeNullColumnConstraint(NullNotnull nullNotnull) {
+    return new NullColumnConstraint(nullNotnull);
+  }
+
   public static DefaultColumnConstraint makeDefaultColumnConstraint(DefaultValue defaultValue) {
     return new DefaultColumnConstraint(defaultValue);
   }
@@ -599,8 +550,14 @@ public abstract class RelationalAlgebraExpressionFactory {
     return new FormatColumnConstraint(colformatEnum);
   }
 
-  public static StorageColumnConstraint makeStorageColumnConstraint(StoragevalEnum storageval) {
+  public static StorageColumnConstraint
+      makeStorageColumnConstraint(StorageColumnConstraint.StoragevalEnum storageval) {
     return new StorageColumnConstraint(storageval);
+  }
+
+  public static ReferenceColumnConstraint
+      makeReferenceColumnConstraint(ReferenceDefinition referenceDefinition) {
+    return new ReferenceColumnConstraint(referenceDefinition);
   }
 
   public static CollateColumnConstraint makeCollateColumnConstraint(CollationName collationName) {
@@ -608,7 +565,7 @@ public abstract class RelationalAlgebraExpressionFactory {
   }
 
   public static GeneratedColumnConstraint makeGeneratedColumnConstraint(Boolean always,
-      Expression expression, Type type) {
+      Expression expression, GeneratedColumnConstraint.Type type) {
     return new GeneratedColumnConstraint(always, expression, type);
   }
 
@@ -617,14 +574,14 @@ public abstract class RelationalAlgebraExpressionFactory {
   }
 
   public static PrimaryKeyTableConstraint makePrimaryKeyTableConstraint(Boolean constraint,
-      Uid name, Uid index, IndexTypeEnum indexType, IndexColumnNames indexColumnNames,
+      Uid name, Uid index, DdlStatement.IndexTypeEnum indexType, IndexColumnNames indexColumnNames,
       List<IndexOption> indexOptions) {
     return new PrimaryKeyTableConstraint(constraint, name, index, indexType, indexColumnNames,
         indexOptions);
   }
 
   public static UniqueKeyTableConstraint makeUniqueKeyTableConstraint(Boolean constraint, Uid name,
-      IndexFormatEnum indexFormat, Uid index, IndexTypeEnum indexType,
+      DdlStatement.IndexFormatEnum indexFormat, Uid index, DdlStatement.IndexTypeEnum indexType,
       IndexColumnNames indexColumnNames, List<IndexOption> indexOptions) {
     return new UniqueKeyTableConstraint(constraint, name, indexFormat, index, indexType,
         indexColumnNames, indexOptions);
@@ -654,23 +611,23 @@ public abstract class RelationalAlgebraExpressionFactory {
   }
 
   public static ReferenceControlTypeEnum makeReferenceControlType(String name) {
-    return ReferenceControlTypeEnum.valueOf(name);
+    return ReferenceControlTypeEnum.valueOf(name.toUpperCase());
   }
 
-  public static SimpleIndexDeclaration makeSimpleIndexDeclaration(IndexFormatEnum indexFormat,
-      Uid uid, IndexTypeEnum indexType, IndexColumnNames indexColumnNames,
-      List<IndexOption> indexOptions) {
+  public static SimpleIndexDeclaration makeSimpleIndexDeclaration(
+      DdlStatement.IndexFormatEnum indexFormat, Uid uid, IndexTypeEnum indexType,
+      IndexColumnNames indexColumnNames, List<IndexOption> indexOptions) {
     return new SimpleIndexDeclaration(indexFormat, uid, indexType, indexColumnNames, indexOptions);
   }
 
   public static SpecialIndexDeclaration makeSpecialIndexDeclaration(
-      SpecialIndexDeclaration.Type type, IndexFormatEnum indexFormat, Uid uid,
+      SpecialIndexDeclaration.Type type, DdlStatement.IndexFormatEnum indexFormat, Uid uid,
       IndexColumnNames indexColumnNames, List<IndexOption> indexOptions) {
     return new SpecialIndexDeclaration(type, indexFormat, uid, indexColumnNames, indexOptions);
   }
 
-  public static TableOptionEngine makeTableOptionEngine(Boolean equal, EngineName engineName) {
-    return new TableOptionEngine(equal, engineName);
+  public static TableOptionEngine makeTableOptionEngine(EngineName engineName) {
+    return new TableOptionEngine(engineName);
   }
 
   public static TableOptionAutoIncrement
@@ -688,7 +645,7 @@ public abstract class RelationalAlgebraExpressionFactory {
   }
 
   public static TableOptionChecksum makeTableOptionChecksum(TableOptionChecksum.Type type,
-      BoolValueEnum boolValue) {
+      DdlStatement.BoolValueEnum boolValue) {
     return new TableOptionChecksum(type, boolValue);
   }
 
@@ -713,7 +670,7 @@ public abstract class RelationalAlgebraExpressionFactory {
     return new TableOptionDataDirectory(stringLiteral);
   }
 
-  public static TableOptionDelay makeTableOptionDelay(BoolValueEnum boolValue) {
+  public static TableOptionDelay makeTableOptionDelay(DdlStatement.BoolValueEnum boolValue) {
     return new TableOptionDelay(boolValue);
   }
 
@@ -725,7 +682,8 @@ public abstract class RelationalAlgebraExpressionFactory {
     return new TableOptionIndexDirectory(stringLiteral);
   }
 
-  public static TableOptionInsertMethod makeTableOptionInsertMethod(InsertMethodEnum insertMethod) {
+  public static TableOptionInsertMethod
+      makeTableOptionInsertMethod(TableOptionInsertMethod.InsertMethodEnum insertMethod) {
     return new TableOptionInsertMethod(insertMethod);
   }
 
@@ -756,11 +714,12 @@ public abstract class RelationalAlgebraExpressionFactory {
   }
 
   public static TableOptionRecalculation
-      makeTableOptionRecalculation(ExtBoolValueEnum extBoolValue) {
+      makeTableOptionRecalculation(DdlStatement.ExtBoolValueEnum extBoolValue) {
     return new TableOptionRecalculation(extBoolValue);
   }
 
-  public static TableOptionPersistent makeTableOptionPersistent(ExtBoolValueEnum extBoolValue) {
+  public static TableOptionPersistent
+      makeTableOptionPersistent(DdlStatement.ExtBoolValueEnum extBoolValue) {
     return new TableOptionPersistent(extBoolValue);
   }
 
@@ -769,7 +728,7 @@ public abstract class RelationalAlgebraExpressionFactory {
   }
 
   public static TableOptionTablespace makeTableOptionTablespace(Uid uid,
-      TablespaceStorageEnum tablespaceStorage) {
+      DdlStatement.TablespaceStorageEnum tablespaceStorage) {
     return new TableOptionTablespace(uid, tablespaceStorage);
   }
 
@@ -778,7 +737,7 @@ public abstract class RelationalAlgebraExpressionFactory {
   }
 
   public static TablespaceStorageEnum makeTablespaceStorage(String name) {
-    return TablespaceStorageEnum.valueOf(name);
+    return TablespaceStorageEnum.valueOf(name.toUpperCase());
   }
 
   public static PartitionDefinitions makePartitionDefinitions(
@@ -795,7 +754,7 @@ public abstract class RelationalAlgebraExpressionFactory {
   }
 
   public static PartitionFunctionKey makePartitionFunctionKey(Boolean linear,
-      PartitionAlgTypeEnum algType, UidList uidList) {
+      DdlStatement.PartitionAlgTypeEnum algType, UidList uidList) {
     return new PartitionFunctionKey(linear, algType, uidList);
   }
 
@@ -815,7 +774,7 @@ public abstract class RelationalAlgebraExpressionFactory {
   }
 
   public static SubPartitionFunctionKey makeSubPartitionFunctionKey(Boolean linear,
-      PartitionAlgTypeEnum algType, UidList uidList) {
+      DdlStatement.PartitionAlgTypeEnum algType, UidList uidList) {
     return new SubPartitionFunctionKey(linear, algType, uidList);
   }
 
@@ -898,18 +857,18 @@ public abstract class RelationalAlgebraExpressionFactory {
   // Alter statements
 
   // AlterSimpleDatabase
-  public static AlterSimpleDatabase makeAlterSimpleDatabase(DbFormatEnum dbFormat, Uid uid,
-      List<CreateDatabaseOption> createDatabaseOptions) {
+  public static AlterSimpleDatabase makeAlterSimpleDatabase(DdlStatement.DbFormatEnum dbFormat,
+      Uid uid, List<CreateDatabaseOption> createDatabaseOptions) {
     return new AlterSimpleDatabase(dbFormat, uid, createDatabaseOptions);
   }
 
-  public static AlterUpgradeName makeAlterUpgradeName(DbFormatEnum dbFormat, Uid uid) {
+  public static AlterUpgradeName makeAlterUpgradeName(DdlStatement.DbFormatEnum dbFormat, Uid uid) {
     return new AlterUpgradeName(dbFormat, uid);
   }
 
   public static AlterEvent makeAlterEvent(OwnerStatement ownerStatement, FullId fullId,
       ScheduleExpression scheduleExpression, Boolean notPreserve, FullId renameToFullId,
-      EnableTypeEnum enableType, String comment, RoutineBody routineBody) {
+      DdlStatement.EnableTypeEnum enableType, String comment, RoutineBody routineBody) {
     return new AlterEvent(ownerStatement, fullId, scheduleExpression, notPreserve, renameToFullId,
         enableType, comment, routineBody);
   }
@@ -936,21 +895,23 @@ public abstract class RelationalAlgebraExpressionFactory {
     return new AlterServer(uid, serverOptions);
   }
 
-  public static AlterTable makeAlterTable(IntimeActionEnum intimeAction, Boolean ignore,
-      TableName tableName, List<AlterSpecification> alterSpecifications,
+  public static AlterTable makeAlterTable(DdlStatement.IntimeActionEnum intimeAction,
+      Boolean ignore, TableName tableName, List<AlterSpecification> alterSpecifications,
       PartitionDefinitions partitionDefinitions) {
     return new AlterTable(intimeAction, ignore, tableName, alterSpecifications,
         partitionDefinitions);
   }
 
-  public static AlterTablespace makeAlterTablespace(Uid uid, ObjectActionEnum objectAction,
-      String dataFile, FileSizeLiteral fileSizeLiteral, Boolean wait, EngineName engineName) {
+  public static AlterTablespace makeAlterTablespace(Uid uid,
+      AlterTablespace.ObjectActionEnum objectAction, String dataFile,
+      FileSizeLiteral fileSizeLiteral, Boolean wait, EngineName engineName) {
     return new AlterTablespace(uid, objectAction, dataFile, fileSizeLiteral, wait, engineName);
   }
 
-  public static AlterView makeAlterView(AlgTypeEnum algType, OwnerStatement ownerStatement,
-      Boolean sqlSecurity, SecContextEnum secContext, FullId fullId, UidList uidList,
-      SelectStatement selectStatement, Boolean withCheckOption, CheckOptEnum checkOpt) {
+  public static AlterView makeAlterView(AlterView.AlgTypeEnum algType,
+      OwnerStatement ownerStatement, Boolean sqlSecurity, AlterView.SecContextEnum secContext,
+      FullId fullId, UidList uidList, SelectStatement selectStatement, Boolean withCheckOption,
+      AlterView.CheckOptEnum checkOpt) {
     return new AlterView(algType, ownerStatement, sqlSecurity, secContext, fullId, uidList,
         selectStatement, withCheckOption, checkOpt);
   }
@@ -969,25 +930,27 @@ public abstract class RelationalAlgebraExpressionFactory {
     return new AlterByAddColumns(uids, columnDefinitions);
   }
 
-  public static AlterByAddIndex makeAlterByAddIndex(IndexFormatEnum indexFormat, Uid uid,
-      IndexTypeEnum indexType, IndexColumnNames indexColumnNames, List<IndexOption> indexOptions) {
+  public static AlterByAddIndex makeAlterByAddIndex(DdlStatement.IndexFormatEnum indexFormat,
+      Uid uid, DdlStatement.IndexTypeEnum indexType, IndexColumnNames indexColumnNames,
+      List<IndexOption> indexOptions) {
     return new AlterByAddIndex(indexFormat, uid, indexType, indexColumnNames, indexOptions);
   }
 
   public static AlterByAddPrimaryKey makeAlterByAddPrimaryKey(Boolean constraint, Uid name,
-      IndexTypeEnum indexType, IndexColumnNames indexColumnNames, List<IndexOption> indexOptions) {
+      DdlStatement.IndexTypeEnum indexType, IndexColumnNames indexColumnNames,
+      List<IndexOption> indexOptions) {
     return new AlterByAddPrimaryKey(constraint, name, indexType, indexColumnNames, indexOptions);
   }
 
   public static AlterByAddUniqueKey makeAlterByAddUniqueKey(Boolean constraint, Uid name,
-      IndexFormatEnum indexFormat, Uid indexName, IndexTypeEnum indexType,
+      DdlStatement.IndexFormatEnum indexFormat, Uid indexName, DdlStatement.IndexTypeEnum indexType,
       IndexColumnNames indexColumnNames, List<IndexOption> indexOptions) {
     return new AlterByAddUniqueKey(constraint, name, indexFormat, indexName, indexType,
         indexColumnNames, indexOptions);
   }
 
   public static AlterByAddSpecialIndex makeAlterByAddSpecialIndex(
-      AlterByAddSpecialIndex.KeyTypeEnum keyType, IndexFormatEnum indexFormat, Uid uid,
+      AlterByAddSpecialIndex.KeyTypeEnum keyType, DdlStatement.IndexFormatEnum indexFormat, Uid uid,
       IndexColumnNames indexColumnNames, List<IndexOption> indexOptions) {
     return new AlterByAddSpecialIndex(keyType, indexFormat, uid, indexColumnNames, indexOptions);
   }
@@ -998,9 +961,9 @@ public abstract class RelationalAlgebraExpressionFactory {
         referenceDefinition);
   }
 
-  public static AlterByAddCheckTableConstraint makeAlterByAddCheckTableConstraint(Boolean constant,
-      Uid name, Expression expression) {
-    return new AlterByAddCheckTableConstraint(constant, name, expression);
+  public static AlterByAddCheckTableConstraint
+      makeAlterByAddCheckTableConstraint(Boolean constraint, Uid name, Expression expression) {
+    return new AlterByAddCheckTableConstraint(constraint, name, expression);
   }
 
   public static AlterBySetAlgorithm
@@ -1035,17 +998,17 @@ public abstract class RelationalAlgebraExpressionFactory {
     return new AlterByDropColumn(column, uid, restrict);
   }
 
-  public static AlterByDropPrimaryKey makeAlterByDropPrimaryKey(Boolean column, Uid uid,
-      Boolean restrict) {
+  public static AlterByDropPrimaryKey makeAlterByDropPrimaryKey() {
     return new AlterByDropPrimaryKey();
   }
 
-  public static AlterByRenameIndex makeAlterByRenameIndex(IndexFormatEnum indexFormat, Uid oldUid,
-      Uid newUid) {
+  public static AlterByRenameIndex makeAlterByRenameIndex(DdlStatement.IndexFormatEnum indexFormat,
+      Uid oldUid, Uid newUid) {
     return new AlterByRenameIndex(indexFormat, oldUid, newUid);
   }
 
-  public static AlterByDropIndex makeAlterByDropIndex(IndexFormatEnum indexFormat, Uid uid) {
+  public static AlterByDropIndex makeAlterByDropIndex(DdlStatement.IndexFormatEnum indexFormat,
+      Uid uid) {
     return new AlterByDropIndex(indexFormat, uid);
   }
 
@@ -1061,8 +1024,8 @@ public abstract class RelationalAlgebraExpressionFactory {
     return new AlterByEnableKeys();
   }
 
-  public static AlterByRename makeAlterByRename(RenameFormatEnum renameFormat, Uid uid,
-      FullId fullId) {
+  public static AlterByRename makeAlterByRename(AlterByRename.RenameFormatEnum renameFormat,
+      Uid uid, FullId fullId) {
     return new AlterByRename(renameFormat, uid, fullId);
   }
 
@@ -1129,7 +1092,7 @@ public abstract class RelationalAlgebraExpressionFactory {
   }
 
   public static AlterByExchangePartition makeAlterByExchangePartition(Uid uid, TableName tableName,
-      ValidationFormatEnum validationFormat) {
+      AlterByExchangePartition.ValidationFormatEnum validationFormat) {
     return new AlterByExchangePartition(uid, tableName, validationFormat);
   }
 
@@ -1164,7 +1127,8 @@ public abstract class RelationalAlgebraExpressionFactory {
   // ---------------------------------------------------------------------------
   // Drop statements
 
-  public static DropDatabase makeDropDatabase(DbFormatEnum dbFormat, IfExists ifExists, Uid uid) {
+  public static DropDatabase makeDropDatabase(DdlStatement.DbFormatEnum dbFormat, IfExists ifExists,
+      Uid uid) {
     return new DropDatabase(dbFormat, ifExists, uid);
   }
 
@@ -1172,9 +1136,14 @@ public abstract class RelationalAlgebraExpressionFactory {
     return new DropEvent(ifExists, fullId);
   }
 
-  public static DropIndex makeDropIndex(IntimeActionEnum intimeAction, Uid uid, TableName tableName,
-      List<IndexAlgorithmOrLock> algorithmOrLocks) {
+  public static DropIndex makeDropIndex(DdlStatement.IntimeActionEnum intimeAction, Uid uid,
+      TableName tableName, List<IndexAlgorithmOrLock> algorithmOrLocks) {
     return new DropIndex(intimeAction, uid, tableName, algorithmOrLocks);
+  }
+
+  public static IndexAlgorithmOrLock makeIndexAlgorithmOrLock(DdlStatement.IndexAlgTypeEnum algType,
+      DdlStatement.LockTypeEnum lockType) {
+    return new IndexAlgorithmOrLock(algType, lockType);
   }
 
   public static DropLogfileGroup makeDropLogfileGroup(Uid uid, EngineName engineName) {
@@ -1194,7 +1163,7 @@ public abstract class RelationalAlgebraExpressionFactory {
   }
 
   public static DropTable makeDropTable(Boolean temporary, IfExists ifExists, Tables tables,
-      DropTypeEnum dropType) {
+      DdlStatement.DropTypeEnum dropType) {
     return new DropTable(temporary, ifExists, tables, dropType);
   }
 
@@ -1207,7 +1176,7 @@ public abstract class RelationalAlgebraExpressionFactory {
   }
 
   public static DropView makeDropView(IfExists ifExists, List<FullId> fullIds,
-      DropTypeEnum dropType) {
+      DdlStatement.DropTypeEnum dropType) {
     return new DropView(ifExists, fullIds, dropType);
   }
 
@@ -1242,8 +1211,8 @@ public abstract class RelationalAlgebraExpressionFactory {
     return new DoStatement(expressions);
   }
 
-  public static InsertStatement makeInsertStatement(PriorityType priority, Boolean ignore,
-      Boolean into, TableName tableName, UidList partitions, UidList columns,
+  public static InsertStatement makeInsertStatement(InsertStatement.PriorityType priority,
+      Boolean ignore, Boolean into, TableName tableName, UidList partitions, UidList columns,
       InsertStatementValue insertStatementValue, List<UpdatedElement> setList,
       List<UpdatedElement> duplicatedList) {
     return new InsertStatement(priority, ignore, into, tableName, partitions, columns,
@@ -1251,10 +1220,10 @@ public abstract class RelationalAlgebraExpressionFactory {
   }
 
   public static LoadDataStatement makeLoadDataStatement(DmlStatement.PriorityEnum priority,
-      Boolean local, String filename, ViolationEnum violation, TableName tableName, UidList uidList,
-      CharsetName charsetName, FieldsFormatEnum fieldsFormat,
+      Boolean local, String filename, DmlStatement.ViolationEnum violation, TableName tableName,
+      UidList uidList, CharsetName charsetName, DmlStatement.FieldsFormatEnum fieldsFormat,
       List<SelectFieldsInto> selectFieldsIntos, List<SelectLinesInto> selectLinesIntos,
-      DecimalLiteral decimalLiteral, LinesFormatEnum linesFormat,
+      DecimalLiteral decimalLiteral, DmlStatement.LinesFormatEnum linesFormat,
       List<AssignmentField> assignmentFields, List<UpdatedElement> updatedElements) {
     return new LoadDataStatement(priority, local, filename, violation, tableName, uidList,
         charsetName, fieldsFormat, selectFieldsIntos, selectLinesIntos, decimalLiteral, linesFormat,
@@ -1262,43 +1231,45 @@ public abstract class RelationalAlgebraExpressionFactory {
   }
 
   public static LoadXmlStatement makeLoadXmlStatement(DmlStatement.PriorityEnum priority,
-      Boolean local, String filename, ViolationEnum violation, TableName tableName,
+      Boolean local, String filename, DmlStatement.ViolationEnum violation, TableName tableName,
       CharsetName charsetName, String tag, DecimalLiteral decimalLiteral,
-      LinesFormatEnum linesFormat, List<AssignmentField> assignmentFields,
+      DmlStatement.LinesFormatEnum linesFormat, List<AssignmentField> assignmentFields,
       List<UpdatedElement> updatedElements) {
     return new LoadXmlStatement(priority, local, filename, violation, tableName, charsetName, tag,
         decimalLiteral, linesFormat, assignmentFields, updatedElements);
   }
 
-  public static ReplaceStatement makeReplaceStatement(PriorityEnum priority, TableName tableName,
-      UidList partitions, UidList columns, InsertStatementValue insertStatementValue,
-      List<UpdatedElement> setList) {
+  public static ReplaceStatement makeReplaceStatement(ReplaceStatement.PriorityEnum priority,
+      TableName tableName, UidList partitions, UidList columns,
+      InsertStatementValue insertStatementValue, List<UpdatedElement> setList) {
     return new ReplaceStatement(priority, tableName, partitions, columns, insertStatementValue,
         setList);
   }
 
   public static SimpleSelect makeSimpleSelect(QuerySpecification querySpecification,
-      LockClauseEnum lockClause) {
+      DmlStatement.LockClauseEnum lockClause) {
     return new SimpleSelect(querySpecification, lockClause);
   }
 
   public static ParenthesisSelect makeParenthesisSelect(QueryExpression queryExpression,
-      LockClauseEnum lockClause) {
+      DmlStatement.LockClauseEnum lockClause) {
     return new ParenthesisSelect(queryExpression, lockClause);
   }
 
   public static UnionSelect makeUnionSelect(QuerySpecificationNointo querySpecificationNointo,
-      List<UnionStatement> unionStatements, UnionTypeEnum unionType,
+      List<UnionStatement> unionStatements, SelectStatement.UnionTypeEnum unionType,
       QuerySpecification querySpecification, QueryExpression queryExpression,
-      OrderByClause orderByClause, LimitClause limitClause, LockClauseEnum lockClause) {
+      OrderByClause orderByClause, LimitClause limitClause,
+      DmlStatement.LockClauseEnum lockClause) {
     return new UnionSelect(querySpecificationNointo, unionStatements, unionType, querySpecification,
         queryExpression, orderByClause, limitClause, lockClause);
   }
 
   public static UnionParenthesisSelect makeUnionParenthesisSelect(
       QueryExpressionNointo queryExpressionNointo, List<UnionParenthesis> unionParenthesisList,
-      UnionTypeEnum unionType, QueryExpression queryExpression, OrderByClause orderByClause,
-      LimitClause limitClause, LockClauseEnum lockClause) {
+      SelectStatement.UnionTypeEnum unionType, QueryExpression queryExpression,
+      OrderByClause orderByClause, LimitClause limitClause,
+      DmlStatement.LockClauseEnum lockClause) {
     return new UnionParenthesisSelect(queryExpressionNointo, unionParenthesisList, unionType,
         queryExpression, orderByClause, limitClause, lockClause);
   }
@@ -1317,8 +1288,8 @@ public abstract class RelationalAlgebraExpressionFactory {
     return new AssignmentField(uid, localId);
   }
 
-  public static LockClauseEnum makeLockClause(String name) {
-    return LockClauseEnum.valueOf(name);
+  public static DmlStatement.LockClauseEnum makeLockClause(String name) {
+    return DmlStatement.LockClauseEnum.valueOf(name.toUpperCase());
   }
 
   // ---------------------------------------------------------------------------
@@ -1409,12 +1380,13 @@ public abstract class RelationalAlgebraExpressionFactory {
   }
 
   public static IndexHint makeIndexHint(IndexHint.IndexHintAction indexHintAction,
-      IndexHint.KeyFormat keyFormat, IndexHintTypeEnum indexHintType, UidList uidList) {
+      IndexHint.KeyFormat keyFormat, DmlStatement.IndexHintTypeEnum indexHintType,
+      UidList uidList) {
     return new IndexHint(indexHintAction, keyFormat, indexHintType, uidList);
   }
 
-  public static IndexHintTypeEnum makeIndexHintType(String name) {
-    return IndexHintTypeEnum.valueOf(name);
+  public static DmlStatement.IndexHintTypeEnum makeIndexHintType(String name) {
+    return DmlStatement.IndexHintTypeEnum.valueOf(name.toUpperCase());
   }
 
   public static InnerJoin makeInnerJoin(TableSourceItem tableSourceItem, Expression expression,
@@ -1427,12 +1399,12 @@ public abstract class RelationalAlgebraExpressionFactory {
     return new StraightJoin(tableSourceItem, expression);
   }
 
-  public static OuterJoin makeOuterJoin(OuterJoinType type, TableSourceItem tableSourceItem,
-      Expression expression, UidList uidList) {
+  public static OuterJoin makeOuterJoin(DmlStatement.OuterJoinType type,
+      TableSourceItem tableSourceItem, Expression expression, UidList uidList) {
     return new OuterJoin(type, tableSourceItem, expression, uidList);
   }
 
-  public static NaturalJoin makeNaturalJoin(OuterJoinType outerJoinType,
+  public static NaturalJoin makeNaturalJoin(DmlStatement.OuterJoinType outerJoinType,
       TableSourceItem tableSourceItem) {
     return new NaturalJoin(outerJoinType, tableSourceItem);
   }
@@ -1440,9 +1412,8 @@ public abstract class RelationalAlgebraExpressionFactory {
   // ---------------------------------------------------------------------------
   // Select Statement's Details
 
-  public static QueryExpression makeQueryExpression(QuerySpecification querySpecification,
-      QueryExpression queryExpression) {
-    return new QueryExpression(querySpecification, queryExpression);
+  public static QueryExpression makeQueryExpression(QuerySpecification querySpecification) {
+    return new QueryExpression(querySpecification);
   }
 
   public static QueryExpressionNointo
@@ -1450,33 +1421,34 @@ public abstract class RelationalAlgebraExpressionFactory {
     return new QueryExpressionNointo(querySpecificationNointo);
   }
 
-  public static QuerySpecification makeQuerySpecification(List<SelectSpecEnum> selectSpecs,
-      SelectElements selectElements, SelectIntoExpression selectIntoExpression,
-      FromClause fromClause, OrderByClause orderByClause, LimitClause limitClause) {
+  public static QuerySpecification makeQuerySpecification(
+      List<SelectStatement.SelectSpecEnum> selectSpecs, SelectElements selectElements,
+      SelectIntoExpression selectIntoExpression, FromClause fromClause, OrderByClause orderByClause,
+      LimitClause limitClause) {
     return new QuerySpecification(selectSpecs, selectElements, selectIntoExpression, fromClause,
         orderByClause, limitClause);
   }
 
   public static QuerySpecificationNointo makeQuerySpecificationNointo(
-      List<SelectSpecEnum> selectSpecs, SelectElements selectElements, FromClause fromClause,
-      OrderByClause orderByClause, LimitClause limitClause) {
+      List<SelectStatement.SelectSpecEnum> selectSpecs, SelectElements selectElements,
+      FromClause fromClause, OrderByClause orderByClause, LimitClause limitClause) {
     return new QuerySpecificationNointo(selectSpecs, selectElements, fromClause, orderByClause,
         limitClause);
   }
 
-  public static UnionParenthesis makeUnionParenthesis(UnionTypeEnum unionType,
+  public static UnionParenthesis makeUnionParenthesis(SelectStatement.UnionTypeEnum unionType,
       QueryExpressionNointo queryExpressionNointo) {
     return new UnionParenthesis(unionType, queryExpressionNointo);
   }
 
-  public static UnionStatement makeUnionStatement(UnionTypeEnum unionType,
+  public static UnionStatement makeUnionStatement(SelectStatement.UnionTypeEnum unionType,
       QuerySpecificationNointo querySpecificationNointo,
       QueryExpressionNointo queryExpressionNointo) {
     return new UnionStatement(unionType, querySpecificationNointo, queryExpressionNointo);
   }
 
-  public static SelectSpecEnum makeSelectSpec(String name) {
-    return SelectSpecEnum.valueOf(name);
+  public static SelectStatement.SelectSpecEnum makeSelectSpec(String name) {
+    return SelectStatement.SelectSpecEnum.valueOf(name.toUpperCase());
   }
 
   public static SelectElements makeSelectElements(Boolean star,
@@ -1513,7 +1485,7 @@ public abstract class RelationalAlgebraExpressionFactory {
   }
 
   public static SelectIntoTextFile makeSelectIntoTextFile(String filename, CharsetName charsetName,
-      TieldsFormatType fieldsFormat, List<SelectFieldsInto> selectFieldsIntos,
+      SelectIntoTextFile.TieldsFormatType fieldsFormat, List<SelectFieldsInto> selectFieldsIntos,
       List<SelectLinesInto> selectLinesIntos) {
     return new SelectIntoTextFile(filename, charsetName, fieldsFormat, selectFieldsIntos,
         selectLinesIntos);
@@ -1534,7 +1506,7 @@ public abstract class RelationalAlgebraExpressionFactory {
     return new FromClause(tableSources, whereExpr, groupByItems, withRollup, havingExpr);
   }
 
-  public static GroupByItem makeGroupByItem(Expression expression, OrderType order) {
+  public static GroupByItem makeGroupByItem(Expression expression, GroupByItem.OrderType order) {
     return new GroupByItem(expression, order);
   }
 
@@ -1551,7 +1523,8 @@ public abstract class RelationalAlgebraExpressionFactory {
   // Transaction's Statements
   // ---------------------------------------------------------------------------
 
-  public static StartTransaction makeStartTransaction(List<TransactionModeEnum> transactionModes) {
+  public static StartTransaction
+      makeStartTransaction(List<TransactionStatement.TransactionModeEnum> transactionModes) {
     return new StartTransaction(transactionModes);
   }
 
@@ -1592,12 +1565,13 @@ public abstract class RelationalAlgebraExpressionFactory {
   }
 
   public static SetTransactionStatement makeSetTransactionStatement(
-      TransactionContextEnum transactionContext, List<TransactionOption> transactionOptions) {
+      SetTransactionStatement.TransactionContextEnum transactionContext,
+      List<TransactionOption> transactionOptions) {
     return new SetTransactionStatement(transactionContext, transactionOptions);
   }
 
-  public static TransactionModeEnum makeTransactionMode(String name) {
-    return TransactionModeEnum.valueOf(name);
+  public static TransactionStatement.TransactionModeEnum makeTransactionMode(String name) {
+    return TransactionStatement.TransactionModeEnum.valueOf(name.toUpperCase());
   }
 
   public static LockTableElement makeLockTableElement(TableName tableName, Uid uid,
@@ -1611,12 +1585,12 @@ public abstract class RelationalAlgebraExpressionFactory {
   }
 
   public static TransactionOption makeTransactionOption(TransactionOption.Type type,
-      TransactionLevelEnum transactionLevel) {
+      TransactionStatement.TransactionLevelEnum transactionLevel) {
     return new TransactionOption(type, transactionLevel);
   }
 
-  public static TransactionLevelEnum makeTransactionLevel(String name) {
-    return TransactionLevelEnum.valueOf(name);
+  public static TransactionStatement.TransactionLevelEnum makeTransactionLevel(String name) {
+    return TransactionStatement.TransactionLevelEnum.valueOf(name.toUpperCase());
   }
 
   // ---------------------------------------------------------------------------
@@ -1649,12 +1623,13 @@ public abstract class RelationalAlgebraExpressionFactory {
     return new ResetSlave(all, channelOption);
   }
 
-  public static StartSlave makeStartSlave(List<ThreadTypeEnum> threadTypes, UntilOption untilOption,
-      List<ConnectionOption> connectionOptions, ChannelOption channelOption) {
+  public static StartSlave makeStartSlave(List<ReplicationStatement.ThreadTypeEnum> threadTypes,
+      UntilOption untilOption, List<ConnectionOption> connectionOptions,
+      ChannelOption channelOption) {
     return new StartSlave(threadTypes, untilOption, connectionOptions, channelOption);
   }
 
-  public static StopSlave makeStopSlave(List<ThreadTypeEnum> threadTypes) {
+  public static StopSlave makeStopSlave(List<ReplicationStatement.ThreadTypeEnum> threadTypes) {
     return new StopSlave(threadTypes);
   }
 
@@ -1666,18 +1641,18 @@ public abstract class RelationalAlgebraExpressionFactory {
     return new StopGroupReplication();
   }
 
-  public static MasterStringOption makeMasterStringOption(StringMasterOptionEnum stringMasterOption,
-      String value) {
+  public static MasterStringOption makeMasterStringOption(
+      ReplicationStatement.StringMasterOptionEnum stringMasterOption, String value) {
     return new MasterStringOption(stringMasterOption, value);
   }
 
-  public static MasterDecimalOption
-      makeMasterDecimalOption(DecimalMasterOptionEnum decimalMasterOption, DecimalLiteral value) {
+  public static MasterDecimalOption makeMasterDecimalOption(
+      ReplicationStatement.DecimalMasterOptionEnum decimalMasterOption, DecimalLiteral value) {
     return new MasterDecimalOption(decimalMasterOption, value);
   }
 
-  public static MasterBoolOption makeMasterBoolOption(BoolMasterOptionEnum boolMasterOption,
-      boolean value) {
+  public static MasterBoolOption makeMasterBoolOption(
+      ReplicationStatement.BoolMasterOptionEnum boolMasterOption, boolean value) {
     return new MasterBoolOption(boolMasterOption, value);
   }
 
@@ -1689,16 +1664,16 @@ public abstract class RelationalAlgebraExpressionFactory {
     return new MasterUidListOption(uids);
   }
 
-  public static StringMasterOptionEnum makeStringMasterOption(String name) {
-    return StringMasterOptionEnum.valueOf(name);
+  public static ReplicationStatement.StringMasterOptionEnum makeStringMasterOption(String name) {
+    return ReplicationStatement.StringMasterOptionEnum.valueOf(name.toUpperCase());
   }
 
-  public static DecimalMasterOptionEnum makeDecimalMasterOption(String name) {
-    return DecimalMasterOptionEnum.valueOf(name);
+  public static ReplicationStatement.DecimalMasterOptionEnum makeDecimalMasterOption(String name) {
+    return ReplicationStatement.DecimalMasterOptionEnum.valueOf(name.toUpperCase());
   }
 
-  public static BoolMasterOptionEnum makeBoolMasterOption(String name) {
-    return BoolMasterOptionEnum.valueOf(name);
+  public static ReplicationStatement.BoolMasterOptionEnum makeBoolMasterOption(String name) {
+    return ReplicationStatement.BoolMasterOptionEnum.valueOf(name.toUpperCase());
   }
 
   public static ChannelOption makeChannelOption(String channel) {
@@ -1738,8 +1713,8 @@ public abstract class RelationalAlgebraExpressionFactory {
     return new TablePair(firstTable, secondTable);
   }
 
-  public static ThreadTypeEnum makeThreadType(String name) {
-    return ThreadTypeEnum.valueOf(name);
+  public static ReplicationStatement.ThreadTypeEnum makeThreadType(String name) {
+    return ReplicationStatement.ThreadTypeEnum.valueOf(name.toUpperCase());
   }
 
   public static GtidsUntilOption makeGtidsUntilOption(GtidsUntilOption.Type type,
@@ -1771,8 +1746,8 @@ public abstract class RelationalAlgebraExpressionFactory {
   // ---------------------------------------------------------------------------
   // XA Transactions
 
-  public static XaStartTransaction makeXaStartTransaction(XaStartEnum xaStart, Xid xid,
-      XaActionEnum xaAction) {
+  public static XaStartTransaction makeXaStartTransaction(XaStartTransaction.XaStartEnum xaStart,
+      Xid xid, XaStartTransaction.XaActionEnum xaAction) {
     return new XaStartTransaction(xaStart, xid, xaAction);
   }
 
@@ -1897,7 +1872,7 @@ public abstract class RelationalAlgebraExpressionFactory {
     return new DeclareCursor(uid, selectStatement);
   }
 
-  public static DeclareHandler makeDeclareHandler(HandlerActionEnum handlerAction,
+  public static DeclareHandler makeDeclareHandler(DeclareHandler.HandlerActionEnum handlerAction,
       List<HandlerConditionValue> handlerConditionValues, RoutineBody routineBody) {
     return new DeclareHandler(handlerAction, handlerConditionValues, routineBody);
   }
@@ -1956,7 +1931,7 @@ public abstract class RelationalAlgebraExpressionFactory {
   public static AlterUserMysqlV57 makeAlterUserMysqlV57(IfExists ifExists,
       List<UserAuthOption> userAuthOptions, Boolean tlsNone, List<TlsOption> tlsOptions,
       List<UserResourceOption> userResourceOptions, List<UserPasswordOption> userPasswordOptions,
-      List<UserLockOptionEnum> userLockOptions) {
+      List<AdministrationStatement.UserLockOptionEnum> userLockOptions) {
     return new AlterUserMysqlV57(ifExists, userAuthOptions, tlsNone, tlsOptions,
         userResourceOptions, userPasswordOptions, userLockOptions);
   }
@@ -1968,7 +1943,7 @@ public abstract class RelationalAlgebraExpressionFactory {
   public static CreateUserMysqlV57 makeCreateUserMysqlV57(IfNotExists ifNotExists,
       List<UserAuthOption> userAuthOptions, Boolean tlsNone, List<TlsOption> tlsOptions,
       List<UserResourceOption> userResourceOptions, List<UserPasswordOption> userPasswordOptions,
-      List<UserLockOptionEnum> userLockOptions) {
+      List<AdministrationStatement.UserLockOptionEnum> userLockOptions) {
     return new CreateUserMysqlV57(ifNotExists, userAuthOptions, tlsNone, tlsOptions,
         userResourceOptions, userPasswordOptions, userLockOptions);
   }
@@ -1978,7 +1953,7 @@ public abstract class RelationalAlgebraExpressionFactory {
   }
 
   public static GrantStatement makeGrantStatement(List<PrivelegeClause> privelegeClauses,
-      PrivilegeObjectEnum privilegeObject, PrivilegeLevel privilegeLevel,
+      AdministrationStatement.PrivilegeObjectEnum privilegeObject, PrivilegeLevel privilegeLevel,
       List<UserAuthOption> userAuthOptions, Boolean tlsNone, List<TlsOption> tlsOptions,
       List<UserResourceOption> userResourceOptions) {
     return new GrantStatement(privelegeClauses, privilegeObject, privilegeLevel, userAuthOptions,
@@ -1995,7 +1970,7 @@ public abstract class RelationalAlgebraExpressionFactory {
   }
 
   public static DetailRevoke makeDetailRevoke(List<PrivelegeClause> privelegeClauses,
-      PrivilegeObjectEnum privilegeObject, PrivilegeLevel privilegeLevel,
+      AdministrationStatement.PrivilegeObjectEnum privilegeObject, PrivilegeLevel privilegeLevel,
       List<UserName> userNames) {
     return new DetailRevoke(privelegeClauses, privilegeObject, privilegeLevel, userNames);
   }
@@ -2050,16 +2025,17 @@ public abstract class RelationalAlgebraExpressionFactory {
     return new UserPasswordOption(expireType, day);
   }
 
-  public static UserLockOptionEnum makeUserLockOption(String name) {
-    return UserLockOptionEnum.valueOf(name);
+  public static AdministrationStatement.UserLockOptionEnum makeUserLockOption(String name) {
+    return AdministrationStatement.UserLockOptionEnum.valueOf(name.toUpperCase());
   }
 
-  public static PrivelegeClause makePrivelegeClause(PrivilegeEnum privilege, UidList uidList) {
+  public static PrivelegeClause makePrivelegeClause(AdministrationStatement.PrivilegeEnum privilege,
+      UidList uidList) {
     return new PrivelegeClause(privilege, uidList);
   }
 
-  public static PrivilegeEnum makePrivilege(String name) {
-    return PrivilegeEnum.valueOf(name);
+  public static AdministrationStatement.PrivilegeEnum makePrivilege(String name) {
+    return AdministrationStatement.PrivilegeEnum.valueOf(name.toUpperCase());
   }
 
   public static CurrentSchemaPriviLevel makeCurrentSchemaPriviLevel() {
@@ -2089,13 +2065,13 @@ public abstract class RelationalAlgebraExpressionFactory {
   // ---------------------------------------------------------------------------
   // Table maintenance statements
 
-  public static AnalyzeTable makeAnalyzeTable(AdminTableActionOptionEnum actionOption,
-      Tables tables) {
+  public static AnalyzeTable makeAnalyzeTable(
+      AdministrationStatement.AdminTableActionOptionEnum actionOption, Tables tables) {
     return new AnalyzeTable(actionOption, tables);
   }
 
   public static CheckTable makeCheckTable(Tables tables,
-      List<CheckTableOptionEnum> checkTableOptions) {
+      List<AdministrationStatement.CheckTableOptionEnum> checkTableOptions) {
     return new CheckTable(tables, checkTableOptions);
   }
 
@@ -2104,18 +2080,19 @@ public abstract class RelationalAlgebraExpressionFactory {
     return new ChecksumTable(tables, actionOption);
   }
 
-  public static OptimizeTable makeOptimizeTable(AdminTableActionOptionEnum actionOption,
-      Tables tables) {
+  public static OptimizeTable makeOptimizeTable(
+      AdministrationStatement.AdminTableActionOptionEnum actionOption, Tables tables) {
     return new OptimizeTable(actionOption, tables);
   }
 
-  public static RepairTable makeRepairTable(AdminTableActionOptionEnum actionOption, Tables tables,
-      Boolean quick, Boolean extended, Boolean useFrm) {
+  public static RepairTable makeRepairTable(
+      AdministrationStatement.AdminTableActionOptionEnum actionOption, Tables tables, Boolean quick,
+      Boolean extended, Boolean useFrm) {
     return new RepairTable(actionOption, tables, quick, extended, useFrm);
   }
 
-  public static CheckTableOptionEnum makeCheckTableOption(String name) {
-    return CheckTableOptionEnum.valueOf(name);
+  public static AdministrationStatement.CheckTableOptionEnum makeCheckTableOption(String name) {
+    return AdministrationStatement.CheckTableOptionEnum.valueOf(name.toUpperCase());
   }
 
   // ---------------------------------------------------------------------------
@@ -2165,8 +2142,8 @@ public abstract class RelationalAlgebraExpressionFactory {
     return new ShowLogEvents(logFormat, filename, fromPosition, offset, rowCount);
   }
 
-  public static ShowObjectFilter makeShowObjectFilter(ShowCommonEntityEnum showCommonEntity,
-      ShowFilter showFilter) {
+  public static ShowObjectFilter makeShowObjectFilter(
+      AdministrationStatement.ShowCommonEntityEnum showCommonEntity, ShowFilter showFilter) {
     return new ShowObjectFilter(showCommonEntity, showFilter);
   }
 
@@ -2197,7 +2174,8 @@ public abstract class RelationalAlgebraExpressionFactory {
     return new ShowEngine(engineName, engineOption);
   }
 
-  public static ShowGlobalInfo makeShowGlobalInfo(ShowGlobalInfoClauseEnum showGlobalInfoClause) {
+  public static ShowGlobalInfo
+      makeShowGlobalInfo(AdministrationStatement.ShowGlobalInfoClauseEnum showGlobalInfoClause) {
     return new ShowGlobalInfo(showGlobalInfoClause);
   }
 
@@ -2211,8 +2189,8 @@ public abstract class RelationalAlgebraExpressionFactory {
   }
 
   public static ShowSchemaFilter makeShowSchemaFilter(
-      ShowSchemaFilter.ShowSchemaEntityEnum showSchemaEntity, SchemaFormatEnum schemaFormat,
-      Uid uid, ShowFilter showFilter) {
+      ShowSchemaFilter.ShowSchemaEntityEnum showSchemaEntity,
+      ShowSchemaFilter.SchemaFormatEnum schemaFormat, Uid uid, ShowFilter showFilter) {
     return new ShowSchemaFilter(showSchemaEntity, schemaFormat, uid, showFilter);
   }
 
@@ -2235,8 +2213,9 @@ public abstract class RelationalAlgebraExpressionFactory {
     return new ShowOpenTables(schemaFormat, uid, showFilter);
   }
 
-  public static ShowProfile makeShowProfile(List<ShowProfileTypeEnum> showProfileTypes,
-      DecimalLiteral queryCount, DecimalLiteral offset, DecimalLiteral rowCount) {
+  public static ShowProfile makeShowProfile(
+      List<AdministrationStatement.ShowProfileTypeEnum> showProfileTypes, DecimalLiteral queryCount,
+      DecimalLiteral offset, DecimalLiteral rowCount) {
     return new ShowProfile(showProfileTypes, queryCount, offset, rowCount);
   }
 
@@ -2253,24 +2232,25 @@ public abstract class RelationalAlgebraExpressionFactory {
     return new VariableClause(type, id, has, scopeType, uid);
   }
 
-  public static ShowCommonEntityEnum makeShowCommonEntity(String name) {
-    return ShowCommonEntityEnum.valueOf(name);
+  public static AdministrationStatement.ShowCommonEntityEnum makeShowCommonEntity(String name) {
+    return AdministrationStatement.ShowCommonEntityEnum.valueOf(name.toUpperCase());
   }
 
   public static ShowFilter makeShowFilter(String like, Expression where) {
     return new ShowFilter(like, where);
   }
 
-  public static ShowGlobalInfoClauseEnum makeShowGlobalInfoClause(String name) {
-    return ShowGlobalInfoClauseEnum.valueOf(name);
+  public static AdministrationStatement.ShowGlobalInfoClauseEnum
+      makeShowGlobalInfoClause(String name) {
+    return AdministrationStatement.ShowGlobalInfoClauseEnum.valueOf(name.toUpperCase());
   }
 
-  public static ShowSchemaEntityEnum makeShowSchemaEntity(String name) {
-    return ShowSchemaEntityEnum.valueOf(name);
+  public static AdministrationStatement.ShowSchemaEntityEnum makeShowSchemaEntity(String name) {
+    return AdministrationStatement.ShowSchemaEntityEnum.valueOf(name.toUpperCase());
   }
 
-  public static ShowProfileTypeEnum makeShowProfileType(String name) {
-    return ShowProfileTypeEnum.valueOf(name);
+  public static AdministrationStatement.ShowProfileTypeEnum makeShowProfileType(String name) {
+    return AdministrationStatement.ShowProfileTypeEnum.valueOf(name.toUpperCase());
   }
 
   // ---------------------------------------------------------------------------
@@ -2285,12 +2265,13 @@ public abstract class RelationalAlgebraExpressionFactory {
     return new CacheIndexStatement(tableIndexes, partitionUidList, partitionAll, schema);
   }
 
-  public static FlushStatement makeFlushStatement(FlushFormatEnum flushFormat,
-      List<FlushOption> flushOptions) {
+  public static FlushStatement makeFlushStatement(
+      AdministrationStatement.FlushFormatEnum flushFormat, List<FlushOption> flushOptions) {
     return new FlushStatement(flushFormat, flushOptions);
   }
 
-  public static KillStatement makeKillStatement(ConnectionFormatEnum connectionFormat,
+  public static KillStatement makeKillStatement(
+      AdministrationStatement.ConnectionFormatEnum connectionFormat,
       List<DecimalLiteral> decimalLiterals) {
     return new KillStatement(connectionFormat, decimalLiterals);
   }
@@ -2308,8 +2289,8 @@ public abstract class RelationalAlgebraExpressionFactory {
     return new ShutdownStatement();
   }
 
-  public static TableIndexes makeTableIndexes(TableName tableName, IndexFormatEnum indexFormat,
-      UidList uidList) {
+  public static TableIndexes makeTableIndexes(TableName tableName,
+      DdlStatement.IndexFormatEnum indexFormat, UidList uidList) {
     return new TableIndexes(tableName, indexFormat, uidList);
   }
 
@@ -2323,17 +2304,17 @@ public abstract class RelationalAlgebraExpressionFactory {
   }
 
   public static TableFlushOption makeTableFlushOption(Tables tables,
-      FlushTableOptionEnum flushTableOption) {
+      AdministrationStatement.FlushTableOptionEnum flushTableOption) {
     return new TableFlushOption(tables, flushTableOption);
   }
 
-  public static FlushTableOptionEnum makeFlushTableOption(String name) {
-    return FlushTableOptionEnum.valueOf(name);
+  public static AdministrationStatement.FlushTableOptionEnum makeFlushTableOption(String name) {
+    return AdministrationStatement.FlushTableOptionEnum.valueOf(name.toUpperCase());
   }
 
   public static LoadedTableIndexes makeLoadedTableIndexes(TableName tableName,
-      UidList partitionList, Boolean partitionAll, IndexFormatEnum indexFormat, UidList indexList,
-      Boolean ignoreLeaves) {
+      UidList partitionList, Boolean partitionAll, DdlStatement.IndexFormatEnum indexFormat,
+      UidList indexList, Boolean ignoreLeaves) {
     return new LoadedTableIndexes(tableName, partitionList, partitionAll, indexFormat, indexList,
         ignoreLeaves);
   }
@@ -2458,7 +2439,7 @@ public abstract class RelationalAlgebraExpressionFactory {
     return new FileSizeLiteral(filesizeLiteral, decimalLiteral);
   }
 
-  public static StringLiteral makeStringLiteral(CharsetNameBaseEnum stringCharsetName,
+  public static StringLiteral makeStringLiteral(SimpleIdSets.CharsetNameBaseEnum stringCharsetName,
       List<String> stringLiterals, String startNationalStringLiteral, CollationName collationName) {
     return new StringLiteral(stringCharsetName, stringLiterals, startNationalStringLiteral,
         collationName);
@@ -2468,8 +2449,8 @@ public abstract class RelationalAlgebraExpressionFactory {
     return new BooleanLiteral(literal);
   }
 
-  public static HexadecimalLiteral makeHexadecimalLiteral(CharsetNameBaseEnum stringCharsetName,
-      String literal) {
+  public static HexadecimalLiteral
+      makeHexadecimalLiteral(SimpleIdSets.CharsetNameBaseEnum stringCharsetName, String literal) {
     return new HexadecimalLiteral(stringCharsetName, literal);
   }
 
@@ -2536,7 +2517,7 @@ public abstract class RelationalAlgebraExpressionFactory {
 
   /** Type.CHAR */
   public static ConvertedDataType makeConvertedDataType(ConvertedDataType.Type type,
-      LengthOneDimension lengthOneDimension, CharsetNameBaseEnum charsetName) {
+      LengthOneDimension lengthOneDimension, CharsetName charsetName) {
     return new ConvertedDataType(type, lengthOneDimension, charsetName);
   }
 
@@ -2649,6 +2630,11 @@ public abstract class RelationalAlgebraExpressionFactory {
     return new DataTypeFunctionCall(type, expression, charsetName);
   }
 
+  public static DataTypeFunctionCall makeDataTypeFunctionCall(DataTypeFunctionCall.Type type,
+      Expression expression, ConvertedDataType convertedDataType) {
+    return new DataTypeFunctionCall(type, expression, convertedDataType);
+  }
+
   public static ValuesFunctionCall makeValuesFunctionCall(FullColumnName fullColumnName) {
     return new ValuesFunctionCall(fullColumnName);
   }
@@ -2700,14 +2686,23 @@ public abstract class RelationalAlgebraExpressionFactory {
 
   public static AggregateWindowedFunction makeAggregateWindowedFunction(
       AggregateWindowedFunction.Type type, AggregateWindowedFunction.AggregatorEnum aggregator,
-      FunctionArg functionArg, FunctionArgs functionArgs, List<OrderByExpression> orderByExpression,
-      String separator) {
+      FunctionArg functionArg, FunctionArgs functionArgs,
+      List<OrderByExpression> orderByExpressions, String separator) {
     return new AggregateWindowedFunction(type, aggregator, functionArg, functionArgs,
-        orderByExpression, separator);
+        orderByExpressions, separator);
   }
 
-  public static ScalarFunctionNameEnum makeScalarFunctionName(String name) {
-    return ScalarFunctionNameEnum.valueOf(name);
+  public static ScalarFunctionCall makeScalarFunctionCall(
+      Functions.ScalarFunctionNameEnum scalarFunctionName, FunctionArgs functionArgs) {
+    return new ScalarFunctionCall(scalarFunctionName, functionArgs);
+  }
+
+  public static UdfFunctionCall makeUdfFunctionCall(FullId fullId, FunctionArgs functionArgs) {
+    return new UdfFunctionCall(fullId, functionArgs);
+  }
+
+  public static Functions.ScalarFunctionNameEnum makeScalarFunctionName(String name) {
+    return Functions.ScalarFunctionNameEnum.valueOf(name.toUpperCase());
   }
 
   public static PasswordFunctionClause makePasswordFunctionClause(
@@ -2875,32 +2870,32 @@ public abstract class RelationalAlgebraExpressionFactory {
   // ---------------------------------------------------------------------------
   // Simple id sets
   // ---------------------------------------------------------------------------
-  public static CharsetNameBaseEnum makeCharsetNameBase(String name) {
-    return CharsetNameBaseEnum.valueOf(name);
+  public static SimpleIdSets.CharsetNameBaseEnum makeCharsetNameBase(String name) {
+    return SimpleIdSets.CharsetNameBaseEnum.valueOf(name.toUpperCase());
   }
 
-  public static TransactionLevelBaseEnum makeTransactionLevelBase(String name) {
-    return TransactionLevelBaseEnum.valueOf(name);
+  public static SimpleIdSets.TransactionLevelBaseEnum makeTransactionLevelBase(String name) {
+    return SimpleIdSets.TransactionLevelBaseEnum.valueOf(name.toUpperCase());
   }
 
-  public static PrivilegesBaseEnum makePrivilegesBase(String name) {
-    return PrivilegesBaseEnum.valueOf(name);
+  public static SimpleIdSets.PrivilegesBaseEnum makePrivilegesBase(String name) {
+    return SimpleIdSets.PrivilegesBaseEnum.valueOf(name.toUpperCase());
   }
 
-  public static IntervalTypeBaseEnum makeIntervalTypeBase(String name) {
-    return IntervalTypeBaseEnum.valueOf(name);
+  public static SimpleIdSets.IntervalTypeBaseEnum makeIntervalTypeBase(String name) {
+    return SimpleIdSets.IntervalTypeBaseEnum.valueOf(name.toUpperCase());
   }
 
-  public static DataTypeBaseEnum makeDataTypeBase(String name) {
-    return DataTypeBaseEnum.valueOf(name);
+  public static SimpleIdSets.DataTypeBaseEnum makeDataTypeBase(String name) {
+    return SimpleIdSets.DataTypeBaseEnum.valueOf(name.toUpperCase());
   }
 
-  public static KeywordsCanBeIdEnum makeKeywordsCanBeId(String name) {
-    return KeywordsCanBeIdEnum.valueOf(name);
+  public static SimpleIdSets.KeywordsCanBeIdEnum makeKeywordsCanBeId(String name) {
+    return SimpleIdSets.KeywordsCanBeIdEnum.valueOf(name.toUpperCase());
   }
 
-  public static FunctionNameBaseEnum makeFunctionNameBase(String name) {
-    return FunctionNameBaseEnum.valueOf(name);
+  public static SimpleIdSets.FunctionNameBaseEnum makeFunctionNameBase(String name) {
+    return SimpleIdSets.FunctionNameBaseEnum.valueOf(name.toUpperCase());
   }
 
 }
