@@ -2848,23 +2848,23 @@ public abstract class RelationalAlgebraExpressionFactory {
   }
 
   public static RelationalUnaryOperatorEnum makeUnaryOperator(String symbol) {
-    return RelationalUnaryOperatorEnum.of(symbol);
+    return RelationalUnaryOperatorEnum.of(symbol.toUpperCase());
   }
 
   public static RelationalComparisonOperatorEnum makeComparisonOperator(String symbol) {
-    return RelationalComparisonOperatorEnum.of(symbol);
+    return RelationalComparisonOperatorEnum.of(symbol.toUpperCase());
   }
 
   public static RelationalLogicalOperatorEnum makeLogicalOperator(String symbol) {
-    return RelationalLogicalOperatorEnum.of(symbol);
+    return RelationalLogicalOperatorEnum.of(symbol.toUpperCase());
   }
 
   public static RelationalBitOperatorEnum makeBitOperator(String symbol) {
-    return RelationalBitOperatorEnum.of(symbol);
+    return RelationalBitOperatorEnum.of(symbol.toUpperCase());
   }
 
   public static RelationalMathOperatorEnum makeMathOperator(String symbol) {
-    return RelationalMathOperatorEnum.of(symbol);
+    return RelationalMathOperatorEnum.of(symbol.toUpperCase());
   }
 
   // ---------------------------------------------------------------------------

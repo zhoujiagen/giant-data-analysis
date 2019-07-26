@@ -32,7 +32,13 @@ public interface CommonLists extends PrimitiveExpression {
 
     @Override
     public String literal() {
-      return Joiner.on(", ").join(uids);
+      StringBuilder sb = new StringBuilder();
+      List<String> literals = Lists.newArrayList();
+      for (Uid uid : uids) {
+        literals.add(uid.literal());
+      }
+      sb.append(Joiner.on(", ").join(literals));
+      return sb.toString();
     }
   }
 

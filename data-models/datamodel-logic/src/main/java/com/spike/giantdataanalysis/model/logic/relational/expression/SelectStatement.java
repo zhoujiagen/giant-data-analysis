@@ -52,9 +52,9 @@ public interface SelectStatement extends DmlStatement {
     @Override
     public String literal() {
       StringBuilder sb = new StringBuilder();
-      sb.append(querySpecification);
+      sb.append(querySpecification.literal());
       if (lockClause != null) {
-        sb.append(" ").append(lockClause);
+        sb.append(" ").append(lockClause.literal());
       }
       return sb.toString();
     }

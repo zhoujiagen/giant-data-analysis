@@ -555,7 +555,7 @@ public interface DmlStatement extends SqlStatement {
       if (expression != null) {
         sb.append(" ON ").append(expression.literal()).append(" ");
       }
-      if (uidList == null) {
+      if (uidList != null) {
         sb.append(" USING ").append(uidList.literal());
       }
       return sb.toString();
