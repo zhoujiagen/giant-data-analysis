@@ -8,7 +8,6 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import com.spike.giantdataanalysis.model.logic.relational.core.RelationalAlgebraEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.CollationName;
-import com.spike.giantdataanalysis.model.logic.relational.expression.Expression.ExpressionAtom;
 import com.spike.giantdataanalysis.model.logic.relational.expression.SimpleIdSets.CharsetNameBaseEnum;
 
 /**

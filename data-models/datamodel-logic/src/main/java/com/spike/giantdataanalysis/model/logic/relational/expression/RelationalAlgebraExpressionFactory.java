@@ -2,7 +2,6 @@ package com.spike.giantdataanalysis.model.logic.relational.expression;
 
 import java.util.List;
 
-import com.google.common.base.Preconditions;
 import com.spike.giantdataanalysis.model.logic.relational.core.RelationalBitOperatorEnum;
 import com.spike.giantdataanalysis.model.logic.relational.core.RelationalComparisonOperatorEnum;
 import com.spike.giantdataanalysis.model.logic.relational.core.RelationalLogicalOperatorEnum;
@@ -125,17 +124,6 @@ import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatemen
 import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.UpdatedElement;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Expression.BetweenPredicate;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Expression.BinaryComparasionPredicate;
-import com.spike.giantdataanalysis.model.logic.relational.expression.Expression.ExpressionAtom;
-import com.spike.giantdataanalysis.model.logic.relational.expression.Expression.ExpressionAtom.BinaryExpressionAtom;
-import com.spike.giantdataanalysis.model.logic.relational.expression.Expression.ExpressionAtom.BitExpressionAtom;
-import com.spike.giantdataanalysis.model.logic.relational.expression.Expression.ExpressionAtom.Collate;
-import com.spike.giantdataanalysis.model.logic.relational.expression.Expression.ExpressionAtom.ExistsExpessionAtom;
-import com.spike.giantdataanalysis.model.logic.relational.expression.Expression.ExpressionAtom.IntervalExpressionAtom;
-import com.spike.giantdataanalysis.model.logic.relational.expression.Expression.ExpressionAtom.MathExpressionAtom;
-import com.spike.giantdataanalysis.model.logic.relational.expression.Expression.ExpressionAtom.NestedExpressionAtom;
-import com.spike.giantdataanalysis.model.logic.relational.expression.Expression.ExpressionAtom.NestedRowExpressionAtom;
-import com.spike.giantdataanalysis.model.logic.relational.expression.Expression.ExpressionAtom.SubqueryExpessionAtom;
-import com.spike.giantdataanalysis.model.logic.relational.expression.Expression.ExpressionAtom.UnaryExpressionAtom;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Expression.ExpressionAtomPredicate;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Expression.InPredicate;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Expression.IsExpression;
@@ -147,6 +135,16 @@ import com.spike.giantdataanalysis.model.logic.relational.expression.Expression.
 import com.spike.giantdataanalysis.model.logic.relational.expression.Expression.RegexpPredicate;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Expression.SoundsLikePredicate;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Expression.SubqueryComparasionPredicate;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ExpressionAtom.BinaryExpressionAtom;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ExpressionAtom.BitExpressionAtom;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ExpressionAtom.Collate;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ExpressionAtom.ExistsExpessionAtom;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ExpressionAtom.IntervalExpressionAtom;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ExpressionAtom.MathExpressionAtom;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ExpressionAtom.NestedExpressionAtom;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ExpressionAtom.NestedRowExpressionAtom;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ExpressionAtom.SubqueryExpessionAtom;
+import com.spike.giantdataanalysis.model.logic.relational.expression.ExpressionAtom.UnaryExpressionAtom;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Functions.AggregateWindowedFunction;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Functions.CaseFuncAlternative;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Functions.CaseFunctionCall;
@@ -265,56 +263,11 @@ import com.spike.giantdataanalysis.model.logic.relational.expression.UpdateState
 import com.spike.giantdataanalysis.model.logic.relational.expression.UtilityStatement.DescribeConnection;
 import com.spike.giantdataanalysis.model.logic.relational.expression.UtilityStatement.DescribeObjectClause;
 import com.spike.giantdataanalysis.model.logic.relational.expression.UtilityStatement.DescribeStatements;
-import com.spike.giantdataanalysis.model.logic.relational.model.RelationalAttribute;
-import com.spike.giantdataanalysis.model.logic.relational.model.RelationalTuples;
 
 /**
  * 关系代数表达式工厂.
  */
 public abstract class RelationalAlgebraExpressionFactory {
-  // ---------------------------------------------------------------------------
-  // RelationalAlgebraExpression
-  // ---------------------------------------------------------------------------
-
-  public static RelationalAlgebraBasicExpression
-      makeBasicExpression(final RelationalTuples tuples) {
-    Preconditions.checkArgument(tuples != null);
-
-    return new RelationalAlgebraBasicExpression(tuples);
-  }
-
-  public static RelationalAlgebraIntersectionExpression
-      makeIntersection(RelationalAlgebraExpression first, RelationalAlgebraExpression second) {
-    Preconditions.checkArgument(first != null);
-    Preconditions.checkArgument(second != null);
-
-    return new RelationalAlgebraIntersectionExpression(first, second);
-  }
-
-  public static RelationalAlgebraUnionExpression makeUnion(RelationalAlgebraExpression first,
-      RelationalAlgebraExpression second) {
-    Preconditions.checkArgument(first != null);
-    Preconditions.checkArgument(second != null);
-
-    return new RelationalAlgebraUnionExpression(first, second);
-  }
-
-  public static RelationalAlgebraDifferenceExpression
-      makeDifference(RelationalAlgebraExpression first, RelationalAlgebraExpression second) {
-    Preconditions.checkArgument(first != null);
-    Preconditions.checkArgument(second != null);
-
-    return new RelationalAlgebraDifferenceExpression(first, second);
-  }
-
-  public static RelationalAlgebraProjectExpression makeProject(RelationalAlgebraExpression first,
-      List<RelationalAttribute> attributes) {
-    Preconditions.checkArgument(first != null);
-    Preconditions.checkArgument(attributes != null && !attributes.isEmpty());
-
-    return new RelationalAlgebraProjectExpression(first, attributes);
-  }
-
   // ---------------------------------------------------------------------------
   // Top Level Description
   // ---------------------------------------------------------------------------

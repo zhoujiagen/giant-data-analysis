@@ -14,7 +14,6 @@ import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.F
 import com.spike.giantdataanalysis.model.logic.relational.expression.DataType.ConvertedDataType;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DdlStatement.IntervalType;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.OrderByExpression;
-import com.spike.giantdataanalysis.model.logic.relational.expression.Expression.ExpressionAtom;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Literals.Constant;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Literals.DecimalLiteral;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Literals.StringLiteral;

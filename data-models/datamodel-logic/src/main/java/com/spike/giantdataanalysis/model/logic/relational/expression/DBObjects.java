@@ -8,7 +8,6 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.spike.giantdataanalysis.model.logic.relational.core.RelationalAlgebraEnum;
-import com.spike.giantdataanalysis.model.logic.relational.expression.Expression.ExpressionAtom;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Literals.DecimalLiteral;
 
 /**
@@ -26,10 +25,26 @@ public interface DBObjects extends PrimitiveExpression {
     public final String dotId;
 
     FullId(List<Uid> uids, String dotId) {
-      Preconditions.checkArgument(uids != null && uids.size() > 0);
+      Preconditions.checkArgument(uids != null && uids.size() >= 1 && uids.size() <= 2);
+      if (dotId != null) {
+        Preconditions.checkArgument(uids.size() == 1);
+      }
 
       this.uids = uids;
       this.dotId = dotId;
+    }
+
+    public String firstRawLiteral() {
+      return uids.get(0).rawLiteral();
+    }
+
+    public String secondRawLiteral() {
+      if (dotId != null) {
+        return dotId.replaceAll("\\.", "");
+      } else if (uids.size() == 2) {
+        return uids.get(1).rawLiteral();
+      }
+      return null;
     }
 
     @Override
@@ -79,9 +94,45 @@ public interface DBObjects extends PrimitiveExpression {
 
     FullColumnName(Uid uid, List<DottedId> dottedIds) {
       Preconditions.checkArgument(uid != null);
+      if (CollectionUtils.isNotEmpty(dottedIds)) {
+        Preconditions.checkArgument(dottedIds.size() <= 2);
+      }
 
       this.uid = uid;
       this.dottedIds = dottedIds;
+    }
+
+    public String triple1() {
+      if (CollectionUtils.isNotEmpty(dottedIds)) {
+        if (dottedIds.size() == 2) {
+          return uid.rawLiteral();
+        }
+      }
+      return null;
+    }
+
+    public String triple2() {
+      if (CollectionUtils.isNotEmpty(dottedIds)) {
+        if (dottedIds.size() == 1) {
+          return uid.rawLiteral();
+        } else {
+          return dottedIds.get(0).rawLiteral();
+        }
+      } else {
+        return null;
+      }
+    }
+
+    public String triple3() {
+      if (CollectionUtils.isNotEmpty(dottedIds)) {
+        if (dottedIds.size() == 1) {
+          return dottedIds.get(0).rawLiteral();
+        } else {
+          return dottedIds.get(1).rawLiteral();
+        }
+      } else {
+        return uid.rawLiteral();
+      }
     }
 
     @Override
@@ -93,7 +144,7 @@ public interface DBObjects extends PrimitiveExpression {
         for (DottedId dottedId : dottedIds) {
           literals.add(dottedId.literal());
         }
-        sb.append(Joiner.on(" ").join(literals));
+        sb.append(Joiner.on("").join(literals));
       }
       return sb.toString();
     }
@@ -507,6 +558,10 @@ public interface DBObjects extends PrimitiveExpression {
       this.literal = literal;
     }
 
+    public String rawLiteral() {
+      return literal.replaceAll("`", "");
+    }
+
     @Override
     public String literal() {
       return literal;
@@ -578,6 +633,14 @@ public interface DBObjects extends PrimitiveExpression {
 
       this.dotId = dotId;
       this.uid = uid;
+    }
+
+    public String rawLiteral() {
+      if (dotId != null) {
+        return dotId.replaceAll("\\.", "");
+      } else {
+        return uid.rawLiteral();
+      }
     }
 
     @Override

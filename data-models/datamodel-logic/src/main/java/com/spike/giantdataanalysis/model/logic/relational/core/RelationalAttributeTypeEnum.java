@@ -6,8 +6,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import com.spike.giantdataanalysis.model.logic.relational.model.RelationalBlobAttributeValue;
-
 /**
  * 数据类型: 参考MySQL的数据类型.
  * 
@@ -84,8 +82,8 @@ public enum RelationalAttributeTypeEnum implements RelationalAlgebraEnum {
   MEDIUMTEXT(-1, String.class), //
   LONGTEXT(-1, String.class), //
 
-  BINARY(-1, byte[].class), //
-  VARBINARY(-1, byte[].class), //
+  BINARY(-1, RelationalBlobAttributeValue.class), //
+  VARBINARY(-1, RelationalBlobAttributeValue.class), //
 
   GEOMETRY(255, String.class), //
 
