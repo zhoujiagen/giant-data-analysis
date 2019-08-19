@@ -34,19 +34,6 @@ public interface DBObjects extends PrimitiveExpression {
       this.dotId = dotId;
     }
 
-    public String firstRawLiteral() {
-      return uids.get(0).rawLiteral();
-    }
-
-    public String secondRawLiteral() {
-      if (dotId != null) {
-        return dotId.replaceAll("\\.", "");
-      } else if (uids.size() == 2) {
-        return uids.get(1).rawLiteral();
-      }
-      return null;
-    }
-
     @Override
     public String literal() {
       StringBuilder sb = new StringBuilder();
@@ -100,39 +87,6 @@ public interface DBObjects extends PrimitiveExpression {
 
       this.uid = uid;
       this.dottedIds = dottedIds;
-    }
-
-    public String triple1() {
-      if (CollectionUtils.isNotEmpty(dottedIds)) {
-        if (dottedIds.size() == 2) {
-          return uid.rawLiteral();
-        }
-      }
-      return null;
-    }
-
-    public String triple2() {
-      if (CollectionUtils.isNotEmpty(dottedIds)) {
-        if (dottedIds.size() == 1) {
-          return uid.rawLiteral();
-        } else {
-          return dottedIds.get(0).rawLiteral();
-        }
-      } else {
-        return null;
-      }
-    }
-
-    public String triple3() {
-      if (CollectionUtils.isNotEmpty(dottedIds)) {
-        if (dottedIds.size() == 1) {
-          return dottedIds.get(0).rawLiteral();
-        } else {
-          return dottedIds.get(1).rawLiteral();
-        }
-      } else {
-        return uid.rawLiteral();
-      }
     }
 
     @Override
@@ -558,10 +512,6 @@ public interface DBObjects extends PrimitiveExpression {
       this.literal = literal;
     }
 
-    public String rawLiteral() {
-      return literal.replaceAll("`", "");
-    }
-
     @Override
     public String literal() {
       return literal;
@@ -633,14 +583,6 @@ public interface DBObjects extends PrimitiveExpression {
 
       this.dotId = dotId;
       this.uid = uid;
-    }
-
-    public String rawLiteral() {
-      if (dotId != null) {
-        return dotId.replaceAll("\\.", "");
-      } else {
-        return uid.rawLiteral();
-      }
     }
 
     @Override

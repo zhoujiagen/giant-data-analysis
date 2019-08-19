@@ -479,14 +479,6 @@ public interface SelectStatement extends DmlStatement {
       this.selectElements = selectElements;
     }
 
-    public String star() {
-      if (Boolean.TRUE.equals(star)) {
-        return "*";
-      } else {
-        return null;
-      }
-    }
-
     @Override
     public String literal() {
       StringBuilder sb = new StringBuilder();
@@ -552,14 +544,6 @@ public interface SelectStatement extends DmlStatement {
 
     public String name() {
       return fullColumnName.literal();
-    }
-
-    public String alias() {
-      if (uid != null) {
-        return uid.rawLiteral();
-      } else {
-        return null;
-      }
     }
 
     @Override

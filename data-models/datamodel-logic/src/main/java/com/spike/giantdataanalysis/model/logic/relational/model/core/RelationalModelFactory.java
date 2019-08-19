@@ -34,6 +34,7 @@ public abstract class RelationalModelFactory {
     return new RelationalAttribute(name, dataType, nullable);
   }
 
+  @Deprecated // make no sense
   public static List<RelationalAttribute> makeAttributes(int count) {
     Preconditions.checkArgument(count > 0);
     List<RelationalAttribute> result = Lists.newArrayList();
