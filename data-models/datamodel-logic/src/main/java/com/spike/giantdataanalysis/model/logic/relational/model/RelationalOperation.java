@@ -14,7 +14,7 @@ public interface RelationalOperation extends Literal {
   public RelationalAlgebraOperationEnum operationType();
 
   public RelationalRelation result(String alias);
-  
+
   /**
    * 求值.
    * @param context 求值上下文; 其中{@link RelationalEvaluationContext#stage}确定是否物理求值

@@ -1,12 +1,17 @@
 package com.spike.giantdataanalysis.model.logic.relational.interpreter;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.commons.collections4.keyvalue.MultiKey;
 import org.apache.commons.collections4.map.MultiKeyMap;
 import org.apache.commons.lang3.StringUtils;
 
+import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
@@ -57,17 +62,25 @@ public final class RESymbolTable {
   @Override
   public String toString() {
     StringBuilder builder = new StringBuilder();
-    builder.append("Symbols=");
-    if (symbolMap.isEmpty()) {
-      builder.append(symbolMap);
-    } else {
-      for (RESymbol symbol : symbolMap.values()) {
-        builder.append(symbol.toString());
+    if (!symbolMap.isEmpty()) {
+      builder.append("Symbols=");
+      builder.append("{");
+      builder.append(Joiner.on(", ").join(symbolMap.values()));
+      builder.append("}");
+      if (!symbolLinks.isEmpty()) {
+        builder.append(", Links=");
+        List<String> symbolLinkStringList = Lists.newArrayList();
+        for (Entry<MultiKey<? extends String>, Set<RESymbolLinkTypeEnum>> entry : symbolLinks
+            .entrySet()) {
+          MultiKey<? extends String> key = entry.getKey();
+          Set<RESymbolLinkTypeEnum> value = entry.getValue();
+          symbolLinkStringList.add(key.getKey(0) + "=" + value + "=>" + key.getKey(1));
+        }
+        // builder.append(symbolLinks);
+        builder.append(Joiner.on(", ").join(symbolLinkStringList));
       }
+
     }
-    builder.append(System.lineSeparator());
-    builder.append("Links=");
-    builder.append(symbolLinks);
     return builder.toString();
   }
 

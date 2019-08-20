@@ -172,6 +172,8 @@ public abstract class Literals implements PrimitiveExpression {
   }
 
   /**
+   * [NOT] NULL [NOT] \\N
+   * 
    * <pre>
   nullNotnull
     : NOT? (NULL_LITERAL | NULL_SPEC_LITERAL)

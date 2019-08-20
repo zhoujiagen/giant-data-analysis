@@ -473,7 +473,7 @@ public interface DBObjects extends PrimitiveExpression {
     @Override
     public String literal() {
       if (uid != null) {
-        return uid.toString();
+        return uid.literal();
       } else {
         return stringLiteral;
       }

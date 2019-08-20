@@ -7,6 +7,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import com.google.common.base.Preconditions;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.FullColumnName;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.FullId;
+import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.MysqlVariable;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.TableName;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.Uid;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.AtomTableItem;
@@ -15,6 +16,7 @@ import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatemen
 import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.LockClauseEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.NaturalJoin;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.OrderByClause;
+import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.OrderByExpression;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.OuterJoin;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.StraightJoin;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.SubqueryTableItem;
@@ -25,10 +27,14 @@ import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatemen
 import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.TableSources;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.TableSourcesItem;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Expression;
+import com.spike.giantdataanalysis.model.logic.relational.expression.Functions.FunctionCall;
+import com.spike.giantdataanalysis.model.logic.relational.expression.Literals.Constant;
+import com.spike.giantdataanalysis.model.logic.relational.expression.Literals.DecimalLiteral;
 import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement;
 import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.FromClause;
 import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.GroupByItem;
 import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.LimitClause;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.LimitClauseAtom;
 import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.ParenthesisSelect;
 import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.QuerySpecification;
 import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.SelectColumnElement;
@@ -48,25 +54,26 @@ import com.spike.giantdataanalysis.model.logic.relational.model.core.RelationalR
 
 /**
  * Interpreter: Expression => Model.
+ * <p>
+ * FIXME(zhoujiagen) 在上层作用域中校正下层作用域中解析出的符号和链接.
  */
-public final class REInterpreter {
-
-  // TODO(zhoujiagen) 一些考虑
-  // (1) catalog provider
-  // (2) IR真心的不好搞啊!!!
+public final class REInterpreter extends REInterpreterBase {
 
   final DummyRelationalCataloger cataloger = new DummyRelationalCataloger();
 
+  @Override
   public RelationalOperation interpreter(REInterpreterContext context,
-      SelectStatement selectStatement) {
+      SelectStatement selectStatement, String postfix) {
+    Preconditions.checkArgument(context != null);
     Preconditions.checkArgument(selectStatement != null);
+    Preconditions.checkArgument(postfix != null);
 
-    context.enterScope("SelectStatement");
+    context.enterScope("SelectStatement", postfix);
     RelationalOperation result = null;
 
     if (selectStatement instanceof SimpleSelect) {
       SimpleSelect simpleSelect = (SimpleSelect) selectStatement;
-      result = this.interpreter(context, simpleSelect);
+      result = this.interpreter(context, simpleSelect, postfix);
     } else if (selectStatement instanceof ParenthesisSelect) {
       ParenthesisSelect parenthesisSelect = (ParenthesisSelect) selectStatement;
       throw REInterpreterError.make(parenthesisSelect);
@@ -84,14 +91,17 @@ public final class REInterpreter {
     return result;
   }
 
-  public RelationalOperation interpreter(REInterpreterContext context, SimpleSelect simpleSelect) {
+  public RelationalOperation interpreter(REInterpreterContext context, SimpleSelect simpleSelect,
+      String postfix) {
+    Preconditions.checkArgument(context != null);
     Preconditions.checkArgument(simpleSelect != null);
+    Preconditions.checkArgument(postfix != null);
 
     RelationalOperation result = null;
-    context.enterScope("SimpleSelect");
+    context.enterScope("SimpleSelect", postfix);
 
     try {
-      result = this.interpreter(context, simpleSelect.querySpecification);
+      result = this.interpreter(context, simpleSelect.querySpecification, postfix);
       final LockClauseEnum lockClause = simpleSelect.lockClause;
     } finally {
       context.leaveScope();
@@ -101,35 +111,41 @@ public final class REInterpreter {
   }
 
   public RelationalOperation interpreter(REInterpreterContext context,
-      QuerySpecification querySpecification) {
+      QuerySpecification querySpecification, String postfix) {
+    Preconditions.checkArgument(context != null);
     Preconditions.checkArgument(querySpecification != null);
+    Preconditions.checkArgument(postfix != null);
 
     RelationalOperation result = null;
-    context.enterScope("QuerySpecification");
+    context.enterScope("QuerySpecification", postfix);
 
     try {
-      context.enterScope("SelectSpec");
       final List<SelectSpecEnum> selectSpecs = querySpecification.selectSpecs;
-      context.leaveScope();
 
-      this.interpreter(context, querySpecification.selectElements);
+      final SelectElements selectElements = querySpecification.selectElements;
+      this.interpreter(context, selectElements, postfix);
 
-      context.enterScope("SelectIntoExpression");
+      context.enterScope("SelectIntoExpression", postfix);
       final SelectIntoExpression selectIntoExpression = querySpecification.selectIntoExpression;
       if (selectIntoExpression != null) {
         throw REInterpreterError.make(selectIntoExpression);
       }
       context.leaveScope(); // SelectIntoExpression
 
-      this.interpreter(context, querySpecification.fromClause);
+      final FromClause fromClause = querySpecification.fromClause;
+      if (fromClause != null) {
+        this.interpreter(context, fromClause, postfix);
+      }
 
-      context.enterScope("OrderByClause");
       final OrderByClause orderByClause = querySpecification.orderByClause;
-      context.leaveScope(); // OrderByClause
+      if (orderByClause != null) {
+        this.interpreter(context, orderByClause, postfix);
+      }
 
-      context.enterScope("LimitClause");
       final LimitClause limitClause = querySpecification.limitClause;
-      context.leaveScope(); // LimitClause
+      if (limitClause != null) {
+        this.interpreter(context, limitClause, postfix);
+      }
     } finally {
       context.leaveScope();
     }
@@ -137,46 +153,164 @@ public final class REInterpreter {
     return result;
   }
 
-  public void interpreter(REInterpreterContext context, FromClause fromClause) {
-    Preconditions.checkArgument(fromClause != null);
+  public void interpreter(REInterpreterContext context, LimitClause limitClause, String postfix) {
+    Preconditions.checkArgument(context != null);
+    Preconditions.checkArgument(limitClause != null);
+    Preconditions.checkArgument(postfix != null);
 
-    context.enterScope("FromClause");
+    context.enterScope("LimitClause", postfix);
     try {
-      final TableSources tableSources = fromClause.tableSources;
-      this.interpreter(context, tableSources);
-      final Expression whereExpr = fromClause.whereExpr;
+      final LimitClauseAtom limit = limitClause.limit;
+      final LimitClauseAtom offset = limitClause.offset;
+      if (offset != null) {
+        this.interpreter(context, offset, postfix + "1");
+        this.interpreter(context, limit, postfix + "2");
+      } else {
+        this.interpreter(context, limit, postfix);
+      }
+    } finally {
+      context.leaveScope();
+    }
 
-      final List<GroupByItem> groupByItems = fromClause.groupByItems;
-      final Boolean withRollup = fromClause.withRollup;
-      final Expression havingExpr = fromClause.havingExpr;
+  }
+
+  // no scope change
+  public void interpreter(REInterpreterContext context, LimitClauseAtom limitClauseAtom,
+      String postfix) {
+    Preconditions.checkArgument(context != null);
+    Preconditions.checkArgument(limitClauseAtom != null);
+    Preconditions.checkArgument(postfix != null);
+
+    final DecimalLiteral decimalLiteral = limitClauseAtom.decimalLiteral;
+    final MysqlVariable mysqlVariable = limitClauseAtom.mysqlVariable;
+    if (decimalLiteral != null) {
+      this.interpreter(context, decimalLiteral, postfix);
+    } else {
+      this.interpreter(context, mysqlVariable, postfix);
+    }
+  }
+
+  // no scope change
+  public void interpreter(REInterpreterContext context, DecimalLiteral decimalLiteral,
+      String postfix) {
+    Preconditions.checkArgument(context != null);
+    Preconditions.checkArgument(decimalLiteral != null);
+    Preconditions.checkArgument(postfix != null);
+
+    context.addSymbol(decimalLiteral.literal(), RESymbolTypeEnum.CONSTANT);
+    context.addLink(RESymbolLinkTypeEnum.TYPE, decimalLiteral.literal(),
+      Constant.Type.DECIMAL_LITERAL.literal());
+  }
+
+  public void interpreter(REInterpreterContext context, OrderByClause orderByClause,
+      String postfix) {
+    Preconditions.checkArgument(context != null);
+    Preconditions.checkArgument(orderByClause != null);
+    Preconditions.checkArgument(postfix != null);
+
+    context.enterScope("OrderByClause", postfix);
+    try {
+      List<OrderByExpression> orderByExpressions = orderByClause.orderByExpressions;
+      for (OrderByExpression orderByExpression : orderByExpressions) {
+        this.interpreter(context, orderByExpression, postfix);
+      }
     } finally {
       context.leaveScope();
     }
   }
 
-  public void interpreter(REInterpreterContext context, SelectElements selectElements) {
-    Preconditions.checkArgument(selectElements != null);
+  public void interpreter(REInterpreterContext context, OrderByExpression orderByExpression,
+      String postfix) {
+    Preconditions.checkArgument(context != null);
+    Preconditions.checkArgument(orderByExpression != null);
+    Preconditions.checkArgument(postfix != null);
 
-    context.enterScope("SelectElements");
+    context.enterScope("OrderByExpression", postfix);
+    try {
+      Expression expression = orderByExpression.expression;
+      this.interpreter(context, expression, postfix);
+      OrderByExpression.OrderType order = orderByExpression.order;
+    } finally {
+      context.leaveScope();
+    }
+  }
+
+  public void interpreter(REInterpreterContext context, FromClause fromClause, String postfix) {
+    Preconditions.checkArgument(context != null);
+    Preconditions.checkArgument(fromClause != null);
+    Preconditions.checkArgument(postfix != null);
+
+    context.enterScope("FromClause", postfix);
+    try {
+      final TableSources tableSources = fromClause.tableSources;
+      this.interpreter(context, tableSources, postfix);
+      final Expression whereExpr = fromClause.whereExpr;
+      if (whereExpr != null) {
+        this.interpreter(context, whereExpr, postfix + "1");
+      }
+
+      final List<GroupByItem> groupByItems = fromClause.groupByItems;
+      if (CollectionUtils.isNotEmpty(groupByItems)) {
+        for (GroupByItem groupByItem : groupByItems) {
+          this.interpreter(context, groupByItem, postfix);
+        }
+      }
+
+      final Boolean withRollup = fromClause.withRollup;
+      final Expression havingExpr = fromClause.havingExpr;
+      if (havingExpr != null) {
+        this.interpreter(context, havingExpr, postfix + "2");
+      }
+    } finally {
+      context.leaveScope();
+    }
+  }
+
+  public void interpreter(REInterpreterContext context, GroupByItem groupByItem, String postfix) {
+    Preconditions.checkArgument(context != null);
+    Preconditions.checkArgument(groupByItem != null);
+    Preconditions.checkArgument(postfix != null);
+
+    context.enterScope("GroupByItem", postfix);
+    try {
+      Expression expression = groupByItem.expression;
+      this.interpreter(context, expression, postfix);
+      GroupByItem.OrderType orderType = groupByItem.order;
+    } finally {
+      context.leaveScope();
+    }
+
+  }
+
+  public void interpreter(REInterpreterContext context, SelectElements selectElements,
+      String postfix) {
+    Preconditions.checkArgument(context != null);
+    Preconditions.checkArgument(selectElements != null);
+    Preconditions.checkArgument(postfix != null);
+
+    context.enterScope("SelectElements", postfix);
     try {
       if (Boolean.TRUE.equals(selectElements.star)) {
-        context.addSymbol(REUtils.star(selectElements));
+        context.addSymbol(REUtils.star(selectElements), RESymbolTypeEnum.ALL_ATTRIBUTE_NAME);
       }
 
       final List<SelectElement> selectElementList = selectElements.selectElements;
       for (SelectElement selectElement : selectElementList) {
-        this.interpreter(context, selectElement);
+        this.interpreter(context, selectElement, postfix);
       }
     } finally {
       context.leaveScope();
     }
   }
 
-  public void interpreter(REInterpreterContext context, SelectElement selectElement) {
+  public void interpreter(REInterpreterContext context, SelectElement selectElement,
+      String postfix) {
+    Preconditions.checkArgument(context != null);
+    Preconditions.checkArgument(context != null);
     Preconditions.checkArgument(selectElement != null);
+    Preconditions.checkArgument(postfix != null);
 
-    context.enterScope("SelectElement");
-
+    context.enterScope("SelectElement", postfix);
     try {
       if (selectElement instanceof SelectStarElement) {
         SelectStarElement selectStarElement = (SelectStarElement) selectElement;
@@ -194,31 +328,12 @@ public final class REInterpreter {
       else if (selectElement instanceof SelectColumnElement) {
         SelectColumnElement selectColumnElement = (SelectColumnElement) selectElement;
         final FullColumnName fullColumnName = selectColumnElement.fullColumnName;
-        String column = REUtils.triple3(fullColumnName);
-        String database = REUtils.triple1(fullColumnName);
-        String table = REUtils.triple2(fullColumnName);
-        context.addSymbol(column, RESymbolTypeEnum.ATTRIBUTE_NAME);
-        if (database != null) {
-          context.addSymbol(database, RESymbolTypeEnum.DATABASE_NAME);
-        }
-        if (table != null) {
-          context.addSymbol(table, RESymbolTypeEnum.TABLE_NAME);
-          context.addLink(RESymbolLinkTypeEnum.ATTRIBUTE_OF, column, table);
-          if (database != null) {
-            context.addLink(RESymbolLinkTypeEnum.TABLE_OF_DATABASE, table, database);
-          }
-        }
-        final Uid uid = selectColumnElement.uid;
-        if (uid != null) {
-          context.addSymbol(REUtils.rawLiteral(uid), RESymbolTypeEnum.ATTRIBUTE_NAME);
-          context.addLink(RESymbolLinkTypeEnum.ALIAS_OF, REUtils.rawLiteral(uid), column);
-        } else {
-        }
+        this.interpreter(context, fullColumnName, postfix);
       }
 
       else if (selectElement instanceof SelectFunctionElement) {
         SelectFunctionElement selectFunctionElement = (SelectFunctionElement) selectElement;
-        throw REInterpreterError.make(selectFunctionElement);
+        this.interpreter(context, selectFunctionElement, postfix);
       }
 
       else if (selectElement instanceof SelectExpressionElement) {
@@ -232,14 +347,40 @@ public final class REInterpreter {
     }
   }
 
-  public void interpreter(REInterpreterContext context, TableSources tableSources) {
-    Preconditions.checkArgument(tableSources != null);
+  public void interpreter(REInterpreterContext context, SelectFunctionElement selectFunctionElement,
+      String postfix) {
+    Preconditions.checkArgument(context != null);
+    Preconditions.checkArgument(selectFunctionElement != null);
+    Preconditions.checkArgument(postfix != null);
 
-    context.enterScope("TableSources");
+    context.enterScope("SelectFunctionElement", postfix);
+    try {
+      FunctionCall functionCall = selectFunctionElement.functionCall;
+      String functionCallLiteral = functionCall.literal();
+      context.addSymbol(functionCallLiteral, RESymbolTypeEnum.ATTRIBUTE_NAME);
+      this.interpreter(context, functionCall, postfix);
+
+      Uid uid = selectFunctionElement.uid;
+      if (uid != null) {
+        String uidRawLiteral = REUtils.rawLiteral(uid);
+        context.addSymbol(uidRawLiteral, RESymbolTypeEnum.ATTRIBUTE_NAME);
+        context.addLink(RESymbolLinkTypeEnum.ALIAS_OF, uidRawLiteral, functionCallLiteral);
+      }
+    } finally {
+      context.leaveScope();
+    }
+  }
+
+  public void interpreter(REInterpreterContext context, TableSources tableSources, String postfix) {
+    Preconditions.checkArgument(context != null);
+    Preconditions.checkArgument(tableSources != null);
+    Preconditions.checkArgument(postfix != null);
+
+    context.enterScope("TableSources", postfix);
     try {
       List<TableSource> tableSourceList = tableSources.tableSources;
       for (TableSource tableSource : tableSourceList) {
-        this.interpreter(context, tableSource);
+        this.interpreter(context, tableSource, postfix);
       }
     } finally {
       context.leaveScope();
@@ -247,11 +388,12 @@ public final class REInterpreter {
 
   }
 
-  public void interpreter(REInterpreterContext context, TableSource tableSource) {
+  public void interpreter(REInterpreterContext context, TableSource tableSource, String postfix) {
     Preconditions.checkArgument(context != null);
     Preconditions.checkArgument(tableSource != null);
+    Preconditions.checkArgument(postfix != null);
 
-    context.enterScope("TableSource");
+    context.enterScope("TableSource", postfix);
 
     try {
       final TableSourceItem tableSourceItem;
@@ -268,11 +410,11 @@ public final class REInterpreter {
         throw REInterpreterError.make(tableSource);
       }
 
-      this.interpreter(context, tableSourceItem);
+      this.interpreter(context, tableSourceItem, postfix);
 
       if (CollectionUtils.isNotEmpty(joinParts)) {
         for (JoinPart joinPart : joinParts) {
-          this.interpreter(context, joinPart);
+          this.interpreter(context, joinPart, postfix);
         }
       }
     } finally {
@@ -281,10 +423,12 @@ public final class REInterpreter {
 
   }
 
-  public void interpreter(REInterpreterContext context, JoinPart joinPart) {
+  public void interpreter(REInterpreterContext context, JoinPart joinPart, String postfix) {
+    Preconditions.checkArgument(context != null);
     Preconditions.checkArgument(joinPart != null);
+    Preconditions.checkArgument(postfix != null);
 
-    context.enterScope("JoinPart");
+    context.enterScope("JoinPart", postfix);
 
     try {
       if (joinPart instanceof InnerJoin) {
@@ -308,10 +452,13 @@ public final class REInterpreter {
 
   }
 
-  public void interpreter(REInterpreterContext context, TableSourceItem tableSourceItem) {
+  public void interpreter(REInterpreterContext context, TableSourceItem tableSourceItem,
+      String postfix) {
+    Preconditions.checkArgument(context != null);
     Preconditions.checkArgument(tableSourceItem != null);
+    Preconditions.checkArgument(postfix != null);
 
-    context.enterScope("TableSourceItem");
+    context.enterScope("TableSourceItem", postfix);
 
     try {
       if (tableSourceItem instanceof AtomTableItem) {
@@ -340,7 +487,8 @@ public final class REInterpreter {
         SubqueryTableItem subqueryTableItem = (SubqueryTableItem) tableSourceItem;
         final SelectStatement selectStatement = subqueryTableItem.selectStatement;
         final Uid alias = subqueryTableItem.alias;
-        RelationalOperation relationalOperation = this.interpreter(context, selectStatement);
+        RelationalOperation relationalOperation =
+            this.interpreter(context, selectStatement, postfix);
         // 临时关系
         RelationalRelation relation = relationalOperation.result(REUtils.rawLiteral(alias));
         context.addSymbol(REUtils.rawLiteral(alias), RESymbolTypeEnum.TABLE_NAME);
@@ -350,7 +498,7 @@ public final class REInterpreter {
       else if (tableSourceItem instanceof TableSourcesItem) {
         TableSourcesItem tableSourcesItem = (TableSourcesItem) tableSourceItem;
         final TableSources tableSources = tableSourcesItem.tableSources;
-        this.interpreter(context, tableSources);
+        this.interpreter(context, tableSources, postfix);
       }
 
       else {
@@ -360,5 +508,4 @@ public final class REInterpreter {
       context.leaveScope();
     }
   }
-
 }

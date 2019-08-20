@@ -17,8 +17,7 @@ public class REInterpreterError extends RuntimeException {
   }
 
   public static REInterpreterError make(RelationalAlgebraExpression expression) {
-    return new REInterpreterError(
-        expression.getClass().getName() + ": \n" + expression.literal());
+    return new REInterpreterError(expression.getClass().getName() + ": \n" + expression.literal());
   }
 
   REInterpreterError() {
@@ -37,8 +36,8 @@ public class REInterpreterError extends RuntimeException {
     super(cause);
   }
 
-  protected REInterpreterError(String message, Throwable cause,
-      boolean enableSuppression, boolean writableStackTrace) {
+  protected REInterpreterError(String message, Throwable cause, boolean enableSuppression,
+      boolean writableStackTrace) {
     super(message, cause, enableSuppression, writableStackTrace);
   }
 }

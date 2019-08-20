@@ -32,8 +32,7 @@ public class RelationalDifferenceOperation extends RelationalBinaryOperation {
   @Override
   public RelationalRelation eval(RelationalEvaluationContext context)
       throws RelationalEvaluationError {
-    Preconditions
-        .checkArgument(RelationalUtils.equals(first.attributes, second.attributes));
+    Preconditions.checkArgument(RelationalUtils.equals(first.attributes, second.attributes));
 
     String name = RelationalUtils.temporaryRelationName(first, second);
     return RelationalModelFactory.makeRelation(name, first.attributes);

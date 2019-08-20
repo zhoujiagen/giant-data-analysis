@@ -24,7 +24,7 @@ public enum RelationalAlgebraOperationEnum implements RelationalAlgebraEnum {
   RIGHT_OUTER_JION("⟖", 3), // 右外连接
   FULL_OUTER_JOIN("⟗", 3), // 全外连接
 
-//  AGGREGATE("∑", 2), // 聚集Д
+  // AGGREGATE("∑", 2), // 聚集Д
 
   DUPLICATE_ELIMINATION("δ", 1), // 消除重复
   GROUP("γ", 2), // 分组

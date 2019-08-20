@@ -521,8 +521,6 @@ public interface SelectStatement extends DmlStatement {
       this.fullId = fullId;
     }
 
-    
-    
     @Override
     public String literal() {
       StringBuilder sb = new StringBuilder();

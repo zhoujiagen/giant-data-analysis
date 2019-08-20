@@ -5,7 +5,6 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
 import com.spike.giantdataanalysis.model.logic.relational.core.RelationalAttributeTypeEnum;
 import com.spike.giantdataanalysis.model.logic.relational.core.RelationalRelationKeyTypeEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Expression;
@@ -27,21 +26,12 @@ public abstract class RelationalModelFactory {
   public static RelationalAttribute makeAttribute(//
       final String name, //
       final RelationalAttributeTypeEnum dataType, //
+      final Integer length, //
       final boolean nullable) {
     Preconditions.checkArgument(StringUtils.isNotBlank(name));
     Preconditions.checkArgument(dataType != null);
 
-    return new RelationalAttribute(name, dataType, nullable);
-  }
-
-  @Deprecated // make no sense
-  public static List<RelationalAttribute> makeAttributes(int count) {
-    Preconditions.checkArgument(count > 0);
-    List<RelationalAttribute> result = Lists.newArrayList();
-    for (int i = 0; i < count; i++) {
-      result.add(makeAttribute(String.valueOf(i), RelationalAttributeTypeEnum.VARCHAR, true));
-    }
-    return result;
+    return new RelationalAttribute(name, dataType, length, nullable);
   }
 
   // ---------------------------------------------------------------------------

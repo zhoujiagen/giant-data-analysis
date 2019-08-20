@@ -11,7 +11,7 @@ import com.spike.giantdataanalysis.model.logic.relational.model.core.RelationalM
 import com.spike.giantdataanalysis.model.logic.relational.model.core.RelationalRelation;
 
 /**
- * 
+ * 关系定义Catalog.
  */
 public interface RelationalCataloger {
 
@@ -20,18 +20,18 @@ public interface RelationalCataloger {
 
     static {
       // Movies
-      RelationalAttribute Movies_title =
-          RelationalModelFactory.makeAttribute("title", RelationalAttributeTypeEnum.VARCHAR, false);
+      RelationalAttribute Movies_title = RelationalModelFactory.makeAttribute("title",
+        RelationalAttributeTypeEnum.VARCHAR, 100, false);
       RelationalAttribute Movies_year =
-          RelationalModelFactory.makeAttribute("year", RelationalAttributeTypeEnum.INT, false);
+          RelationalModelFactory.makeAttribute("year", RelationalAttributeTypeEnum.INT, 11, false);
       RelationalAttribute Movies_length =
-          RelationalModelFactory.makeAttribute("length", RelationalAttributeTypeEnum.INT, false);
-      RelationalAttribute Movies_genre =
-          RelationalModelFactory.makeAttribute("genre", RelationalAttributeTypeEnum.VARCHAR, false);
+          RelationalModelFactory.makeAttribute("length", RelationalAttributeTypeEnum.INT, 11, true);
+      RelationalAttribute Movies_genre = RelationalModelFactory.makeAttribute("genre",
+        RelationalAttributeTypeEnum.VARCHAR, 10, true);
       RelationalAttribute Movies_studioName = RelationalModelFactory.makeAttribute("studioName",
-        RelationalAttributeTypeEnum.VARCHAR, false);
-      RelationalAttribute Movies_producerC =
-          RelationalModelFactory.makeAttribute("producerC", RelationalAttributeTypeEnum.INT, false);
+        RelationalAttributeTypeEnum.VARCHAR, 30, true);
+      RelationalAttribute Movies_producerC = RelationalModelFactory.makeAttribute("producerC#",
+        RelationalAttributeTypeEnum.INT, 11, true);
       RelationalRelation Movies = RelationalModelFactory.makeRelation("Movies", Lists.newArrayList(//
         Movies_title, Movies_year, Movies_length, Movies_genre, Movies_studioName,
         Movies_producerC));
@@ -41,14 +41,14 @@ public interface RelationalCataloger {
       relationMap.put("Movies", Movies);
 
       // MovieStar
-      RelationalAttribute MovieStar_name =
-          RelationalModelFactory.makeAttribute("name", RelationalAttributeTypeEnum.VARCHAR, false);
+      RelationalAttribute MovieStar_name = RelationalModelFactory.makeAttribute("name",
+        RelationalAttributeTypeEnum.VARCHAR, 30, false);
       RelationalAttribute MovieStar_address = RelationalModelFactory.makeAttribute("address",
-        RelationalAttributeTypeEnum.VARCHAR, false);
+        RelationalAttributeTypeEnum.VARCHAR, 255, true);
       RelationalAttribute MovieStar_gender =
-          RelationalModelFactory.makeAttribute("gender", RelationalAttributeTypeEnum.CHAR, false);
+          RelationalModelFactory.makeAttribute("gender", RelationalAttributeTypeEnum.CHAR, 1, true);
       RelationalAttribute MovieStar_birthdate = RelationalModelFactory.makeAttribute("birthdate",
-        RelationalAttributeTypeEnum.DATE, false);
+        RelationalAttributeTypeEnum.DATE, null, true);
       RelationalRelation MovieStar =
           RelationalModelFactory.makeRelation("MovieStar", Lists.newArrayList(//
             MovieStar_name, MovieStar_address, MovieStar_gender, MovieStar_birthdate));
@@ -59,11 +59,11 @@ public interface RelationalCataloger {
 
       // StarsIn
       RelationalAttribute StarsIn_movieTitle = RelationalModelFactory.makeAttribute("movieTitle",
-        RelationalAttributeTypeEnum.VARCHAR, false);
-      RelationalAttribute StarsIn_movieYear =
-          RelationalModelFactory.makeAttribute("movieYear", RelationalAttributeTypeEnum.INT, false);
+        RelationalAttributeTypeEnum.VARCHAR, 100, false);
+      RelationalAttribute StarsIn_movieYear = RelationalModelFactory.makeAttribute("movieYear",
+        RelationalAttributeTypeEnum.INT, 11, false);
       RelationalAttribute StarsIn_starName = RelationalModelFactory.makeAttribute("starName",
-        RelationalAttributeTypeEnum.VARCHAR, false);
+        RelationalAttributeTypeEnum.VARCHAR, 30, false);
       RelationalRelation StarsIn =
           RelationalModelFactory.makeRelation("StarsIn", Lists.newArrayList(//
             StarsIn_movieTitle, StarsIn_movieYear, StarsIn_starName));
@@ -73,14 +73,14 @@ public interface RelationalCataloger {
       relationMap.put("StarsIn", StarsIn);
 
       // MovieExec
-      RelationalAttribute MovieExec_name =
-          RelationalModelFactory.makeAttribute("name", RelationalAttributeTypeEnum.VARCHAR, false);
+      RelationalAttribute MovieExec_name = RelationalModelFactory.makeAttribute("name",
+        RelationalAttributeTypeEnum.VARCHAR, 100, false);
       RelationalAttribute MovieExec_address = RelationalModelFactory.makeAttribute("address",
-        RelationalAttributeTypeEnum.VARCHAR, false);
+        RelationalAttributeTypeEnum.VARCHAR, 255, true);
       RelationalAttribute MovieExec_cert =
-          RelationalModelFactory.makeAttribute("cert", RelationalAttributeTypeEnum.INT, false);
-      RelationalAttribute MovieExec_netWorth =
-          RelationalModelFactory.makeAttribute("netWorth", RelationalAttributeTypeEnum.INT, false);
+          RelationalModelFactory.makeAttribute("cert#", RelationalAttributeTypeEnum.INT, 11, true);
+      RelationalAttribute MovieExec_netWorth = RelationalModelFactory.makeAttribute("netWorth",
+        RelationalAttributeTypeEnum.INT, 11, true);
       RelationalRelation MovieExec =
           RelationalModelFactory.makeRelation("MovieExec", Lists.newArrayList(//
             MovieExec_name, MovieExec_address, MovieExec_cert, MovieExec_netWorth));
@@ -90,12 +90,12 @@ public interface RelationalCataloger {
       relationMap.put("MovieExec", MovieExec);
 
       // Studio
-      RelationalAttribute Studioc_name =
-          RelationalModelFactory.makeAttribute("name", RelationalAttributeTypeEnum.VARCHAR, false);
+      RelationalAttribute Studioc_name = RelationalModelFactory.makeAttribute("name",
+        RelationalAttributeTypeEnum.VARCHAR, 30, false);
       RelationalAttribute Studioc_address = RelationalModelFactory.makeAttribute("address",
-        RelationalAttributeTypeEnum.VARCHAR, false);
+        RelationalAttributeTypeEnum.VARCHAR, 255, true);
       RelationalAttribute Studioc_presC =
-          RelationalModelFactory.makeAttribute("presC", RelationalAttributeTypeEnum.VARCHAR, false);
+          RelationalModelFactory.makeAttribute("presC#", RelationalAttributeTypeEnum.INT, 11, true);
       RelationalRelation Studio = RelationalModelFactory.makeRelation("Studio", Lists.newArrayList(//
         Studioc_name, Studioc_address, Studioc_presC));
       Studio.addKeys(Lists.newArrayList(//
@@ -104,8 +104,8 @@ public interface RelationalCataloger {
       relationMap.put("Studio", Studio);
     }
 
-    public RelationalRelation relation(String name) {
-      return relationMap.get(name);
+    public RelationalRelation relation(String relationName) {
+      return relationMap.get(relationName);
     }
 
     public RelationalAttribute attribute(String relationName, String attributeName) {

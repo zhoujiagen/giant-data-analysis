@@ -12,7 +12,7 @@ import com.spike.giantdataanalysis.model.logic.relational.core.RelationalAttribu
 public class RelationalAttribute implements Literal, Comparable<RelationalAttribute> {
 
   public static final RelationalAttribute EMPTY =
-      new RelationalAttribute("EMPTY", RelationalAttributeTypeEnum.NULL, true);
+      new RelationalAttribute("EMPTY", RelationalAttributeTypeEnum.NULL, 0, true);
 
   public static final String NAME_SEP = ".";
 
@@ -20,28 +20,32 @@ public class RelationalAttribute implements Literal, Comparable<RelationalAttrib
   public final String name;
   // 属性类型
   public final RelationalAttributeTypeEnum dataType;
-  // 属性是否可空
+  // 属性值长度
+  public final Integer length;
+  // 属性值是否可空
   public final boolean nullable;
 
-  RelationalAttribute(String name, RelationalAttributeTypeEnum dataType, boolean nullable) {
+  RelationalAttribute(String name, RelationalAttributeTypeEnum dataType, Integer length,
+      boolean nullable) {
     Preconditions.checkArgument(StringUtils.isNotBlank(name));
     Preconditions.checkArgument(dataType != null);
 
     this.name = name;
     this.dataType = dataType;
+    this.length = length;
     this.nullable = nullable;
   }
 
   /** 拷贝: 同名. */
   public RelationalAttribute copy() {
-    return new RelationalAttribute(name, dataType, nullable);
+    return new RelationalAttribute(name, dataType, length, nullable);
   }
 
   /** 拷贝: 别名. */
   public RelationalAttribute copy(String alias) {
     Preconditions.checkArgument(StringUtils.isNotBlank(alias));
 
-    return new RelationalAttribute(alias, dataType, nullable);
+    return new RelationalAttribute(alias, dataType, length, nullable);
   }
 
   @Override
