@@ -3,7 +3,7 @@ package com.spike.giantdataanalysis.model.logic.relational.model;
 import com.google.common.base.Preconditions;
 import com.spike.giantdataanalysis.model.logic.relational.core.RelationalAlgebraOperationEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Expression;
-import com.spike.giantdataanalysis.model.logic.relational.interpreter.REScope;
+import com.spike.giantdataanalysis.model.logic.relational.interpreter.REInterpreterScope;
 import com.spike.giantdataanalysis.model.logic.relational.model.core.RelationalModelFactory;
 import com.spike.giantdataanalysis.model.logic.relational.model.core.RelationalRelation;
 
@@ -15,10 +15,10 @@ public class RelationalSelectOperation implements RelationalOperation {
 
   public final Expression condition;
   // may be a higher scope than 'expression'
-  public final REScope interpreteScope;
+  public final REInterpreterScope interpreteScope;
 
   public RelationalSelectOperation(RelationalRelation relation, Expression condition,
-      REScope interpreteScope) {
+      REInterpreterScope interpreteScope) {
     Preconditions.checkArgument(relation != null);
 
     this.relation = relation;

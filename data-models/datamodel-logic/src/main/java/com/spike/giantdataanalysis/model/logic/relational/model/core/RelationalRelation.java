@@ -18,8 +18,9 @@ public class RelationalRelation implements Literal {
   public static final String TEMPORARY_NAME_PREFIX = "$";
   public static final String TEMPORARY_NAME_SEP = "^";
 
+  public static final String RELATION_NAME_DUAL = "DUAL";
   public static final RelationalRelation DUAL =
-      new RelationalRelation("DUAL", Lists.newArrayList(RelationalAttribute.EMPTY));
+      new RelationalRelation(RELATION_NAME_DUAL, Lists.newArrayList(RelationalAttribute.EMPTY));
 
   // 关系的名称
   public final String name;
@@ -80,16 +81,12 @@ public class RelationalRelation implements Literal {
   public String literal() {
     StringBuilder sb = new StringBuilder();
     sb.append(name);
-    sb.append(System.lineSeparator());
-
-    sb.append("attributes: ");
+    sb.append("(");
     sb.append(attributes);
-    sb.append(System.lineSeparator());
-
+    sb.append(")");
     if (CollectionUtils.isNotEmpty(keys)) {
-      sb.append("keys: ");
+      sb.append(", keys: ");
       sb.append(keys);
-      sb.append(System.lineSeparator());
     }
     return sb.toString();
   }

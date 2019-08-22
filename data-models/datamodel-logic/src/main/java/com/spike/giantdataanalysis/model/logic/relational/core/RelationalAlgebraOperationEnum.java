@@ -41,6 +41,6 @@ public enum RelationalAlgebraOperationEnum implements RelationalAlgebraEnum {
 
   @Override
   public String literal() {
-    return name();
+    return symbol;
   }
 }

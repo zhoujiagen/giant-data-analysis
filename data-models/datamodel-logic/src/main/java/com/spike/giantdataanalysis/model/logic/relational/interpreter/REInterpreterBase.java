@@ -51,7 +51,9 @@ import com.spike.giantdataanalysis.model.logic.relational.expression.Functions.U
 import com.spike.giantdataanalysis.model.logic.relational.expression.Literals.Constant;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Literals.NullNotnull;
 import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement;
-import com.spike.giantdataanalysis.model.logic.relational.model.RelationalOperation;
+import com.spike.giantdataanalysis.model.logic.relational.interpreter.RESymbolTable.RESymbolLinkTypeEnum;
+import com.spike.giantdataanalysis.model.logic.relational.interpreter.RESymbolTable.RESymbolTypeEnum;
+import com.spike.giantdataanalysis.model.logic.relational.model.RelationalOperationTree.TreeNode;
 
 /**
  * Interpreter Base: Predicate => Model.
@@ -60,7 +62,7 @@ import com.spike.giantdataanalysis.model.logic.relational.model.RelationalOperat
  */
 public abstract class REInterpreterBase {
 
-  public abstract RelationalOperation interpreter(REInterpreterContext context,
+  public abstract TreeNode interpreter(REInterpreterContext context,
       SelectStatement selectStatement, String postfix);
 
   public void interpreter(REInterpreterContext context, Expressions expressions, String postfix) {
@@ -288,7 +290,7 @@ public abstract class REInterpreterBase {
         try {
           String localId = expressionAtomPredicate.localId;
           if (StringUtils.isNotBlank(localId)) {
-            context.addSymbol(localId, RESymbolTypeEnum.VARIABLE);
+            context.addSymbol(localId, RESymbolTypeEnum.LOCAL_ID);
           }
           ExpressionAtom expressionAtom = expressionAtomPredicate.expressionAtom;
           this.interpreter(context, expressionAtom, postfix);

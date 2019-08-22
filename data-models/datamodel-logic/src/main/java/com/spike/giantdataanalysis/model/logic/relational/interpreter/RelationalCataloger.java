@@ -2,6 +2,8 @@ package com.spike.giantdataanalysis.model.logic.relational.interpreter;
 
 import java.util.Map;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.spike.giantdataanalysis.model.logic.relational.core.RelationalAttributeTypeEnum;
@@ -119,6 +121,19 @@ public interface RelationalCataloger {
         }
       }
 
+      return null;
+    }
+
+    // TODO(zhoujiagen) hard coded here, may introduce context information
+    public Pair<RelationalRelation, RelationalAttribute> guessAttribute(String attributeName) {
+      for (String relationName : relationMap.keySet()) {
+        RelationalRelation relation = relationMap.get(relationName);
+        for (RelationalAttribute attribute : relation.attributes) {
+          if (attribute.name.equals(attributeName)) {
+            return Pair.of(relation, attribute);
+          }
+        }
+      }
       return null;
     }
 

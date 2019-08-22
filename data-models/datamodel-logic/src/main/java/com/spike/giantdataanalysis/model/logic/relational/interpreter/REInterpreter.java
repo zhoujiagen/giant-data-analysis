@@ -3,8 +3,13 @@ package com.spike.giantdataanalysis.model.logic.relational.interpreter;
 import java.util.List;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
+import com.spike.giantdataanalysis.model.logic.relational.core.RelationalAlgebraOperationEnum;
+import com.spike.giantdataanalysis.model.logic.relational.core.RelationalAttributeTypeEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.CommonLists.UidList;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.FullColumnName;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.FullId;
@@ -54,8 +59,12 @@ import com.spike.giantdataanalysis.model.logic.relational.expression.SelectState
 import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.UnionParenthesisSelect;
 import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.UnionSelect;
 import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.UnionStatement;
+import com.spike.giantdataanalysis.model.logic.relational.interpreter.RESymbolTable.RESymbol;
+import com.spike.giantdataanalysis.model.logic.relational.interpreter.RESymbolTable.RESymbolLinkTypeEnum;
+import com.spike.giantdataanalysis.model.logic.relational.interpreter.RESymbolTable.RESymbolTypeEnum;
 import com.spike.giantdataanalysis.model.logic.relational.interpreter.RelationalCataloger.DummyRelationalCataloger;
-import com.spike.giantdataanalysis.model.logic.relational.model.RelationalOperation;
+import com.spike.giantdataanalysis.model.logic.relational.model.RelationalOperationTree.TreeNode;
+import com.spike.giantdataanalysis.model.logic.relational.model.core.RelationalAttribute;
 import com.spike.giantdataanalysis.model.logic.relational.model.core.RelationalModelFactory;
 import com.spike.giantdataanalysis.model.logic.relational.model.core.RelationalRelation;
 
@@ -66,6 +75,9 @@ import com.spike.giantdataanalysis.model.logic.relational.model.core.RelationalR
  *  TODO(zhoujiagen) hack these:
  * 1 在上层作用域中校正下层作用域中解析出的符号和链接
  * 2 将AST转换为代数表达式
+ * 
+ * More Detailed Features:
+ * 1 区分立即结果和中间结果: relation, alias
  * </pre>
  */
 public final class REInterpreter extends REInterpreterBase {
@@ -73,8 +85,8 @@ public final class REInterpreter extends REInterpreterBase {
   final DummyRelationalCataloger cataloger = new DummyRelationalCataloger();
 
   @Override
-  public RelationalOperation interpreter(REInterpreterContext context,
-      SelectStatement selectStatement, String postfix) {
+  public TreeNode interpreter(REInterpreterContext context, SelectStatement selectStatement,
+      String postfix) {
     Preconditions.checkArgument(context != null);
     Preconditions.checkArgument(selectStatement != null);
     Preconditions.checkArgument(postfix != null);
@@ -101,13 +113,13 @@ public final class REInterpreter extends REInterpreterBase {
     }
   }
 
-  public RelationalOperation interpreter(REInterpreterContext context,
-      ParenthesisSelect parenthesisSelect, String postfix) {
+  public TreeNode interpreter(REInterpreterContext context, ParenthesisSelect parenthesisSelect,
+      String postfix) {
     Preconditions.checkArgument(context != null);
     Preconditions.checkArgument(parenthesisSelect != null);
     Preconditions.checkArgument(postfix != null);
 
-    RelationalOperation result = null;
+    TreeNode result = null;
     context.enterScope("ParenthesisSelect", postfix);
     try {
       final QueryExpression queryExpression = parenthesisSelect.queryExpression;
@@ -123,13 +135,13 @@ public final class REInterpreter extends REInterpreterBase {
     return result;
   }
 
-  public RelationalOperation interpreter(REInterpreterContext context,
-      QueryExpression queryExpression, String postfix) {
+  public TreeNode interpreter(REInterpreterContext context, QueryExpression queryExpression,
+      String postfix) {
     Preconditions.checkArgument(context != null);
     Preconditions.checkArgument(queryExpression != null);
     Preconditions.checkArgument(postfix != null);
 
-    RelationalOperation result = null;
+    TreeNode result = null;
     context.enterScope("QueryExpression", postfix);
     try {
       final QuerySpecification querySpecification = queryExpression.querySpecification;
@@ -141,7 +153,7 @@ public final class REInterpreter extends REInterpreterBase {
     return result;
   }
 
-  public RelationalOperation interpreter(REInterpreterContext context,
+  public TreeNode interpreter(REInterpreterContext context,
       QueryExpressionNointo queryExpressionNointo, String postfix) {
     Preconditions.checkArgument(context != null);
     Preconditions.checkArgument(queryExpressionNointo != null);
@@ -158,13 +170,13 @@ public final class REInterpreter extends REInterpreterBase {
   }
 
   // TODO(zhoujiagen) hack this: 多个并操作符
-  public RelationalOperation interpreter(REInterpreterContext context, UnionSelect unionSelect,
+  public TreeNode interpreter(REInterpreterContext context, UnionSelect unionSelect,
       String postfix) {
     Preconditions.checkArgument(context != null);
     Preconditions.checkArgument(unionSelect != null);
     Preconditions.checkArgument(postfix != null);
 
-    RelationalOperation result = null;
+    TreeNode result = null;
     context.enterScope("UnionSelect", postfix);
     try {
       final QuerySpecificationNointo querySpecificationNointo =
@@ -205,8 +217,8 @@ public final class REInterpreter extends REInterpreterBase {
     return result;
   }
 
-  public RelationalOperation interpreter(REInterpreterContext context,
-      UnionParenthesis unionParenthesis, String postfix) {
+  public TreeNode interpreter(REInterpreterContext context, UnionParenthesis unionParenthesis,
+      String postfix) {
     Preconditions.checkArgument(context != null);
     Preconditions.checkArgument(unionParenthesis != null);
     Preconditions.checkArgument(postfix != null);
@@ -224,8 +236,8 @@ public final class REInterpreter extends REInterpreterBase {
     }
   }
 
-  public RelationalOperation interpreter(REInterpreterContext context,
-      UnionStatement unionStatement, String postfix) {
+  public TreeNode interpreter(REInterpreterContext context, UnionStatement unionStatement,
+      String postfix) {
     Preconditions.checkArgument(context != null);
     Preconditions.checkArgument(unionStatement != null);
     Preconditions.checkArgument(postfix != null);
@@ -255,13 +267,13 @@ public final class REInterpreter extends REInterpreterBase {
    * @return
    * @see #interpreter(REInterpreterContext, QuerySpecification, String)
    */
-  public RelationalOperation interpreter(REInterpreterContext context,
+  public TreeNode interpreter(REInterpreterContext context,
       QuerySpecificationNointo querySpecificationNointo, String postfix) {
     Preconditions.checkArgument(context != null);
     Preconditions.checkArgument(querySpecificationNointo != null);
     Preconditions.checkArgument(postfix != null);
 
-    RelationalOperation result = null;
+    TreeNode result = null;
     context.enterScope("QuerySpecification", postfix);
 
     try {
@@ -297,7 +309,7 @@ public final class REInterpreter extends REInterpreterBase {
   }
 
   // TODO(zhoujiagen) see UnionSelect
-  public RelationalOperation interpreter(REInterpreterContext context,
+  public TreeNode interpreter(REInterpreterContext context,
       UnionParenthesisSelect unionParenthesisSelect, String postfix) {
     Preconditions.checkArgument(context != null);
     Preconditions.checkArgument(unionParenthesisSelect != null);
@@ -340,13 +352,13 @@ public final class REInterpreter extends REInterpreterBase {
     throw REInterpreterError.make(unionParenthesisSelect);
   }
 
-  public RelationalOperation interpreter(REInterpreterContext context, SimpleSelect simpleSelect,
+  public TreeNode interpreter(REInterpreterContext context, SimpleSelect simpleSelect,
       String postfix) {
     Preconditions.checkArgument(context != null);
     Preconditions.checkArgument(simpleSelect != null);
     Preconditions.checkArgument(postfix != null);
 
-    RelationalOperation result = null;
+    TreeNode result = null;
     context.enterScope("SimpleSelect", postfix);
 
     try {
@@ -362,15 +374,14 @@ public final class REInterpreter extends REInterpreterBase {
     return result;
   }
 
-  public RelationalOperation interpreter(REInterpreterContext context,
-      QuerySpecification querySpecification, String postfix) {
+  public TreeNode interpreter(REInterpreterContext context, QuerySpecification querySpecification,
+      String postfix) {
     Preconditions.checkArgument(context != null);
     Preconditions.checkArgument(querySpecification != null);
     Preconditions.checkArgument(postfix != null);
 
-    RelationalOperation result = null;
+    TreeNode result = null;
     context.enterScope("QuerySpecification", postfix);
-
     try {
       final List<SelectSpecEnum> selectSpecs = querySpecification.selectSpecs;
       if (CollectionUtils.isNotEmpty(selectSpecs)) {
@@ -378,6 +389,7 @@ public final class REInterpreter extends REInterpreterBase {
           context.addSymbol(selectSpec.literal(), RESymbolTypeEnum.SPECIFIER_SELECT);
         }
       }
+
       final SelectElements selectElements = querySpecification.selectElements;
       this.interpreter(context, selectElements, postfix);
 
@@ -388,11 +400,48 @@ public final class REInterpreter extends REInterpreterBase {
       }
       context.leaveScope(); // SelectIntoExpression
 
-      result = RelationalModelFactory.makeSelect(RelationalRelation.DUAL, null, context.currentScope);
-      
       final FromClause fromClause = querySpecification.fromClause;
-      if (fromClause != null) {
-        this.interpreter(context, fromClause, postfix);
+      if (fromClause == null) {
+
+        List<RESymbol> symbols = context.collect(RESymbolTypeEnum.CONSTANT, true);
+        List<RelationalAttribute> attributes = Lists.newArrayList();
+        for (RESymbol symbol : symbols) {
+          List<String> toSymbols = Lists.newArrayList();
+          toSymbols.addAll(context.collect(symbol, RESymbolLinkTypeEnum.TYPE, true));
+          for (String toSymbol : toSymbols) {
+            RelationalAttributeTypeEnum attributeType =
+                REUtils.convert(Constant.Type.valueOf(toSymbol));
+            attributes.add(//
+              RelationalModelFactory.makeAttribute(symbol.text, attributeType, null, true));
+          }
+        }
+
+        RelationalRelation dualRelation =
+            RelationalModelFactory.makeRelation(RelationalRelation.RELATION_NAME_DUAL, attributes);
+        TreeNode dualRelationNode = RelationalModelFactory.newTreeNode(dualRelation);
+        result = RelationalModelFactory.newTreeNode(RelationalAlgebraOperationEnum.PROJECT,
+          Lists.newArrayList(dualRelationNode));
+
+      } else {
+
+        result = this.interpreter(context, fromClause, postfix);
+
+        List<RESymbol> selectSymbols =
+            context.collect("SelectElements", postfix, RESymbolTypeEnum.ATTRIBUTE_NAME, true);
+        List<RelationalAttribute> projectAttributes = Lists.newArrayList();
+        for (RESymbol selectSymbol : selectSymbols) {
+          Pair<RelationalRelation, RelationalAttribute> guessed =
+              cataloger.guessAttribute(selectSymbol.text);
+          if (guessed == null) {
+            throw REInterpreterError.make(querySpecification.literal() + " "
+                + selectElements.literal() + "未找到匹配的属性: " + selectSymbol);
+
+          }
+          projectAttributes.add(guessed.getRight());
+        }
+
+        result = RelationalModelFactory.newTreeNodeAttribute(RelationalAlgebraOperationEnum.PROJECT,
+          Lists.newArrayList(result), projectAttributes);
       }
 
       final OrderByClause orderByClause = querySpecification.orderByClause;
@@ -404,6 +453,13 @@ public final class REInterpreter extends REInterpreterBase {
       if (limitClause != null) {
         this.interpreter(context, limitClause, postfix);
       }
+
+      
+      if (selectSpecs.contains(SelectStatement.SelectSpecEnum.DISTINCT)) {
+        result = RelationalModelFactory.newTreeNode(
+          RelationalAlgebraOperationEnum.DUPLICATE_ELIMINATION, Lists.newArrayList(result));
+      }
+
     } finally {
       context.leaveScope();
     }
@@ -496,38 +552,71 @@ public final class REInterpreter extends REInterpreterBase {
     }
   }
 
-  public void interpreter(REInterpreterContext context, FromClause fromClause, String postfix) {
+  public TreeNode interpreter(REInterpreterContext context, FromClause fromClause, String postfix) {
     Preconditions.checkArgument(context != null);
     Preconditions.checkArgument(fromClause != null);
     Preconditions.checkArgument(postfix != null);
 
+    TreeNode result = null;
+    List<TreeNode> selectNodeChildren = Lists.newArrayList();
     context.enterScope("FromClause", postfix);
     try {
       final TableSources tableSources = fromClause.tableSources;
       this.interpreter(context, tableSources, postfix);
+      List<RESymbol> fromTableSymbols = context.collect(RESymbolTypeEnum.TABLE_NAME, true);
+      for (RESymbol fromTableSymbol : fromTableSymbols) {
+        RelationalRelation relation = cataloger.relation(fromTableSymbol.text);
+        if (relation != null) {
+          selectNodeChildren.add(RelationalModelFactory.newTreeNode(relation));
+        }
+      }
+
       final Expression whereExpr = fromClause.whereExpr;
       if (whereExpr != null) {
         this.interpreter(context, whereExpr, postfix + "1");
       }
+      result = RelationalModelFactory.newTreeNodeCondition(RelationalAlgebraOperationEnum.SELECT,
+        selectNodeChildren, Lists.newArrayList(whereExpr));
 
       final List<GroupByItem> groupByItems = fromClause.groupByItems;
+
       if (CollectionUtils.isNotEmpty(groupByItems)) {
+        List<Expression> conditions = Lists.newArrayList();
         for (GroupByItem groupByItem : groupByItems) {
-          this.interpreter(context, groupByItem, postfix);
+          conditions.add(groupByItem.expression);
         }
+        result = RelationalModelFactory.newTreeNodeCondition(RelationalAlgebraOperationEnum.GROUP,
+          Lists.newArrayList(result), conditions);
       }
 
       final Boolean withRollup = fromClause.withRollup;
       if (Boolean.TRUE.equals(withRollup)) {
         context.addSymbol("WITH ROLLUP", RESymbolTypeEnum.SPEFICIER_GROUP_BY);
       }
+
       final Expression havingExpr = fromClause.havingExpr;
       if (havingExpr != null) {
         this.interpreter(context, havingExpr, postfix + "2");
       }
+
+      List<RESymbol> fromAttributeSymbols =
+          context.collect("FromClause", postfix, RESymbolTypeEnum.ATTRIBUTE_NAME, true);
+      List<RelationalAttribute> fromAttributes = Lists.newArrayList();
+      for (RESymbol fromAttributeSymbol : fromAttributeSymbols) {
+        Pair<RelationalRelation, RelationalAttribute> guessed =
+            cataloger.guessAttribute(fromAttributeSymbol.text);
+        if (guessed == null) {
+          throw REInterpreterError
+              .make(fromClause.literal() + " " + fromClause.literal() + "未找到匹配的属性");
+        }
+        fromAttributes.add(guessed.getRight());
+      }
+
     } finally {
       context.leaveScope();
     }
+
+    return result;
   }
 
   public void interpreter(REInterpreterContext context, GroupByItem groupByItem, String postfix) {
@@ -582,13 +671,12 @@ public final class REInterpreter extends REInterpreterBase {
       if (selectElement instanceof SelectStarElement) {
         SelectStarElement selectStarElement = (SelectStarElement) selectElement;
         final FullId fullId = selectStarElement.fullId;
-        String firstRawLiteral = REUtils.firstRawLiteral(fullId);
-        String secondRawLiteral = REUtils.secondRawLiteral(fullId);
-        if (secondRawLiteral == null) {
-          context.addSymbol(firstRawLiteral, RESymbolTypeEnum.DATABASE_NAME);
-          context.addSymbol(secondRawLiteral, RESymbolTypeEnum.TABLE_NAME);
+        Pair<String, String> fullIdPair = REUtils.pair(fullId);
+        if (fullIdPair.getRight() == null) {
+          context.addSymbol(fullIdPair.getLeft(), RESymbolTypeEnum.DATABASE_NAME);
+          context.addSymbol(fullIdPair.getRight(), RESymbolTypeEnum.TABLE_NAME);
         } else {
-          context.addSymbol(firstRawLiteral, RESymbolTypeEnum.TABLE_NAME);
+          context.addSymbol(fullIdPair.getLeft(), RESymbolTypeEnum.TABLE_NAME);
         }
       }
 
@@ -605,9 +693,37 @@ public final class REInterpreter extends REInterpreterBase {
 
       else if (selectElement instanceof SelectExpressionElement) {
         SelectExpressionElement selectExpressionElement = (SelectExpressionElement) selectElement;
-        throw REInterpreterError.make(selectExpressionElement);
-      } else {
+        this.interpreter(context, selectExpressionElement, postfix);
+      }
+
+      else {
         throw REInterpreterError.make(selectElement);
+      }
+    } finally {
+      context.leaveScope();
+    }
+  }
+
+  public void interpreter(REInterpreterContext context,
+      SelectExpressionElement selectExpressionElement, String postfix) {
+    Preconditions.checkArgument(context != null);
+    Preconditions.checkArgument(selectExpressionElement != null);
+    Preconditions.checkArgument(postfix != null);
+
+    context.enterScope("SelectExpressionElement", postfix);
+    try {
+      final String localId = selectExpressionElement.localId;
+      if (StringUtils.isNotBlank(localId)) {
+        context.addSymbol(localId, RESymbolTypeEnum.LOCAL_ID);
+      }
+      final Expression expression = selectExpressionElement.expression;
+      this.interpreter(context, expression, postfix);
+      final Uid uid = selectExpressionElement.uid;
+      if (uid != null) {
+        String uidAlias = REUtils.rawLiteral(uid);
+        context.addSymbol(uidAlias, RESymbolTypeEnum.EXPRESSION, expression);
+      } else {
+        context.addSymbol(StringUtils.EMPTY, RESymbolTypeEnum.EXPRESSION, expression);
       }
     } finally {
       context.leaveScope();
@@ -624,7 +740,7 @@ public final class REInterpreter extends REInterpreterBase {
     try {
       FunctionCall functionCall = selectFunctionElement.functionCall;
       String functionCallLiteral = functionCall.literal();
-      context.addSymbol(functionCallLiteral, RESymbolTypeEnum.ATTRIBUTE_NAME);
+      context.addSymbol(functionCallLiteral, RESymbolTypeEnum.FUNCTION_ATTRIBUTE_NAME);
       this.interpreter(context, functionCall, postfix);
 
       Uid uid = selectFunctionElement.uid;
@@ -775,16 +891,15 @@ public final class REInterpreter extends REInterpreterBase {
         AtomTableItem atomTableItem = (AtomTableItem) tableSourceItem;
         final TableName tableName = atomTableItem.tableName;
         final FullId fullId = tableName.fullId;
-        String firstRawLiteral = REUtils.firstRawLiteral(fullId);
-        String secondRawLiteral = REUtils.secondRawLiteral(fullId);
+        Pair<String, String> fullIdPair = REUtils.pair(fullId);
         String tableNameText = null;
-        if (secondRawLiteral != null) {
-          context.addSymbol(firstRawLiteral, RESymbolTypeEnum.DATABASE_NAME);
-          tableNameText = secondRawLiteral;
-          context.addSymbol(secondRawLiteral, RESymbolTypeEnum.TABLE_NAME);
+        if (fullIdPair.getRight() != null) {
+          context.addSymbol(fullIdPair.getLeft(), RESymbolTypeEnum.DATABASE_NAME);
+          tableNameText = fullIdPair.getRight();
+          context.addSymbol(tableNameText, RESymbolTypeEnum.TABLE_NAME);
         } else {
-          tableNameText = firstRawLiteral;
-          context.addSymbol(firstRawLiteral, RESymbolTypeEnum.TABLE_NAME);
+          tableNameText = fullIdPair.getLeft();
+          context.addSymbol(tableNameText, RESymbolTypeEnum.TABLE_NAME);
         }
 
         final Uid alias = atomTableItem.alias;
@@ -797,12 +912,11 @@ public final class REInterpreter extends REInterpreterBase {
         SubqueryTableItem subqueryTableItem = (SubqueryTableItem) tableSourceItem;
         final SelectStatement selectStatement = subqueryTableItem.selectStatement;
         final Uid alias = subqueryTableItem.alias;
-        RelationalOperation relationalOperation =
-            this.interpreter(context, selectStatement, postfix);
+        TreeNode relationalOperation = this.interpreter(context, selectStatement, postfix);
         // 临时关系
-        RelationalRelation relation = relationalOperation.result(REUtils.rawLiteral(alias));
+        // RelationalRelation relation = relationalOperation.result(REUtils.rawLiteral(alias));
         context.addSymbol(REUtils.rawLiteral(alias), RESymbolTypeEnum.TABLE_NAME);
-        context.addTemporaryRelation(REUtils.rawLiteral(alias), relation);
+        // context.addTemporaryRelation(REUtils.rawLiteral(alias), relation);
       }
 
       else if (tableSourceItem instanceof TableSourcesItem) {

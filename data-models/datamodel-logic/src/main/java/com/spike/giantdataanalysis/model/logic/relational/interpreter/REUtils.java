@@ -2,16 +2,19 @@ package com.spike.giantdataanalysis.model.logic.relational.interpreter;
 
 import java.util.List;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects;
+import com.spike.giantdataanalysis.model.logic.relational.core.RelationalAttributeTypeEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.CommonLists.UidList;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.DottedId;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.FullColumnName;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.FullId;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.Uid;
+import com.spike.giantdataanalysis.model.logic.relational.expression.Literals.Constant;
 import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.SelectColumnElement;
 import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.SelectElements;
 
@@ -23,24 +26,55 @@ public abstract class REUtils {
   public static String NONE_STRING_LITERAL_PREFIX = "`";
 
   // ---------------------------------------------------------------------------
-  // FullId
+  // Constant.Type => RelationalAttributeTypeEnum
   // ---------------------------------------------------------------------------
-  public static String firstRawLiteral(FullId fullId) {
-    Preconditions.checkArgument(fullId != null);
 
-    return rawLiteral(fullId.uids.get(0));
+  public static RelationalAttributeTypeEnum convert(Constant.Type type) {
+    if (type == null) {
+      return RelationalAttributeTypeEnum.VARCHAR;
+    }
+
+    switch (type) {
+    case STRING_LITERAL:
+      return RelationalAttributeTypeEnum.VARCHAR;
+    case DECIMAL_LITERAL:
+      return RelationalAttributeTypeEnum.DECIMAL;
+    case HEXADECIMAL_LITERAL:
+      return RelationalAttributeTypeEnum.DECIMAL;
+    case BOOLEAN_LITERAL:
+      return RelationalAttributeTypeEnum.BOOL;
+    case REAL_LITERAL:
+      return RelationalAttributeTypeEnum.DECIMAL;
+    case BIT_STRING:
+      return RelationalAttributeTypeEnum.BINARY;
+    case NULL_LITERAL:
+      return RelationalAttributeTypeEnum.NULL;
+    default:
+      return RelationalAttributeTypeEnum.VARCHAR;
+    }
   }
 
-  // may be null
-  public static String secondRawLiteral(FullId fullId) {
+  // ---------------------------------------------------------------------------
+  // FullId
+  // ---------------------------------------------------------------------------
+  public static Pair<String, String> pair(FullId fullId) {
     Preconditions.checkArgument(fullId != null);
 
-    if (fullId.dotId != null) {
-      return fullId.dotId.replaceAll("\\.", "");
-    } else if (fullId.uids.size() == 2) {
-      return rawLiteral(fullId.uids.get(1));
+    String left = null;
+    String right = null;
+    if (fullId.dotId == null) {
+      if (fullId.uids.size() == 1) {
+        left = rawLiteral(fullId.uids.get(0));
+      } else {
+        left = rawLiteral(fullId.uids.get(0));
+        right = rawLiteral(fullId.uids.get(1));
+      }
+    } else {
+      left = rawLiteral(fullId.uids.get(0));
+      right = fullId.dotId.replaceAll("\\.", "");
     }
-    return null;
+
+    return Pair.of(left, right);
   }
 
   // ---------------------------------------------------------------------------

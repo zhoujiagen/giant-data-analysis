@@ -2,18 +2,15 @@ package com.spike.giantdataanalysis.model.logic.relational.model.core;
 
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.google.common.base.Preconditions;
+import com.spike.giantdataanalysis.model.logic.relational.core.RelationalAlgebraOperationEnum;
 import com.spike.giantdataanalysis.model.logic.relational.core.RelationalAttributeTypeEnum;
 import com.spike.giantdataanalysis.model.logic.relational.core.RelationalRelationKeyTypeEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Expression;
-import com.spike.giantdataanalysis.model.logic.relational.interpreter.REScope;
-import com.spike.giantdataanalysis.model.logic.relational.model.RelationalDifferenceOperation;
-import com.spike.giantdataanalysis.model.logic.relational.model.RelationalIntersectionOperation;
-import com.spike.giantdataanalysis.model.logic.relational.model.RelationalProjectOperation;
-import com.spike.giantdataanalysis.model.logic.relational.model.RelationalSelectOperation;
-import com.spike.giantdataanalysis.model.logic.relational.model.RelationalUnionOperation;
+import com.spike.giantdataanalysis.model.logic.relational.model.RelationalOperationTree.TreeNode;
 
 /**
  * 关系模型抽象的工厂.
@@ -60,37 +57,92 @@ public abstract class RelationalModelFactory {
   // ---------------------------------------------------------------------------
   // 操作
   // ---------------------------------------------------------------------------
+  public static TreeNode newTreeNode(RelationalRelation relation) {
+    Preconditions.checkArgument(relation != null);
 
-  public static RelationalIntersectionOperation makeIntersection(RelationalRelation first,
-      RelationalRelation second) {
-    return new RelationalIntersectionOperation(first, second);
+    TreeNode result = new TreeNode();
+    result.relation = relation;
+    return result;
   }
 
-  public static RelationalUnionOperation makeUnion(RelationalRelation first,
-      RelationalRelation second) {
-    return new RelationalUnionOperation(first, second);
+  public static TreeNode newTreeNode(RelationalAlgebraOperationEnum operation,
+      List<TreeNode> children) {
+    Preconditions.checkArgument(operation != null);
+    Preconditions.checkArgument(CollectionUtils.isNotEmpty(children));
+
+    TreeNode result = new TreeNode();
+    result.operation = operation;
+    result.children = children;
+    for (TreeNode treeNode : result.children) {
+      treeNode.parent = result;
+    }
+    return result;
   }
 
-  public static RelationalUnionOperation makeUnion(RelationalRelation... relations) {
-    return new RelationalUnionOperation(relations);
+  public static TreeNode newTreeNodeCondition(RelationalAlgebraOperationEnum operation,
+      List<TreeNode> children, List<Expression> conditions) {
+    Preconditions.checkArgument(operation != null);
+    Preconditions.checkArgument(CollectionUtils.isNotEmpty(children));
+
+    TreeNode result = new TreeNode();
+    result.operation = operation;
+
+    result.children = children;
+    result.conditions = conditions;
+    for (TreeNode treeNode : result.children) {
+      treeNode.parent = result;
+    }
+    return result;
   }
 
-  public static RelationalUnionOperation makeUnion(List<RelationalRelation> relationalRelations) {
-    return new RelationalUnionOperation(relationalRelations);
+  public static TreeNode newTreeNodeAttribute(RelationalAlgebraOperationEnum operation,
+      List<TreeNode> children, List<RelationalAttribute> attributes) {
+    Preconditions.checkArgument(operation != null);
+    Preconditions.checkArgument(CollectionUtils.isNotEmpty(children));
+
+    TreeNode result = new TreeNode();
+    result.operation = operation;
+
+    result.children = children;
+    result.attributes = attributes;
+    for (TreeNode treeNode : result.children) {
+      treeNode.parent = result;
+    }
+    return result;
   }
 
-  public static RelationalDifferenceOperation makeDifference(RelationalRelation first,
-      RelationalRelation second) {
-    return new RelationalDifferenceOperation(first, second);
-  }
-
-  public static RelationalProjectOperation makeProject(RelationalRelation first,
-      List<String> attributeNames) {
-    return new RelationalProjectOperation(first, attributeNames);
-  }
-
-  public static RelationalSelectOperation makeSelect(RelationalRelation relation,
-      Expression condition, REScope interpreteScope) {
-    return new RelationalSelectOperation(relation, condition, interpreteScope);
-  }
+  // TODO(zhoujiagen) hacking RelationalOperationTree
+  // public static RelationalIntersectionOperation makeIntersection(RelationalRelation first,
+  // RelationalRelation second) {
+  // return new RelationalIntersectionOperation(first, second);
+  // }
+  //
+  // public static RelationalUnionOperation makeUnion(RelationalRelation first,
+  // RelationalRelation second) {
+  // return new RelationalUnionOperation(first, second);
+  // }
+  //
+  // public static RelationalUnionOperation makeUnion(RelationalRelation... relations) {
+  // return new RelationalUnionOperation(relations);
+  // }
+  //
+  // public static RelationalUnionOperation makeUnion(List<RelationalRelation> relationalRelations)
+  // {
+  // return new RelationalUnionOperation(relationalRelations);
+  // }
+  //
+  // public static RelationalDifferenceOperation makeDifference(RelationalRelation first,
+  // RelationalRelation second) {
+  // return new RelationalDifferenceOperation(first, second);
+  // }
+  //
+  // public static RelationalProjectOperation makeProject(RelationalRelation first,
+  // List<String> attributeNames) {
+  // return new RelationalProjectOperation(first, attributeNames);
+  // }
+  //
+  // public static RelationalSelectOperation makeSelect(RelationalRelation relation,
+  // Expression condition, REScope interpreteScope) {
+  // return new RelationalSelectOperation(relation, condition, interpreteScope);
+  // }
 }

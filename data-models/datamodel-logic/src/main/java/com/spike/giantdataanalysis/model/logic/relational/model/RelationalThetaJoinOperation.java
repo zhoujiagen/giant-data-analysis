@@ -5,7 +5,7 @@ import java.util.List;
 import com.google.common.base.Preconditions;
 import com.spike.giantdataanalysis.model.logic.relational.core.RelationalAlgebraOperationEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Expression;
-import com.spike.giantdataanalysis.model.logic.relational.interpreter.REScope;
+import com.spike.giantdataanalysis.model.logic.relational.interpreter.REInterpreterScope;
 import com.spike.giantdataanalysis.model.logic.relational.model.core.RelationalRelation;
 
 /**
@@ -15,10 +15,10 @@ public class RelationalThetaJoinOperation extends RelationalJoinOperation {
 
   public final Expression condition;
   // may be a higher scope than 'expression'
-  public final REScope interpreteScope;
+  public final REInterpreterScope interpreteScope;
 
   public RelationalThetaJoinOperation(Expression condition, RelationalRelation first,
-      RelationalRelation second, REScope interpreteScope) {
+      RelationalRelation second, REInterpreterScope interpreteScope) {
     super(first, second);
     Preconditions.checkArgument(condition != null);
 
@@ -26,7 +26,7 @@ public class RelationalThetaJoinOperation extends RelationalJoinOperation {
     this.interpreteScope = interpreteScope;
   }
 
-  public RelationalThetaJoinOperation(Expression condition, REScope interpreteScope,
+  public RelationalThetaJoinOperation(Expression condition, REInterpreterScope interpreteScope,
       RelationalRelation... relations) {
     super(relations);
     Preconditions.checkArgument(condition != null);
@@ -35,7 +35,7 @@ public class RelationalThetaJoinOperation extends RelationalJoinOperation {
     this.interpreteScope = interpreteScope;
   }
 
-  public RelationalThetaJoinOperation(Expression condition, REScope interpreteScope,
+  public RelationalThetaJoinOperation(Expression condition, REInterpreterScope interpreteScope,
       List<RelationalRelation> relations) {
     super(relations);
     Preconditions.checkArgument(condition != null);

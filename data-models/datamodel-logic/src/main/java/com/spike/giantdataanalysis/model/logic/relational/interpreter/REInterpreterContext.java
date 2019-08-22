@@ -8,7 +8,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.spike.giantdataanalysis.model.logic.relational.expression.RelationalAlgebraExpression;
+import com.spike.giantdataanalysis.model.logic.relational.interpreter.RESymbolTable.RESymbol;
+import com.spike.giantdataanalysis.model.logic.relational.interpreter.RESymbolTable.RESymbolLinkTypeEnum;
+import com.spike.giantdataanalysis.model.logic.relational.interpreter.RESymbolTable.RESymbolTypeEnum;
 import com.spike.giantdataanalysis.model.logic.relational.model.core.RelationalRelation;
 
 /**
@@ -22,15 +27,15 @@ public class REInterpreterContext {
   public final RESymbolTable globalSymbolTable = new RESymbolTable();
 
   /** 作用域缓存. */
-  public final Map<String, REScope> scopeCache = Maps.newHashMap();
+  public final Map<String, REInterpreterScope> scopeCache = Maps.newHashMap();
   /** 作用域中的符号表: scope name => symbol table */
   public final Map<String, RESymbolTable> scopeSymbolTable = Maps.newHashMap();
 
   /** 根作用域. */
-  public final REScope rootScope = REScope.ROOT;
-
+  public final REInterpreterScope rootScope = REInterpreterScope.ROOT;
   /** 当前作用域. */
-  public REScope currentScope = rootScope;
+  public REInterpreterScope currentScope = rootScope;
+  /** 当前作用域中的符号表. */
   public RESymbolTable currentSymbolTable = new RESymbolTable();
 
   /** 临时关系字典: relation name => relation */
@@ -51,9 +56,9 @@ public class REInterpreterContext {
 
     String newName = currentScope.newName(currentScope, paddedShortName);
     LOG.debug("enter scope: {} => {}", currentScope.name, newName);
-    REScope scope = scopeCache.get(newName);
+    REInterpreterScope scope = scopeCache.get(newName);
     if (scope == null) {
-      scope = new REScope(currentScope, paddedShortName);
+      scope = new REInterpreterScope(currentScope, paddedShortName);
       scopeCache.put(newName, scope);
     }
     currentScope = scope;
@@ -68,7 +73,7 @@ public class REInterpreterContext {
 
   public final void leaveScope() {
     String currentScopeName = currentScope.name;
-    if (REScope.ROOT_NAME.equals(currentScope.name)) {
+    if (REInterpreterScope.ROOT_NAME.equals(currentScope.name)) {
       return;
     }
     currentScope = currentScope.parent;
@@ -89,6 +94,22 @@ public class REInterpreterContext {
     LOG.debug("add symbol {}/type {} in scope {}", text, symbolType, currentScope.name);
 
     currentSymbolTable.addSymbol(text, symbolType);
+  }
+
+  // delegate to RESymbolTable
+  public void addSymbol(String text, RESymbolTypeEnum symbolType, Object object) {
+    String objectString = "";
+    if (object != null) {
+      if (object instanceof RelationalAlgebraExpression) {
+        objectString = ((RelationalAlgebraExpression) object).literal();
+      } else {
+        objectString = object.toString();
+      }
+    }
+    LOG.debug("add symbol {}/type {}/value {} in scope {}", text, symbolType, objectString,
+      currentScope.name);
+
+    currentSymbolTable.addSymbol(text, symbolType, object);
   }
 
   // delegate to RESymbolTable
@@ -130,7 +151,8 @@ public class REInterpreterContext {
    * @param scope
    * @param level
    */
-  public void toString(boolean compact, StringBuilder builder, REScope scope, int level) {
+  public void toString(boolean compact, StringBuilder builder, REInterpreterScope scope,
+      int level) {
     if (scope == null) {
       return;
     }
@@ -151,12 +173,86 @@ public class REInterpreterContext {
       builder.append(symbolTable).append(System.lineSeparator());
     }
 
-    List<REScope> children = scope.children;
+    List<REInterpreterScope> children = scope.children;
     if (CollectionUtils.isNotEmpty(children)) {
-      for (REScope child : children) {
+      for (REInterpreterScope child : children) {
         this.toString(compact, builder, child, level + 1);
       }
     }
   }
 
+  // ---------------------------------------------------------------------------
+  // Collect
+  // ---------------------------------------------------------------------------
+
+  public List<RESymbol> collect(RESymbolTypeEnum symbolType, boolean recursive) {
+    return this.collect(currentScope, symbolType, recursive);
+  }
+
+  public List<RESymbol> collect(String childScopeName, String postfix, RESymbolTypeEnum symbolType,
+      boolean recursive) {
+    return collect(currentScope.childName(childScopeName + postfix), symbolType, recursive);
+  }
+
+  public List<RESymbol> collect(String scopeName, RESymbolTypeEnum symbolType, boolean recursive) {
+    REInterpreterScope scope = scopeCache.get(scopeName);
+    if (scope == null) {
+      return Lists.newArrayList();
+    } else {
+      return collect(scope, symbolType, recursive);
+    }
+  }
+
+  public List<RESymbol> collect(REInterpreterScope scope, RESymbolTypeEnum symbolType,
+      boolean recursive) {
+    List<RESymbol> result = Lists.newArrayList();
+
+    RESymbolTable symbolTable = scopeSymbolTable.get(scope.name);
+    result.addAll(this.collect(symbolTable, symbolType));
+
+    if (recursive) {
+      for (REInterpreterScope childScope : scope.children) {
+        result.addAll(this.collect(childScope, symbolType, recursive));
+      }
+    }
+
+    return result;
+  }
+
+  public List<RESymbol> collect(RESymbolTable symbolTable, RESymbolTypeEnum symbolType) {
+    List<RESymbol> result = Lists.newArrayList();
+    if (symbolTable == null || symbolTable.symbolMap.isEmpty()) {
+      return result;
+    }
+
+    for (RESymbol symbol : symbolTable.symbolMap.values()) {
+      if (symbol.type.equals(symbolType)) {
+        result.add(symbol);
+      }
+    }
+    return result;
+  }
+
+  public List<String> collect(RESymbol from, RESymbolLinkTypeEnum linkType, boolean recursive) {
+    return this.collect(currentScope, from, linkType, recursive);
+  }
+
+  public List<String> collect(REInterpreterScope scope, RESymbol from,
+      RESymbolLinkTypeEnum linkType, boolean recursive) {
+    List<String> result = Lists.newArrayList();
+
+    RESymbolTable symbolTable = scopeSymbolTable.get(scope.name);
+    String toSymbol = symbolTable.getSymbolThroughLink(from, linkType);
+    if (toSymbol != null) {
+      result.add(toSymbol);
+    }
+
+    if (recursive) {
+      for (REInterpreterScope childScope : scope.children) {
+        result.addAll(this.collect(childScope, from, linkType, recursive));
+      }
+    }
+
+    return result;
+  }
 }

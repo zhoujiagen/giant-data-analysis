@@ -11,20 +11,20 @@ import com.google.common.collect.Lists;
 /**
  * 作用域.
  */
-public class REScope implements Comparable<REScope> {
+public class REInterpreterScope implements Comparable<REInterpreterScope> {
 
   public static final String ROOT_NAME = "<ROOT>";
-  public static final REScope ROOT = new REScope(null, ROOT_NAME);
+  public static final REInterpreterScope ROOT = new REInterpreterScope(null, ROOT_NAME);
   public static final String SEP = "$";
 
   /** chain of names. */
   public final String name;
   /** parent scope. */
-  public final REScope parent;
+  public final REInterpreterScope parent;
   /** child scopes. */
-  public final List<REScope> children = Lists.newArrayList();
+  public final List<REInterpreterScope> children = Lists.newArrayList();
 
-  public REScope(REScope parent, String shortName) {
+  public REInterpreterScope(REInterpreterScope parent, String shortName) {
     Preconditions.checkArgument(shortName != null);
 
     this.parent = parent;
@@ -34,12 +34,27 @@ public class REScope implements Comparable<REScope> {
     }
   }
 
-  public String newName(REScope parent, String shortName) {
+  public String newName(REInterpreterScope parent, String childName) {
     if (parent == null) {
-      return shortName;
+      return childName;
     } else {
-      return parent.name + SEP + shortName;
+      return parent.name + SEP + childName;
     }
+  }
+
+  public String childName(String childName) {
+    return this.name + SEP + childName;
+  }
+
+  public REInterpreterScope childScope(String childName) {
+    String childScopeName = this.childName(childName);
+    for (REInterpreterScope childScope : children) {
+      if (childScope.name.endsWith(childScopeName)) {
+        return childScope;
+      }
+    }
+
+    throw REInterpreterError.make(childName + " Not Found!");
   }
 
   public String shortName() {
@@ -51,7 +66,7 @@ public class REScope implements Comparable<REScope> {
   }
 
   @Override
-  public int compareTo(REScope o) {
+  public int compareTo(REInterpreterScope o) {
     if (o == null) {
       return 1;
     }
