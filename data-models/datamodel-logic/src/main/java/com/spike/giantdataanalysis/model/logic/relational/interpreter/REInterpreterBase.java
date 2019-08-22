@@ -15,7 +15,7 @@ import com.spike.giantdataanalysis.model.logic.relational.expression.CommonLists
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.FullColumnName;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.MysqlVariable;
-import com.spike.giantdataanalysis.model.logic.relational.expression.DdlStatement.IntervalType;
+import com.spike.giantdataanalysis.model.logic.relational.expression.DdlStatement;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Expression;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Expression.BetweenPredicate;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Expression.BinaryComparasionPredicate;
@@ -89,32 +89,45 @@ public abstract class REInterpreterBase {
         } finally {
           context.leaveScope();
         }
-      } else if (expression instanceof LogicalExpression) {
+      }
+
+      else if (expression instanceof LogicalExpression) {
         LogicalExpression logicalExpression = (LogicalExpression) expression;
 
         context.enterScope("LogicalExpression", postfix);
         try {
           this.interpreter(context, logicalExpression.first, postfix + "1");
-          RelationalLogicalOperatorEnum operator = logicalExpression.operator;
+          final RelationalLogicalOperatorEnum operator = logicalExpression.operator;
+          context.addSymbol(operator.literal(), RESymbolTypeEnum.OPERATOR_NAME);
           this.interpreter(context, logicalExpression.second, postfix + "2");
         } finally {
           context.leaveScope();
         }
-      } else if (expression instanceof IsExpression) {
+      }
+
+      else if (expression instanceof IsExpression) {
         IsExpression isExpression = (IsExpression) expression;
 
         context.enterScope("IsExpression", postfix);
         try {
           this.interpreter(context, isExpression.predicate, postfix);
           Boolean not = isExpression.not;
+          if (Boolean.TRUE.equals(not)) {
+            context.addSymbol("NOT", RESymbolTypeEnum.SPEFICIER_TEST_VALUE);
+          }
           IsExpression.TestValue testValue = isExpression.testValue;
+          context.addSymbol(testValue.literal(), RESymbolTypeEnum.CONSTANT);
         } finally {
           context.leaveScope();
         }
-      } else if (expression instanceof PredicateExpression) {
+      }
+
+      else if (expression instanceof PredicateExpression) {
         PredicateExpression predicateExpression = (PredicateExpression) expression;
         this.interpreter(context, predicateExpression, postfix);
-      } else {
+      }
+
+      else {
         throw REInterpreterError.make(expression);
       }
     } finally {
@@ -137,6 +150,9 @@ public abstract class REInterpreterBase {
         try {
           this.interpreter(context, inPredicate.predicate, postfix);
           Boolean not = inPredicate.not;
+          if (Boolean.TRUE.equals(not)) {
+            context.addSymbol("NOT", RESymbolTypeEnum.SPEFICIER_TEST_VALUE);
+          }
           SelectStatement selectStatement = inPredicate.selectStatement;
           Expressions expressions = inPredicate.expressions;
           if (selectStatement != null) {
@@ -169,7 +185,7 @@ public abstract class REInterpreterBase {
         context.enterScope("BinaryComparasionPredicate", postfix);
         try {
           this.interpreter(context, binaryComparasionPredicate.left, postfix + "1");
-          RelationalComparisonOperatorEnum comparisonOperator =
+          final RelationalComparisonOperatorEnum comparisonOperator =
               binaryComparasionPredicate.comparisonOperator;
           context.addSymbol(comparisonOperator.literal(), RESymbolTypeEnum.OPERATOR_NAME);
           this.interpreter(context, binaryComparasionPredicate.right, postfix + "2");
@@ -185,11 +201,12 @@ public abstract class REInterpreterBase {
         context.enterScope("SubqueryComparasionPredicate", postfix);
         try {
           this.interpreter(context, subqueryComparasionPredicate.predicate, postfix);
-          RelationalComparisonOperatorEnum comparisonOperator =
+          final RelationalComparisonOperatorEnum comparisonOperator =
               subqueryComparasionPredicate.comparisonOperator;
           context.addSymbol(comparisonOperator.literal(), RESymbolTypeEnum.OPERATOR_NAME);
-          SubqueryComparasionPredicate.QuantifierEnum quantifier =
+          final SubqueryComparasionPredicate.QuantifierEnum quantifier =
               subqueryComparasionPredicate.quantifier;
+          context.addSymbol(quantifier.literal(), RESymbolTypeEnum.QUALIFIER_PREDICATE);
           this.interpreter(context, subqueryComparasionPredicate.selectStatement, postfix);
         } finally {
           context.leaveScope();
@@ -202,7 +219,10 @@ public abstract class REInterpreterBase {
         context.enterScope("BetweenPredicate", postfix);
         try {
           this.interpreter(context, betweenPredicate.first, postfix + "1");
-          Boolean not = betweenPredicate.not;
+          final Boolean not = betweenPredicate.not;
+          if (Boolean.TRUE.equals(not)) {
+            context.addSymbol("NOT", RESymbolTypeEnum.SPEFICIER_TEST_VALUE);
+          }
           this.interpreter(context, betweenPredicate.second, postfix + "2");
           this.interpreter(context, betweenPredicate.third, postfix + "3");
         } finally {
@@ -228,10 +248,15 @@ public abstract class REInterpreterBase {
         context.enterScope("LikePredicate", postfix);
         try {
           this.interpreter(context, likePredicate.first, postfix + "1");
-          Boolean not = likePredicate.not;
+          final Boolean not = likePredicate.not;
+          if (Boolean.TRUE.equals(not)) {
+            context.addSymbol("NOT", RESymbolTypeEnum.SPEFICIER_TEST_VALUE);
+          }
           this.interpreter(context, likePredicate.second, postfix + "2");
           String escapeString = likePredicate.stringLiteral;
-          context.addSymbol(escapeString, RESymbolTypeEnum.CONSTANT);
+          if (escapeString != null) {
+            context.addSymbol(escapeString, RESymbolTypeEnum.CONSTANT);
+          }
         } finally {
           context.leaveScope();
         }
@@ -243,8 +268,12 @@ public abstract class REInterpreterBase {
         context.enterScope("RegexpPredicate", postfix);
         try {
           this.interpreter(context, regexpPredicate.first, postfix + "1");
-          Boolean not = regexpPredicate.not;
-          RegexpPredicate.RegexType regexType = regexpPredicate.regex;
+          final Boolean not = regexpPredicate.not;
+          if (Boolean.TRUE.equals(not)) {
+            context.addSymbol("NOT", RESymbolTypeEnum.SPEFICIER_TEST_VALUE);
+          }
+          final RegexpPredicate.RegexType regexType = regexpPredicate.regex;
+          context.addSymbol(regexType.literal(), RESymbolTypeEnum.REGEX_TYPE);
           this.interpreter(context, regexpPredicate.second, postfix + "2");
         } finally {
           context.leaveScope();
@@ -387,7 +416,8 @@ public abstract class REInterpreterBase {
         context.enterScope("IntervalExpressionAtom", postfix);
         try {
           this.interpreter(context, intervalExpressionAtom.expression, postfix);
-          IntervalType intervalType = intervalExpressionAtom.intervalType;
+          final DdlStatement.IntervalType intervalType = intervalExpressionAtom.intervalType;
+          context.addSymbol(intervalType.literal(), RESymbolTypeEnum.INTERVAL_TYPE);
         } finally {
           context.leaveScope();
         }
@@ -525,6 +555,7 @@ public abstract class REInterpreterBase {
     }
   }
 
+  // TODO(zhoujiagen) implement this!!!
   public void interpreter(REInterpreterContext context, FunctionCall functionCall, String postfix) {
     Preconditions.checkArgument(context != null);
     Preconditions.checkArgument(functionCall != null);
@@ -536,20 +567,30 @@ public abstract class REInterpreterBase {
       if (functionCall instanceof SpecificFunction) {
         SpecificFunction specificFunction = (SpecificFunction) functionCall;
         throw REInterpreterError.make(specificFunction);
-      } else if (functionCall instanceof AggregateWindowedFunction) {
+      }
+
+      else if (functionCall instanceof AggregateWindowedFunction) {
         AggregateWindowedFunction aggregateWindowedFunction =
             (AggregateWindowedFunction) functionCall;
         this.interpreter(context, aggregateWindowedFunction, postfix);
-      } else if (functionCall instanceof ScalarFunctionCall) {
+      }
+
+      else if (functionCall instanceof ScalarFunctionCall) {
         ScalarFunctionCall scalarFunctionCall = (ScalarFunctionCall) functionCall;
         throw REInterpreterError.make(scalarFunctionCall);
-      } else if (functionCall instanceof UdfFunctionCall) {
+      }
+
+      else if (functionCall instanceof UdfFunctionCall) {
         UdfFunctionCall udfFunctionCall = (UdfFunctionCall) functionCall;
         throw REInterpreterError.make(udfFunctionCall);
-      } else if (functionCall instanceof PasswordFunctionClause) {
+      }
+
+      else if (functionCall instanceof PasswordFunctionClause) {
         PasswordFunctionClause passwordFunctionClause = (PasswordFunctionClause) functionCall;
         throw REInterpreterError.make(passwordFunctionClause);
-      } else {
+      }
+
+      else {
         throw REInterpreterError.make(functionCall);
       }
 
@@ -573,8 +614,12 @@ public abstract class REInterpreterBase {
       case MIN:
       case SUM:
         context.addSymbol(type.literal(), RESymbolTypeEnum.FUNCTION_NAME);
-        AggregateWindowedFunction.AggregatorEnum aggregator = aggregateWindowedFunction.aggregator;
-        FunctionArg functionArg = aggregateWindowedFunction.functionArg;
+        final AggregateWindowedFunction.AggregatorEnum aggregator =
+            aggregateWindowedFunction.aggregator;
+        if (aggregator != null) {
+          context.addSymbol(aggregator.literal(), RESymbolTypeEnum.SPEFICIER_AGG);
+        }
+        final FunctionArg functionArg = aggregateWindowedFunction.functionArg;
         this.interpreter(context, functionArg, postfix);
         break;
       case COUNT:
@@ -629,7 +674,7 @@ public abstract class REInterpreterBase {
         this.interpreter(context, functionArg.functionCall, postfix);
         break;
       case EXPRESSION:
-        throw REInterpreterError.make(functionArg);
+        this.interpreter(context, functionArg.expression, postfix);
       default:
         throw REInterpreterError.make(functionArg);
       }

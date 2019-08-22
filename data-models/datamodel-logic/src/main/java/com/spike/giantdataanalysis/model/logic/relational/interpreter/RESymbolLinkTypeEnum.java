@@ -6,7 +6,9 @@ public enum RESymbolLinkTypeEnum implements RelationalInterpreterEnum {
   ARGUMENT_OF, //
   ATTRIBUTE_OF, //
   TABLE_OF_DATABASE, //
-  TYPE;// Constant.Type
+  TYPE, // Constant.Type
+  SPECIFIER // 限定符
+  ;
   // others
 
   @Override

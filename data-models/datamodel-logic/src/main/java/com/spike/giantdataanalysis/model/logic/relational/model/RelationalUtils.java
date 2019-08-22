@@ -44,24 +44,101 @@ public abstract class RelationalUtils {
   }
 
   // ---------------------------------------------------------------------------
+  // 获取.
+  // ---------------------------------------------------------------------------
+
+  public static List<RelationalAttribute> get(List<RelationalAttribute> list,
+      List<String> attributeNames) {
+    List<RelationalAttribute> result = Lists.newArrayList();
+
+    if (CollectionUtils.isNotEmpty(list) && CollectionUtils.isNotEmpty(attributeNames)) {
+      for (RelationalAttribute relationalAttribute : list) {
+        for (String attributeName : attributeNames) {
+          if (relationalAttribute.name.endsWith(attributeName)) {
+            result.add(relationalAttribute);
+            break;
+          }
+        }
+      }
+    }
+
+    return result;
+  }
+
+  /**
+   * 获取自然连接后的属性: 按名称.
+   * @param first
+   * @param second
+   * @return
+   */
+  public static List<RelationalAttribute> getNaturalJoin(List<RelationalAttribute> first,
+      List<RelationalAttribute> second) {
+    Preconditions.checkArgument(CollectionUtils.isNotEmpty(first));
+    Preconditions.checkArgument(CollectionUtils.isNotEmpty(second));
+
+    List<RelationalAttribute> result = Lists.newArrayList();
+    List<String> firstAttributeNames = Lists.newArrayList();
+    List<String> secondAttributeNames = Lists.newArrayList();
+    for (RelationalAttribute attribute : first) {
+      firstAttributeNames.add(attribute.name);
+    }
+    for (RelationalAttribute attribute : second) {
+      secondAttributeNames.add(attribute.name);
+    }
+
+    Triple<List<Integer>, List<Integer>, List<Integer>> compareResult =
+        RelationalUtils.compareCollection(firstAttributeNames, secondAttributeNames);
+
+    for (Integer index : compareResult.getLeft()) {
+      result.add(first.get(index));
+    }
+
+    for (Integer index : compareResult.getMiddle()) {
+      result.add(first.get(index));
+    }
+    for (Integer index : compareResult.getRight()) {
+      result.add(second.get(index));
+    }
+
+    return result;
+  }
+
+  // ---------------------------------------------------------------------------
   // 比较.
   // ---------------------------------------------------------------------------
 
-  public static boolean contains(List<RelationalAttribute> list, RelationalAttribute attribute) {
+  public static boolean contains(List<RelationalAttribute> list, String attributeName) {
     if (CollectionUtils.isEmpty(list)) {
       return false;
     }
-    if (attribute == null) {
+    if (attributeName == null) {
       return false;
     }
 
     for (RelationalAttribute relationalAttribute : list) {
-      if (relationalAttribute.name.equals(attribute.name)) {
+      if (relationalAttribute.name.equals(attributeName)) {
         return true;
       }
     }
 
     return false;
+  }
+
+  public static boolean containsAll(List<RelationalAttribute> list, List<String> attributeNames) {
+    if (attributeNames == null || attributeNames.isEmpty()) {
+      return false;
+    }
+
+    for (String attributeName : attributeNames) {
+      if (!contains(list, attributeName)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  public static boolean contains(List<RelationalAttribute> list, RelationalAttribute attribute) {
+    return contains(list, attribute.name);
   }
 
   /**

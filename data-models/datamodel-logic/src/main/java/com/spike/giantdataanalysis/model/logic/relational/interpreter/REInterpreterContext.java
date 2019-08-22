@@ -27,7 +27,7 @@ public class REInterpreterContext {
   public final Map<String, RESymbolTable> scopeSymbolTable = Maps.newHashMap();
 
   /** 根作用域. */
-  private final REScope rootScope = REScope.ROOT;
+  public final REScope rootScope = REScope.ROOT;
 
   /** 当前作用域. */
   public REScope currentScope = rootScope;
@@ -120,27 +120,41 @@ public class REInterpreterContext {
   @Override
   public String toString() {
     StringBuilder builder = new StringBuilder();
-    this.toString(builder, rootScope, 0);
+    this.toString(false, builder, rootScope, 0);
     return builder.toString();
   }
 
-  public void toString(StringBuilder builder, REScope scope, int level) {
+  /**
+   * @param compact 带空符号表的作用域是否输出
+   * @param builder
+   * @param scope
+   * @param level
+   */
+  public void toString(boolean compact, StringBuilder builder, REScope scope, int level) {
     if (scope == null) {
       return;
     }
 
-    String tabs = StringUtils.repeat("_|", level);
-
-    builder.append(tabs);
-    builder.append(scope.shortName()).append(" ");
-
     RESymbolTable symbolTable = scopeSymbolTable.get(scope.name);
-    builder.append(symbolTable).append(System.lineSeparator());
+
+    if (compact) {
+      if (!symbolTable.isEmpty() || rootScope.name.equals(scope.name)) {
+        String tabs = StringUtils.repeat("_|", level);
+        builder.append(tabs);
+        builder.append(scope.shortName()).append(" ");
+        builder.append(symbolTable).append(System.lineSeparator());
+      }
+    } else {
+      String tabs = StringUtils.repeat("_|", level);
+      builder.append(tabs);
+      builder.append(scope.shortName()).append(" ");
+      builder.append(symbolTable).append(System.lineSeparator());
+    }
 
     List<REScope> children = scope.children;
     if (CollectionUtils.isNotEmpty(children)) {
       for (REScope child : children) {
-        this.toString(builder, child, level + 1);
+        this.toString(compact, builder, child, level + 1);
       }
     }
   }

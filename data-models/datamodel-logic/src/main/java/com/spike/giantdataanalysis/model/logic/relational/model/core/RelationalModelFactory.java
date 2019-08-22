@@ -8,6 +8,7 @@ import com.google.common.base.Preconditions;
 import com.spike.giantdataanalysis.model.logic.relational.core.RelationalAttributeTypeEnum;
 import com.spike.giantdataanalysis.model.logic.relational.core.RelationalRelationKeyTypeEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.Expression;
+import com.spike.giantdataanalysis.model.logic.relational.interpreter.REScope;
 import com.spike.giantdataanalysis.model.logic.relational.model.RelationalDifferenceOperation;
 import com.spike.giantdataanalysis.model.logic.relational.model.RelationalIntersectionOperation;
 import com.spike.giantdataanalysis.model.logic.relational.model.RelationalProjectOperation;
@@ -70,18 +71,26 @@ public abstract class RelationalModelFactory {
     return new RelationalUnionOperation(first, second);
   }
 
+  public static RelationalUnionOperation makeUnion(RelationalRelation... relations) {
+    return new RelationalUnionOperation(relations);
+  }
+
+  public static RelationalUnionOperation makeUnion(List<RelationalRelation> relationalRelations) {
+    return new RelationalUnionOperation(relationalRelations);
+  }
+
   public static RelationalDifferenceOperation makeDifference(RelationalRelation first,
       RelationalRelation second) {
     return new RelationalDifferenceOperation(first, second);
   }
 
   public static RelationalProjectOperation makeProject(RelationalRelation first,
-      List<RelationalAttribute> attributes) {
-    return new RelationalProjectOperation(first, attributes);
+      List<String> attributeNames) {
+    return new RelationalProjectOperation(first, attributeNames);
   }
 
   public static RelationalSelectOperation makeSelect(RelationalRelation relation,
-      Expression condition) {
-    return new RelationalSelectOperation(relation, condition);
+      Expression condition, REScope interpreteScope) {
+    return new RelationalSelectOperation(relation, condition, interpreteScope);
   }
 }

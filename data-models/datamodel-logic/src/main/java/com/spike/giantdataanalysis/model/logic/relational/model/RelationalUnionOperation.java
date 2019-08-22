@@ -1,7 +1,7 @@
 package com.spike.giantdataanalysis.model.logic.relational.model;
 
-import com.spike.giantdataanalysis.model.logic.relational.RelationalEvaluationContext;
-import com.spike.giantdataanalysis.model.logic.relational.RelationalEvaluationError;
+import java.util.List;
+
 import com.spike.giantdataanalysis.model.logic.relational.core.RelationalAlgebraOperationEnum;
 import com.spike.giantdataanalysis.model.logic.relational.model.core.RelationalModelFactory;
 import com.spike.giantdataanalysis.model.logic.relational.model.core.RelationalRelation;
@@ -9,10 +9,18 @@ import com.spike.giantdataanalysis.model.logic.relational.model.core.RelationalR
 /**
  * 并操作.
  */
-public class RelationalUnionOperation extends RelationalBinaryOperation {
+public class RelationalUnionOperation extends RelationalMultipleRelationOperation {
 
   public RelationalUnionOperation(RelationalRelation first, RelationalRelation second) {
     super(first, second);
+  }
+
+  public RelationalUnionOperation(RelationalRelation... relations) {
+    super(relations);
+  }
+
+  public RelationalUnionOperation(List<RelationalRelation> relations) {
+    super(relations);
   }
 
   @Override
@@ -21,23 +29,8 @@ public class RelationalUnionOperation extends RelationalBinaryOperation {
   }
 
   @Override
-  public String literal() {
-    StringBuilder sb = new StringBuilder();
-    sb.append(operationType().symbol);
-    sb.append("(").append(first.literal()).append(", ").append(second.literal()).append(")");
-    return sb.toString();
-  }
-
-  @Override
-  public RelationalRelation eval(RelationalEvaluationContext context)
-      throws RelationalEvaluationError {
-    // TODO Implement RelationalExpression.eval
-    return null;
-  }
-
-  @Override
   public RelationalRelation result(String alias) {
-    return RelationalModelFactory.makeRelation(alias, first.attributes);
+    return RelationalModelFactory.makeRelation(alias, this.relations.get(0).attributes);
   }
 
 }

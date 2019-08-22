@@ -18,6 +18,9 @@ public class RelationalRelation implements Literal {
   public static final String TEMPORARY_NAME_PREFIX = "$";
   public static final String TEMPORARY_NAME_SEP = "^";
 
+  public static final RelationalRelation DUAL =
+      new RelationalRelation("DUAL", Lists.newArrayList(RelationalAttribute.EMPTY));
+
   // 关系的名称
   public final String name;
   // 关系的属性列表

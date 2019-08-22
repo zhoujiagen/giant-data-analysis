@@ -586,13 +586,13 @@ public interface DmlStatement extends SqlStatement {
   }
 
   public static class OuterJoin implements JoinPart {
-    public final OuterJoinType type;
+    public final DmlStatement.OuterJoinType type;
     public final TableSourceItem tableSourceItem;
     public final Expression expression;
     public final UidList uidList;
 
-    OuterJoin(OuterJoinType type, TableSourceItem tableSourceItem, Expression expression,
-        UidList uidList) {
+    OuterJoin(DmlStatement.OuterJoinType type, TableSourceItem tableSourceItem,
+        Expression expression, UidList uidList) {
       Preconditions.checkArgument(type != null);
       Preconditions.checkArgument(tableSourceItem != null);
       Preconditions.checkArgument(!(expression == null && uidList == null));
@@ -628,7 +628,7 @@ public interface DmlStatement extends SqlStatement {
   }
 
   public static class NaturalJoin implements JoinPart {
-    public final OuterJoinType outerJoinType;
+    public final DmlStatement.OuterJoinType outerJoinType;
     public final TableSourceItem tableSourceItem;
 
     NaturalJoin(OuterJoinType outerJoinType, TableSourceItem tableSourceItem) {

@@ -5,7 +5,9 @@ import java.util.List;
 import org.apache.commons.lang3.tuple.Triple;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects;
+import com.spike.giantdataanalysis.model.logic.relational.expression.CommonLists.UidList;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.DottedId;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.FullColumnName;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.FullId;
@@ -39,6 +41,21 @@ public abstract class REUtils {
       return rawLiteral(fullId.uids.get(1));
     }
     return null;
+  }
+
+  // ---------------------------------------------------------------------------
+  // UidList
+  // ---------------------------------------------------------------------------
+  public static List<String> rawLiteral(UidList uidList) {
+    Preconditions.checkArgument(uidList != null);
+    List<Uid> uids = uidList.uids;
+
+    List<String> result = Lists.newArrayList();
+    for (Uid uid : uids) {
+      result.add(rawLiteral(uid));
+    }
+
+    return result;
   }
 
   // ---------------------------------------------------------------------------

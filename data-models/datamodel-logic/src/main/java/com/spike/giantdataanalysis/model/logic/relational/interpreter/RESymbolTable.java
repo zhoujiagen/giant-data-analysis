@@ -47,6 +47,10 @@ public final class RESymbolTable {
     }
   }
 
+  public boolean isEmpty() {
+    return symbolMap.isEmpty();
+  }
+
   public RESymbol getSymbol(String text) {
     return symbolMap.get(text);
   }
@@ -61,25 +65,26 @@ public final class RESymbolTable {
 
   @Override
   public String toString() {
-    StringBuilder builder = new StringBuilder();
-    if (!symbolMap.isEmpty()) {
-      builder.append("Symbols=");
-      builder.append("{");
-      builder.append(Joiner.on(", ").join(symbolMap.values()));
-      builder.append("}");
-      if (!symbolLinks.isEmpty()) {
-        builder.append(", Links=");
-        List<String> symbolLinkStringList = Lists.newArrayList();
-        for (Entry<MultiKey<? extends String>, Set<RESymbolLinkTypeEnum>> entry : symbolLinks
-            .entrySet()) {
-          MultiKey<? extends String> key = entry.getKey();
-          Set<RESymbolLinkTypeEnum> value = entry.getValue();
-          symbolLinkStringList.add(key.getKey(0) + "=" + value + "=>" + key.getKey(1));
-        }
-        // builder.append(symbolLinks);
-        builder.append(Joiner.on(", ").join(symbolLinkStringList));
-      }
+    if (symbolMap.isEmpty()) {
+      return StringUtils.EMPTY;
+    }
 
+    StringBuilder builder = new StringBuilder();
+    builder.append("Symbols=");
+    builder.append("{");
+    builder.append(Joiner.on(", ").join(symbolMap.values()));
+    builder.append("}");
+    if (!symbolLinks.isEmpty()) {
+      builder.append(", Links=");
+      List<String> symbolLinkStringList = Lists.newArrayList();
+      for (Entry<MultiKey<? extends String>, Set<RESymbolLinkTypeEnum>> entry : symbolLinks
+          .entrySet()) {
+        MultiKey<? extends String> key = entry.getKey();
+        Set<RESymbolLinkTypeEnum> value = entry.getValue();
+        symbolLinkStringList.add(key.getKey(0) + " -" + value + "-> " + key.getKey(1));
+      }
+      // builder.append(symbolLinks);
+      builder.append(Joiner.on(", ").join(symbolLinkStringList));
     }
     return builder.toString();
   }

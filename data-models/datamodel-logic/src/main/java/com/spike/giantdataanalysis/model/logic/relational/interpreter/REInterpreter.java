@@ -5,15 +5,16 @@ import java.util.List;
 import org.apache.commons.collections4.CollectionUtils;
 
 import com.google.common.base.Preconditions;
+import com.spike.giantdataanalysis.model.logic.relational.expression.CommonLists.UidList;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.FullColumnName;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.FullId;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.MysqlVariable;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.TableName;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DBObjects.Uid;
+import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.AtomTableItem;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.InnerJoin;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.JoinPart;
-import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.LockClauseEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.NaturalJoin;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.OrderByClause;
 import com.spike.giantdataanalysis.model.logic.relational.expression.DmlStatement.OrderByExpression;
@@ -36,7 +37,10 @@ import com.spike.giantdataanalysis.model.logic.relational.expression.SelectState
 import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.LimitClause;
 import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.LimitClauseAtom;
 import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.ParenthesisSelect;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.QueryExpression;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.QueryExpressionNointo;
 import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.QuerySpecification;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.QuerySpecificationNointo;
 import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.SelectColumnElement;
 import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.SelectElement;
 import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.SelectElements;
@@ -46,16 +50,23 @@ import com.spike.giantdataanalysis.model.logic.relational.expression.SelectState
 import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.SelectSpecEnum;
 import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.SelectStarElement;
 import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.SimpleSelect;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.UnionParenthesis;
 import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.UnionParenthesisSelect;
 import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.UnionSelect;
+import com.spike.giantdataanalysis.model.logic.relational.expression.SelectStatement.UnionStatement;
 import com.spike.giantdataanalysis.model.logic.relational.interpreter.RelationalCataloger.DummyRelationalCataloger;
 import com.spike.giantdataanalysis.model.logic.relational.model.RelationalOperation;
+import com.spike.giantdataanalysis.model.logic.relational.model.core.RelationalModelFactory;
 import com.spike.giantdataanalysis.model.logic.relational.model.core.RelationalRelation;
 
 /**
  * Interpreter: Expression => Model.
- * <p>
- * FIXME(zhoujiagen) 在上层作用域中校正下层作用域中解析出的符号和链接.
+ * 
+ * <pre>
+ *  TODO(zhoujiagen) hack these:
+ * 1 在上层作用域中校正下层作用域中解析出的符号和链接
+ * 2 将AST转换为代数表达式
+ * </pre>
  */
 public final class REInterpreter extends REInterpreterBase {
 
@@ -69,26 +80,264 @@ public final class REInterpreter extends REInterpreterBase {
     Preconditions.checkArgument(postfix != null);
 
     context.enterScope("SelectStatement", postfix);
-    RelationalOperation result = null;
+    try {
+      if (selectStatement instanceof SimpleSelect) {
+        SimpleSelect simpleSelect = (SimpleSelect) selectStatement;
+        return this.interpreter(context, simpleSelect, postfix);
+      } else if (selectStatement instanceof ParenthesisSelect) {
+        ParenthesisSelect parenthesisSelect = (ParenthesisSelect) selectStatement;
+        return this.interpreter(context, parenthesisSelect, postfix);
+      } else if (selectStatement instanceof UnionSelect) {
+        UnionSelect unionSelect = (UnionSelect) selectStatement;
+        return this.interpreter(context, unionSelect, postfix);
+      } else if (selectStatement instanceof UnionParenthesisSelect) {
+        UnionParenthesisSelect unionParenthesisSelect = (UnionParenthesisSelect) selectStatement;
+        return this.interpreter(context, unionParenthesisSelect, postfix);
+      } else {
+        throw REInterpreterError.make(selectStatement);
+      }
+    } finally {
+      context.leaveScope();
+    }
+  }
 
-    if (selectStatement instanceof SimpleSelect) {
-      SimpleSelect simpleSelect = (SimpleSelect) selectStatement;
-      result = this.interpreter(context, simpleSelect, postfix);
-    } else if (selectStatement instanceof ParenthesisSelect) {
-      ParenthesisSelect parenthesisSelect = (ParenthesisSelect) selectStatement;
-      throw REInterpreterError.make(parenthesisSelect);
-    } else if (selectStatement instanceof UnionSelect) {
-      UnionSelect unionSelect = (UnionSelect) selectStatement;
-      throw REInterpreterError.make(unionSelect);
-    } else if (selectStatement instanceof UnionParenthesisSelect) {
-      UnionParenthesisSelect unionParenthesisSelect = (UnionParenthesisSelect) selectStatement;
-      throw REInterpreterError.make(unionParenthesisSelect);
-    } else {
-      throw REInterpreterError.make(selectStatement);
+  public RelationalOperation interpreter(REInterpreterContext context,
+      ParenthesisSelect parenthesisSelect, String postfix) {
+    Preconditions.checkArgument(context != null);
+    Preconditions.checkArgument(parenthesisSelect != null);
+    Preconditions.checkArgument(postfix != null);
+
+    RelationalOperation result = null;
+    context.enterScope("ParenthesisSelect", postfix);
+    try {
+      final QueryExpression queryExpression = parenthesisSelect.queryExpression;
+      result = this.interpreter(context, queryExpression, postfix);
+      final DmlStatement.LockClauseEnum lockClause = parenthesisSelect.lockClause;
+      if (lockClause != null) {
+        context.addSymbol(lockClause.literal(), RESymbolTypeEnum.OPERATOR_NAME);
+      }
+    } finally {
+      context.leaveScope();
     }
 
-    context.leaveScope();
     return result;
+  }
+
+  public RelationalOperation interpreter(REInterpreterContext context,
+      QueryExpression queryExpression, String postfix) {
+    Preconditions.checkArgument(context != null);
+    Preconditions.checkArgument(queryExpression != null);
+    Preconditions.checkArgument(postfix != null);
+
+    RelationalOperation result = null;
+    context.enterScope("QueryExpression", postfix);
+    try {
+      final QuerySpecification querySpecification = queryExpression.querySpecification;
+      result = this.interpreter(context, querySpecification, postfix);
+    } finally {
+      context.leaveScope();
+    }
+
+    return result;
+  }
+
+  public RelationalOperation interpreter(REInterpreterContext context,
+      QueryExpressionNointo queryExpressionNointo, String postfix) {
+    Preconditions.checkArgument(context != null);
+    Preconditions.checkArgument(queryExpressionNointo != null);
+    Preconditions.checkArgument(postfix != null);
+
+    context.enterScope("QueryExpressionNointo", postfix);
+    try {
+      final QuerySpecificationNointo querySpecificationNointo =
+          queryExpressionNointo.querySpecificationNointo;
+      return this.interpreter(context, querySpecificationNointo, postfix);
+    } finally {
+      context.leaveScope();
+    }
+  }
+
+  // TODO(zhoujiagen) hack this: 多个并操作符
+  public RelationalOperation interpreter(REInterpreterContext context, UnionSelect unionSelect,
+      String postfix) {
+    Preconditions.checkArgument(context != null);
+    Preconditions.checkArgument(unionSelect != null);
+    Preconditions.checkArgument(postfix != null);
+
+    RelationalOperation result = null;
+    context.enterScope("UnionSelect", postfix);
+    try {
+      final QuerySpecificationNointo querySpecificationNointo =
+          unionSelect.querySpecificationNointo;
+      this.interpreter(context, querySpecificationNointo, postfix);
+      final List<UnionStatement> unionStatements = unionSelect.unionStatements;
+      int unionStatementIndex = 1;
+      for (UnionStatement unionStatement : unionStatements) {
+        this.interpreter(context, unionStatement, postfix + (unionStatementIndex++));
+      }
+
+      final SelectStatement.UnionTypeEnum unionType = unionSelect.unionType;
+      final QuerySpecification querySpecification = unionSelect.querySpecification;
+      final QueryExpression queryExpression = unionSelect.queryExpression;
+      if (querySpecification != null || queryExpression != null) {
+        context.addSymbol("UNION", RESymbolTypeEnum.OPERATOR_NAME);
+        if (unionType != null) {
+          context.addLink(RESymbolLinkTypeEnum.SPECIFIER, "UNION", unionType.literal());
+        }
+      }
+
+      final OrderByClause orderByClause = unionSelect.orderByClause;
+      if (orderByClause != null) {
+        this.interpreter(context, orderByClause, postfix);
+      }
+      final LimitClause limitClause = unionSelect.limitClause;
+      if (limitClause != null) {
+        this.interpreter(context, limitClause, postfix);
+      }
+      final DmlStatement.LockClauseEnum lockClause = unionSelect.lockClause;
+      if (lockClause != null) {
+        context.addSymbol(lockClause.literal(), RESymbolTypeEnum.OPERATOR_NAME);
+      }
+    } finally {
+      context.leaveScope();
+    }
+
+    return result;
+  }
+
+  public RelationalOperation interpreter(REInterpreterContext context,
+      UnionParenthesis unionParenthesis, String postfix) {
+    Preconditions.checkArgument(context != null);
+    Preconditions.checkArgument(unionParenthesis != null);
+    Preconditions.checkArgument(postfix != null);
+
+    context.enterScope("UnionParenthesis", postfix);
+    try {
+      context.addSymbol("UNION", RESymbolTypeEnum.OPERATOR_NAME);
+      final SelectStatement.UnionTypeEnum unionType = unionParenthesis.unionType;
+      context.addLink(RESymbolLinkTypeEnum.SPECIFIER, "UNION", unionType.literal());
+
+      final QueryExpressionNointo queryExpressionNointo = unionParenthesis.queryExpressionNointo;
+      return this.interpreter(context, queryExpressionNointo, postfix);
+    } finally {
+      context.leaveScope();
+    }
+  }
+
+  public RelationalOperation interpreter(REInterpreterContext context,
+      UnionStatement unionStatement, String postfix) {
+    Preconditions.checkArgument(context != null);
+    Preconditions.checkArgument(unionStatement != null);
+    Preconditions.checkArgument(postfix != null);
+
+    context.enterScope("UnionStatement", postfix);
+    try {
+      context.addSymbol("UNION", RESymbolTypeEnum.OPERATOR_NAME);
+      final SelectStatement.UnionTypeEnum unionType = unionStatement.unionType;
+      context.addLink(RESymbolLinkTypeEnum.SPECIFIER, "UNION", unionType.literal());
+      final QuerySpecificationNointo querySpecificationNointo =
+          unionStatement.querySpecificationNointo;
+      final QueryExpressionNointo queryExpressionNointo = unionStatement.queryExpressionNointo;
+      if (querySpecificationNointo != null) {
+        return this.interpreter(context, querySpecificationNointo, postfix);
+      } else {
+        return this.interpreter(context, queryExpressionNointo, postfix);
+      }
+    } finally {
+      context.leaveScope();
+    }
+  }
+
+  /**
+   * @param context
+   * @param querySpecificationNointo
+   * @param postfix
+   * @return
+   * @see #interpreter(REInterpreterContext, QuerySpecification, String)
+   */
+  public RelationalOperation interpreter(REInterpreterContext context,
+      QuerySpecificationNointo querySpecificationNointo, String postfix) {
+    Preconditions.checkArgument(context != null);
+    Preconditions.checkArgument(querySpecificationNointo != null);
+    Preconditions.checkArgument(postfix != null);
+
+    RelationalOperation result = null;
+    context.enterScope("QuerySpecification", postfix);
+
+    try {
+      final List<SelectSpecEnum> selectSpecs = querySpecificationNointo.selectSpecs;
+      if (CollectionUtils.isNotEmpty(selectSpecs)) {
+        for (SelectSpecEnum selectSpec : selectSpecs) {
+          context.addSymbol(selectSpec.literal(), RESymbolTypeEnum.SPECIFIER_SELECT);
+        }
+      }
+
+      final SelectElements selectElements = querySpecificationNointo.selectElements;
+      this.interpreter(context, selectElements, postfix);
+
+      final FromClause fromClause = querySpecificationNointo.fromClause;
+      if (fromClause != null) {
+        this.interpreter(context, fromClause, postfix);
+      }
+
+      final OrderByClause orderByClause = querySpecificationNointo.orderByClause;
+      if (orderByClause != null) {
+        this.interpreter(context, orderByClause, postfix);
+      }
+
+      final LimitClause limitClause = querySpecificationNointo.limitClause;
+      if (limitClause != null) {
+        this.interpreter(context, limitClause, postfix);
+      }
+    } finally {
+      context.leaveScope();
+    }
+
+    return result;
+  }
+
+  // TODO(zhoujiagen) see UnionSelect
+  public RelationalOperation interpreter(REInterpreterContext context,
+      UnionParenthesisSelect unionParenthesisSelect, String postfix) {
+    Preconditions.checkArgument(context != null);
+    Preconditions.checkArgument(unionParenthesisSelect != null);
+    Preconditions.checkArgument(postfix != null);
+
+    context.enterScope("UnionParenthesisSelect", postfix);
+    try {
+      final QueryExpressionNointo queryExpressionNointo =
+          unionParenthesisSelect.queryExpressionNointo;
+      this.interpreter(context, queryExpressionNointo, postfix);
+      final List<UnionParenthesis> unionParenthesisList =
+          unionParenthesisSelect.unionParenthesisList;
+      for (UnionParenthesis unionParenthesis : unionParenthesisList) {
+        this.interpreter(context, unionParenthesis, postfix);
+      }
+      final SelectStatement.UnionTypeEnum unionType = unionParenthesisSelect.unionType;
+      final QueryExpression queryExpression = unionParenthesisSelect.queryExpression;
+      if (queryExpression != null) {
+        context.addSymbol("UNION", RESymbolTypeEnum.OPERATOR_NAME);
+        if (unionType != null) {
+          context.addLink(RESymbolLinkTypeEnum.SPECIFIER, "UNION", unionType.literal());
+        }
+      }
+      final OrderByClause orderByClause = unionParenthesisSelect.orderByClause;
+      if (orderByClause != null) {
+        this.interpreter(context, orderByClause, postfix);
+      }
+      final LimitClause limitClause = unionParenthesisSelect.limitClause;
+      if (limitClause != null) {
+        this.interpreter(context, limitClause, postfix);
+      }
+      final DmlStatement.LockClauseEnum lockClause = unionParenthesisSelect.lockClause;
+      if (lockClause != null) {
+        context.addSymbol(lockClause.literal(), RESymbolTypeEnum.OPERATOR_NAME);
+      }
+    } finally {
+      context.leaveScope();
+    }
+
+    throw REInterpreterError.make(unionParenthesisSelect);
   }
 
   public RelationalOperation interpreter(REInterpreterContext context, SimpleSelect simpleSelect,
@@ -102,7 +351,10 @@ public final class REInterpreter extends REInterpreterBase {
 
     try {
       result = this.interpreter(context, simpleSelect.querySpecification, postfix);
-      final LockClauseEnum lockClause = simpleSelect.lockClause;
+      final DmlStatement.LockClauseEnum lockClause = simpleSelect.lockClause;
+      if (lockClause != null) {
+        context.addSymbol(lockClause.literal(), RESymbolTypeEnum.OPERATOR_NAME);
+      }
     } finally {
       context.leaveScope();
     }
@@ -121,7 +373,11 @@ public final class REInterpreter extends REInterpreterBase {
 
     try {
       final List<SelectSpecEnum> selectSpecs = querySpecification.selectSpecs;
-
+      if (CollectionUtils.isNotEmpty(selectSpecs)) {
+        for (SelectSpecEnum selectSpec : selectSpecs) {
+          context.addSymbol(selectSpec.literal(), RESymbolTypeEnum.SPECIFIER_SELECT);
+        }
+      }
       final SelectElements selectElements = querySpecification.selectElements;
       this.interpreter(context, selectElements, postfix);
 
@@ -132,6 +388,8 @@ public final class REInterpreter extends REInterpreterBase {
       }
       context.leaveScope(); // SelectIntoExpression
 
+      result = RelationalModelFactory.makeSelect(RelationalRelation.DUAL, null, context.currentScope);
+      
       final FromClause fromClause = querySpecification.fromClause;
       if (fromClause != null) {
         this.interpreter(context, fromClause, postfix);
@@ -230,6 +488,9 @@ public final class REInterpreter extends REInterpreterBase {
       Expression expression = orderByExpression.expression;
       this.interpreter(context, expression, postfix);
       OrderByExpression.OrderType order = orderByExpression.order;
+      if (order != null) {
+        context.addSymbol(order.literal(), RESymbolTypeEnum.SPECIFIER_ORDER);
+      }
     } finally {
       context.leaveScope();
     }
@@ -257,6 +518,9 @@ public final class REInterpreter extends REInterpreterBase {
       }
 
       final Boolean withRollup = fromClause.withRollup;
+      if (Boolean.TRUE.equals(withRollup)) {
+        context.addSymbol("WITH ROLLUP", RESymbolTypeEnum.SPEFICIER_GROUP_BY);
+      }
       final Expression havingExpr = fromClause.havingExpr;
       if (havingExpr != null) {
         this.interpreter(context, havingExpr, postfix + "2");
@@ -276,6 +540,9 @@ public final class REInterpreter extends REInterpreterBase {
       Expression expression = groupByItem.expression;
       this.interpreter(context, expression, postfix);
       GroupByItem.OrderType orderType = groupByItem.order;
+      if (orderType != null) {
+        context.addSymbol(orderType.literal(), RESymbolTypeEnum.SPECIFIER_ORDER);
+      }
     } finally {
       context.leaveScope();
     }
@@ -429,21 +696,64 @@ public final class REInterpreter extends REInterpreterBase {
     Preconditions.checkArgument(postfix != null);
 
     context.enterScope("JoinPart", postfix);
-
     try {
       if (joinPart instanceof InnerJoin) {
         InnerJoin innerJoin = (InnerJoin) joinPart;
-        throw REInterpreterError.make(joinPart);
-      } else if (joinPart instanceof StraightJoin) {
+        final TableSourceItem tableSourceItem = innerJoin.tableSourceItem;
+        this.interpreter(context, tableSourceItem, postfix);
+        final Expression expression = innerJoin.expression;
+        final UidList uidList = innerJoin.uidList;
+        if (expression != null) {
+          this.interpreter(context, expression, postfix);
+        }
+        if (uidList != null) {
+          List<String> uids = REUtils.rawLiteral(uidList);
+          for (String uid : uids) {
+            context.addSymbol(uid, RESymbolTypeEnum.ATTRIBUTE_NAME);
+          }
+        }
+      }
+
+      else if (joinPart instanceof StraightJoin) {
         StraightJoin straightJoin = (StraightJoin) joinPart;
-        throw REInterpreterError.make(joinPart);
-      } else if (joinPart instanceof OuterJoin) {
+        final TableSourceItem tableSourceItem = straightJoin.tableSourceItem;
+        this.interpreter(context, tableSourceItem, postfix);
+        final Expression expression = straightJoin.expression;
+        if (expression != null) {
+          this.interpreter(context, expression, postfix);
+        }
+      }
+
+      else if (joinPart instanceof OuterJoin) {
         OuterJoin outerJoin = (OuterJoin) joinPart;
-        throw REInterpreterError.make(joinPart);
-      } else if (joinPart instanceof NaturalJoin) {
+        final DmlStatement.OuterJoinType type = outerJoin.type;
+        context.addSymbol(type.literal(), RESymbolTypeEnum.SPEFICIER_JOIN);
+        final TableSourceItem tableSourceItem = outerJoin.tableSourceItem;
+        this.interpreter(context, tableSourceItem, postfix);
+        final Expression expression = outerJoin.expression;
+        if (expression != null) {
+          this.interpreter(context, expression, postfix);
+        }
+        final UidList uidList = outerJoin.uidList;
+        if (uidList != null) {
+          List<String> uids = REUtils.rawLiteral(uidList);
+          for (String uid : uids) {
+            context.addSymbol(uid, RESymbolTypeEnum.ATTRIBUTE_NAME);
+          }
+        }
+      }
+
+      else if (joinPart instanceof NaturalJoin) {
         NaturalJoin naturalJoin = (NaturalJoin) joinPart;
-        throw REInterpreterError.make(joinPart);
-      } else {
+        final DmlStatement.OuterJoinType outerJoinType = naturalJoin.outerJoinType;
+        if (outerJoinType != null) {
+          context.addSymbol(outerJoinType.literal(), RESymbolTypeEnum.SPEFICIER_JOIN);
+        }
+        final TableSourceItem tableSourceItem = naturalJoin.tableSourceItem;
+        this.interpreter(context, tableSourceItem, postfix);
+      }
+
+      else {
         throw REInterpreterError.make(joinPart);
       }
     } finally {

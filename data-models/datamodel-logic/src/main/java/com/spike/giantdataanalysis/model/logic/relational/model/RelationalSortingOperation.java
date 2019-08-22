@@ -7,8 +7,6 @@ import org.apache.commons.collections4.CollectionUtils;
 import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
-import com.spike.giantdataanalysis.model.logic.relational.RelationalEvaluationContext;
-import com.spike.giantdataanalysis.model.logic.relational.RelationalEvaluationError;
 import com.spike.giantdataanalysis.model.logic.relational.core.RelationalAlgebraOperationEnum;
 import com.spike.giantdataanalysis.model.logic.relational.model.core.RelationalAttribute;
 import com.spike.giantdataanalysis.model.logic.relational.model.core.RelationalModelFactory;
@@ -51,13 +49,6 @@ public class RelationalSortingOperation implements RelationalOperation {
     sb.append("[").append(Joiner.on(", ").join(attributeNames)).append("]");
     sb.append("(").append(relation.name).append(")");
     return sb.toString();
-  }
-
-  @Override
-  public RelationalRelation eval(RelationalEvaluationContext context)
-      throws RelationalEvaluationError {
-    // TODO Implement RelationalSortingOperation.eval
-    return null;
   }
 
   @Override

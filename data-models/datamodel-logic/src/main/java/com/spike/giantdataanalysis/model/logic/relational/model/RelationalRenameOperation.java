@@ -7,8 +7,6 @@ import org.apache.commons.lang3.StringUtils;
 import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
-import com.spike.giantdataanalysis.model.logic.relational.RelationalEvaluationContext;
-import com.spike.giantdataanalysis.model.logic.relational.RelationalEvaluationError;
 import com.spike.giantdataanalysis.model.logic.relational.core.RelationalAlgebraOperationEnum;
 import com.spike.giantdataanalysis.model.logic.relational.model.core.RelationalAttribute;
 import com.spike.giantdataanalysis.model.logic.relational.model.core.RelationalModelFactory;
@@ -19,7 +17,9 @@ import com.spike.giantdataanalysis.model.logic.relational.model.core.RelationalR
  */
 public class RelationalRenameOperation implements RelationalOperation {
   public final RelationalRelation relation;
+  // 新关系的名称
   public final String newRelationName;
+  // 新关系中属性的名称, 为空时为原关系中属性名称, 不为空时为原关系中属性的新名称
   public final List<String> newAttributeNames;
 
   public RelationalRenameOperation(RelationalRelation relation, String newRelationName,
@@ -48,13 +48,6 @@ public class RelationalRenameOperation implements RelationalOperation {
         .append(Joiner.on(" ").join(newAttributeNames)).append(")").append("]");
     sb.append("(").append(relation.literal()).append(")");
     return sb.toString();
-  }
-
-  @Override
-  public RelationalRelation eval(RelationalEvaluationContext context)
-      throws RelationalEvaluationError {
-    // TODO Implement RelationalExpression.eval
-    return null;
   }
 
   @Override
