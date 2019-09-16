@@ -1,7 +1,5 @@
 package com.spike.giantdataanalysis.model.logic.relational;
 
-import com.spike.giantdataanalysis.model.logic.relational.model.RelationalOperation;
-
 /**
  * 求值错误异常.
  */
@@ -14,11 +12,6 @@ public class RelationalEvaluationError extends RuntimeException {
 
   public static RelationalEvaluationError make(String message) {
     return new RelationalEvaluationError(message);
-  }
-
-  public static RelationalEvaluationError make(RelationalOperation expression) {
-    return new RelationalEvaluationError(
-        expression.getClass().getName() + ": \n" + expression.literal());
   }
 
   RelationalEvaluationError() {

@@ -9,8 +9,8 @@ import com.google.common.base.Preconditions;
 import com.spike.giantdataanalysis.model.logic.relational.core.RelationalAlgebraOperationEnum;
 import com.spike.giantdataanalysis.model.logic.relational.core.RelationalAttributeTypeEnum;
 import com.spike.giantdataanalysis.model.logic.relational.core.RelationalRelationKeyTypeEnum;
-import com.spike.giantdataanalysis.model.logic.relational.expression.Expression;
-import com.spike.giantdataanalysis.model.logic.relational.model.RelationalOperationTree.TreeNode;
+import com.spike.giantdataanalysis.model.logic.relational.model.tree.RelationalOperationTreeExpressionNode;
+import com.spike.giantdataanalysis.model.logic.relational.model.tree.RelationalOperationTreeNode;
 
 /**
  * 关系模型抽象的工厂.
@@ -57,92 +57,85 @@ public abstract class RelationalModelFactory {
   // ---------------------------------------------------------------------------
   // 操作
   // ---------------------------------------------------------------------------
-  public static TreeNode newTreeNode(RelationalRelation relation) {
+
+  /**
+   * 构造操作数树节点: 关系.
+   * @param relation
+   * @return
+   */
+  public static RelationalOperationTreeNode newTreeNode(RelationalRelation relation) {
     Preconditions.checkArgument(relation != null);
 
-    TreeNode result = new TreeNode();
+    RelationalOperationTreeNode result = new RelationalOperationTreeNode();
     result.relation = relation;
     return result;
   }
 
-  public static TreeNode newTreeNode(RelationalAlgebraOperationEnum operation,
-      List<TreeNode> children) {
+  /**
+   * 构造操作数树节点: 子节点.
+   * @param operation
+   * @param children
+   * @return
+   */
+  public static RelationalOperationTreeNode newTreeNode(RelationalAlgebraOperationEnum operation,
+      List<RelationalOperationTreeNode> children) {
     Preconditions.checkArgument(operation != null);
     Preconditions.checkArgument(CollectionUtils.isNotEmpty(children));
 
-    TreeNode result = new TreeNode();
+    RelationalOperationTreeNode result = new RelationalOperationTreeNode();
     result.operation = operation;
     result.children = children;
-    for (TreeNode treeNode : result.children) {
+    for (RelationalOperationTreeNode treeNode : result.children) {
       treeNode.parent = result;
     }
     return result;
   }
 
-  public static TreeNode newTreeNodeCondition(RelationalAlgebraOperationEnum operation,
-      List<TreeNode> children, List<Expression> conditions) {
+  /**
+   * 构造操作数树节点: 子节点和条件.
+   * @param operation
+   * @param children
+   * @param conditions
+   * @return
+   */
+  public static RelationalOperationTreeNode newTreeNodeCondition(
+      RelationalAlgebraOperationEnum operation, List<RelationalOperationTreeNode> children,
+      List<RelationalOperationTreeExpressionNode> conditions) {
     Preconditions.checkArgument(operation != null);
     Preconditions.checkArgument(CollectionUtils.isNotEmpty(children));
 
-    TreeNode result = new TreeNode();
+    RelationalOperationTreeNode result = new RelationalOperationTreeNode();
     result.operation = operation;
 
     result.children = children;
     result.conditions = conditions;
-    for (TreeNode treeNode : result.children) {
+    for (RelationalOperationTreeNode treeNode : result.children) {
       treeNode.parent = result;
     }
     return result;
   }
 
-  public static TreeNode newTreeNodeAttribute(RelationalAlgebraOperationEnum operation,
-      List<TreeNode> children, List<RelationalAttribute> attributes) {
+  /**
+   * 构造操作数树节点: 子节点和属性.
+   * @param operation
+   * @param children
+   * @param attributes
+   * @return
+   */
+  public static RelationalOperationTreeNode newTreeNodeAttribute(
+      RelationalAlgebraOperationEnum operation, List<RelationalOperationTreeNode> children,
+      List<RelationalAttribute> attributes) {
     Preconditions.checkArgument(operation != null);
     Preconditions.checkArgument(CollectionUtils.isNotEmpty(children));
 
-    TreeNode result = new TreeNode();
+    RelationalOperationTreeNode result = new RelationalOperationTreeNode();
     result.operation = operation;
 
     result.children = children;
     result.attributes = attributes;
-    for (TreeNode treeNode : result.children) {
+    for (RelationalOperationTreeNode treeNode : result.children) {
       treeNode.parent = result;
     }
     return result;
   }
-
-  // TODO(zhoujiagen) hacking RelationalOperationTree
-  // public static RelationalIntersectionOperation makeIntersection(RelationalRelation first,
-  // RelationalRelation second) {
-  // return new RelationalIntersectionOperation(first, second);
-  // }
-  //
-  // public static RelationalUnionOperation makeUnion(RelationalRelation first,
-  // RelationalRelation second) {
-  // return new RelationalUnionOperation(first, second);
-  // }
-  //
-  // public static RelationalUnionOperation makeUnion(RelationalRelation... relations) {
-  // return new RelationalUnionOperation(relations);
-  // }
-  //
-  // public static RelationalUnionOperation makeUnion(List<RelationalRelation> relationalRelations)
-  // {
-  // return new RelationalUnionOperation(relationalRelations);
-  // }
-  //
-  // public static RelationalDifferenceOperation makeDifference(RelationalRelation first,
-  // RelationalRelation second) {
-  // return new RelationalDifferenceOperation(first, second);
-  // }
-  //
-  // public static RelationalProjectOperation makeProject(RelationalRelation first,
-  // List<String> attributeNames) {
-  // return new RelationalProjectOperation(first, attributeNames);
-  // }
-  //
-  // public static RelationalSelectOperation makeSelect(RelationalRelation relation,
-  // Expression condition, REScope interpreteScope) {
-  // return new RelationalSelectOperation(relation, condition, interpreteScope);
-  // }
 }
