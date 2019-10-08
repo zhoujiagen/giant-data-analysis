@@ -194,16 +194,15 @@ public class ConceptConstructorTest {
 
   @Test
   public void complex_example() {
-    ConceptConstructor c =
-        new CUnion(//
-            new CValueRestriction(RoleConstructor.atomic("R1"), ConceptConstructor.atomic("C1")),//
-            new CAtLeastNumberRestriction(2, RoleConstructor.atomic("R2")),//
-            new CIntersection(//
-                new CExistentialQuantification(RoleConstructor.atomic("R3"),
-                    ConceptConstructor.atomic("C3")), //
-                new CNegation(ConceptConstructor.atomic("R4"))//
-            )//
-        );
+    ConceptConstructor c = new CUnion(//
+        new CValueRestriction(RoleConstructor.atomic("R1"), ConceptConstructor.atomic("C1")), //
+        new CAtLeastNumberRestriction(2, RoleConstructor.atomic("R2")), //
+        new CIntersection(//
+            new CExistentialQuantification(RoleConstructor.atomic("R3"),
+                ConceptConstructor.atomic("C3")), //
+            new CNegation(ConceptConstructor.atomic("R4"))//
+        )//
+    );
     // (or (all R1 C1) (at-least 2 R2) (and (some R3 C3) (not R4)))
     System.out.println(c);
   }

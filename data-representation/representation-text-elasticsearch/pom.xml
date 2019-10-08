@@ -16,7 +16,8 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<lucene.version>7.2.1</lucene.version><!-- 覆盖父项目中的版本 -->
-		<jackson.version>2.8.10</jackson.version>
+		<!-- changed from 2.8.10 at 20191008 -->
+		<jackson.version>2.10.0</jackson.version>
 	</properties>
 
 	<dependencies>
@@ -118,7 +119,7 @@
 					</execution>
 				</executions>
 			</plugin>
-			<!-- !!! LOOK HERE !!! Run tests with JUnit4 instead. A simple configuration 
+			<!-- !!! LOOK HERE !!! Run tests with JUnit4 instead. A simple configuration
 				here. -->
 			<plugin>
 				<groupId>com.carrotsearch.randomizedtesting</groupId>
@@ -133,7 +134,7 @@
 						<phase>test</phase>
 						<configuration>
 							<!-- 配置见: http://randomizedtesting.github.io/randomizedtesting/releases/2.4.0/ant/Tasks/junit4.html -->
-							<!-- Some of these examples have intentional failures, so don't fail 
+							<!-- Some of these examples have intentional failures, so don't fail
 								on errors. -->
 							<haltOnFailure>false</haltOnFailure>
 
