@@ -8,7 +8,7 @@ logicalOperator
     : AND | '&' '&' | XOR | OR | '|' '|'
  * </pre>
  */
-public enum RelationalLogicalOperatorEnum {
+public enum RelationalLogicalOperatorEnum implements RelationalAlgebraEnum {
   AND1("AND"), //
   AND2("&&"), //
   XOR("XOR"), //
@@ -33,5 +33,10 @@ public enum RelationalLogicalOperatorEnum {
     }
 
     return null;
+  }
+
+  @Override
+  public String literal() {
+    return symbol;
   }
 }

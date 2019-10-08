@@ -1,4 +1,4 @@
 /**
- * 关系代数表达式抽象.
+ * 关系代数表达式.
  */
 package com.spike.giantdataanalysis.model.logic.relational.expression;

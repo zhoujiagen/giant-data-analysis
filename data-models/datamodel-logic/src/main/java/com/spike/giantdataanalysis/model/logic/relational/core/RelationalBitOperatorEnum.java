@@ -8,7 +8,7 @@ bitOperator
     : '<' '<' | '>' '>' | '&' | '^' | '|'
  * </pre>
  */
-public enum RelationalBitOperatorEnum {
+public enum RelationalBitOperatorEnum implements RelationalAlgebraEnum {
   LEFT_SHIFT("<<"), //
   RIGHT_SHIFT(">>"), //
   AND("&"), //
@@ -20,7 +20,7 @@ public enum RelationalBitOperatorEnum {
   RelationalBitOperatorEnum(String symbol) {
     this.symbol = symbol;
   }
-  
+
   public static RelationalBitOperatorEnum of(String symbol) {
     if (symbol == null) {
       return null;
@@ -33,5 +33,10 @@ public enum RelationalBitOperatorEnum {
     }
 
     return null;
+  }
+
+  @Override
+  public String literal() {
+    return symbol;
   }
 }
