@@ -21,7 +21,8 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.7</java.version>
 		<spring.boot.version>1.5.8.RELEASE</spring.boot.version>
-		<spring.boot.jackson.version>2.9.9</spring.boot.jackson.version>
+		<!-- changed from 2.9.9 at 20191008 -->
+		<spring.boot.jackson.version>2.10.0</spring.boot.jackson.version>
 		<spring.boot.mysql.version>5.1.44</spring.boot.mysql.version>
 		<spring-retry.version>1.2.1.RELEASE</spring-retry.version>
 		<spring-session.version>1.3.1.RELEASE</spring-session.version>
