@@ -12,6 +12,7 @@
  * 
  * Hadoops                    - 工具类
  * </pre>
+ * 
  * @author zhoujiagen
  */
 package com.spike.giantdataanalysis.hadoop.support;

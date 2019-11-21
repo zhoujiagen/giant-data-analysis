@@ -14,13 +14,14 @@ import org.apache.hadoop.mapreduce.Mapper;
  * 输入: (行在文件中的偏移量, 行内容)
  * 输出: (Text(year), Int(temperature))
  * </pre>
+ * 
  * @author zhoujiagen
  */
 public class MaxTemperatureMapper extends Mapper<LongWritable, Text, Text, IntWritable> {
 
   @Override
-  public void map(LongWritable key, Text value, Context context) throws IOException,
-      InterruptedException {
+  public void map(LongWritable key, Text value, Context context)
+      throws IOException, InterruptedException {
 
     String line = value.toString();
 

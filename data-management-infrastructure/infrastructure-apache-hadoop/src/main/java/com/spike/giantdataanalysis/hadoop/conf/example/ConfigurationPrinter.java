@@ -15,6 +15,7 @@ import com.spike.giantdataanalysis.hadoop.support.Hadoops;
  * {@link Tool}内部使用{@link GenericOptionsParser};
  * {@link ToolRunner}执行{@link Tool}.
  * </pre>
+ * 
  * @author zhoujiagen
  * @see Tool
  */

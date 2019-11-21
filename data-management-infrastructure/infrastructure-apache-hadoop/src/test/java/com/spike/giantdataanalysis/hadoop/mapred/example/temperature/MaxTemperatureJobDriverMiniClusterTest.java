@@ -27,6 +27,7 @@ import com.spike.giantdataanalysis.hadoop.support.Hadoops;
  * 
  * TODO failed when launch Yarn AM. fix it when processing Yarn.
  * </pre>
+ * 
  * @author zhoujiagen
  * @see org.apache.hadoop.fs.FileUtil
  * @see org.apache.hadoop.fs.FileStatus
@@ -34,8 +35,8 @@ import com.spike.giantdataanalysis.hadoop.support.Hadoops;
  */
 public class MaxTemperatureJobDriverMiniClusterTest extends ClusterMapReduceTestCase {
 
-  private static final Logger LOG = LoggerFactory
-      .getLogger(MaxTemperatureJobDriverMiniClusterTest.class);
+  private static final Logger LOG =
+      LoggerFactory.getLogger(MaxTemperatureJobDriverMiniClusterTest.class);
 
   @Test
   public void setUp() throws Exception {
@@ -73,7 +74,7 @@ public class MaxTemperatureJobDriverMiniClusterTest extends ClusterMapReduceTest
       }
     };
     Path[] outputFiles = FileUtil.stat2Paths(fs.listStatus(output, filter));
-    try (InputStream is = fs.open(outputFiles[0]);//
+    try (InputStream is = fs.open(outputFiles[0]); //
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));) {
       String line = null;
       while ((line = reader.readLine()) != null) {

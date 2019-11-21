@@ -12,6 +12,7 @@ import org.apache.commons.configuration.tree.ConfigurationNode;
  * http://my.oschina.net/jack230230/blog/57171?fromerr=V4OBdFtr
  * https://commons.apache.org/proper/commons-configuration/userguide_v1.10/user_guide.html
  * </pre>
+ * 
  * @author zhoujiagen
  */
 public class HadoopConfigXMLFileParser {
@@ -26,14 +27,14 @@ public class HadoopConfigXMLFileParser {
     // dir += "hadoop2/etc/hadoop/"; // V2
     // dir += "hadoop2/_default/";// V2 default
     dir += "hbase1.2.6/";
-    
+
     // String fileName = dir + "core-site.xml";
     // String fileName = dir + "hdfs-site.xml";
     // String fileName = dir + "mapred-site.xml";
     // String fileName = dir + "yarn-site.xml";
     // String fileName = dir + "hdfs-default.xml";
     String fileName = dir + "hbase-default.xml";
-    
+
     XMLConfiguration conf = new XMLConfiguration(fileName);
 
     // Iterator<?> keys = conf.getKeys();
@@ -84,9 +85,8 @@ public class HadoopConfigXMLFileParser {
       System.out.println("\"" + valueValue + "\",");
 
       String descriptionValue = descriptionSb.toString();
-      descriptionValue =
-          descriptionValue.replaceAll(System.lineSeparator(), "").replaceAll("\\s+", " ")
-              .replaceAll("\"", "");
+      descriptionValue = descriptionValue.replaceAll(System.lineSeparator(), "")
+          .replaceAll("\\s+", " ").replaceAll("\"", "");
       System.out.println("\"" + descriptionValue + "\"");
 
       if (i == childCount - 1) {

@@ -1,17 +1,77 @@
-# Welcome to MkDocs
+# 围绕美国国家学术院国家研究委员会编著的《[海量数据分析前沿](https://www.amazon.cn/gp/product/B00X52U9P6/ref=oh_aui_detailpage_o09_s00?ie=UTF8&psc=1)》的实践
 
-For full documentation visit [mkdocs.org](https://mkdocs.org).
 
-## Commands
 
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs help` - Print this help message.
+## 海量数据分析前沿的目录
 
-## Project layout
+### 第二章 科学、技术、商业、国防、电信及其他领域的海量数据
 
-    mkdocs.yml    # The configuration file.
-    docs/
-        index.md  # The documentation homepage.
-        ...       # Other markdown pages, images and other files.
+ + 海量数据出现在哪里
+ + 海量数据分析的挑战
+ + 数据分析趋势
+ + 样例
+ + 参考文献
+
+### 第三章 数据管理基础设施的规模扩大
+
+ + 扩大数据集的数量
+ + 通过分布式和并行系统实现计算技术的扩展
+ + 未来研究的趋势
+ + 参考文献
+
+### 第四章 时态数据和实时算法
+
+ + 概述
+ + 数据采集
+ + 数据处理、表示和推理
+ + 针对时态数据集的系统和硬件
+ + 挑战
+ + 参考文献
+
+### 第五章 大规模数据表示
+
+ + 概述
+ + 数据表示的目标
+ + 挑战和未来方向
+ + 参考文献
+
+### 第六章 资源、权衡与局限性
+ + 概述
+ + 理论计算机科学的相关知识
+ + 差异与机会
+ + 参考文献
+
+###  第七章 由海量数据建立模型
+
+ +  统计模型介绍
+ +  数据清洗
+ +  模型分类
+ +  模型调整与评估
+ +  挑战
+ +  参考文献
+
+###  第八章 采样与海量数据
+
+ +  统计采样的常用技术
+ +  海量数据采样的挑战
+ +  参考文献
+
+###  第九章 人类与数据的交互
+
+ +  概述
+ +  最新进展
+ +  人机协同的数据分析
+ +  机遇、挑战和方向
+ +  参考文献
+
+###  第十章 海量数据分析的七个计算“巨人”
+
+ +  基本统计
+ +  广义N体问题
+ +  图论计算
+ +  线性代数计算
+ +  优化
+ +  积分
+ +  对齐问题
+ +  讨论
+ +  参考文献

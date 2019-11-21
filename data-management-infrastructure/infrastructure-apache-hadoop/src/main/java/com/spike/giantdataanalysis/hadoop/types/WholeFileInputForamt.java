@@ -57,8 +57,8 @@ public class WholeFileInputForamt extends FileInputFormat<NullWritable, BytesWri
     private BytesWritable value = new BytesWritable();
 
     @Override
-    public void initialize(InputSplit split, TaskAttemptContext context) throws IOException,
-        InterruptedException {
+    public void initialize(InputSplit split, TaskAttemptContext context)
+        throws IOException, InterruptedException {
       this.fileSplit = (FileSplit) split;// cast
       this.conf = context.getConfiguration();
     }
@@ -113,8 +113,8 @@ public class WholeFileInputForamt extends FileInputFormat<NullWritable, BytesWri
    */
   public static class SmallFiles2SequenceFileJobDriver extends Configured implements Tool {
 
-    public static class SmallFiles2SequenceFileMapper extends
-        Mapper<NullWritable, BytesWritable, Text, BytesWritable> {
+    public static class SmallFiles2SequenceFileMapper
+        extends Mapper<NullWritable, BytesWritable, Text, BytesWritable> {
 
       private Text fileNameKey;
 
@@ -126,8 +126,8 @@ public class WholeFileInputForamt extends FileInputFormat<NullWritable, BytesWri
       }
 
       @Override
-      public void map(NullWritable key, BytesWritable value, Context context) throws IOException,
-          InterruptedException {
+      public void map(NullWritable key, BytesWritable value, Context context)
+          throws IOException, InterruptedException {
         context.write(fileNameKey, value);
       }
     }

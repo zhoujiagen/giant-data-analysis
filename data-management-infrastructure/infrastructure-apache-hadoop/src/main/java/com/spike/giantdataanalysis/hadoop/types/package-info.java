@@ -17,6 +17,7 @@
  * WholeFileInputForamt     - 输入格式示例: 将整个文件作为一条记录
  * MultiOutpusExample       - Reducer多输出的示例: 将NCDC数据集按气象站拆分
  * </pre>
+ * 
  * @author zhoujiagen
  */
 package com.spike.giantdataanalysis.hadoop.types;

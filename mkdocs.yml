@@ -2,4 +2,48 @@ site_name: Giant Data Analysis
 nav:
     - Home: index.md
     - About: about.md
-theme: readthedocs
+    - Commons: project-commons/README.md
+    - '数据管道': data-pipeline/README.md
+    - '数据管理基础设施': data-management-infrastructure/README.md
+    - '时序数据和实时算法': temporal-data-and-realtime-algorithm/README.md
+    - '数据表示': data-representation/README.md
+    - '数据模型': data-models/README.md
+    - '数据采样': data-sampling/README.md
+    - '数据交互': data-interaction/README.md
+    - '数据计算巨人': data-computing-giants/README.md
+    - patches:
+      - '说明': patches/index.md
+      - OpenTSDB: patches/opentsdb.md
+
+
+#theme: readthedocs
+theme:
+  name: material
+extra:
+  search:
+    language: 'en'
+markdown_extensions:
+  - admonition
+  - codehilite:
+      linenums: true
+      guess_lang: False
+  - toc:
+      permalink: true
+  - pymdownx.arithmatex # LaTeX math equations
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.critic
+  - pymdownx.details
+  - pymdownx.inlinehilite
+  - pymdownx.magiclink
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.superfences
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+  - footnotes
+
+extra_javascript:
+  - 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'

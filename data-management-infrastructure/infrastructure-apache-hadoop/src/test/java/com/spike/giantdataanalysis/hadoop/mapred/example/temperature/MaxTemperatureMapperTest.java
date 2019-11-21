@@ -28,10 +28,9 @@ public class MaxTemperatureMapperTest {
 
   @Test
   public void processValidRecord() throws IOException {
-    String line =
-        "0029029070999991901"
-            + "010106004+64333+023450FM-12+000599999V0202701N015919999999N0000001N9"
-            + "-00781+99999102001ADDGF108991999999999999999999";
+    String line = "0029029070999991901"
+        + "010106004+64333+023450FM-12+000599999V0202701N015919999999N0000001N9"
+        + "-00781+99999102001ADDGF108991999999999999999999";
 
     // String year = line.substring(15, 19);
     // int airTemperature = Integer.parseInt(line.substring(87, 92));
@@ -50,10 +49,9 @@ public class MaxTemperatureMapperTest {
   @Test
   public void ignoreMissingTemperatureRecord() throws IOException {
 
-    String line =
-        "0029029070999991901"
-            + "010106004+64333+023450FM-12+000599999V0202701N015919999999N0000001N9"
-            + "+99991+99999102001ADDGF108991999999999999999999";
+    String line = "0029029070999991901"
+        + "010106004+64333+023450FM-12+000599999V0202701N015919999999N0000001N9"
+        + "+99991+99999102001ADDGF108991999999999999999999";
 
     // String year = line.substring(15, 19);
 

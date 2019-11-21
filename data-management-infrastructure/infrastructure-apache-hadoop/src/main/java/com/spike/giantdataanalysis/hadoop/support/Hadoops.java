@@ -183,9 +183,9 @@ public final class Hadoops {
    */
   public static void DEV_RENDER_WRITABLE_SEQFILE(Configuration conf, Path path) throws IOException {
 
-    SequenceFile.Reader.Option[] options = new SequenceFile.Reader.Option[] {//
+    SequenceFile.Reader.Option[] options = new SequenceFile.Reader.Option[] { //
         SequenceFile.Reader.file(path) //
-        };
+    };
     try (SequenceFile.Reader reader = new SequenceFile.Reader(conf, options);) {
 
       Writable _key = (Writable) ReflectionUtils.newInstance(reader.getKeyClass(), conf);

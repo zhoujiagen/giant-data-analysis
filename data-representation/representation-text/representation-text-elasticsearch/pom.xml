@@ -7,7 +7,6 @@
 		<groupId>com.spike.giantdataanalysis</groupId>
 		<artifactId>representation-text</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
-		<relativePath>../representation-text</relativePath>
 	</parent>
 
 	<artifactId>representation-text-elasticsearch</artifactId>
