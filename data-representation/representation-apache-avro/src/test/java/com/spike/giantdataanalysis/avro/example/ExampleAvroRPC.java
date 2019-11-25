@@ -1,4 +1,4 @@
-package com.spike.giantdataanalysis.communication.example.avro;
+package com.spike.giantdataanalysis.avro.example;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -21,8 +21,8 @@ import org.slf4j.LoggerFactory;
 public class ExampleAvroRPC {
   private static final Logger LOG = LoggerFactory.getLogger(ExampleAvroRPC.class);
 
-  public static class MailImpl implements Mail {
-    public Utf8 send(Message message) {
+  public static class MailImpl implements AvroPMail {
+    public Utf8 send(AvroTMessage message) {
       System.out.println("Sending message");
       return new Utf8("Sending message to " + message.getTo().toString() + " from "
           + message.getFrom().toString() + " with body " + message.getBody().toString());
@@ -32,7 +32,7 @@ public class ExampleAvroRPC {
   private static Server server;
 
   private static void startServer() throws IOException {
-    server = new NettyServer(new SpecificResponder(Mail.class, new MailImpl()),
+    server = new NettyServer(new SpecificResponder(AvroPMail.class, new MailImpl()),
         new InetSocketAddress(65111));
   }
 
@@ -44,10 +44,10 @@ public class ExampleAvroRPC {
 
     // 使用客户端
     NettyTransceiver client = new NettyTransceiver(new InetSocketAddress(65111));
-    Mail proxy = (Mail) SpecificRequestor.getClient(Mail.class, client);
+    AvroPMail proxy = (AvroPMail) SpecificRequestor.getClient(AvroPMail.class, client);
     LOG.info("Client built, got proxy");
 
-    Message message = new Message();
+    AvroTMessage message = new AvroTMessage();
     message.setTo(new Utf8("to mail"));
     message.setFrom(new Utf8("from mail"));
     message.setBody(new Utf8("main body"));

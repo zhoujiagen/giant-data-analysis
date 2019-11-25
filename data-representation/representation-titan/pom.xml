@@ -3,9 +3,8 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.spike.giantdataanalysis</groupId>
-		<artifactId>java-parent</artifactId>
+		<artifactId>data-representation</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
-		<relativePath>../../project-commons/java-parent</relativePath>
 	</parent>
 
 	<artifactId>representation-titan</artifactId>
@@ -115,34 +114,34 @@
 		</dependency>
 
 		<!-- cassandra -->
-		<!-- <dependency> <groupId>com.thinkaurelius.titan</groupId> <artifactId>titan-cassandra</artifactId> 
-			<version>${titan.version}</version> <exclusions> <exclusion> <groupId>org.slf4j</groupId> 
-			<artifactId>slf4j-log4j12</artifactId> </exclusion> <exclusion> <groupId>ch.qos.logback</groupId> 
-			<artifactId>logback-classic</artifactId> </exclusion> <exclusion> <groupId>org.apache.cassandra</groupId> 
-			<artifactId>cassandra-all</artifactId> </exclusion> </exclusions> </dependency> 
-			<dependency> <groupId>org.apache.cassandra</groupId> <artifactId>cassandra-all</artifactId> 
-			<version>2.1.9</version> <exclusions> <exclusion> <groupId>ch.qos.logback</groupId> 
-			<artifactId>logback-core</artifactId> </exclusion> <exclusion> <groupId>ch.qos.logback</groupId> 
-			<artifactId>logback-classic</artifactId> </exclusion> <exclusion> <groupId>com.addthis.metrics</groupId> 
-			<artifactId>reporter-config</artifactId> </exclusion> </exclusions> </dependency> 
-			<dependency> <groupId>com.addthis.metrics</groupId> <artifactId>reporter-config</artifactId> 
-			<version>2.1.0</version> <exclusions> <exclusion> <groupId>org.hibernate</groupId> 
-			<artifactId>hibernate-validator</artifactId> </exclusion> </exclusions> </dependency> 
-			<dependency> <groupId>org.hibernate</groupId> <artifactId>hibernate-validator</artifactId> 
-			<version>4.3.0.Final</version> <exclusions> <exclusion> <groupId>org.jboss.logging</groupId> 
+		<!-- <dependency> <groupId>com.thinkaurelius.titan</groupId> <artifactId>titan-cassandra</artifactId>
+			<version>${titan.version}</version> <exclusions> <exclusion> <groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId> </exclusion> <exclusion> <groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId> </exclusion> <exclusion> <groupId>org.apache.cassandra</groupId>
+			<artifactId>cassandra-all</artifactId> </exclusion> </exclusions> </dependency>
+			<dependency> <groupId>org.apache.cassandra</groupId> <artifactId>cassandra-all</artifactId>
+			<version>2.1.9</version> <exclusions> <exclusion> <groupId>ch.qos.logback</groupId>
+			<artifactId>logback-core</artifactId> </exclusion> <exclusion> <groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId> </exclusion> <exclusion> <groupId>com.addthis.metrics</groupId>
+			<artifactId>reporter-config</artifactId> </exclusion> </exclusions> </dependency>
+			<dependency> <groupId>com.addthis.metrics</groupId> <artifactId>reporter-config</artifactId>
+			<version>2.1.0</version> <exclusions> <exclusion> <groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId> </exclusion> </exclusions> </dependency>
+			<dependency> <groupId>org.hibernate</groupId> <artifactId>hibernate-validator</artifactId>
+			<version>4.3.0.Final</version> <exclusions> <exclusion> <groupId>org.jboss.logging</groupId>
 			<artifactId>jboss-logging</artifactId> </exclusion> </exclusions> </dependency> -->
 
 		<!-- lucene -->
-		<!-- <dependency> <groupId>com.thinkaurelius.titan</groupId> <artifactId>titan-lucene</artifactId> 
+		<!-- <dependency> <groupId>com.thinkaurelius.titan</groupId> <artifactId>titan-lucene</artifactId>
 			<version>${titan.version}</version> </dependency> -->
 
 		<!-- solr -->
-		<!-- <dependency> <groupId>com.thinkaurelius.titan</groupId> <artifactId>titan-solr</artifactId> 
-			<version>${titan.version}</version> <exclusions> <exclusion> <groupId>org.apache.solr</groupId> 
-			<artifactId>solr-core</artifactId> </exclusion> </exclusions> </dependency> 
-			<dependency> <groupId>org.apache.solr</groupId> <artifactId>solr-core</artifactId> 
-			<version>5.2.1</version> <exclusions> <exclusion> <groupId>log4j</groupId> 
-			<artifactId>log4j</artifactId> </exclusion> <exclusion> <groupId>org.slf4j</groupId> 
+		<!-- <dependency> <groupId>com.thinkaurelius.titan</groupId> <artifactId>titan-solr</artifactId>
+			<version>${titan.version}</version> <exclusions> <exclusion> <groupId>org.apache.solr</groupId>
+			<artifactId>solr-core</artifactId> </exclusion> </exclusions> </dependency>
+			<dependency> <groupId>org.apache.solr</groupId> <artifactId>solr-core</artifactId>
+			<version>5.2.1</version> <exclusions> <exclusion> <groupId>log4j</groupId>
+			<artifactId>log4j</artifactId> </exclusion> <exclusion> <groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId> </exclusion> </exclusions> </dependency> -->
 
 		<!-- elasticsearch -->

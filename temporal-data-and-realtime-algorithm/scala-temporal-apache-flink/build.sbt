@@ -2,9 +2,9 @@
 organization := "com.spike.giantdataanalysis"
 name := "scala-temporal-apache-flink"
 version := "1.0.0"
-scalaVersion := "2.11.12"
+scalaVersion := "2.12.10"
 
-lazy val FLINK_VERSION = "1.6.0"
+lazy val FLINK_VERSION = "1.8.2"
 
 libraryDependencies ++= Seq(
   "org.apache.flink" % "flink-core" % FLINK_VERSION withSources()
@@ -21,8 +21,11 @@ libraryDependencies ++= Seq(
   , "org.apache.flink" %% "flink-queryable-state-client-java" % FLINK_VERSION % "provided" withSources()
 
   // table and sql
-  , "org.apache.flink" %% "flink-table" % FLINK_VERSION withSources()
-  , "org.apache.flink" % "flink-jdbc" % FLINK_VERSION withSources()
+  , "org.apache.flink" % "flink-table" % FLINK_VERSION % "provided" pomOnly()
+  , "org.apache.flink" % "flink-table-common" % FLINK_VERSION withSources()
+  , "org.apache.flink" %% "flink-table-api-scala-bridge" % FLINK_VERSION withSources()
+  , "org.apache.flink" %% "flink-table-planner" % FLINK_VERSION withSources()
+  , "org.apache.flink" %% "flink-jdbc" % FLINK_VERSION withSources()
   , "mysql" % "mysql-connector-java" % "5.1.45"
 
   // lib

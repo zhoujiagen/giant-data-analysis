@@ -21,5 +21,6 @@
 		<module>representation-text</module>
 		<module>representation-apache-jena</module>
 		<module>representation-apache-tinkerpop</module> -->
+		<module>representation-apache-parquet</module>
 	</modules>
 </project>

@@ -1,6 +1,6 @@
-{"namespace": "com.spike.giantdataanalysis.communication.example.avro",
+{"namespace": "com.spike.giantdataanalysis.avro.example",
  "type": "record",
- "name": "User",
+ "name": "AvroTUser",
  "fields": [
      {"name": "name", "type": "string"},
      {"name": "favorite_number",  "type": ["int", "null"]},
