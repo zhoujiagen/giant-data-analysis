@@ -65,6 +65,8 @@
 			<artifactId>jmxtools</artifactId>
 			<version>1.2.1</version>
 			<!-- <scope>system</scope> <systemPath>/lib/jmxtools.jar</systemPath> -->
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/jmxtools.jar</systemPath>
 		</dependency>
 
 		<!-- Concurrent: Disruptor -->
