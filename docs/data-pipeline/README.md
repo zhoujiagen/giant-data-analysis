@@ -1,4 +1,4 @@
-# 数据管道实践
+# 数据管道
 
 使用数据流水线, 聚合不同存储格式和Schema的数据源, 提取分析任务感兴趣的特征.
 
@@ -29,7 +29,7 @@
 + Apache Apex
 
 
-# 项目
+## 项目
 
 + [infrastructure-benchmark](infrastructure-benchmark/README.md)
 + [infrastructure-blockchain](infrastructure-blockchain/README.md)

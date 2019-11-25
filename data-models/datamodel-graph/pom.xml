@@ -3,9 +3,9 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.spike.giantdataanalysis</groupId>
-		<artifactId>java-parent</artifactId>
+		<artifactId>data-models</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
-		<relativePath>../../project-commons/java-parent</relativePath>
+		<!-- <relativePath>../../project-commons/java-parent</relativePath> -->
 	</parent>
 
 	<artifactId>datamodel-graph</artifactId>

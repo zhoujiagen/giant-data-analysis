@@ -1,0 +1,20 @@
+{"namespace": "com.spike.giantdataanalysis.avro.example",
+ "protocol": "AvroPMail",
+
+ "types": [
+     {"name": "AvroTMessage", "type": "record",
+      "fields": [
+          {"name": "to",   "type": "string"},
+          {"name": "from", "type": "string"},
+          {"name": "body", "type": "string"}
+      ]
+     }
+ ],
+
+ "messages": {
+     "send": {
+         "request": [{"name": "message", "type": "AvroTMessage"}],
+         "response": "string"
+     }
+ }
+}

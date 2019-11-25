@@ -1,0 +1,29 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.spike.giantdataanalysis</groupId>
+		<artifactId>java-parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+
+		<relativePath>../project-commons/java-parent</relativePath>
+	</parent>
+
+	<artifactId>data-management-infrastructure</artifactId>
+	<name>Data Management Infrastructure(POM)</name>
+	<packaging>pom</packaging>
+
+	<modules>
+		<module>infrastructure-test</module>
+		<module>infrastructure-commons</module>
+		<!-- <module>infrastructure-netty</module>
+		<module>infrastructure-etl</module>
+			<module>infrastructure-jetty</module>
+			<module>infrastructure-apache-zookeeper</module>
+			<module>infrastructure-apache-curator</module> -->
+			<module>infrastructure-apache-hadoop</module>
+			<!-- <module>infrastructure-apache-hbase</module>
+			<module>infrastructure-opentsdb</module>
+		<module>infrastructure-apache-cassandra</module> -->
+	</modules>
+</project>

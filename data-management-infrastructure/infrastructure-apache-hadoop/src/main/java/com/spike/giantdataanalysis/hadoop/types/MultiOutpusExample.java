@@ -82,8 +82,8 @@ public class MultiOutpusExample {
     private LineRecordParser parser = new LineRecordParser();
 
     @Override
-    protected void map(LongWritable key, Text value, Context context) throws IOException,
-        InterruptedException {
+    protected void map(LongWritable key, Text value, Context context)
+        throws IOException, InterruptedException {
 
       parser.parse(value);
       // 键为气象站标识
@@ -99,8 +99,8 @@ public class MultiOutpusExample {
     }
 
     @Override
-    protected void reduce(Text key, Iterable<Text> values, Context context) throws IOException,
-        InterruptedException {
+    protected void reduce(Text key, Iterable<Text> values, Context context)
+        throws IOException, InterruptedException {
       String baseOutputPath = key.toString();
       for (Text value : values) {
         // 不使用context.write(...)

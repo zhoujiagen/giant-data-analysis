@@ -20,7 +20,7 @@
 		<protobuf.version>3.6.1</protobuf.version>
 		<grpc.version>1.17.1</grpc.version>
 		<thrift.version>0.12.0</thrift.version>
-		<avro.version>1.8.2</avro.version>
+		
 	</properties>
 
 	<!-- <pluginRepositories> <pluginRepository> <id>dtrotts</id> <name>Repository
@@ -90,17 +90,6 @@
 			<groupId>io.grpc</groupId>
 			<artifactId>grpc-stub</artifactId>
 			<version>${grpc.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.avro</groupId>
-			<artifactId>avro</artifactId>
-			<version>${avro.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.avro</groupId>
-			<artifactId>avro-ipc</artifactId>
-			<version>${avro.version}</version>
 		</dependency>
 
 		<dependency>
@@ -176,27 +165,6 @@
 				</execution> </executions> </plugin> -->
 
 			<plugin>
-				<groupId>org.apache.avro</groupId>
-				<artifactId>avro-maven-plugin</artifactId>
-				<version>1.8.1</version>
-				<executions>
-					<execution>
-						<id>schemas</id>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>schema</goal>
-							<goal>protocol</goal>
-							<goal>idl-protocol</goal>
-						</goals>
-						<configuration>
-							<sourceDirectory>${basedir}/src/main/avro/</sourceDirectory>
-							<outputDirectory>${basedir}/target/generated-resources/avro/</outputDirectory>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-
-			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
 				<version>1.4</version>
@@ -211,11 +179,9 @@
 							<sources>
 								<source>${basedir}/src/main/proto</source>
 								<source>${basedir}/src/main/thrift</source>
-								<source>${basedir}/src/main/avro</source>
 								<source>${basedir}/target/generated-sources/protobuf/java</source>
 								<source>${basedir}/target/generated-sources/protobuf/grpc-java</source>
 								<source>${basedir}/target/generated-resources/thrift</source>
-								<source>${basedir}/target/generated-resources/avro</source>
 							</sources>
 						</configuration>
 					</execution>

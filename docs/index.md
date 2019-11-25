@@ -3,7 +3,7 @@
 围绕[美国国家学术院国家研究委员会编著的《海量数据分析前沿》](https://www.amazon.cn/gp/product/B00X52U9P6/ref=oh_aui_detailpage_o09_s00?ie=UTF8&psc=1)的实践.
 
 
-# 相关项目
+## 相关项目
 
 [SpringDataBasedNoSQLTutorials](https://github.com/zhoujiagen/SpringDataBasedNoSQLTutorials): Spring数据操作.
 
@@ -14,9 +14,6 @@
 [Parallel-Programming-Examples](https://github.com/zhoujiagen/Parallel-Programming-Examples): 并行计算. - removed
 
 [Jena-Based-Semantic-Web-Tutorial](https://github.com/zhoujiagen/Jena-Based-Semantic-Web-Tutorial): 基于Jena的语义网.
-
-
-# 内容
 
 ## 数据管道
 

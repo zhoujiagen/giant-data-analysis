@@ -13,13 +13,14 @@ import org.apache.hadoop.mapreduce.Reducer;
  * 输入: (Text(year), [Int(temperature), ...]) 
  * 输出: (Text(year), Int)
  * </pre>
+ * 
  * @author zhoujiagen
  */
 public class MaxTemperatureReducer extends Reducer<Text, IntWritable, Text, IntWritable> {
 
   @Override
-  public void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException,
-      InterruptedException {
+  public void reduce(Text key, Iterable<IntWritable> values, Context context)
+      throws IOException, InterruptedException {
 
     int maxValue = Integer.MIN_VALUE;
     for (IntWritable val : values) {

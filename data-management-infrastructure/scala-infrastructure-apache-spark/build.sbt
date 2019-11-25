@@ -2,10 +2,10 @@
 organization := "com.spike.giantdataanalysis"
 name := "scala-infrastructure-apache-spark"
 version := "1.0.0"
-scalaVersion := "2.11.12"
+scalaVersion := "2.12.10"
 
 // update from 1.5.2 to 2.4.0 20190402
-lazy val VERSION_SPARK = "2.4.0"
+lazy val VERSION_SPARK = "2.4.4"
 
 libraryDependencies ++= Seq (
 	"org.apache.spark" %% "spark-core" % VERSION_SPARK withSources()

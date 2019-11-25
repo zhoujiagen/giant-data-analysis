@@ -1,4 +1,6 @@
-#  程序/工具入口
+# Patches of OpenTSDB
+
+##  程序/工具入口
 
 tsdb命令
 
@@ -44,15 +46,15 @@ tsdb命令
       exec $JAVA $JVMARGS -classpath "$CLASSPATH" net.opentsdb.tools.$MAINCLASS "$@"
 ```
 
-#  net.opentsdb.tools.TSDMain
+##  net.opentsdb.tools.TSDMain
 
-## (1) 流程
+#### (1) 流程
 
 加载配置, 初始化TSDB, RpcManager;
 
 启动JBoss Netty协议处理(PipelineFactory=>IdleStateHandler,RpcHandler,ConnectionManager);
 
-## (2) 实例
+#### (2) 实例
 以内建HTTP RPC请求处理为例,
 
 ```
@@ -67,7 +69,7 @@ tsdb命令
     |--|--|--|-- net.opentsdb.core.TSDB.addPointInternal(String, long, byte[], Map<String, String>, short)
 ```
 
-## (3) 具体的写入数据点
+#### (3) 具体的写入数据点
 
 相关的配置选项
 
@@ -102,7 +104,7 @@ net.opentsdb.core.TSDB.addPointInternal(...).WriteCB
     result = client.put(point);// MARK(zhoujiagen) 写入HBase: 同一行中不同的列中
 ```
 
-## 压缩的处理
+#### 压缩的处理
 
 ```
 net.opentsdb.core.CompactionQueue.CompactionQueue(TSDB)
@@ -111,14 +113,14 @@ net.opentsdb.core.CompactionQueue.CompactionQueue(TSDB)
     }
 ```
 
-### (1) TSDB中显式调用
+###### (1) TSDB中显式调用
 
 ```
 net.opentsdb.core.TSDB.flush()
     net.opentsdb.core.CompactionQueue.flush() // MARK(zhoujiagen) 将压缩队列中一个小时之前的数据刷入HBase中.
 ```
 
-### (2) 后台压缩线程
+###### (2) 后台压缩线程
 
 ```
 net.opentsdb.core.CompactionQueue.Thrd.run()
@@ -134,7 +136,7 @@ net.opentsdb.core.CompactionQueue.Thrd.run()
         ds.add(tsdb.get(row).addCallbacks(compactcb, handle_read_error)); // MARK 执行一行的压缩: 先读再压缩
 ```
 
-### 压缩参数的解释
+###### 压缩参数的解释
 
 待压缩的是一小时的数据, 当前压缩队列中有size行待压缩, 要在一小时之内处理完.
 size * flush_speed / Const.MAX_TIMESPAN : 一次压缩线程操作的行数
@@ -176,9 +178,9 @@ net.opentsdb.core.CompactionQueue.HandleErrorCB.call(Exception)
     add(((HBaseRpc.HasKey) rpc).key());// MARK 重新加入压缩队列, 待后续重试(这种情况下, 压缩的列限定符和值已经写入HBase)
 ```
 
-#  扩展
+##  扩展
 
-## 1 GangliaStatsCollector
+#### 1 GangliaStatsCollector
 
 TSDB统计指标收集器.
 
@@ -428,14 +430,14 @@ GangliaStatsCollector
 opentsdb.conf
 
 ```
-    # ----------- EXTENSION -----------
-    # 指标收集Ganglia host
+    ## ----------- EXTENSION -----------
+    ## 指标收集Ganglia host
     tsd.extension.ganglia.host=localhost
-    # 指标收集Ganglia port
+    ## 指标收集Ganglia port
     tsd.extension.ganglia.port=8649
 ```
 
-## 2 KafkaRTPublisher
+#### 2 KafkaRTPublisher
 
 使用Kafka的实时发布器.
 
@@ -446,7 +448,7 @@ tsd.extension.plugin.kakfa.file
 tsd.extension.plugin.rt.kakfa.topic.annotation
 ```
 
-## 3 KafkaStorageExceptionHandler
+#### 3 KafkaStorageExceptionHandler
 
 使用Kafka的存储异常处理器.
 

@@ -3,16 +3,15 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.spike.giantdataanalysis</groupId>
-		<artifactId>java-parent</artifactId>
+		<artifactId>data-representation</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
-		<relativePath>../../project-commons/java-parent</relativePath>
 	</parent>
 
 	<artifactId>representation-neo4j</artifactId>
 
 	<dependencies>
 		<!-- SDN(Neo4j OGM 2.1.2) -->
-		<!-- <dependency> <groupId>org.springframework.data</groupId> <artifactId>spring-data-neo4j</artifactId> 
+		<!-- <dependency> <groupId>org.springframework.data</groupId> <artifactId>spring-data-neo4j</artifactId>
 			<version>${spring.data.neo4j.version}</version> </dependency> -->
 
 		<dependency>
@@ -22,7 +21,7 @@
 		</dependency>
 
 
-		<!-- The Neo4j Java driver, used to send cypher statements that call the 
+		<!-- The Neo4j Java driver, used to send cypher statements that call the
 			procedure. -->
 		<!-- Java Driver recommented for Neo4j 3.2 -->
 		<dependency>
@@ -31,7 +30,7 @@
 			<version>${neo4j.driver.java.version}</version>
 		</dependency>
 
-		<!-- Neo4j Harness, a utility that allows for starting a lightweight Neo4j 
+		<!-- Neo4j Harness, a utility that allows for starting a lightweight Neo4j
 			instance. -->
 		<dependency>
 			<groupId>org.neo4j.test</groupId>
@@ -64,7 +63,7 @@
 
 
 		<!-- LOG -->
-		<!-- <dependency> <groupId>org.neo4j</groupId> <artifactId>neo4j-slf4j</artifactId> 
+		<!-- <dependency> <groupId>org.neo4j</groupId> <artifactId>neo4j-slf4j</artifactId>
 			<version>${neo4j.version}</version> <scope>test</scope> </dependency> -->
 
 		<dependency>

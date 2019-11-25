@@ -19,6 +19,7 @@
  * MaxTemperatureJobDriverTest            - JobDriver测试
  * MaxTemperatureJobDriverMiniClusterTest - TODO mini集群测试
  * </pre>
+ * 
  * @author zhoujiagen
  */
 package com.spike.giantdataanalysis.hadoop.mapred.example.temperature;

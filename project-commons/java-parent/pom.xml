@@ -7,7 +7,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-	<name>Giant Data Analysis(GDA)</name>
+	<name>Giant Data Analysis(POM)</name>
 	<description>giant-data-analysis中Java项目的Maven父项目</description>
 	<inceptionYear>2017</inceptionYear>
 	<organization>
@@ -16,43 +16,11 @@
 	</organization>
 
 	<modules>
-		<!-- data-management-infrastructure -->
-		<module>../../data-management-infrastructure/infrastructure-test</module>
-		<module>../../data-management-infrastructure/infrastructure-commons</module>
-		<module>../../data-management-infrastructure/infrastructure-netty</module>
-		<!-- <module>../../data-management-infrastructure/infrastructure-etl</module>
-			<module>../../data-management-infrastructure/infrastructure-jetty</module>
-			<module>../../data-management-infrastructure/infrastructure-apache-zookeeper</module>
-			<module>../../data-management-infrastructure/infrastructure-apache-curator</module>
-			<module>../../data-management-infrastructure/infrastructure-apache-hadoop</module>
-			<module>../../data-management-infrastructure/infrastructure-apache-hbase</module>
-			<module>../../data-management-infrastructure/infrastructure-opentsdb</module> -->
-		<module>../../data-management-infrastructure/infrastructure-apache-cassandra</module>
-
-		<!-- data-pipeline -->
-		<module>../../data-pipeline/infrastructure-pipeline</module>
-		<module>../../data-pipeline/infrastructure-communication</module>
-		<module>../../data-pipeline/infrastructure-coordination</module>
-		<module>../../data-pipeline/infrastructure-task</module>
-		<module>../../data-pipeline/infrastructure-benchmark</module>
-		<module>../../data-pipeline/infrastructure-blockchain</module>
-		<module>../../data-pipeline/infrastructure-track</module>
-		<module>../../data-pipeline/infrastructure-procedure</module>
-
-		<!-- data-representation -->
-		<!-- <module>../../data-representation/representation-titan</module> <module>../../data-representation/representation-apache-tinkerpop</module>
-			<module>../../data-representation/representation-apache-jena</module> <module>../../data-representation/representation-apache-giraph</module>
-			<module>../../data-representation/representation-neo4j</module> -->
-		<module>../../data-representation/representation-text</module>
-
-		<!-- temporal-data-and-realtime-algorithm -->
-		<module>../../temporal-data-and-realtime-algorithm/temporal-apache-storm</module>
-		<module>../../temporal-data-and-realtime-algorithm/temporal-apache-kafka</module>
-		<module>../../temporal-data-and-realtime-algorithm/temporal-apache-flink</module>
-
-		<!-- data-models -->
-		<!-- <module>../../data-models/datamodel-graph</module> <module>../../data-models/datamodel-algorithms</module> -->
-		<module>../../data-models/datamodel-logic</module>
+		<module>../../data-management-infrastructure</module>
+		<!-- <module>../../data-pipeline</module> -->
+		<module>../../data-representation</module>
+		<!-- <module>../../temporal-data-and-realtime-algorithm</module> -->
+		<!-- <module>../../data-models</module> -->
 	</modules>
 
 	<licenses>
@@ -102,6 +70,12 @@
 		<neo4j.version>3.2.2</neo4j.version>
 		<neo4j.driver.java.version>1.4.0</neo4j.driver.java.version>
 		<spring.data.neo4j.version>4.2.6.RELEASE</spring.data.neo4j.version>
+		<parquet.version>1.10.1</parquet.version>
+		<avro.version>1.8.2</avro.version>
+		<protobuf.version>3.6.1</protobuf.version>
+		<grpc.version>1.17.1</grpc.version>
+		<thrift.version>0.12.0</thrift.version>
+		
 		<!-- temporal -->
 		<storm.version>0.9.7</storm.version>
 		<twitter4j.version>4.0.6</twitter4j.version>

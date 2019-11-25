@@ -1,27 +1,17 @@
-# 第五章 大规模数据表示
+# 数据表示
 
-+ 概述
-+ 数据表示的目标
-+ 挑战和未来方向
-+ 参考文献
-+ 第六章 资源、权衡与局限性
-+ 概述
-+ 理论计算机科学的相关知识
-+ 差异与机会
-+ 参考文献
+## Graph Database
 
-# Graph Database
-
-## Graph database - wikipedia
+### Graph database - wikipedia
 https://en.wikipedia.org/wiki/Graph_database
 
-## Top 31 Graph Databases - Predictive Analytics Today
+### Top 31 Graph Databases - Predictive Analytics Today
 http://www.predictiveanalyticstoday.com/top-graph-databases/
 
-## Titan
+### Titan
 http://titan.thinkaurelius.com/
 
-## 图访问API
+### 图访问API
 
 + (1) **TinkerPop** is a group of open source projects focused on graph technologies such
 as database access, data flow, and graph traversal.
@@ -33,7 +23,7 @@ to relational databases.
 + (3) **Gremlin** is a high-level Java API built on the top of the Pipes and Blueprints APIs.
 
 
-# 项目
+## 项目
 
 + [representation-apache-giraph](representation-apache-giraph/README.md)
 + [representation-apache-jena](representation-apache-jena/README.md)

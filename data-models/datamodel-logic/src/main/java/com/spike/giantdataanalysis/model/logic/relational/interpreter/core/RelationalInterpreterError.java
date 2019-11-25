@@ -37,8 +37,8 @@ public class RelationalInterpreterError extends RuntimeException {
     super(cause);
   }
 
-  protected RelationalInterpreterError(String message, Throwable cause,
-      boolean enableSuppression, boolean writableStackTrace) {
+  protected RelationalInterpreterError(String message, Throwable cause, boolean enableSuppression,
+      boolean writableStackTrace) {
     super(message, cause, enableSuppression, writableStackTrace);
   }
 }

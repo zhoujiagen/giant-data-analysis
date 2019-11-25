@@ -6,9 +6,8 @@
 
 	<parent>
 		<groupId>com.spike.giantdataanalysis</groupId>
-		<artifactId>java-parent</artifactId>
+		<artifactId>data-representation</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
-		<relativePath>../../project-commons/java-parent</relativePath>
 	</parent>
 
 	<artifactId>representation-text</artifactId>
@@ -17,12 +16,12 @@
 	<name>representation-text</name>
 
 	<modules>
-		<module>../representation-text-raw</module>
-		<module>../representation-text-lucene</module>
-		<module>../representation-text-solr</module>
-		<module>../representation-text-elasticsearch</module>
-		<module>../representation-text-opennlp</module>
-		<module>../representation-text-mahout</module>
+		<module>representation-text-raw</module>
+		<module>representation-text-lucene</module>
+		<module>representation-text-solr</module>
+		<module>representation-text-elasticsearch</module>
+		<module>representation-text-opennlp</module>
+		<module>representation-text-mahout</module>
 	</modules>
 
 	<properties>

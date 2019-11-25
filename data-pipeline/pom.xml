@@ -1,0 +1,26 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.spike.giantdataanalysis</groupId>
+		<artifactId>java-parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+
+		<relativePath>../project-commons/java-parent</relativePath>
+	</parent>
+
+	<artifactId>data-pipeline</artifactId>
+	<name>Data Pipeline(POM)</name>
+	<packaging>pom</packaging>
+
+	<modules>
+		<module>infrastructure-pipeline</module>
+		<module>infrastructure-communication</module>
+		<module>infrastructure-coordination</module>
+		<module>infrastructure-task</module>
+		<module>infrastructure-benchmark</module>
+		<module>infrastructure-blockchain</module>
+		<module>infrastructure-track</module>
+		<module>infrastructure-procedure</module>
+	</modules>
+</project>

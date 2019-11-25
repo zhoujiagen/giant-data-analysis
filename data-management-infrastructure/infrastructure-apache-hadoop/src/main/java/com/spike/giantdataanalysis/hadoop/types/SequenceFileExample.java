@@ -23,10 +23,10 @@ import com.spike.giantdataanalysis.hadoop.support.Hadoops;
 public class SequenceFileExample {
   private static final String[] DATA = { //
       "One, two, buckle my shoe", //
-          "Three, four, shut the door",//
-          "Five, six, pick up sticks", //
-          "Seven, eight, lay them straight", //
-          "Nine, ten, a big fat hen" };
+      "Three, four, shut the door", //
+      "Five, six, pick up sticks", //
+      "Seven, eight, lay them straight", //
+      "Nine, ten, a big fat hen" };
 
   public static void main(String[] args) throws IOException {
     String pathUri = ApplicationConstants.DATA_TEST_OUTPUT_PATH + "/seqfile";
@@ -50,11 +50,11 @@ public class SequenceFileExample {
     IntWritable key = new IntWritable();
     Text value = new Text();
 
-    SequenceFile.Writer.Option[] options = new SequenceFile.Writer.Option[] {//
-        SequenceFile.Writer.file(path),//
-            SequenceFile.Writer.keyClass(key.getClass()),//
-            SequenceFile.Writer.valueClass(value.getClass()) //
-        };
+    SequenceFile.Writer.Option[] options = new SequenceFile.Writer.Option[] { //
+        SequenceFile.Writer.file(path), //
+        SequenceFile.Writer.keyClass(key.getClass()), //
+        SequenceFile.Writer.valueClass(value.getClass()) //
+    };
 
     // or IOUtils.closeStream(writer);
     try (SequenceFile.Writer writer = SequenceFile.createWriter(conf, options);) {
@@ -70,9 +70,9 @@ public class SequenceFileExample {
   }
 
   static void readAll(Configuration conf, Path path) throws IOException {
-    SequenceFile.Reader.Option[] options = new SequenceFile.Reader.Option[] {//
+    SequenceFile.Reader.Option[] options = new SequenceFile.Reader.Option[] { //
         SequenceFile.Reader.file(path) //
-        };
+    };
     try (SequenceFile.Reader reader = new SequenceFile.Reader(conf, options);) {
 
       Writable _key = (Writable) ReflectionUtils.newInstance(reader.getKeyClass(), conf);
@@ -92,9 +92,9 @@ public class SequenceFileExample {
 
   static void readSeek(Configuration conf, Path path) throws IOException {
 
-    SequenceFile.Reader.Option[] options = new SequenceFile.Reader.Option[] {//
+    SequenceFile.Reader.Option[] options = new SequenceFile.Reader.Option[] { //
         SequenceFile.Reader.file(path) //
-        };
+    };
     try (SequenceFile.Reader reader = new SequenceFile.Reader(conf, options);) {
 
       Writable _key = (Writable) ReflectionUtils.newInstance(reader.getKeyClass(), conf);

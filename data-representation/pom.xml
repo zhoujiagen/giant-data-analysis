@@ -1,0 +1,26 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.spike.giantdataanalysis</groupId>
+		<artifactId>java-parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+
+		<relativePath>../project-commons/java-parent</relativePath>
+	</parent>
+
+	<artifactId>data-representation</artifactId>
+	<name>Data Representation(POM)</name>
+	<packaging>pom</packaging>
+
+	<modules>
+		<!-- <module>representation-neo4j</module>
+		<module>representation-text-mahout</module>
+		<module>representation-titan</module>
+		<module>representation-apache-giraph</module>
+		<module>representation-text</module>
+		<module>representation-apache-jena</module>
+		<module>representation-apache-tinkerpop</module> -->
+		<module>representation-apache-parquet</module>
+	</modules>
+</project>

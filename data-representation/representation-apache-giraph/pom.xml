@@ -3,9 +3,8 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.spike.giantdataanalysis</groupId>
-		<artifactId>java-parent</artifactId>
+		<artifactId>data-representation</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
-		<relativePath>../../project-commons/java-parent</relativePath>
 	</parent>
 
 	<artifactId>representation-apache-giraph</artifactId>
@@ -44,7 +43,7 @@
 		</dependency>
 
 		<!-- hbase io: only hadoop2 -->
-		<!-- <dependency> <groupId>org.apache.giraph</groupId> <artifactId>giraph-hbase</artifactId> 
+		<!-- <dependency> <groupId>org.apache.giraph</groupId> <artifactId>giraph-hbase</artifactId>
 			<version>${giraph.hadoop2.version}</version> </dependency> -->
 
 		<dependency>

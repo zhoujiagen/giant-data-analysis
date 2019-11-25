@@ -21,6 +21,7 @@ import com.spike.giantdataanalysis.hadoop.support.Hadoops;
  * hadoop this-full-path-class-name input output
  * </code>
  * </pre>
+ * 
  * @author zhoujiagen
  */
 public class MaxTemperatureApplication {

@@ -1,0 +1,23 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.spike.giantdataanalysis</groupId>
+		<artifactId>java-parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+
+		<relativePath>../project-commons/java-parent</relativePath>
+	</parent>
+
+	<artifactId>temporal-data-and-realtime-algorithm</artifactId>
+	<name>Temporal Data and Realtime Algorithm(POM)</name>
+	<packaging>pom</packaging>
+
+	<modules>
+		<!--
+		<module>../../temporal-data-and-realtime-algorithm/temporal-apache-storm</module>
+		<module>../../temporal-data-and-realtime-algorithm/temporal-apache-kafka</module>
+		<module>../../temporal-data-and-realtime-algorithm/temporal-apache-flink</module>
+	-->
+	</modules>
+</project>
