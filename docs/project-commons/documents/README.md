@@ -1,4 +1,4 @@
-# TODO
+# XXX
 
 		create package `com.spike.giantdataanalysis.<specific-project>`
 
@@ -11,12 +11,12 @@
 
 		// ======================================== classes
 
-# 0 实践版本
+## 0 实践版本
 
 	x.y.z
 
-# 1 资源
+## 1 资源
 
-# 2 运行实例
+## 2 运行实例
 
-# 3 安装和配置
+## 3 安装和配置
