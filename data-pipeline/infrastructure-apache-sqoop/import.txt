@@ -1,0 +1,17 @@
+import
+--connect
+jdbc:mysql://192.168.56.1/test
+--username
+root
+--password
+admin
+--table
+example
+--incremental
+append
+--check-column
+id
+--last-value
+0
+--autoreset-to-one-mapper
+--as-parquetfile

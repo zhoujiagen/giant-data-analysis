@@ -3,23 +3,20 @@
 ## 项目
 
 + [datasets](datasets/README.md)
-+ [infrastructure-ansible](infrastructure-ansible/README.md)
-+ [infrastructure-apache-cassandra](infrastructure-apache-cassandra/README.md)
-+ [infrastructure-apache-curator](infrastructure-apache-curator/README.md)
-+ [infrastructure-apache-hadoop](infrastructure-apache-hadoop/README.md)
-+ [infrastructure-apache-hadoop](infrastructure-apache-hadoop/documents/faq.md)
-+ [infrastructure-apache-hbase](infrastructure-apache-hbase/README.md)
-+ [infrastructure-apache-zookeeper](infrastructure-apache-zookeeper/README.md)
-+ [infrastructure-container-docker](infrastructure-container-docker/README.md)
-+ [infrastructure-etl](infrastructure-etl/README.md)
-+ [infrastructure-jetty](infrastructure-jetty/README.md)
-+ [infrastructure-netty](infrastructure-netty/README.md)
-+ [infrastructure-opentsdb](infrastructure-opentsdb/README.md)
-+ [scala-infrastructure-akka](scala-infrastructure-akka/README.md)
-+ [scala-infrastructure-apache-spark](scala-infrastructure-apache-spark/README.md)
-
-
-
++ [ansible](ansible/README.md)
++ [apache-cassandra](apache-cassandra/README.md)
++ [apache-curator](apache-curator/README.md)
++ [apache-hadoop](apache-hadoop/README.md)
++ [apache-hadoop FAQ](apache-hadoop/documents/faq.md)
++ [apache-hbase](apache-hbase/README.md)
++ [apache-zookeeper](apache-zookeeper/README.md)
++ [docker](docker/README.md)
++ [etl](etl/README.md)
++ [jetty](jetty/README.md)
++ [netty](netty/README.md)
++ [opentsdb](opentsdb/README.md)
++ [akka](akka/README.md)
++ [apache-spark](apache-spark/README.md)
 
 ### infrastructure-commons-agent
 
