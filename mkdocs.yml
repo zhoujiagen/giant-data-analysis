@@ -3,8 +3,13 @@ nav:
     - Home: index.md
     - About: about.md
     - Commons: project-commons/README.md
-    - '数据管道': data-pipeline/README.md
-    - '数据管理基础设施': data-management-infrastructure/README.md
+    - '数据管道':
+      - 'Home': data-pipeline/README.md
+      - 'Apache Hudi': data-pipeline/apache-hudi/README.md
+    - '数据管理基础设施':
+      - 'Home': data-management-infrastructure/README.md
+      - 'Docker': data-management-infrastructure/container/docker.md
+      - 'K8S': data-management-infrastructure/container/k8s.md
     - '时序数据和实时算法': temporal-data-and-realtime-algorithm/README.md
     - '数据表示': data-representation/README.md
     - '数据模型': data-models/README.md
