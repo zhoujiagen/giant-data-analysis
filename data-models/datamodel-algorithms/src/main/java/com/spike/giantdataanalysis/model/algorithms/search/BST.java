@@ -4,9 +4,8 @@ import java.util.List;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
-import com.spike.giantdataanalysis.commons.annotation.Parameter;
-import com.spike.giantdataanalysis.commons.annotation.Parameter.Type;
 import com.spike.giantdataanalysis.commons.annotation.constraint.InvariantConstraint;
+import com.spike.giantdataanalysis.commons.annotation.constraint.runtime.Parameter;
 import com.spike.giantdataanalysis.model.algorithms.adt.Queue;
 
 /**
@@ -434,7 +433,7 @@ public class BST<Key extends Comparable<Key>, Value> implements IOrderedST<Key, 
 
   // 在以当前节点x为根节点的子树中查找键在[low, high]范围内的节点, 加入队列q中
   // 使用中序遍历
-  private void keys(Node x, @Parameter(Type.OUT) Queue<Key> q, Key low, Key high) {
+  private void keys(Node x, @Parameter.OUT Queue<Key> q, Key low, Key high) {
     if (x == null) {
       return;
     }

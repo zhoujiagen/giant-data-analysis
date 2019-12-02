@@ -12,7 +12,12 @@ nav:
       - 'K8S': data-management-infrastructure/container/k8s.md
     - '时序数据和实时算法': temporal-data-and-realtime-algorithm/README.md
     - '数据表示': data-representation/README.md
-    - '数据模型': data-models/README.md
+    - '数据模型':
+      - 'Home': data-models/README.md
+      - 'Algorithm': data-models/algorithms.md
+      - 'Algorithm Analysis': data-models/algorithm-analysis.md
+      - 'Graph': data-models/graph.md
+      - 'Logic': data-models/logic.md
     - '数据采样': data-sampling/README.md
     - '数据交互': data-interaction/README.md
     - '数据计算巨人': data-computing-giants/README.md

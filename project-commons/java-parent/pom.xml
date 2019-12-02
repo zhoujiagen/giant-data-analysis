@@ -20,7 +20,7 @@
 		<!-- <module>../../data-pipeline</module> -->
 		<module>../../data-representation</module>
 		<!-- <module>../../temporal-data-and-realtime-algorithm</module> -->
-		<!-- <module>../../data-models</module> -->
+		<module>../../data-models</module>
 	</modules>
 
 	<licenses>
@@ -75,7 +75,7 @@
 		<protobuf.version>3.6.1</protobuf.version>
 		<grpc.version>1.17.1</grpc.version>
 		<thrift.version>0.12.0</thrift.version>
-		
+
 		<!-- temporal -->
 		<storm.version>0.9.7</storm.version>
 		<twitter4j.version>4.0.6</twitter4j.version>

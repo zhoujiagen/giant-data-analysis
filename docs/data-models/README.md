@@ -3,6 +3,6 @@
 ## 项目
 
 
-+ [datamodel-algorithms](datamodel-algorithms.md)
-+ [datamodel-graph](datamodel-graph.md)
-+ [datamodel-logic](datamodel-logic.md)
++ [algorithms](algorithms.md), [algorithm analysis](algorithm-analysis.md)
++ [graph](graph.md)
++ [logic](logic.md)
