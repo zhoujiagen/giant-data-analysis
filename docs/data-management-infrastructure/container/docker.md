@@ -5,8 +5,9 @@
 ## 资源
 
 - 1 Docker容器与容器云 by 浙江大学SEL实验室
-- 2 [Kubernetes指南 by feiskyer](https://github.com/feiskyer/kubernetes-handbook)
+- 2 [Docker overview](https://docs.docker.com/engine/docker-overview/)
 - 3 [Docker Documentation](https://docs.docker.com/)
+- 4 [Kubernetes指南 by feiskyer](https://github.com/feiskyer/kubernetes-handbook)
 
 
 ## 概念
@@ -17,6 +18,10 @@
 
 ![](./images/container-ecosys.png)
 
+
+Docker引擎(见[Docker overview - Docker Engine](https://docs.docker.com/engine/docker-overview/)):
+
+![](./images/docker-engine-components-flow.png)
 
 ### 一个示例应用
 
@@ -116,6 +121,12 @@ haproxy -f haproxy.cfg
 
 ### namespaces, cgroups
 
+## RTFSC
+
+- [Docker CE](https://github.com/docker/docker-ce) componnets: [docker/docker-ce-packaging](https://github.com/docker/docker-ce-packaging), [moby/moby](https://github.com/moby/moby), [docker/cli](https://github.com/docker/cli)
+- [Moby projects](https://mobyproject.org/projects/): Moby is an open-source project, created by Docker, to enable and accelerate software containerization.
+- [containerd](https://containerd.io/):An industry-standard container runtime with an emphasis on simplicity, robustness and portability - [Containerd 简介](https://www.cnblogs.com/sparkdev/p/9063042.html)
+- [opencontainers/runc](https://github.com/opencontainers/runc): CLI tool for spawning and running containers according to the OCI specification - [RunC 简介](https://www.cnblogs.com/sparkdev/p/9032209.html)
 
 ## Ops
 
