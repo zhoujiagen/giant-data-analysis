@@ -1,0 +1,76 @@
+# REF: https://github.com/apache/incubator-hudi/blob/master/docker/compose/docker-compose_hadoop284_hive233_spark244.yml
+version: "3.3"
+
+services:
+
+  namenode:
+    image: apachehudi/hudi-hadoop_2.8.4-namenode:latest
+    hostname: namenode
+    container_name: namenode
+    volumes:
+      - /tmp/hadoop_name:/hadoop/dfs/name
+    environment:
+      - CLUSTER_NAME=hudi_hadoop284
+    ports:
+      - "50070:50070"
+      - "8020:8020"
+    env_file:
+      - ./hadoop.env
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://namenode:50070"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  datanode1:
+    image: apachehudi/hudi-hadoop_2.8.4-datanode:latest
+    container_name: datanode1
+    hostname: datanode1
+    environment:
+      - CLUSTER_NAME=hudi_hadoop284
+    env_file:
+      - ./hadoop.env
+    ports:
+      - "50075:50075"
+      - "50010:50010"
+    links:
+      - "namenode"
+      - "historyserver"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://datanode1:50075"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    depends_on:
+      - namenode
+    volumes:
+      - /tmp/hadoop_data:/hadoop/dfs/data
+
+  historyserver:
+    image: apachehudi/hudi-hadoop_2.8.4-history:latest
+    hostname: historyserver
+    container_name: historyserver
+    environment:
+      - CLUSTER_NAME=hudi_hadoop284
+    depends_on:
+      - "namenode"
+    links:
+      - "namenode"
+    ports:
+      - "58188:8188"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://historyserver:8188"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    env_file:
+      - ./hadoop.env
+    volumes:
+      - historyserver:/hadoop/yarn/timeline
+
+volumes:
+  namenode:
+  historyserver:
+
+networks:
+  default:

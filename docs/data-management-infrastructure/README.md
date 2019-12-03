@@ -1,5 +1,11 @@
 # 数据管理基础设施
 
+## Containerization
+
+a few clues:
+
+- [big-data-europe/docker-hadoop](https://github.com/big-data-europe/docker-hadoop): Apache Hadoop docker image
+
 ## 项目
 
 + [datasets](datasets/README.md)

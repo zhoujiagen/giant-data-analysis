@@ -1,0 +1,127 @@
+# REF: https://github.com/apache/incubator-hudi/blob/master/docker/compose/docker-compose_hadoop284_hive233_spark244.yml
+
+version: "3.3"
+
+services:
+
+  namenode:
+    image: apachehudi/hudi-hadoop_2.8.4-namenode:latest
+    hostname: namenode
+    container_name: namenode
+    volumes:
+      - /tmp/hadoop_name:/hadoop/dfs/name
+    environment:
+      - CLUSTER_NAME=hudi_hadoop284
+    ports:
+      - "50070:50070"
+      - "8020:8020"
+    env_file:
+      - ./hadoop.env
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://namenode:50070"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  datanode1:
+    image: apachehudi/hudi-hadoop_2.8.4-datanode:latest
+    container_name: datanode1
+    hostname: datanode1
+    environment:
+      - CLUSTER_NAME=hudi_hadoop284
+    env_file:
+      - ./hadoop.env
+    ports:
+      - "50075:50075"
+      - "50010:50010"
+    links:
+      - "namenode"
+      - "historyserver"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://datanode1:50075"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    depends_on:
+      - namenode
+    volumes:
+      - /tmp/hadoop_data:/hadoop/dfs/data
+
+  historyserver:
+    image: apachehudi/hudi-hadoop_2.8.4-history:latest
+    hostname: historyserver
+    container_name: historyserver
+    environment:
+      - CLUSTER_NAME=hudi_hadoop284
+    depends_on:
+      - "namenode"
+    links:
+      - "namenode"
+    ports:
+      - "58188:8188"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://historyserver:8188"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    env_file:
+      - ./hadoop.env
+    volumes:
+      - historyserver:/hadoop/yarn/timeline
+
+  hive-metastore-postgresql:
+    image: bde2020/hive-metastore-postgresql:2.3.0
+    volumes:
+      - hive-metastore-postgresql:/var/lib/postgresql
+    hostname: hive-metastore-postgresql
+    container_name: hive-metastore-postgresql
+
+  hivemetastore:
+    image: apachehudi/hudi-hadoop_2.8.4-hive_2.3.3:latest
+    hostname: hivemetastore
+    container_name: hivemetastore
+    links:
+      - "hive-metastore-postgresql"
+      - "namenode"
+    env_file:
+      - ./hadoop.env
+    command: /opt/hive/bin/hive --service metastore
+    environment:
+      SERVICE_PRECONDITION: "namenode:50070 hive-metastore-postgresql:5432"
+    ports:
+      - "9083:9083"
+    healthcheck:
+      test: ["CMD", "nc", "-z", "hivemetastore", "9083"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    depends_on:
+      - "hive-metastore-postgresql"
+      - "namenode"
+
+  hiveserver:
+    image: apachehudi/hudi-hadoop_2.8.4-hive_2.3.3:latest
+    hostname: hiveserver
+    container_name: hiveserver
+    env_file:
+      - ./hadoop.env
+    environment:
+      SERVICE_PRECONDITION: "hivemetastore:9083"
+    ports:
+      - "10000:10000"
+    depends_on:
+      - "hivemetastore"
+    links:
+      - "hivemetastore"
+      - "hive-metastore-postgresql"
+      - "namenode"
+    volumes:
+      - /tmp/hive:/var/hive/ws
+
+volumes:
+  namenode:
+  historyserver:
+  hive-metastore-postgresql:
+
+networks:
+  default:

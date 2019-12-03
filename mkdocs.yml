@@ -11,8 +11,14 @@ nav:
       - 'Netty':
         - 'Home': data-management-infrastructure/netty/README.md
         - 'Netty in Action': data-management-infrastructure/netty/notes-of-netty-in-action.md
-      - 'Docker': data-management-infrastructure/container/docker.md
+      - 'Docker':
+        - 'Home': data-management-infrastructure/container/docker.md
+        - 'Dockerfile': data-management-infrastructure/container/dockerfile.md
+        - 'Docker Compose': data-management-infrastructure/container/docker-compose.md
       - 'K8S': data-management-infrastructure/container/k8s.md
+      - 'Apache Hadoop': data-management-infrastructure/apache-hadoop/README.md
+      - 'Apache HBase': data-management-infrastructure/apache-hbase/README.md
+      - 'Apache Hive': data-management-infrastructure/apache-hive/README.md
     - '时序数据和实时算法': temporal-data-and-realtime-algorithm/README.md
     - '数据表示': data-representation/README.md
     - '数据模型':

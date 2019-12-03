@@ -1,9 +1,13 @@
+#  Apache HBase
 
-# 0 实践版本
 
-	1.2.3
+##  0 实践版本
 
-# 1 资源
+```
+1.2.3
+```
+
+##  1 资源
 
 + 本地文档: hbase-1.2.3/docs/index.html
 
@@ -13,14 +17,14 @@
 A fully asynchronous, non-blocking, thread-safe, high-performance HBase client.
 
 [async](https://github.com/OpenTSDB/async)
-Building blocks for asynchronous Java processing inspired by Twisted's API. 
+Building blocks for asynchronous Java processing inspired by Twisted's API.
 
 
-# 2 运行实例
+##  2 运行实例
 
-# 3 安装和配置
+##  3 安装和配置
 
-## 3.1 standalone方式运行
+## # 3.1 standalone方式运行
 
 conf/hbase-site.xml
 
@@ -34,7 +38,7 @@ conf/hbase-site.xml
 	  </property>
 
 启动/停止:
-	
+
 	bin/start-hbase.sh
 	bin/stop-hbase.sh
 
@@ -42,15 +46,10 @@ conf/hbase-site.xml
 
 	bin/hbase shell
 
-# 4 数据存储模式
+##  4 数据存储模式
 
 	(Table, RowKey, Family, Column, Timestamp) -> Value
-	
+
 	SortedMap<RowKey, List<SortedMap<Column, List<Value, Timestamp>>>>
-	
-	10^9行 * 10^6列 * 10^3版本 = TB/PB级存储 
 
-
-
-
-	
+	10^9行 * 10^6列 * 10^3版本 = TB/PB级存储
