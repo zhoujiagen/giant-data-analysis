@@ -16,7 +16,7 @@ import java.lang.annotation.Target;
     ElementType.CONSTRUCTOR, ElementType.LOCAL_VARIABLE, ElementType.ANNOTATION_TYPE,
     ElementType.PACKAGE })
 public @interface DesignPattern {
-  Pattern value() default Pattern._;
+  Pattern value() default Pattern.UNKNOWN;
 
   String description() default "";
 
@@ -39,7 +39,7 @@ public @interface DesignPattern {
   }
 
   enum Pattern {
-    _("未知", null, null, null), //
+    UNKNOWN("未知", null, null, null), //
     AbstractFactory("", Purpose.Creational, Scope.OBJECT, ""), //
     AdapterC("", Purpose.Structural, Scope.CLASS, ""), //
     AdapterO("", Purpose.Structural, Scope.OBJECT, ""), //

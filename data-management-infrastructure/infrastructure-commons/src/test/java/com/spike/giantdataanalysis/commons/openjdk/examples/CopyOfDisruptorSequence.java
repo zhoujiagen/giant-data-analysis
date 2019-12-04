@@ -2,6 +2,7 @@ package com.spike.giantdataanalysis.commons.openjdk.examples;
 
 import sun.misc.Unsafe;
 
+@SuppressWarnings("restriction")
 class LhsPadding {
   protected long p1, p2, p3, p4, p5, p6, p7;
 }
@@ -16,6 +17,8 @@ class RhsPadding extends Value {
 
 public class CopyOfDisruptorSequence extends RhsPadding {
   static final long INITIAL_VALUE = -1L;
+  @SuppressWarnings({ "restriction", "unused" })
   private static final Unsafe UNSAFE = null;
+  @SuppressWarnings("unused")
   private static final long VALUE_OFFSET = 0;
 }

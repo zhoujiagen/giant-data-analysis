@@ -54,7 +54,7 @@
 		<!--<curator.version>2.12.0</curator.version> -->
 		<curator.version>4.0.0</curator.version> <!-- change at 20171115 -->
 		<hadoop1.version>1.2.1</hadoop1.version>
-		<hadoop2.version>2.7.4</hadoop2.version>
+		<hadoop2.version>2.10.0</hadoop2.version>
 		<mrunit.version>1.1.0</mrunit.version>
 		<hbase.version>1.2.6</hbase.version>
 		<netty.version>4.1.8.Final</netty.version>

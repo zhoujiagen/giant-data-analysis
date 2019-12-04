@@ -16,7 +16,13 @@ nav:
         - 'Dockerfile': data-management-infrastructure/container/dockerfile.md
         - 'Docker Compose': data-management-infrastructure/container/docker-compose.md
       - 'K8S': data-management-infrastructure/container/k8s.md
-      - 'Apache Hadoop': data-management-infrastructure/apache-hadoop/README.md
+      - 'Apache Hadoop':
+        - 'Home': data-management-infrastructure/apache-hadoop/README.md
+        - 'Common': data-management-infrastructure/apache-hadoop/hadoop-common.md
+        - 'HDFS': data-management-infrastructure/apache-hadoop/hadoop-hdfs.md
+        - 'MapReduce': data-management-infrastructure/apache-hadoop/hadoop-mr.md
+        - 'Yarn': data-management-infrastructure/apache-hadoop/hadoop-yarn.md
+        - 'FAQ': data-management-infrastructure/apache-hadoop/hadoop-faq.md
       - 'Apache HBase': data-management-infrastructure/apache-hbase/README.md
       - 'Apache Hive': data-management-infrastructure/apache-hive/README.md
     - '时序数据和实时算法': temporal-data-and-realtime-algorithm/README.md

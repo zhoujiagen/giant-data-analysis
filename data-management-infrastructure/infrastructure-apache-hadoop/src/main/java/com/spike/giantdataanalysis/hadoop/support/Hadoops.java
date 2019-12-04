@@ -2,6 +2,7 @@ package com.spike.giantdataanalysis.hadoop.support;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.TreeMap;
 
 import org.apache.commons.lang.StringUtils;
@@ -28,30 +29,36 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public final class Hadoops {
-
   private static final Logger LOG = LoggerFactory.getLogger(Hadoops.class);
-
-  public static final String HADOOP_HOME_VALUE = "/Users/jiedong/software/hadoop-2.7.2";
 
   public static final String HADOOP_HOME_PROP_NAME = "hadoop.home.dir";
   public static final String HADOOP_HOME_ENV_NAME = "HADOOP_HOME";
+  public static final String HADOOP_ENV_PB = "hadoop-env";
 
   /**
    * 设置系统/环境属性
    */
-  public static void SETUP_ENV() {
-    String home = System.getProperty(HADOOP_HOME_PROP_NAME);
-    if (home == null) {
-      System.setProperty(HADOOP_HOME_PROP_NAME, HADOOP_HOME_VALUE);
-      // home = System.getenv(HADOOP_HOME_ENV_NAME);
+  public static void setUpEnvironment() {
+    String valueInSystem = System.getProperty(HADOOP_HOME_PROP_NAME);
+    String valueInEnv = System.getenv(HADOOP_HOME_ENV_NAME);
+
+    if (valueInSystem == null) {
+      if (valueInEnv != null) {
+        System.setProperty(HADOOP_HOME_PROP_NAME, valueInEnv);
+      } else {
+        ResourceBundle rb = ResourceBundle.getBundle(HADOOP_ENV_PB);
+        System.setProperty(HADOOP_HOME_PROP_NAME, rb.getString(HADOOP_HOME_PROP_NAME));
+      }
     }
+
+    LOG.info("Current hadoop.home.dir={}", System.getProperty(HADOOP_HOME_PROP_NAME));
   }
 
   /**
    * 输出配置内容
    * @param conf
    */
-  public static void RENDER(Configuration conf) {
+  public static void output(Configuration conf) {
     if (conf == null) return;
 
     StringBuilder sb = new StringBuilder();
@@ -88,7 +95,8 @@ public final class Hadoops {
    * @throws IOException
    * @see {@link FileSystem#get(Configuration)}
    */
-  public static void DELETE(Configuration conf, Path path, boolean recursive) throws IOException {
+  public static void deletePath(Configuration conf, Path path, boolean recursive)
+      throws IOException {
     if (conf == null || path == null) return;
 
     FileSystem fs = FileSystem.get(conf);
@@ -103,7 +111,7 @@ public final class Hadoops {
    * @throws IOException
    * @see {@link FileSystem#getLocal(Configuration)}
    */
-  public static void DELETE_LOCAL(Configuration conf, Path path, boolean recursive)
+  public static void deleteLocalPath(Configuration conf, Path path, boolean recursive)
       throws IOException {
     if (conf == null || path == null) return;
 
@@ -181,7 +189,7 @@ public final class Hadoops {
    * @param path
    * @throws IOException
    */
-  public static void DEV_RENDER_WRITABLE_SEQFILE(Configuration conf, Path path) throws IOException {
+  public static void outputWritableSequenceFile(Configuration conf, Path path) throws IOException {
 
     SequenceFile.Reader.Option[] options = new SequenceFile.Reader.Option[] { //
         SequenceFile.Reader.file(path) //

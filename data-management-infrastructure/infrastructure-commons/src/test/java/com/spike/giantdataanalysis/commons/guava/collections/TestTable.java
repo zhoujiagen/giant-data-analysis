@@ -66,7 +66,7 @@ public class TestTable {
 
     Map<Integer, String> col = hashBasedTable.column(4);
     // 会忽略不存在的第1行第4列
-    Assert.assertFalse(col.containsKey("1"));
+    Assert.assertFalse(col.containsKey(1));
     System.out.println(col);
   }
 
