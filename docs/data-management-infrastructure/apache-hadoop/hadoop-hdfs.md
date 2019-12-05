@@ -38,10 +38,16 @@
 - 支持的文件系统见`org.apache.hadoop.fs.AbstractFileSystem`的具体实现
 - 应用使用`org.apache.hadoop.fs.FileSystem`: `FSDataInputStream`, `FSDataOutputStream`, `FileStatus`
 
-java.io.DataOutputStream.flush(): Flushes this data output stream.<br>
-FSDataOutputStream.hflush(): Flush out the data in client's user buffer.<br>
-FSDataOutputStream.hsync(): Similar to posix fsync, flush out the data in client's user buffer all the way to the disk device (but the disk may have it in its cache).
+> java.io.DataOutputStream.flush(): Flushes this data output stream.<br>
+> FSDataOutputStream.hflush(): Flush out the data in client's user buffer.<br>
+> FSDataOutputStream.hsync(): Similar to posix fsync, flush out the data in client's user buffer all the way to the disk device (but the disk may have it in its cache).
 
 - distcp: 并行拷贝工具
 - 数据完整性: 校验和 CRC-32C
 - 压缩格式: DEFLATE, gzip, bzip2, LZO, LZ4, Snappy
+
+## Packages
+
+### org.apache.hadoop.hdfs
+
+- `MiniDFSCluster`: This class creates a single-process DFS cluster for junit testing

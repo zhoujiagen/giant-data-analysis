@@ -8,7 +8,9 @@
 
 ### org.apache.hadoop.util
 
-
+- `GenericOptionsParser`: [hadoop命令](https://hadoop.apache.org/docs/r2.10.0/hadoop-project-dist/hadoop-common/CommandsManual.html)
+- `Tool`: MapReduce工具或应用的标准
+- `ToolRunner`
 
 ### org.apache.hadoop.io
 

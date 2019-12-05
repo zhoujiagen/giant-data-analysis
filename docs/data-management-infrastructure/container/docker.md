@@ -9,6 +9,9 @@
 - 3 [Docker Documentation](https://docs.docker.com/)
 - 4 [Kubernetes指南 by feiskyer](https://github.com/feiskyer/kubernetes-handbook)
 
+### Problems
+
+- [Docker on Mac Mojava is using 4GB even though it's configured for 2GB #3377](https://github.com/docker/for-mac/issues/3377): 容器可用和实际使用内存, `docker run -m 1g`, `docker stats`
 
 ## 概念
 

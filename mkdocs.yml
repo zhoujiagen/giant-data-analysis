@@ -1,4 +1,9 @@
 site_name: Giant Data Analysis
+site_author: 'zhoujiagen@gmail.com'
+copyright: MIT
+repo_name: giant-data-analysis
+repo_url: https://github.com/zhoujiagen/giant-data-analysis
+
 nav:
     - Home: index.md
     - About: about.md
@@ -21,7 +26,7 @@ nav:
         - 'Common': data-management-infrastructure/apache-hadoop/hadoop-common.md
         - 'HDFS': data-management-infrastructure/apache-hadoop/hadoop-hdfs.md
         - 'MapReduce': data-management-infrastructure/apache-hadoop/hadoop-mr.md
-        - 'Yarn': data-management-infrastructure/apache-hadoop/hadoop-yarn.md
+        - 'YARN': data-management-infrastructure/apache-hadoop/hadoop-yarn.md
         - 'FAQ': data-management-infrastructure/apache-hadoop/hadoop-faq.md
       - 'Apache HBase': data-management-infrastructure/apache-hbase/README.md
       - 'Apache Hive': data-management-infrastructure/apache-hive/README.md

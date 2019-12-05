@@ -19,6 +19,10 @@ import org.apache.hadoop.mapreduce.Mapper;
  */
 public class ExampleMaxTemperatureMapper extends Mapper<LongWritable, Text, Text, IntWritable> {
 
+  enum MaxTemperatureCounterEnum {
+    MISSING, OVER_100
+  }
+
   @Override
   public void map(LongWritable key, Text value, Context context)
       throws IOException, InterruptedException {
@@ -29,11 +33,18 @@ public class ExampleMaxTemperatureMapper extends Mapper<LongWritable, Text, Text
     String temperature = line.substring(87, 92);
 
     if (!isMissingTemperature(temperature)) {
-
       int airTemperature = Integer.parseInt(temperature);
-      context.write(new Text(year), new IntWritable(airTemperature));
+      if (airTemperature > 100) {
+        // set current status of task
+        context.setStatus("Detected possibly corrupt record: see logs.");
+        // counter
+        context.getCounter(MaxTemperatureCounterEnum.OVER_100).increment(1);
+      } else {
+        context.write(new Text(year), new IntWritable(airTemperature));
+      }
+    } else {
+      context.getCounter(MaxTemperatureCounterEnum.MISSING).increment(1);
     }
-
   }
 
   private boolean isMissingTemperature(String temperature) {

@@ -31,27 +31,33 @@ import org.slf4j.LoggerFactory;
 public final class Hadoops {
   private static final Logger LOG = LoggerFactory.getLogger(Hadoops.class);
 
-  public static final String HADOOP_HOME_PROP_NAME = "hadoop.home.dir";
-  public static final String HADOOP_HOME_ENV_NAME = "HADOOP_HOME";
   public static final String HADOOP_ENV_PB = "hadoop-env";
+  
+  public static final String PROP_HADOOP_HOME = "hadoop.home.dir";
+  public static final String ENV_HADOOP_HOME = "HADOOP_HOME";
+  
 
+  public static void main(String[] args) {
+    System.out.println(System.getenv("JAVA_HOME"));
+  }
+  
   /**
    * 设置系统/环境属性
    */
   public static void setUpEnvironment() {
-    String valueInSystem = System.getProperty(HADOOP_HOME_PROP_NAME);
-    String valueInEnv = System.getenv(HADOOP_HOME_ENV_NAME);
+    String valueInSystem = System.getProperty(PROP_HADOOP_HOME);
+    String valueInEnv = System.getenv(ENV_HADOOP_HOME);
 
     if (valueInSystem == null) {
       if (valueInEnv != null) {
-        System.setProperty(HADOOP_HOME_PROP_NAME, valueInEnv);
+        System.setProperty(PROP_HADOOP_HOME, valueInEnv);
       } else {
         ResourceBundle rb = ResourceBundle.getBundle(HADOOP_ENV_PB);
-        System.setProperty(HADOOP_HOME_PROP_NAME, rb.getString(HADOOP_HOME_PROP_NAME));
+        System.setProperty(PROP_HADOOP_HOME, rb.getString(PROP_HADOOP_HOME));
       }
     }
-
-    LOG.info("Current hadoop.home.dir={}", System.getProperty(HADOOP_HOME_PROP_NAME));
+    
+    LOG.info("Current hadoop.home.dir={}", System.getProperty(PROP_HADOOP_HOME));
   }
 
   /**

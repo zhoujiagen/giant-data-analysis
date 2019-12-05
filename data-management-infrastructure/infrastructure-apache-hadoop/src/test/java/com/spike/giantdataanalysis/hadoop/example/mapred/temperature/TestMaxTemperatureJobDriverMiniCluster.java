@@ -19,19 +19,12 @@ import com.spike.giantdataanalysis.hadoop.example.ExampleConstants;
 import com.spike.giantdataanalysis.hadoop.support.Hadoops;
 
 /**
- * <pre>
- * 在mini集群中测试
- * 
- * REF tomwhite/hadoop-book: https://github.com/tomwhite/hadoop-book
- * ch06-mr-dev/src/test/java/v2/MaxTemperatureDriverMiniTest.java
- * 
- * TODO failed when launch Yarn AM. fix it when processing Yarn.
- * </pre>
- * 
+ * 在mini集群中测试.
+ * <p>
+ * 注意: 设置JAVA_HOME以解决YARN中未找到/bin/java问题.
  * @author zhoujiagen
- * @see org.apache.hadoop.fs.FileUtil
- * @see org.apache.hadoop.fs.FileStatus
  * @see org.apache.hadoop.hdfs.MiniDFSCluster
+ * @see org.apache.hadoop.mapred.MiniMRCluster
  */
 public class TestMaxTemperatureJobDriverMiniCluster extends ClusterMapReduceTestCase {
 
@@ -40,7 +33,6 @@ public class TestMaxTemperatureJobDriverMiniCluster extends ClusterMapReduceTest
 
   @Test
   public void setUp() throws Exception {
-    // Hadoops.SETUP_ENV();
     super.setUp();
   }
 
@@ -49,13 +41,12 @@ public class TestMaxTemperatureJobDriverMiniCluster extends ClusterMapReduceTest
     Configuration conf = super.createJobConf();
     Hadoops.output(conf);
 
-    Path localInput = new Path(ExampleConstants.DATA_NCDC_INPUT_PATH);
     // 集群中输入和输出目录
     Path input = super.getInputDir();
     Path output = super.getOutputDir();
     // 1 创建HDFS输入目录, 拷贝数据到测试HDFS
     FileSystem fs = super.getFileSystem();
-    // fs.mkdirs(input);
+    Path localInput = new Path(ExampleConstants.DATA_NCDC_INPUT_PATH);
     fs.copyFromLocalFile(localInput, input);
     LOG.info("localInput={}, input={}, output={}", localInput, input, output);
 
