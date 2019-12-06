@@ -2,8 +2,8 @@
 
 ## 资源
 
-+ The Google File System by Sanjay Ghemawat and Howard Gobioff and Shun-Tak Leung, 2003.
-
++ The Google File System, by Sanjay Ghemawat and Howard Gobioff and Shun-Tak Leung, 2003.
++ The Hadoop Distributed File System, by Konstantin Shvachko and Hairong Kuang and Sanjay Radia and Robert Chansler, 2010.
 
 ## 图例
 
@@ -51,3 +51,14 @@
 ### org.apache.hadoop.hdfs
 
 - `MiniDFSCluster`: This class creates a single-process DFS cluster for junit testing
+
+
+## RTFSC
+
+### Questions
+
+- 启动入口在哪里? 依次启动那些组件?
+- 是如何处理客户端的并发写入的?
+- 组件: 为什么要用这些组件? 使用了那些数据结构(包括协议)和过程? 
+
+### Candidate Answers

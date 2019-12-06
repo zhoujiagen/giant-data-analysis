@@ -4,6 +4,8 @@ import org.apache.commons.lang.StringUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.spike.giantdataanalysis.hadoop.example.mapred.temperature.ExampleMaxTemperatureMapperUsingParser.ExampleLineRecordParser;
+
 public class TestLineRecordParser {
 
   static final String LINE = "005733213099999" + StringUtils.repeat("1", 200);
