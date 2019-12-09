@@ -59,6 +59,100 @@
 
 - 启动入口在哪里? 依次启动那些组件?
 - 是如何处理客户端的并发写入的?
-- 组件: 为什么要用这些组件? 使用了那些数据结构(包括协议)和过程? 
+- 组件: 为什么要用这些组件? 使用了那些数据结构(包括协议)和过程?
 
 ### Candidate Answers
+
+#### 启动入口
+
+- sbin/start-dfs.sh
+
+```
+bin/hdfs start namenode
+bin/hdfs start datanode
+bin/hdfs start secondarynamenode (if any)
+bin/hdfs start journalnode (if any): dfs.namenode.shared.edits.dir
+bin/hdfs start zkfc (if auto-HA is enabled): dfs.ha.automatic-failover.enabled
+```
+
+- libexec/hdfs-config.sh
+- libexec/hadoop-config.sh
+- bin/hdfs
+- sbin/hadoop-daemons.sh
+
+
+##### bin/hdfs
+
+- getconf: org.apache.hadoop.hdfs.tools.GetConf
+- namenode: org.apache.hadoop.hdfs.server.namenode.NameNode
+- datanode: org.apache.hadoop.hdfs.server.datanode.DataNode
+- secondarynamenode: org.apache.hadoop.hdfs.server.namenode.SecondaryNameNode
+- journalnode: org.apache.hadoop.hdfs.qjournal.server.JournalNode
+- zkfc: org.apache.hadoop.hdfs.tools.DFSZKFailoverController
+- others
+
+
+#### 组件
+
+##### NameNode
+
+- 聚合`FSNamesystem`管理文件系统
+- 实现的协议: `ClientProtocol`, `DatanodeProtocol`, `NamenodeProtocol`
+- 角色`HdfsServerConstants.NamenodeRole`: `NAMENODE`, `BACKUP`, `CHECKPOINT`
+
+- 创建实例: `NameNode.createNameNode(String[], Configuration)`
+- 初始化: `NameNode.initialize(Configuration)`
+
+```
+NameNode.loginAsNameNodeUser(Configuration)
+NameNode.initMetrics(Configuration, NamenodeRole)
+NameNode.startHttpServer(Configuration)
+NameNode.loadNamesystem(Configuration)
+|-- FSNamesystem.loadFromDisk(Configuration)    // 加载fsimage和edits日志
+NameNode.createRpcServer(Configuration)         // rpcServer
+|-- NameNodeRpcServer.NameNodeRpcServer(Configuration, NameNode)
+NameNode.initReconfigurableBackoffKey()
+NameNode.startCommonServices(Configuration)
+|-- FSNamesystem.startCommonServices(Configuration, HAContext)
+NameNode.startMetricsLogger(Configuration)
+```
+
+###### FSNamesystem
+
+###### NameNodeRpcServer
+
+###### SecondaryNameNode
+
+因为NN在启动时合并fsimage和edits日志文件, 周期性的合并fsimage和edits日志文件.
+
+###### BackupNode
+
+- checkpoint: org.apache.hadoop.hdfs.server.common.HdfsServerConstants.StartupOption.CHECKPOINT
+
+周期性的创建文件命名空间的检查点: 从活跃NN下载fsimage和edits日志文件, 本地合并, 再上传给活跃NN.
+
+启动: `bin/hdfs namenode -checkpoint`.
+
+- backup: org.apache.hadoop.hdfs.server.common.HdfsServerConstants.StartupOption.BACKUP
+
+在内存中维护与活跃NN状态同步的文件系统命名空间, 也接收并持久化edits日志流. 启动: `bin/hdfs namenode -backup`.
+
+- Checkpointer
+
+
+##### DataNode
+
+
+
+##### JournalNode
+
+##### DFSZKFailoverController
+
+
+#### 协议
+
+##### ClientProtocol
+
+##### DatanodeProtocol
+
+##### NamenodeProtocol

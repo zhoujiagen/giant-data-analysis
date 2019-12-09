@@ -123,3 +123,85 @@ $ tree -L 2 hadoop-2.10.0-src
 ```
 
 ## 3 安装和配置
+
+### 配置文件
+
+- [配置项备注 on Google doc](https://docs.google.com/spreadsheets/d/1xkn2421q2AvAWHxml_hsBFWzh6PA5WzOCZyreihL_gE/edit?usp=sharing)
+
+```
+$ tree etc/hadoop/ | grep -v "cmd"
+etc/hadoop/
+├── capacity-scheduler.xml
+├── configuration.xsl
+├── container-executor.cfg
+├── core-site.xml
+├── hadoop-env.sh                   // Hadoop环境变量
+├── hadoop-metrics.properties
+├── hadoop-metrics2.properties
+├── hadoop-policy.xml
+├── hdfs-site.xml
+├── httpfs-env.sh
+├── httpfs-log4j.properties
+├── httpfs-signature.secret
+├── httpfs-site.xml
+├── kms-acls.xml
+├── kms-env.sh
+├── kms-log4j.properties
+├── kms-site.xml
+├── log4j.properties
+├── mapred-env.sh
+├── mapred-queues.xml.template
+├── mapred-site.xml.template
+├── slaves
+├── ssl-client.xml.example
+├── ssl-server.xml.example
+├── yarn-env.sh
+└── yarn-site.xml
+```
+
+### 启停脚本
+
+```
+$ ls bin | grep -v "cmd"
+hadoop                        // 见文档中Hadoop Commands Guide
+hdfs                          // 见文档中HDFS Commands Guide
+mapred
+rcc
+yarn
+```
+
+```
+$ ls sbin | grep -v "cmd"
+FederationStateStore
+distribute-exclude.sh
+hadoop-daemon.sh              // 运行Hadoop命令
+hadoop-daemons.sh             // 在所有slave上运行Hadoop命令: namenode|secondarynamenode|datanode|journalnode|dfs|dfsadmin|fsck|balancer|zkfc|portmap|nfs3|dfsrouter
+hdfs-config.sh
+httpfs.sh
+kms.sh
+mr-jobhistory-daemon.sh
+refresh-namenodes.sh
+slaves.sh                     // 在所有slave上执行脚本
+start-all.sh
+start-balancer.sh
+start-dfs.sh
+start-secure-dns.sh
+start-yarn.sh
+stop-all.sh
+stop-balancer.sh
+stop-dfs.sh
+stop-secure-dns.sh
+stop-yarn.sh
+yarn-daemon.sh
+yarn-daemons.sh
+```
+
+```
+$ ls libexec | grep -v "cmd"
+hadoop-config.sh              // 包含在hadoop脚本中
+hdfs-config.sh                // 包含在hdfs脚本中
+httpfs-config.sh
+kms-config.sh
+mapred-config.sh
+yarn-config.sh
+```
