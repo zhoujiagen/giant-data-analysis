@@ -58,7 +58,7 @@
 ### Questions
 
 - 启动入口在哪里? 依次启动那些组件?
-- 是如何处理客户端的并发写入的?
+- 是如何处理客户端的并发写入和读取的?
 - 组件: 为什么要用这些组件? 使用了那些数据结构(包括协议)和过程?
 
 ### Candidate Answers
@@ -96,6 +96,27 @@ bin/hdfs start zkfc (if auto-HA is enabled): dfs.ha.automatic-failover.enabled
 
 ##### NameNode
 
+```
+NameNode serves as both directory namespace manager and
+"inode table" for the Hadoop DFS.  There is a single NameNode
+running in any DFS deployment.  (Well, except when there
+is a second backup/failover NameNode, or when using federated NameNodes.)
+
+The NameNode controls two critical tables:
+  1)  filename->blocksequence (namespace)
+  2)  block->machinelist ("inodes")
+
+The first table is stored on disk and is very precious.
+The second table is rebuilt every time the NameNode comes up.
+
+'NameNode' refers to both this class as well as the 'NameNode server'.
+The 'FSNamesystem' class actually performs most of the filesystem
+management.  The majority of the 'NameNode' class itself is concerned
+with exposing the IPC interface and the HTTP server to the outside world,
+plus some configuration management.
+```
+
+
 - 聚合`FSNamesystem`管理文件系统
 - 实现的协议: `ClientProtocol`, `DatanodeProtocol`, `NamenodeProtocol`
 - 角色`HdfsServerConstants.NamenodeRole`: `NAMENODE`, `BACKUP`, `CHECKPOINT`
@@ -119,7 +140,137 @@ NameNode.startMetricsLogger(Configuration)
 
 ###### FSNamesystem
 
+> public class FSNamesystem implements Namesystem, FSNamesystemMBean, NameNodeMXBean
+
+```
+FSNamesystem does the actual bookkeeping work for the DataNode.
+
+It tracks several important tables.
+
+1)  valid fsname --> blocklist  (kept on disk, logged)
+2)  Set of all valid blocks (inverted #1)
+3)  block --> machinelist (kept in memory, rebuilt dynamically from reports)
+4)  machine --> blocklist (inverted #2)
+5)  LRU cache of updated-heartbeat machines
+```
+
+配置:
+
+- FSNamesystem.getNamespaceDirs(Configuration): `dfs.namenode.name.dir`
+- FSNamesystem.getNamespaceEditsDirs(Configuration): `dfs.namenode.shared.edits.dir`, `dfs.namenode.edits.dir`
+- FSNamesystem.getRequiredNamespaceEditsDirs(Configuration): `dfs.namenode.edits.dir.required`, `dfs.namenode.shared.edits.dir`
+- FSNamesystem.getSharedEditsDirs(Configuration): `dfs.namenode.shared.edits.dir`
+- resourceRecheckInterval: `dfs.namenode.resource.check.interval`
+- supergroup: `dfs.permissions.superusergroup`
+- isPermissionEnabled: `dfs.permissions.enabled`
+- serverDefaults: FsServerDefaults: `dfs.checksum.type`, `dfs.blocksize`, `dfs.bytes-per-checksum`, `dfs.client-write-packet-size`, `dfs.replication`, `io.file.buffer.size`, `dfs.encrypt.data.transfer`, `fs.trash.interval`, `hadoop.security.key.provider.path`
+- maxFsObjects: `dfs.namenode.max.objects`
+- minBlockSize: `dfs.namenode.fs-limits.min-block-size`
+- maxBlocksPerFile: `dfs.namenode.fs-limits.max-blocks-per-file`
+- numCommittedAllowed: `dfs.namenode.file.close.num-committed-allowed`
+- supportAppends: `dfs.support.append`
+- maxCorruptFileBlocksReturn: `dfs.namenode.max-corrupt-file-blocks-returned`
+- dtpReplaceDatanodeOnFailure: ReplaceDatanodeOnFailure // replace-datanode-on-failure特性的配置, `dfs.client.block.write.replace-datanode-on-failure.enable`, `dfs.client.block.write.replace-datanode-on-failure.policy`, `dfs.client.block.write.replace-datanode-on-failure.best-effort`
+- standbyShouldCheckpoint: `dfs.ha.standby.checkpoints`
+- editLogRollerThreshold, editLogRollerInterval: `dfs.namenode.edit.log.autoroll.multiplier.threshold`, `dfs.namenode.checkpoint.txns`, `dfs.namenode.edit.log.autoroll.check.interval.ms`
+- lazyPersistFileScrubIntervalSec: `dfs.namenode.lazypersist.file.scrub.interval.sec`
+- edekCacheLoaderDelay, edekCacheLoaderInterval: `dfs.namenode.edekcacheloader.initial.delay.ms`, `dfs.namenode.edekcacheloader.interval.ms`
+- leaseRecheckIntervalMs, maxLockHoldToReleaseLeaseMs: `dfs.namenode.lease-recheck-interval-ms`, `dfs.namenode.max-lock-hold-to-release-lease-ms`
+- inodeAttributeProvider: INodeAttributeProvider // `dfs.namenode.inode.attributes.provider.class`
+- maxListOpenFilesResponses: `dfs.namenode.list.openfiles.num.responses`
+- blockDeletionIncrement: `dfs.namenode.block.deletion.increment`
+
+聚合:
+
+- fsLock, cond: FSNamesystemLock, `java.util.concurrent.locks.Condition` // 模拟`java.util.concurrent.locks.ReentrantReadWriteLock`
+- cpLock: ReentrantLock // checkpoint用的锁
+- fsImage: FSImage // 处理名称空间上edits的checkpointing和logging
+- nameserviceId: // HA模式下名称服务ID
+- blockManager: BlockManager // 块管理器, 尝试维护足够的活跃副本数量
+- datanodeStatistics: DatanodeStatistics // DN统计信息
+- dir: FSDirectory // 管理名称空间, 纯内存结构
+- snapshotManager: SnapshotManager // 快照管理器
+- cacheManager: CacheManager // DN中缓存的管理器
+- retryCache: RetryCache // 非幂等请求重试的缓存
+
+构造: `FSNamesystem.loadFromDisk(Configuration)`
+
+- FSNamesystem.FSNamesystem(Configuration, FSImage, boolean)
+- FSNamesystem.loadFSImage(StartupOption)
+
+```
+FSImage.format(FSNamesystem, String) // 指定了-format时
+FSImage.recoverTransitionRead(StartupOption, FSNamesystem, MetaRecoveryContext)
+FSImage.saveNamespace(FSNamesystem) // 需要保存名称空间时
+FSImage.openEditLogForWrite(int) // 非standby时, 开启新的edits日志
+```
+
+###### FSImage
+
 ###### NameNodeRpcServer
+
+> public class NameNodeRpcServer implements NamenodeProtocols
+
+- serviceRpcServer: 监听DN请求
+- lifelineRpcServer: 监听lifeline请求
+- clientRpcServer: 监听客户端请求
+
+构造过程:
+
+(1) PB BlockingService
+
+- clientNNPbService: ClientNamenodeProtocol, ClientNamenodeProtocolServerSideTranslatorPB
+- dnProtoPbService: DatanodeProtocolService, DatanodeProtocolServerSideTranslatorPB
+- lifelineProtoPbService: DatanodeLifelineProtocolService, DatanodeLifelineProtocolServerSideTranslatorPB
+- NNPbService: NamenodeProtocolService, NamenodeProtocolServerSideTranslatorPB
+- refreshAuthService: RefreshUserMappingsProtocolService, RefreshUserMappingsProtocolServerSideTranslatorPB
+- refreshCallQueueService: RefreshCallQueueProtocolService, RefreshCallQueueProtocolServerSideTranslatorPB
+- genericRefreshService: GenericRefreshProtocolService, GenericRefreshProtocolServerSideTranslatorPB
+- getUserMappingService: GetUserMappingsProtocolService, GetUserMappingsProtocolServerSideTranslatorPB
+- haPbService: HAServiceProtocolService, HAServiceProtocolServerSideTranslatorPB
+- reconfigurationPbService: ReconfigurationProtocolService, ReconfigurationProtocolServerSideTranslatorPB
+- traceAdminService: TraceAdminService, TraceAdminProtocolServerSideTranslatorPB
+
+(2) serviceRpcServer
+
+> dfs.namenode.servicerpc-address
+
+协议:
+
+- clientNNPbService
+- haPbService
+- reconfigurationPbService
+- NNPbService
+- dnProtoPbService
+- refreshAuthService
+- refreshUserMappingService
+- refreshCallQueueService
+- genericRefreshService
+- getUserMappingService
+- traceAdminService
+
+
+(3) lifelineRpcServer
+
+> dfs.namenode.lifeline.rpc-address, dfs.namenode.lifeline.rpc-bind-host
+
+- haPbService
+- lifelineProtoPbService
+
+
+(4) clientRpcServer
+
+- clientNNPbService
+- haPbService
+- reconfigurationPbService
+- NNPbService
+- dnProtoPbService
+- refreshAuthService
+- refreshUserMappingService
+- refreshCallQueueService
+- genericRefreshService
+- getUserMappingService
+- traceAdminService
 
 ###### SecondaryNameNode
 
