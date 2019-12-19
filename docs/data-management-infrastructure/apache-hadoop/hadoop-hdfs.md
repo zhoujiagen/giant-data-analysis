@@ -61,9 +61,9 @@
 - 是如何处理客户端的并发写入和读取的?
 - 组件: 为什么要用这些组件? 使用了那些数据结构(包括协议)和过程?
 
-### Candidate Answers
 
-#### 启动入口
+
+### 启动入口
 
 - sbin/start-dfs.sh
 
@@ -92,30 +92,54 @@ bin/hdfs start zkfc (if auto-HA is enabled): dfs.ha.automatic-failover.enabled
 - others
 
 
-#### 组件
+### 组件
 
-##### NameNode
+#### NameNode
 
 ```
-NameNode serves as both directory namespace manager and
-"inode table" for the Hadoop DFS.  There is a single NameNode
-running in any DFS deployment.  (Well, except when there
-is a second backup/failover NameNode, or when using federated NameNodes.)
+package org.apache.hadoop.hdfs.server.namenode;
 
-The NameNode controls two critical tables:
-  1)  filename->blocksequence (namespace)
-  2)  block->machinelist ("inodes")
-
-The first table is stored on disk and is very precious.
-The second table is rebuilt every time the NameNode comes up.
-
-'NameNode' refers to both this class as well as the 'NameNode server'.
-The 'FSNamesystem' class actually performs most of the filesystem
-management.  The majority of the 'NameNode' class itself is concerned
-with exposing the IPC interface and the HTTP server to the outside world,
-plus some configuration management.
+/**********************************************************
+ * NameNode serves as both directory namespace manager and
+ * "inode table" for the Hadoop DFS.  There is a single NameNode
+ * running in any DFS deployment.  (Well, except when there
+ * is a second backup/failover NameNode, or when using federated NameNodes.)
+ *
+ * The NameNode controls two critical tables:
+ *   1)  filename->blocksequence (namespace)
+ *   2)  block->machinelist ("inodes")
+ *
+ * The first table is stored on disk and is very precious.
+ * The second table is rebuilt every time the NameNode comes up.
+ *
+ * 'NameNode' refers to both this class as well as the 'NameNode server'.
+ * The 'FSNamesystem' class actually performs most of the filesystem
+ * management.  The majority of the 'NameNode' class itself is concerned
+ * with exposing the IPC interface and the HTTP server to the outside world,
+ * plus some configuration management.
+ *
+ * NameNode implements the
+ * {@link org.apache.hadoop.hdfs.protocol.ClientProtocol} interface, which
+ * allows clients to ask for DFS services.
+ * {@link org.apache.hadoop.hdfs.protocol.ClientProtocol} is not designed for
+ * direct use by authors of DFS client code.  End-users should instead use the
+ * {@link org.apache.hadoop.fs.FileSystem} class.
+ *
+ * NameNode also implements the
+ * {@link org.apache.hadoop.hdfs.server.protocol.DatanodeProtocol} interface,
+ * used by DataNodes that actually store DFS data blocks.  These
+ * methods are invoked repeatedly and automatically by all the
+ * DataNodes in a DFS deployment.
+ *
+ * NameNode also implements the
+ * {@link org.apache.hadoop.hdfs.server.protocol.NamenodeProtocol} interface,
+ * used by secondary namenodes or rebalancing processes to get partial
+ * NameNode state, for example partial blocksMap etc.
+ **********************************************************/
+@InterfaceAudience.Private
+public class NameNode extends ReconfigurableBase implements
+    NameNodeStatusMXBean
 ```
-
 
 - 聚合`FSNamesystem`管理文件系统
 - 实现的协议: `ClientProtocol`, `DatanodeProtocol`, `NamenodeProtocol`
@@ -138,7 +162,228 @@ NameNode.startCommonServices(Configuration)
 NameNode.startMetricsLogger(Configuration)
 ```
 
-###### FSNamesystem
+##### NameNodeRpcServer
+
+> public class NameNodeRpcServer implements NamenodeProtocols
+
+- serviceRpcServer: 监听DN请求
+- lifelineRpcServer: 监听lifeline请求
+- clientRpcServer: 监听客户端请求
+
+构造过程:
+
+(1) PB BlockingService
+
+- clientNNPbService: ClientNamenodeProtocol, ClientNamenodeProtocolServerSideTranslatorPB
+- dnProtoPbService: DatanodeProtocolService, DatanodeProtocolServerSideTranslatorPB
+- lifelineProtoPbService: DatanodeLifelineProtocolService, DatanodeLifelineProtocolServerSideTranslatorPB
+- NNPbService: NamenodeProtocolService, NamenodeProtocolServerSideTranslatorPB
+- refreshAuthService: RefreshUserMappingsProtocolService, RefreshUserMappingsProtocolServerSideTranslatorPB
+- refreshCallQueueService: RefreshCallQueueProtocolService, RefreshCallQueueProtocolServerSideTranslatorPB
+- genericRefreshService: GenericRefreshProtocolService, GenericRefreshProtocolServerSideTranslatorPB
+- getUserMappingService: GetUserMappingsProtocolService, GetUserMappingsProtocolServerSideTranslatorPB
+- haPbService: HAServiceProtocolService, HAServiceProtocolServerSideTranslatorPB
+- reconfigurationPbService: ReconfigurationProtocolService, ReconfigurationProtocolServerSideTranslatorPB
+- traceAdminService: TraceAdminService, TraceAdminProtocolServerSideTranslatorPB
+
+(2) serviceRpcServer
+
+> dfs.namenode.servicerpc-address
+
+协议:
+
+- clientNNPbService
+- haPbService
+- reconfigurationPbService
+- NNPbService
+- dnProtoPbService
+- refreshAuthService
+- refreshUserMappingService
+- refreshCallQueueService
+- genericRefreshService
+- getUserMappingService
+- traceAdminService
+
+
+(3) lifelineRpcServer
+
+> dfs.namenode.lifeline.rpc-address, dfs.namenode.lifeline.rpc-bind-host
+
+- haPbService
+- lifelineProtoPbService
+
+
+(4) clientRpcServer
+
+- clientNNPbService
+- haPbService
+- reconfigurationPbService
+- NNPbService
+- dnProtoPbService
+- refreshAuthService
+- refreshUserMappingService
+- refreshCallQueueService
+- genericRefreshService
+- getUserMappingService
+- traceAdminService
+
+#### SecondaryNameNode
+
+```
+/**********************************************************
+ * The Secondary NameNode is a helper to the primary NameNode.
+ * The Secondary is responsible for supporting periodic checkpoints
+ * of the HDFS metadata. The current design allows only one Secondary
+ * NameNode per HDFs cluster.
+ *
+ * The Secondary NameNode is a daemon that periodically wakes
+ * up (determined by the schedule specified in the configuration),
+ * triggers a periodic checkpoint and then goes back to sleep.
+ * The Secondary NameNode uses the NamenodeProtocol to talk to the
+ * primary NameNode.
+ *
+ **********************************************************/
+public class SecondaryNameNode implements Runnable,
+        SecondaryNameNodeInfoMXBean
+```
+
+因为NN在启动时合并fsimage和edits日志文件, 周期性的合并fsimage和edits日志文件.
+
+
+```
+public static void main(String[] argv) throws Exception
+
+  secondary = new SecondaryNameNode(tconf, opts);
+
+  // SecondaryNameNode can be started in 2 modes:
+  // 1. run a command (i.e. checkpoint or geteditsize) then terminate
+  // 2. run as a daemon when {@link #parseArgs} yields no commands
+
+  // mode 2
+  secondary.startInfoServer();
+  secondary.startCheckpointThread();
+  secondary.join();
+```
+
+```
+SecondaryNameNode.doCheckpoint()
+|-- SecondaryNameNode.doMerge
+|--|-- FSImage.reloadFromImageFile            // 加载fsimage
+|--|--|-- FSImage.loadFSImage
+|--|-- Checkpointer.rollForwardByApplyingLogs // 前向应用edits日志
+|--|--|-- FSImage.loadEdits
+|--|--|--|-- FSEditLogLoader.loadFSEdits
+|--|--|--|--|-- FSEditLogLoader.loadEditRecords
+|--|--|--|--|--|-- FSEditLogLoader.applyEditLogOp
+
+switch (op.opCode) { // edits日志中操作
+  org.apache.hadoop.hdfs.server.namenode.FSEditLogOpCodes
+```
+
+
+#### BackupNode
+
+
+```
+package org.apache.hadoop.hdfs.server.namenode;
+
+/**
+ * BackupNode.
+ * <p>
+ * Backup node can play two roles.
+ * <ol>
+ * <li>{@link NamenodeRole#CHECKPOINT} node periodically creates checkpoints,
+ * that is downloads image and edits from the active node, merges them, and
+ * uploads the new image back to the active.</li>
+ * <li>{@link NamenodeRole#BACKUP} node keeps its namespace in sync with the
+ * active node, and periodically creates checkpoints by simply saving the
+ * namespace image to local disk(s).</li>
+ * </ol>
+ */
+public class BackupNode extends NameNode
+```
+
+- checkpoint: org.apache.hadoop.hdfs.server.common.HdfsServerConstants.StartupOption.CHECKPOINT
+
+周期性的创建文件命名空间的检查点: 从活跃NN下载fsimage和edits日志文件, 本地合并, 再上传给活跃NN.
+
+启动: `bin/hdfs namenode -checkpoint`.
+
+- backup: org.apache.hadoop.hdfs.server.common.HdfsServerConstants.StartupOption.BACKUP
+
+在内存中维护与活跃NN状态同步的文件系统命名空间, 也接收并持久化edits日志流. 启动: `bin/hdfs namenode -backup`.
+
+- Checkpointer
+
+```
+package org.apache.hadoop.hdfs.server.namenode;
+
+/**
+ * The Checkpointer is responsible for supporting periodic checkpoints
+ * of the HDFS metadata.
+ *
+ * The Checkpointer is a daemon that periodically wakes up
+ * up (determined by the schedule specified in the configuration),
+ * triggers a periodic checkpoint and then goes back to sleep.
+ *
+ * The start of a checkpoint is triggered by one of the two factors:
+ * (1) time or (2) the size of the edits file.
+ */
+class Checkpointer extends Daemon
+```
+
+
+#### DataNode
+
+```
+package org.apache.hadoop.hdfs.server.datanode;
+
+/**********************************************************
+ * DataNode is a class (and program) that stores a set of
+ * blocks for a DFS deployment.  A single deployment can
+ * have one or many DataNodes.  Each DataNode communicates
+ * regularly with a single NameNode.  It also communicates
+ * with client code and other DataNodes from time to time.
+ *
+ * DataNodes store a series of named blocks.  The DataNode
+ * allows client code to read these blocks, or to write new
+ * block data.  The DataNode may also, in response to instructions
+ * from its NameNode, delete blocks or copy blocks to/from other
+ * DataNodes.
+ *
+ * The DataNode maintains just one critical table:
+ *   block-> stream of bytes (of BLOCK_SIZE or less)
+ *
+ * This info is stored on a local disk.  The DataNode
+ * reports the table's contents to the NameNode upon startup
+ * and every so often afterwards.
+ *
+ * DataNodes spend their lives in an endless loop of asking
+ * the NameNode for something to do.  A NameNode cannot connect
+ * to a DataNode directly; a NameNode simply returns values from
+ * functions invoked by a DataNode.
+ *
+ * DataNodes maintain an open server socket so that client code
+ * or other DataNodes can read/write data.  The host/port for
+ * this server is reported to the NameNode, which then sends that
+ * information to clients or other DataNodes that might be interested.
+ *
+ **********************************************************/
+public class DataNode extends ReconfigurableBase
+    implements InterDatanodeProtocol, ClientDatanodeProtocol,
+        TraceAdminProtocol, DataNodeMXBean, ReconfigurationProtocol
+```
+
+#### JournalNode
+
+
+
+#### DFSZKFailoverController
+
+
+### 数据结构
+
+##### FSNamesystem
 
 > public class FSNamesystem implements Namesystem, FSNamesystemMBean, NameNodeMXBean
 
@@ -205,105 +450,75 @@ FSImage.saveNamespace(FSNamesystem) // 需要保存名称空间时
 FSImage.openEditLogForWrite(int) // 非standby时, 开启新的edits日志
 ```
 
-###### FSImage
+##### FSImage
 
-###### NameNodeRpcServer
+```
+/**
+ * FSImage handles checkpointing and logging of the namespace edits.
+ */
+public class FSImage implements Closeable
+```
 
-> public class NameNodeRpcServer implements NamenodeProtocols
+- 离线查看: OfflineImageViewerPB
 
-- serviceRpcServer: 监听DN请求
-- lifelineRpcServer: 监听lifeline请求
-- clientRpcServer: 监听客户端请求
+聚合:
 
-构造过程:
-
-(1) PB BlockingService
-
-- clientNNPbService: ClientNamenodeProtocol, ClientNamenodeProtocolServerSideTranslatorPB
-- dnProtoPbService: DatanodeProtocolService, DatanodeProtocolServerSideTranslatorPB
-- lifelineProtoPbService: DatanodeLifelineProtocolService, DatanodeLifelineProtocolServerSideTranslatorPB
-- NNPbService: NamenodeProtocolService, NamenodeProtocolServerSideTranslatorPB
-- refreshAuthService: RefreshUserMappingsProtocolService, RefreshUserMappingsProtocolServerSideTranslatorPB
-- refreshCallQueueService: RefreshCallQueueProtocolService, RefreshCallQueueProtocolServerSideTranslatorPB
-- genericRefreshService: GenericRefreshProtocolService, GenericRefreshProtocolServerSideTranslatorPB
-- getUserMappingService: GetUserMappingsProtocolService, GetUserMappingsProtocolServerSideTranslatorPB
-- haPbService: HAServiceProtocolService, HAServiceProtocolServerSideTranslatorPB
-- reconfigurationPbService: ReconfigurationProtocolService, ReconfigurationProtocolServerSideTranslatorPB
-- traceAdminService: TraceAdminService, TraceAdminProtocolServerSideTranslatorPB
-
-(2) serviceRpcServer
-
-> dfs.namenode.servicerpc-address
-
-协议:
-
-- clientNNPbService
-- haPbService
-- reconfigurationPbService
-- NNPbService
-- dnProtoPbService
-- refreshAuthService
-- refreshUserMappingService
-- refreshCallQueueService
-- genericRefreshService
-- getUserMappingService
-- traceAdminService
+- editLog: org.apache.hadoop.hdfs.server.namenode.FSEditLog
+- storage: org.apache.hadoop.hdfs.server.namenode.NNStorage
 
 
-(3) lifelineRpcServer
+##### FSEditLog
 
-> dfs.namenode.lifeline.rpc-address, dfs.namenode.lifeline.rpc-bind-host
+```
+/**
+ * FSEditLog maintains a log of the namespace modifications.
+ */
+public class FSEditLog implements LogsPurgeable
+```
 
-- haPbService
-- lifelineProtoPbService
-
-
-(4) clientRpcServer
-
-- clientNNPbService
-- haPbService
-- reconfigurationPbService
-- NNPbService
-- dnProtoPbService
-- refreshAuthService
-- refreshUserMappingService
-- refreshCallQueueService
-- genericRefreshService
-- getUserMappingService
-- traceAdminService
-
-###### SecondaryNameNode
-
-因为NN在启动时合并fsimage和edits日志文件, 周期性的合并fsimage和edits日志文件.
-
-###### BackupNode
-
-- checkpoint: org.apache.hadoop.hdfs.server.common.HdfsServerConstants.StartupOption.CHECKPOINT
-
-周期性的创建文件命名空间的检查点: 从活跃NN下载fsimage和edits日志文件, 本地合并, 再上传给活跃NN.
-
-启动: `bin/hdfs namenode -checkpoint`.
-
-- backup: org.apache.hadoop.hdfs.server.common.HdfsServerConstants.StartupOption.BACKUP
-
-在内存中维护与活跃NN状态同步的文件系统命名空间, 也接收并持久化edits日志流. 启动: `bin/hdfs namenode -backup`.
-
-- Checkpointer
+- 离线查看: OfflineEditsViewer
 
 
-##### DataNode
+### 协议
 
+#### ClientProtocol
 
+```
+package org.apache.hadoop.hdfs.protocol;
 
-##### JournalNode
+/**********************************************************************
+ * ClientProtocol is used by user code via the DistributedFileSystem class to
+ * communicate with the NameNode.  User code can manipulate the directory
+ * namespace, as well as open/close file streams, etc.
+ *
+ **********************************************************************/
+public interface ClientProtocol
+```
 
-##### DFSZKFailoverController
+#### DatanodeProtocol
 
+```
+package org.apache.hadoop.hdfs.server.protocol;
 
-#### 协议
+/**********************************************************************
+ * Protocol that a DFS datanode uses to communicate with the NameNode.
+ * It's used to upload current load information and block reports.
+ *
+ * The only way a NameNode can communicate with a DataNode is by
+ * returning values from these functions.
+ *
+ **********************************************************************/
+public interface DatanodeProtocol
+```
 
-##### ClientProtocol
+#### NamenodeProtocol
 
-##### DatanodeProtocol
+```
+package org.apache.hadoop.hdfs.server.protocol;
 
-##### NamenodeProtocol
+/*****************************************************************************
+ * Protocol that a secondary NameNode uses to communicate with the NameNode.
+ * It's used to get part of the name node state
+ *****************************************************************************/
+public interface NamenodeProtocol
+```
