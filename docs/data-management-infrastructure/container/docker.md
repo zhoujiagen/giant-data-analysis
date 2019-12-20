@@ -13,6 +13,17 @@
 
 - [Docker on Mac Mojava is using 4GB even though it's configured for 2GB #3377](https://github.com/docker/for-mac/issues/3377): 容器可用和实际使用内存, `docker run -m 1g`, `docker stats`
 
+- [Where is /var/lib/docker on Mac/OS X](https://stackoverflow.com/questions/38532483/where-is-var-lib-docker-on-mac-os-x)
+
+```
+$ screen ~/Library/Containers/com.docker.docker/Data/com.docker.driver.amd64-linux/tty
+
+$ ctrl + a + d
+$ screen ~/Library/Containers/com.docker.docker/Data/com.docker.driver.amd64-linux/tty
+[detached]
+
+```
+
 ## 概念
 
 ### 容器生态系统

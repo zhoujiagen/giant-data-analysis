@@ -1,0 +1,3 @@
+exec_before_build.sh
+hadoop-2.10.0/*
+*.cmd

@@ -20,7 +20,7 @@ import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
 import com.spike.giantdataanalysis.hadoop.example.ExampleConstants;
-import com.spike.giantdataanalysis.hadoop.example.mapred.temperature.ExampleLineRecordParser;
+import com.spike.giantdataanalysis.hadoop.example.mapred.temperature.ExampleMaxTemperatureMapperUsingParser.ExampleLineRecordParser;
 import com.spike.giantdataanalysis.hadoop.support.Hadoops;
 
 /**
