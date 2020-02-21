@@ -29,7 +29,7 @@ to relational databases.
 + [apache-jena](apache-jena/README.md)
 + [apache-tinkerpop](apache-tinkerpop/README.md)
 + [notes-of-TinkerPop3-renference](apache-tinkerpop/notes-of-TinkerPop3-renference.md)
-+ [neo4j](representation-neo4j/README.md)
++ [neo4j](neo4j/README.md)
 + [text dataset](text/datasets.md)
 + [lucene](text/lucene.md)
 + [mahout](text/mahout.md)
