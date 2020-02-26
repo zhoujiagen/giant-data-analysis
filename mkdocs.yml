@@ -15,6 +15,8 @@ nav:
         - '概念': data-pipeline/apache-hudi/hudi-concepts.md
     - '数据管理基础设施':
       - 'Home': data-management-infrastructure/README.md
+      - 'MySQL':
+        - "High Performance MySQL": data-management-infrastructure/MySQL/highperf-mysql.md
       - 'Netty':
         - 'Home': data-management-infrastructure/netty/README.md
         - 'Netty in Action': data-management-infrastructure/netty/notes-of-netty-in-action.md
