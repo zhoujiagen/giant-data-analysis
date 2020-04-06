@@ -42,6 +42,21 @@
 
     The hot backup process consists of two stages. The initial copying of the data files produces a raw backup. The apply step incorporates any changes to the database that happened while the backup was running. Applying the changes produces a prepared backup; these files are ready to be restored whenever necessary.
 
+``` CPP
+univ.i
+
+#ifdef _WIN64
+typedef unsigned __int64	ulint;
+typedef __int64			lint;
+# define ULINTPF		UINT64PF
+#else
+typedef unsigned long int	ulint;
+typedef long int		lint;
+# define ULINTPF		"%lu"
+#endif /* _WIN64 */
+```
+
+
 ### db0err.h
 
 |header|description|
@@ -115,7 +130,7 @@
 | eval0eval.h | SQL evaluator: evaluates simple data structures, like expressions, in a query graph |
 | eval0proc.h | Executes SQL stored procedures and their control structures |
 
-###  fil: The low-level file system
+###  [fil: The low-level file system](rtfsc-innodb-file-space-mgmt.md)
 
 |header|description|
 |:---|:---|
@@ -169,7 +184,7 @@
 |:---|:---|
 | handler0alter.h | Smart ALTER TABLE |
 
-###  ha: The hash table
+###  [ha: The hash table](rtfsc-innodb-utilities.md)
 
 |header|description|
 |:---|:---|
@@ -238,11 +253,16 @@
 |:---|:---|
 | os0atomic.h | Macros for using atomics |
 | os0event.h | The interface to the operating system condition variables |
-| os0file.h | The interface to the operating system file io |
+| os0file.h | [The interface to the operating system file io](rtfsc-innodb-file-space-mgmt.md) |
 | os0once.h | A class that aids executing a given function exactly once in a multi-threaded environment. |
 | os0proc.h | The interface to the operating system process control primitives |
 | os0thread.h | The interface to the operating system process and thread control primitives |
 
+
+``` CPP
+os0atomic.h
+
+```
 
 ###  [page: Index page routines](rtfsc-innodb-page-row-record.md)
 
@@ -361,7 +381,7 @@
 
 |header|description|
 |:---|:---|
-| ib0mutex.h | Policy based mutexes. |
+
 | ut0byte.h | Utilities for byte operations |
 | ut0counter.h | Counter utility class |
 | ut0crc32.h | CRC32 implementation |

@@ -10,6 +10,8 @@
 
 
 ``` CPP
+mem0mem.h
+
 /** A block of a memory heap consists of the info structure
 followed by an area of memory */
 typedef struct mem_block_info_t	mem_block_t;
@@ -30,4 +32,11 @@ buffer pool; the latter method is used for very big heaps */
 					and if it's NULL, the memory
 					allocation functions can return
 					NULL. */
+```
+
+
+``` CPP
+dyn0buf.h
+
+dyn_buf_t::block_t
 ```

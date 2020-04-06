@@ -23,7 +23,6 @@ nav:
         - "RTFSC MySQL":
           - "InnoDB headers": data-management-infrastructure/MySQL/rtfsc/rtfsc-innodb-headers.md
           - "InnoDB Utilities": data-management-infrastructure/MySQL/rtfsc/rtfsc-innodb-utilities.md
-          - "InnoDB OS Interface": data-management-infrastructure/MySQL/rtfsc/rtfsc-innodb-os.md
           - "InnoDB Memory Mgmt": data-management-infrastructure/MySQL/rtfsc/rtfsc-innodb-memory-mgmt.md
           - "InnoDB Buffer": data-management-infrastructure/MySQL/rtfsc/rtfsc-innodb-buffer.md
           - "InnoDB Redo Log": data-management-infrastructure/MySQL/rtfsc/rtfsc-innodb-redo-log.md
