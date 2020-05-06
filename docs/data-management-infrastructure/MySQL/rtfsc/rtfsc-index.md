@@ -21,6 +21,28 @@
     - redo log
 
 
+## Tool and Environment Settings
+
+```
+Eclipse
+perference -> C/C++ -> Build -> Environment .And add
+PATH /usr/local/bin
+
+Ninja
+https://ninja-build.org/
+https://github.com/ninja-build/ninja/releases
+$ brew install ninja
+
+Boost
+MySQL currently requires boost_1_70_0
+$ brew install boost
+
+Run MySQL
+mkdir data
+bin/mysqld --initialize-insecure --user=zhang
+```
+
+
 ## InnoDB Storage Engine
 
 - [How to optimize MySQL for large BLOB updates](https://dba.stackexchange.com/questions/46543/how-to-optimize-mysql-for-large-blob-updates)
