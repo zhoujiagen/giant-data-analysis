@@ -16,7 +16,7 @@
 	<modules>
 		<module>infrastructure-test</module>
 		<module>infrastructure-commons</module>
-		<!-- <module>infrastructure-netty</module>
+		<!--
 		<module>infrastructure-etl</module>
 			<module>infrastructure-jetty</module>
 			<module>infrastructure-apache-zookeeper</module>
