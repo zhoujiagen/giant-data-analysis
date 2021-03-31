@@ -35,7 +35,7 @@
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
-			<version>26.0-android</version><!--$NO-MVN-MAN-VER$ -->
+			<version>29.0-android</version><!--$NO-MVN-MAN-VER$ -->
 			<scope>compile</scope>
 			<exclusions>
 				<exclusion>
